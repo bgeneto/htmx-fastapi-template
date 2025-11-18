@@ -1,0 +1,118 @@
+<!-- Language Selector Component -->
+<div class="relative" x-data="{ open: false }" @click.away="open = false">
+    <button @click="open = !open" data-lang-toggle
+        class="p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm flex items-center gap-2">
+        <!-- Globe icon -->
+        <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
+            </path>
+        </svg>
+        <!-- Current locale display -->
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-current-locale>EN</span>
+    </button>
+
+    <!-- Dropdown menu -->
+    <div x-show="open" x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
+        class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
+        style="display: none;">
+        <div class="py-1">
+            <!-- English -->
+            <button onclick="window.setLocale('en')" data-locale-option="en"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <span class="text-xl">🇺🇸</span>
+                    <span>English</span>
+                </span>
+                <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="en" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+
+            <!-- Portuguese (Brazil) -->
+            <button onclick="window.setLocale('pt_BR')" data-locale-option="pt_BR"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <span class="text-xl">🇧🇷</span>
+                    <span>Português (Brasil)</span>
+                </span>
+                <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="pt_BR" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+
+            <!-- Add more languages here as needed -->
+            <!-- Example for Spanish:
+            <button onclick="window.setLocale('es')" data-locale-option="es"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <span class="text-xl">🇪🇸</span>
+                    <span>Español</span>
+                </span>
+                <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="es" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Language switching functionality
+    window.setLocale = function (locale) {
+        // Set locale cookie
+        document.cookie = `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+
+        // Show loading indicator
+        const loadingToast = window.showToast('{{ _("Changing language...") }}', 'info', 1000);
+
+        // Reload page to apply new locale
+        setTimeout(() => {
+            window.location.reload();
+        }, 300);
+    };
+
+    // Initialize locale display on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get current locale from cookie or default to 'en'
+        const currentLocale = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('locale='))
+            ?.split('=')[1] || '{{ request.state.locale|default("en") }}';
+
+        // Update current locale display
+        const localeDisplay = document.querySelector('[data-current-locale]');
+        if (localeDisplay) {
+            const localeMap = {
+                'en': 'EN',
+                'pt_BR': 'PT',
+                'es': 'ES',
+                'fr': 'FR',
+                'de': 'DE'
+            };
+            localeDisplay.textContent = localeMap[currentLocale] || 'EN';
+        }
+
+        // Show checkmark for current locale
+        document.querySelectorAll('[data-locale-check]').forEach(check => {
+            check.classList.add('hidden');
+        });
+        const currentCheck = document.querySelector(`[data-locale-check="${currentLocale}"]`);
+        if (currentCheck) {
+            currentCheck.classList.remove('hidden');
+        }
+    });
+</script>

@@ -1,16 +1,19 @@
 {% extends "_base.html" %}
 
-{% block title %}Admin login{% endblock %}
+{% block title %}{{ _('Admin login') }}{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto p-6">
-  <!-- Header with theme toggle -->
+  <!-- Header with theme toggle and language selector -->
   <header class="flex items-center justify-between mb-8">
     <div>
-      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Admin
-        Login</h1>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{
+        _('Admin Login') }}</h1>
     </div>
-    {% include "components/_theme_toggle.html" %}
+    <div class="flex items-center gap-3">
+      {% include "components/_language_selector.html" %}
+      {% include "components/_theme_toggle.html" %}
+    </div>
   </header>
 
   <!-- Login form -->
@@ -24,8 +27,8 @@
           </path>
         </svg>
       </div>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Secure Access</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">Please enter your credentials</p>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ _('Secure Access') }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">{{ _('Please enter your credentials') }}</p>
     </div>
 
     <!-- Error message -->
@@ -35,7 +38,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <span class="text-red-700 dark:text-red-300 font-medium">{{ error }}</span>
+        <span class="text-red-700 dark:text-red-300 font-medium">{{ _('Invalid credentials') }}</span>
       </div>
     </div>{% endif %}
 
@@ -43,7 +46,8 @@
     <form method="post" class="space-y-6">
       <!-- Username field -->
       <div>
-        <label for="username" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Username</label>
+        <label for="username" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Username')
+          }}</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +62,8 @@
 
       <!-- Password field -->
       <div>
-        <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Password</label>
+        <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Password')
+          }}</label>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +84,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
         </svg>
-        Sign In
+        {{ _('Sign In') }}
       </button>
     </form>
   </div>

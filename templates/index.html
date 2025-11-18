@@ -2,21 +2,25 @@
 
 {% block content %}
 <div class="max-w-6xl mx-auto p-4 md:p-6">
-  <!-- Header with theme toggle -->
+  <!-- Header with theme toggle and language selector -->
   <header class="flex items-center justify-between mb-8">
     <div>
       <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        ContactFlow</h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">FastAPI + HTMX starter — now with Tailwind UI</p>
+        {{ _('ContactFlow') }}</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ _('FastAPI + HTMX starter — now with Tailwind UI') }}
+      </p>
     </div>
-    {% include "components/_theme_toggle.html" %}
+    <div class="flex items-center gap-3">
+      {% include "components/_language_selector.html" %}
+      {% include "components/_theme_toggle.html" %}
+    </div>
   </header>
 
   <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <!-- Contact Form Section -->
     <section
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 lg:col-span-2">
-      <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Contact us</h2>
+      <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">{{ _('Contact us') }}</h2>
       <div id="contact-area">
         {% include "_form.html" %}
       </div>
@@ -24,11 +28,12 @@
 
     <!-- Recent Contacts Section -->
     <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Recent contacts</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">{{ _('Recent contacts') }}</h2>
       <div class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-        <p>This scaffold includes a ready-to-use DB and migrations. Extend repository to show recent entries.</p>
+        <p>{{ _('This scaffold includes a ready-to-use DB and migrations. Extend repository to show recent entries.') }}
+        </p>
         <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <p class="text-xs text-gray-500 dark:text-gray-500 mb-2">⏳ Coming soon...</p>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-2">{{ _('⏳ Coming soon...') }}</p>
           <div class="space-y-3">
             <div class="flex items-center space-x-3">
               <div class="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">

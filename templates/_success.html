@@ -1,6 +1,6 @@
 <!-- Script to show success toast and reload form -->
 <script>
-  window.showToast('Thanks {{ contact.name }} — your message has been received!', 'success');
+  window.showToast("{{ _('Thanks %(name)s — your message has been received!', name=contact.name) }}", 'success');
   setTimeout(function () {
     htmx.ajax('GET', '/', { target: '#contact-area', swap: 'outerHTML' });
   }, 3000);
@@ -17,9 +17,9 @@
     </div>
 
     <!-- Success message -->
-    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Message Sent!') }}</h3>
     <p class="text-lg text-green-600 dark:text-green-400 font-medium mb-6">
-      Thanks {{ contact.name }} — your message has been received!
+      {{ _('Thanks %(name)s — your message has been received!', name=contact.name) }}
     </p>
 
     <!-- Send another button -->
@@ -29,7 +29,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
         </path>
       </svg>
-      Send Another Message
+      {{ _('Send Another Message') }}
     </button>
   </div>
 </div>

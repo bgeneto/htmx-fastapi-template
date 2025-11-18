@@ -4,9 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
 from sqlmodel.ext.asyncio.session import AsyncSession
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from .config import settings
 from .db import init_db
+from .i18n import get_locale, get_translations, set_locale
 from .logger import get_logger
 from .models import Contact
 from .repository import create_contact, get_session, list_contacts
@@ -16,7 +18,50 @@ logger = get_logger("main")
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
 templates = Jinja2Templates(directory="templates")
+
+# Configure Jinja2 with i18n extension
+templates.env.add_extension("jinja2.ext.i18n")
+templates.env.install_gettext_callables(
+    gettext=lambda x: get_translations(get_locale()).gettext(x),
+    ngettext=lambda s, p, n: get_translations(get_locale()).ngettext(s, p, n),
+    newstyle=True,
+)
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+# Middleware for locale detection
+class LocaleMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # Try to get locale from cookie first
+        locale = request.cookies.get("locale")
+
+        # Fall back to Accept-Language header
+        if not locale:
+            accept_language = request.headers.get("Accept-Language", "en")
+            # Parse Accept-Language header (simple parsing)
+            locale = accept_language.split(",")[0].split(";")[0].strip()
+            # Normalize locale (e.g., en-US -> en, pt-BR -> pt_BR)
+            if "-" in locale:
+                parts = locale.split("-")
+                if len(parts[1]) == 2 and parts[1].isupper():
+                    # Country code: pt-BR -> pt_BR
+                    locale = f"{parts[0]}_{parts[1]}"
+                else:
+                    # Language only: en-US -> en
+                    locale = parts[0]
+
+        # Set locale for this request
+        set_locale(locale)
+
+        # Make locale available in request state
+        request.state.locale = locale
+
+        response = await call_next(request)
+        return response
+
+
+app.add_middleware(LocaleMiddleware)
 
 
 # Startup event
@@ -80,8 +125,6 @@ async def contact(
         return templates.TemplateResponse("_success.html", ctx)
     return RedirectResponse("/", status_code=303)
 
-
-from fastapi import Depends, Form
 
 from .auth import create_session_cookie, require_admin
 

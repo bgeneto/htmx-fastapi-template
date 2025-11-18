@@ -1,7 +1,7 @@
 <form hx-post="/contact" hx-target="#contact-area" hx-swap="outerHTML" method="post" novalidate class="space-y-6">
   <!-- Name field with icon -->
   <div>
-    <label for="name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Name</label>
+    <label for="name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Name') }}</label>
     <div class="relative">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
 
   <!-- Email field with icon -->
   <div>
-    <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Email</label>
+    <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Email') }}</label>
     <div class="relative">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,8 @@
 
   <!-- Message field with icon -->
   <div>
-    <label for="message" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Message</label>
+    <label for="message" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Message')
+      }}</label>
     <div class="relative">
       <div class="absolute top-3 left-3 pointer-events-none">
         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +99,7 @@
           d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
         </path>
       </svg>
-      <span>Send Message</span>
+      <span>{{ _('Send Message') }}</span>
     </button>
     <button type="reset"
       class="inline-flex items-center px-4 py-3 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 shadow-sm">
@@ -107,12 +108,23 @@
           d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
         </path>
       </svg>
-      Reset
+      {{ _('Reset') }}
     </button>
   </div>
 </form>
 
 <script>
+  // Translated validation messages from server
+  const i18n = {
+    nameRequired: "{{ _('Name is required') }}",
+    nameMinLength: "{{ _('Name must be at least 2 characters') }}",
+    emailRequired: "{{ _('Email is required') }}",
+    emailInvalid: "{{ _('Please enter a valid email address') }}",
+    messageRequired: "{{ _('Message is required') }}",
+    messageMinLength: "{{ _('Message must be at least 5 characters') }}",
+    fixErrors: "{{ _('Please fix the errors before submitting.') }}"
+  };
+
   document.addEventListener('DOMContentLoaded', function () {
     // Validation functions
     function validateField(fieldId, message) {
@@ -135,9 +147,9 @@
       const field = document.getElementById('name');
       const value = field.value.trim();
       if (!value) {
-        validateField('name', 'Name is required');
+        validateField('name', i18n.nameRequired);
       } else if (value.length < 2) {
-        validateField('name', 'Name must be at least 2 characters');
+        validateField('name', i18n.nameMinLength);
       } else {
         validateField('name', '');
       }
@@ -148,9 +160,9 @@
       const value = field.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value) {
-        validateField('email', 'Email is required');
+        validateField('email', i18n.emailRequired);
       } else if (!emailRegex.test(value)) {
-        validateField('email', 'Please enter a valid email address');
+        validateField('email', i18n.emailInvalid);
       } else {
         validateField('email', '');
       }
@@ -160,9 +172,9 @@
       const field = document.getElementById('message');
       const value = field.value.trim();
       if (!value) {
-        validateField('message', 'Message is required');
+        validateField('message', i18n.messageRequired);
       } else if (value.length < 5) {
-        validateField('message', 'Message must be at least 5 characters');
+        validateField('message', i18n.messageMinLength);
       } else {
         validateField('message', '');
       }
@@ -190,7 +202,7 @@
     document.querySelector('form').addEventListener('submit', function (e) {
       if (!validateForm()) {
         e.preventDefault();
-        window.showToast('Please fix the errors before submitting.', 'error');
+        window.showToast(i18n.fixErrors, 'error');
         // Scroll to first error
         const firstError = document.querySelector('.text-red-600, .dark\\:text-red-400');
         if (firstError) {
