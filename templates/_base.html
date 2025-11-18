@@ -21,26 +21,14 @@
     <!-- Self-hosted Tailwind CSS (compiled) -->
     <link rel="stylesheet" href="/static/output.css">
 
-    <!-- HTMX configuration (must be before HTMX script) -->
-    <meta name="htmx-config"
-        content='{"defaultSwapStyle":"outerHTML","defaultSwapDelay":0,"defaultSettleDelay":20,"historyCacheSize":10,"timeout":5000,"includeIndicatorStyles":false}'>
-
-    <!-- HTMX with SRI for security and caching -->
-    <script src="https://unpkg.com/htmx.org@2.0.3"
-        integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
-        crossorigin="anonymous"></script>
-
-    <!-- HTMX preload extension for link prefetching -->
-    <script src="https://unpkg.com/htmx-ext-preload@2.0.1/preload.js"></script>
-
-    <!-- Alpine.js for interactive components (deferred for non-blocking load) -->
+    <!-- Alpine.js for reactive components -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
 
     <link rel="stylesheet" href="/static/style.css" />
     {% block extra_head %}{% endblock %}
 </head>
 
-<body hx-boost="true" hx-ext="preload"
+<body
     class="font-sans font-normal bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
     {% block content %}{% endblock %}
 
@@ -58,12 +46,6 @@
         })();
 
         document.addEventListener('DOMContentLoaded', function () {
-            // Check if HTMX is available
-            if (typeof htmx !== 'undefined') {
-                console.log('✅ HTMX is loaded and available');
-            } else {
-                console.warn('⚠️ HTMX not available - using fallback form submission');
-            }
             // Update icons to match the initial theme state
             const isDark = document.documentElement.classList.contains('dark');
 

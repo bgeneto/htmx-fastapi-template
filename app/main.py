@@ -1,5 +1,5 @@
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates  # type: ignore[import]
 from pydantic import ValidationError
@@ -88,25 +88,11 @@ async def index(request: Request, session: AsyncSession = Depends(get_session)):
         "index.html",
         {
             "request": request,
-            "errors": {},
-            "form": {},
             "recent_contacts": recent_contacts,
         },
     )
-    # Add cache headers for improved performance with HTMX history navigation
+    # Cache headers for improved performance
     response.headers["Cache-Control"] = "private, max-age=0, must-revalidate"
-    response.headers["Vary"] = "Accept-Language, Cookie"
-    return response
-
-
-@app.get("/form", response_class=HTMLResponse)
-async def get_form(request: Request):
-    """Return just the contact form for HTMX swaps"""
-    response = templates.TemplateResponse(
-        "_contact_form_wrapper.html", {"request": request, "errors": {}, "form": {}}
-    )
-    # Add cache headers for static form template (can be cached briefly)
-    response.headers["Cache-Control"] = "private, max-age=60"
     return response
 
 
@@ -114,7 +100,7 @@ async def get_form(request: Request):
 async def get_recent_contacts_partial(
     request: Request, session: AsyncSession = Depends(get_session)
 ):
-    """Return just the recent contacts partial for HTMX updates"""
+    """Return just the recent contacts partial for dynamic updates"""
     recent_contacts = await get_recent_contacts(session, limit=4)
     response = templates.TemplateResponse(
         "_recent_contacts.html",
@@ -125,7 +111,7 @@ async def get_recent_contacts_partial(
     return response
 
 
-@app.post("/contact", response_class=HTMLResponse)
+@app.post("/contact")
 async def contact(
     request: Request,
     name: str = Form(...),
@@ -133,10 +119,6 @@ async def contact(
     message: str = Form(...),
     session: AsyncSession = Depends(get_session),
 ):
-    # Add logging to understand what's happening
-    logger.info(
-        f"Contact endpoint called. Method: {request.method}, Headers: {dict(request.headers)}"
-    )
     form_data = {"name": name, "email": email, "message": message}
     logger.info(
         "Form submission received: name={}, email={}, message_length={}",
@@ -181,20 +163,13 @@ async def contact(
             else:
                 # Use the message from validator if it's already translated
                 errors[field] = msg
-        context = {"request": request, "errors": errors, "form": form_data}
-        is_htmx = (
-            request.headers.get("hx-request")
-            or request.headers.get("x-requested-with") == "XMLHttpRequest"
-        )
-        if is_htmx:
-            # For HTMX, return form wrapped in contact-area div
-            return templates.TemplateResponse("_contact_form_wrapper.html", context)
-        # For non-HTMX, return the full page with the form and errors
-        recent_contacts = await get_recent_contacts(session, limit=4)
-        context["recent_contacts"] = recent_contacts
-        return templates.TemplateResponse("index.html", context)
 
-    # persist contact
+        # Return JSON for Alpine.js
+        return JSONResponse(
+            status_code=400, content={"errors": errors, "form": form_data}
+        )
+
+    # Persist contact
     try:
         contact = await create_contact(session, payload)
         logger.info(
@@ -206,17 +181,18 @@ async def contact(
         logger.error("Failed to save contact: {}", exc)
         raise HTTPException(status_code=500, detail="Failed to save contact")
 
-    ctx = {"request": request, "contact": contact}
-    # Check for HTMX request (hx-request header) or XMLHttpRequest (fallback for some browsers)
-    is_htmx = (
-        request.headers.get("hx-request")
-        or request.headers.get("x-requested-with") == "XMLHttpRequest"
+    # Return JSON for Alpine.js
+    return JSONResponse(
+        content={
+            "success": True,
+            "contact": {
+                "id": contact.id,
+                "name": contact.name,
+                "email": contact.email,
+                "message": contact.message,
+            },
+        }
     )
-    if is_htmx:
-        logger.info("HTMX request detected successfully, returning success template")
-        return templates.TemplateResponse("_success.html", ctx)
-    logger.info("Non-HTMX request, performing redirect")
-    return RedirectResponse("/", status_code=303)
 
 
 from .auth import create_session_cookie, require_admin

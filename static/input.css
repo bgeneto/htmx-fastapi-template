@@ -15,16 +15,6 @@
     --text-primary: #f9fafb;
     --border-color: #374151;
   }
-
-  /* HTMX loading indicator - hidden by default */
-  .htmx-indicator {
-    display: none;
-  }
-
-  .htmx-request .htmx-indicator,
-  .htmx-request.htmx-indicator {
-    display: flex;
-  }
 }
 
 /* Custom animations */

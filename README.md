@@ -1,15 +1,16 @@
-# FastAPI + HTMX Enterprise Starter
+# FastAPI + Alpine.js Starter
 
 Features:
-- FastAPI app with HTMX progressive enhancement patterns
+- FastAPI app with Alpine.js reactive components
 - **Internationalization (i18n)** - Multi-language support with Babel
-- Pydantic v2 for validation (server-side)
+- Pydantic v2 for validation (server-side + client-side)
 - SQLModel (SQLAlchemy) for DB models and persistence
 - Async DB session management and simple repository pattern
 - Structured logging with Loguru + logging adapter
 - Environment config via pydantic BaseSettings
 - Development helper script to create the DB schema
 - Simple migration hint using Alembic (template included)
+- Tailwind CSS 3.x for styling
 
 ## 🌍 Internationalization
 

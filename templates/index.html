@@ -7,7 +7,8 @@
     <div>
       <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
         {{ _('ContactFlow') }}</h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ _('FastAPI + HTMX starter — now with Tailwind UI') }}
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ _('FastAPI + Alpine.js starter — now with Tailwind
+        UI') }}</p>
       </p>
     </div>
     <div class="flex items-center gap-3">
@@ -21,9 +22,7 @@
     <section
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 lg:col-span-2">
       <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">{{ _('Contact us') }}</h2>
-      <div id="contact-area">
-        {% include "_form.html" %}
-      </div>
+      {% include "_form_alpine.html" %}
     </section>
 
     <!-- Recent Contacts Section -->
