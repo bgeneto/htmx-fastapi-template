@@ -1,4 +1,5 @@
-<form hx-post="/contact" hx-target="#contact-area" hx-swap="outerHTML" method="post" novalidate class="space-y-6">
+<form action="/contact" method="post" hx-post="/contact" hx-target="#contact-area" hx-swap="outerHTML"
+  hx-disabled-elt="button[type=submit]" novalidate class="space-y-6">
   <!-- Name field with icon -->
   <div>
     <label for="name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Name') }}</label>
@@ -90,10 +91,10 @@
 
   <!-- Action buttons -->
   <div class="flex items-center gap-3 pt-2">
-    <button type="submit" hx-indicator="#loading-spinner"
+    <button type="submit"
       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-      <svg id="loading-spinner" class="hidden h-5 w-5 mr-2 animate-spin text-white" xmlns="http://www.w3.org/2000/svg"
-        fill="none" viewBox="0 0 24 24">
+      <svg class="htmx-indicator h-5 w-5 mr-2 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor"
           d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
@@ -125,12 +126,12 @@
     fixErrors: "{{ _('Please fix the errors before submitting.') }}"
   };
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function initFormValidation() {
     // Validation functions
     function validateField(fieldId, message) {
       const field = document.getElementById(fieldId);
       const errorDiv = document.getElementById(fieldId + '-error');
-      const errorSpan = errorDiv.querySelector('span');
+      const errorSpan = errorDiv ? errorDiv.querySelector('span') : null;
 
       if (field && errorDiv && errorSpan) {
         if (message) {
@@ -145,6 +146,7 @@
 
     function validateName() {
       const field = document.getElementById('name');
+      if (!field) return;
       const value = field.value.trim();
       if (!value) {
         validateField('name', i18n.nameRequired);
@@ -157,6 +159,7 @@
 
     function validateEmail() {
       const field = document.getElementById('email');
+      if (!field) return;
       const value = field.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value) {
@@ -170,6 +173,7 @@
 
     function validateMessage() {
       const field = document.getElementById('message');
+      if (!field) return;
       const value = field.value.trim();
       if (!value) {
         validateField('message', i18n.messageRequired);
@@ -185,30 +189,78 @@
       validateEmail();
       validateMessage();
 
-      // Check if any errors are visible
-      const errors = document.querySelectorAll('.text-red-600, .dark\\:text-red-400');
+      // Check if any errors are visible (exclude hidden ones)
+      const errors = document.querySelectorAll('.text-red-600:not(.hidden), .dark\\:text-red-400:not(.hidden)');
       return errors.length === 0;
     }
 
+    function clearValidationErrors() {
+      // Hide all error messages
+      document.querySelectorAll('[id$="-error"]').forEach(function (errorDiv) {
+        errorDiv.classList.add('hidden');
+        const errorSpan = errorDiv.querySelector('span');
+        if (errorSpan) {
+          errorSpan.textContent = '';
+        }
+      });
+    }
+
     // Add event listeners
-    document.getElementById('name').addEventListener('blur', validateName);
-    document.getElementById('name').addEventListener('input', validateName);
-    document.getElementById('email').addEventListener('blur', validateEmail);
-    document.getElementById('email').addEventListener('input', validateEmail);
-    document.getElementById('message').addEventListener('blur', validateMessage);
-    document.getElementById('message').addEventListener('input', validateMessage);
+    const nameField = document.getElementById('name');
+    const emailField = document.getElementById('email');
+    const messageField = document.getElementById('message');
+    const resetButton = document.querySelector('button[type="reset"]');
+    const form = document.querySelector('form');
+
+    if (nameField) {
+      nameField.addEventListener('blur', validateName);
+      nameField.addEventListener('input', validateName);
+    }
+
+    if (emailField) {
+      emailField.addEventListener('blur', validateEmail);
+      emailField.addEventListener('input', validateEmail);
+    }
+
+    if (messageField) {
+      messageField.addEventListener('blur', validateMessage);
+      messageField.addEventListener('input', validateMessage);
+    }
+
+    // Clear validation errors when reset button is clicked
+    if (resetButton) {
+      resetButton.addEventListener('click', function () {
+        // Use setTimeout to clear errors after the form reset completes
+        setTimeout(clearValidationErrors, 0);
+      });
+    }
 
     // Prevent form submission if validation fails
-    document.querySelector('form').addEventListener('submit', function (e) {
-      if (!validateForm()) {
-        e.preventDefault();
-        window.showToast(i18n.fixErrors, 'error');
-        // Scroll to first error
-        const firstError = document.querySelector('.text-red-600, .dark\\:text-red-400');
-        if (firstError) {
-          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (!validateForm()) {
+          e.preventDefault();
+          if (window.showToast) {
+            window.showToast(i18n.fixErrors, 'error');
+          }
+          // Scroll to first error
+          const firstError = document.querySelector('.text-red-600:not(.hidden), .dark\\:text-red-400:not(.hidden)');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }
-      }
-    });
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initFormValidation);
+
+  // Re-initialize after HTMX swaps (when form is replaced with errors)
+  document.body.addEventListener('htmx:afterSwap', function (event) {
+    // Check if the swapped content contains our form
+    if (event.detail.target.id === 'contact-area' || event.detail.target.querySelector('form')) {
+      initFormValidation();
+    }
   });
 </script>

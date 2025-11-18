@@ -16,4 +16,4 @@ loguru
 itsdangerous
 pytest
 pytest-asyncio
-babel>=2.14.0
+babel

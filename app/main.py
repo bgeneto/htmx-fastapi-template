@@ -1,22 +1,27 @@
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi.templating import Jinja2Templates  # type: ignore[import]
 from pydantic import ValidationError
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 
 from .config import settings
 from .db import init_db
 from .i18n import get_locale, get_translations, set_locale
 from .logger import get_logger
 from .models import Contact
-from .repository import create_contact, get_session, list_contacts
+from .repository import create_contact, get_recent_contacts, get_session, list_contacts
 from .schemas import ContactCreate
 
 logger = get_logger("main")
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
+
+# Add GZip compression for responses > 1KB
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
 templates = Jinja2Templates(directory="templates")
 
 # Configure Jinja2 with i18n extension
@@ -27,7 +32,8 @@ templates.env.install_gettext_callables(
     newstyle=True,
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files with caching (1 year for immutable assets)
+app.mount("/static", StaticFiles(directory="static", html=False), name="static")
 
 
 # Middleware for locale detection
@@ -76,10 +82,47 @@ async def startup_event():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse(
-        "index.html", {"request": request, "errors": {}, "form": {}}
+async def index(request: Request, session: AsyncSession = Depends(get_session)):
+    recent_contacts = await get_recent_contacts(session, limit=4)
+    response = templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "errors": {},
+            "form": {},
+            "recent_contacts": recent_contacts,
+        },
     )
+    # Add cache headers for improved performance with HTMX history navigation
+    response.headers["Cache-Control"] = "private, max-age=0, must-revalidate"
+    response.headers["Vary"] = "Accept-Language, Cookie"
+    return response
+
+
+@app.get("/form", response_class=HTMLResponse)
+async def get_form(request: Request):
+    """Return just the contact form for HTMX swaps"""
+    response = templates.TemplateResponse(
+        "_contact_form_wrapper.html", {"request": request, "errors": {}, "form": {}}
+    )
+    # Add cache headers for static form template (can be cached briefly)
+    response.headers["Cache-Control"] = "private, max-age=60"
+    return response
+
+
+@app.get("/recent-contacts", response_class=HTMLResponse)
+async def get_recent_contacts_partial(
+    request: Request, session: AsyncSession = Depends(get_session)
+):
+    """Return just the recent contacts partial for HTMX updates"""
+    recent_contacts = await get_recent_contacts(session, limit=4)
+    response = templates.TemplateResponse(
+        "_recent_contacts.html",
+        {"request": request, "recent_contacts": recent_contacts},
+    )
+    # Short cache since this data changes frequently
+    response.headers["Cache-Control"] = "private, max-age=10"
+    return response
 
 
 @app.post("/contact", response_class=HTMLResponse)
@@ -90,39 +133,89 @@ async def contact(
     message: str = Form(...),
     session: AsyncSession = Depends(get_session),
 ):
+    # Add logging to understand what's happening
+    logger.info(
+        f"Contact endpoint called. Method: {request.method}, Headers: {dict(request.headers)}"
+    )
     form_data = {"name": name, "email": email, "message": message}
+    logger.info(
+        "Form submission received: name={}, email={}, message_length={}",
+        form_data["name"],
+        form_data["email"],
+        len(form_data["message"] or ""),
+    )
+
     # Server-side validation with Pydantic
     try:
         payload = ContactCreate.model_validate(form_data)
+        logger.info("Form validation successful for user: {}", form_data["email"])
     except ValidationError as e:
-        errors = (
-            {
-                err["loc"][0]: err["msg"]
-                for err in e.model_dump().get("__pydantic_validation_errors__", [])
-            }
-            if hasattr(e, "model_dump")
-            else {}
+        logger.warning(
+            "Form validation failed for: email={}, errors={}",
+            form_data["email"],
+            str(e),
         )
-        # Fallback: use pydantic's errors() if available
-        try:
-            errors = {err["loc"][-1]: err["msg"] for err in e.errors()}
-        except Exception:
-            errors = {"__all__": str(e)}
+        # Translate Pydantic validation errors to user's language
+        from .i18n import gettext as _
+
+        errors = {}
+        for err in e.errors():
+            field = err["loc"][-1]
+            msg = err["msg"]
+
+            # Translate common Pydantic error messages
+            if "String should have at least" in msg:
+                if field == "name":
+                    errors[field] = _("Name must be at least 2 characters")
+                elif field == "message":
+                    errors[field] = _("Message must be at least 5 characters")
+            elif "value is not a valid email address" in msg.lower():
+                errors[field] = _("Please enter a valid email address")
+            elif "Field required" in msg:
+                if field == "name":
+                    errors[field] = _("Name is required")
+                elif field == "email":
+                    errors[field] = _("Email is required")
+                elif field == "message":
+                    errors[field] = _("Message is required")
+            else:
+                # Use the message from validator if it's already translated
+                errors[field] = msg
         context = {"request": request, "errors": errors, "form": form_data}
-        if request.headers.get("hx-request"):
-            return templates.TemplateResponse("_form.html", context)
+        is_htmx = (
+            request.headers.get("hx-request")
+            or request.headers.get("x-requested-with") == "XMLHttpRequest"
+        )
+        if is_htmx:
+            # For HTMX, return form wrapped in contact-area div
+            return templates.TemplateResponse("_contact_form_wrapper.html", context)
+        # For non-HTMX, return the full page with the form and errors
+        recent_contacts = await get_recent_contacts(session, limit=4)
+        context["recent_contacts"] = recent_contacts
         return templates.TemplateResponse("index.html", context)
 
     # persist contact
     try:
         contact = await create_contact(session, payload)
+        logger.info(
+            "Contact successfully saved: email={}, id={}",
+            form_data["email"],
+            contact.id,
+        )
     except Exception as exc:
         logger.error("Failed to save contact: {}", exc)
         raise HTTPException(status_code=500, detail="Failed to save contact")
 
     ctx = {"request": request, "contact": contact}
-    if request.headers.get("hx-request"):
+    # Check for HTMX request (hx-request header) or XMLHttpRequest (fallback for some browsers)
+    is_htmx = (
+        request.headers.get("hx-request")
+        or request.headers.get("x-requested-with") == "XMLHttpRequest"
+    )
+    if is_htmx:
+        logger.info("HTMX request detected successfully, returning success template")
         return templates.TemplateResponse("_success.html", ctx)
+    logger.info("Non-HTMX request, performing redirect")
     return RedirectResponse("/", status_code=303)
 
 

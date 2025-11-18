@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --text-primary: #111827;
+    --border-color: #e5e7eb;
+  }
+
+  body.dark {
+    --bg-primary: #111827;
+    --text-primary: #f9fafb;
+    --border-color: #374151;
+  }
+
+  /* HTMX loading indicator - hidden by default */
+  .htmx-indicator {
+    display: none;
+  }
+
+  .htmx-request .htmx-indicator,
+  .htmx-request.htmx-indicator {
+    display: flex;
+  }
+}
+
+/* Custom animations */
+@layer utilities {
+  .animate-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .slide-in-from-right-2 {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}

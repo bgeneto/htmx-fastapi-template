@@ -5,43 +5,42 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{{ request.app.title }}{% endblock %}</title>
-    <!-- Google Fonts -->
+
+    <!-- Preconnect to CDNs for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
-    <!-- Heroicons -->
-    <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js" type="module"></script>
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.10.0"></script>
-    <!-- Alpine.js for interactive components -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="/static/style.css" />
-    <style>
-        /* Dark mode variables */
-        :root {
-            --bg-primary: #ffffff;
-            --text-primary: #111827;
-            --border-color: #e5e7eb;
-        }
+    <link rel="preconnect" href="https://unpkg.com">
 
-        body.dark {
-            --bg-primary: #111827;
-            --text-primary: #f9fafb;
-            --border-color: #374151;
-        }
-    </style>
+    <!-- Google Fonts -->
+    <!--<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">-->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Self-hosted Tailwind CSS (compiled) -->
+    <link rel="stylesheet" href="/static/output.css">
+
+    <!-- HTMX configuration (must be before HTMX script) -->
+    <meta name="htmx-config"
+        content='{"defaultSwapStyle":"outerHTML","defaultSwapDelay":0,"defaultSettleDelay":20,"historyCacheSize":10,"timeout":5000,"includeIndicatorStyles":false}'>
+
+    <!-- HTMX with SRI for security and caching -->
+    <script src="https://unpkg.com/htmx.org@2.0.3"
+        integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+        crossorigin="anonymous"></script>
+
+    <!-- HTMX preload extension for link prefetching -->
+    <script src="https://unpkg.com/htmx-ext-preload@2.0.1/preload.js"></script>
+
+    <!-- Alpine.js for interactive components (deferred for non-blocking load) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
+
+    <link rel="stylesheet" href="/static/style.css" />
     {% block extra_head %}{% endblock %}
 </head>
 
-<body
+<body hx-boost="true" hx-ext="preload"
     class="font-sans font-normal bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
     {% block content %}{% endblock %}
 
@@ -50,15 +49,21 @@
 
     <!-- Common scripts -->
     <script>
-            // Initialize theme IMMEDIATELY before DOMContentLoaded to prevent flash
-            (function () {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                if (savedTheme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                }
-            })();
+        // Initialize theme IMMEDIATELY before DOMContentLoaded to prevent flash
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Check if HTMX is available
+            if (typeof htmx !== 'undefined') {
+                console.log('✅ HTMX is loaded and available');
+            } else {
+                console.warn('⚠️ HTMX not available - using fallback form submission');
+            }
             // Update icons to match the initial theme state
             const isDark = document.documentElement.classList.contains('dark');
 
