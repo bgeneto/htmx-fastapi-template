@@ -1,0 +1,202 @@
+<form hx-post="/contact" hx-target="#contact-area" hx-swap="outerHTML" method="post" novalidate class="space-y-6">
+  <!-- Name field with icon -->
+  <div>
+    <label for="name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Name</label>
+    <div class="relative">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+      <input id="name" name="name" value="{{ form.get('name','') }}" required minlength="2"
+        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+    </div>
+    {% if errors.get('name') %}<div id="name-error"
+      class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      {{ errors['name'] }}
+    </div>{% else %}<div id="name-error" class="hidden mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span></span>
+    </div>{% endif %}
+  </div>
+
+  <!-- Email field with icon -->
+  <div>
+    <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Email</label>
+    <div class="relative">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+          </path>
+        </svg>
+      </div>
+      <input id="email" name="email" value="{{ form.get('email','') }}" required
+        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+    </div>
+    {% if errors.get('email') %}<div id="email-error"
+      class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      {{ errors['email'] }}
+    </div>{% else %}<div id="email-error" class="hidden mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span></span>
+    </div>{% endif %}
+  </div>
+
+  <!-- Message field with icon -->
+  <div>
+    <label for="message" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Message</label>
+    <div class="relative">
+      <div class="absolute top-3 left-3 pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+        </svg>
+      </div>
+      <textarea id="message" name="message" required minlength="5" rows="4"
+        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 resize-none">{{ form.get('message','') }}</textarea>
+    </div>
+    {% if errors.get('message') %}<div class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      {{ errors['message'] }}
+    </div>{% endif %}
+    <div id="message-error" class="hidden mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="flex items-center gap-3 pt-2">
+    <button type="submit" hx-indicator="#loading-spinner"
+      class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+      <svg id="loading-spinner" class="hidden h-5 w-5 mr-2 animate-spin text-white" xmlns="http://www.w3.org/2000/svg"
+        fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+        </path>
+      </svg>
+      <span>Send Message</span>
+    </button>
+    <button type="reset"
+      class="inline-flex items-center px-4 py-3 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 shadow-sm">
+      <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+        </path>
+      </svg>
+      Reset
+    </button>
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Validation functions
+    function validateField(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorDiv = document.getElementById(fieldId + '-error');
+      const errorSpan = errorDiv.querySelector('span');
+
+      if (field && errorDiv && errorSpan) {
+        if (message) {
+          errorSpan.textContent = message;
+          errorDiv.classList.remove('hidden');
+        } else {
+          errorSpan.textContent = '';
+          errorDiv.classList.add('hidden');
+        }
+      }
+    }
+
+    function validateName() {
+      const field = document.getElementById('name');
+      const value = field.value.trim();
+      if (!value) {
+        validateField('name', 'Name is required');
+      } else if (value.length < 2) {
+        validateField('name', 'Name must be at least 2 characters');
+      } else {
+        validateField('name', '');
+      }
+    }
+
+    function validateEmail() {
+      const field = document.getElementById('email');
+      const value = field.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value) {
+        validateField('email', 'Email is required');
+      } else if (!emailRegex.test(value)) {
+        validateField('email', 'Please enter a valid email address');
+      } else {
+        validateField('email', '');
+      }
+    }
+
+    function validateMessage() {
+      const field = document.getElementById('message');
+      const value = field.value.trim();
+      if (!value) {
+        validateField('message', 'Message is required');
+      } else if (value.length < 5) {
+        validateField('message', 'Message must be at least 5 characters');
+      } else {
+        validateField('message', '');
+      }
+    }
+
+    function validateForm() {
+      validateName();
+      validateEmail();
+      validateMessage();
+
+      // Check if any errors are visible
+      const errors = document.querySelectorAll('.text-red-600, .dark\\:text-red-400');
+      return errors.length === 0;
+    }
+
+    // Add event listeners
+    document.getElementById('name').addEventListener('blur', validateName);
+    document.getElementById('name').addEventListener('input', validateName);
+    document.getElementById('email').addEventListener('blur', validateEmail);
+    document.getElementById('email').addEventListener('input', validateEmail);
+    document.getElementById('message').addEventListener('blur', validateMessage);
+    document.getElementById('message').addEventListener('input', validateMessage);
+
+    // Prevent form submission if validation fails
+    document.querySelector('form').addEventListener('submit', function (e) {
+      if (!validateForm()) {
+        e.preventDefault();
+        window.showToast('Please fix the errors before submitting.', 'error');
+        // Scroll to first error
+        const firstError = document.querySelector('.text-red-600, .dark\\:text-red-400');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    });
+  });
+</script>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{{ request.app.title }}{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- Heroicons -->
+    <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js" type="module"></script>
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.10.0"></script>
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+        /* Dark mode variables */
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #111827;
+            --border-color: #e5e7eb;
+        }
+
+        body.dark {
+            --bg-primary: #111827;
+            --text-primary: #f9fafb;
+            --border-color: #374151;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body
+    class="font-sans font-normal bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
+    {% block content %}{% endblock %}
+
+    <!-- Toast container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Common scripts -->
+    <script>
+            // Initialize theme IMMEDIATELY before DOMContentLoaded to prevent flash
+            (function () {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Update icons to match the initial theme state
+            const isDark = document.documentElement.classList.contains('dark');
+
+            document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+                const sunIcon = btn.querySelector('[data-theme-sun]');
+                const moonIcon = btn.querySelector('[data-theme-moon]');
+                if (sunIcon && moonIcon) {
+                    if (isDark) {
+                        sunIcon.classList.remove('hidden');
+                        moonIcon.classList.add('hidden');
+                    } else {
+                        moonIcon.classList.remove('hidden');
+                        sunIcon.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Function to toggle theme (can be called from any component)
+        window.toggleTheme = function () {
+            const html = document.documentElement;
+            const isCurrentlyDark = html.classList.contains('dark');
+
+            // Toggle the dark class on html element
+            if (isCurrentlyDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+
+            // Update all theme toggle buttons on the page
+            document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+                const sunIcon = btn.querySelector('[data-theme-sun]');
+                const moonIcon = btn.querySelector('[data-theme-moon]');
+                if (sunIcon && moonIcon) {
+                    if (!isCurrentlyDark) {
+                        // We just switched to dark mode
+                        sunIcon.classList.remove('hidden');
+                        moonIcon.classList.add('hidden');
+                    } else {
+                        // We just switched to light mode
+                        moonIcon.classList.remove('hidden');
+                        sunIcon.classList.add('hidden');
+                    }
+                }
+            });
+        };
+
+        // Toast functions
+        window.showToast = function (message, type = 'success', duration = 5000) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            toast.className = `${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between min-w-80 max-w-md animate-in slide-in-from-right-2`;
+
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${type === 'success' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' : ''}
+                        ${type === 'error' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' : ''}
+                        ${type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 19c-.77.833.192 2.5 1.732 2.5z"></path>' : ''}
+                        ${type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' : ''}
+                    </svg>
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto remove after duration
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, duration);
+
+            return toast;
+        };
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

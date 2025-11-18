@@ -1,0 +1,3 @@
+/* minimal overrides and error/success styles */
+.err { color: #b00020; }
+.success { color: #0a8a0a; font-weight:600; }

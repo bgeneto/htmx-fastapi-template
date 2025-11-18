@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./:/app
+      - db_data:/app/devdata
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./dev.db
+      - ENV=development
+      - SECRET_KEY=change-me
+
+volumes:
+  db_data:
+    driver: local
