@@ -71,12 +71,83 @@ def kill_existing_processes():
         time.sleep(2)
 
 
+def update_translations():
+    """Extract, update, and compile translation files before starting the application"""
+    try:
+        print("🌍 Updating translations...")
+
+        # Step 1: Extract messages
+        print("  📝 Extracting messages from source code...")
+        result = subprocess.run(
+            [
+                "pybabel",
+                "extract",
+                "-F",
+                "babel.cfg",
+                "-o",
+                "messages.pot",
+                ".",
+                "--project=alpine-fastapi-app",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode != 0:
+            print(f"  ⚠️  Message extraction failed: {result.stderr}")
+            return False
+
+        # Step 2: Update existing translations
+        print("  🔄 Updating translation files...")
+        result = subprocess.run(
+            ["pybabel", "update", "-i", "messages.pot", "-d", "translations"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode != 0:
+            print(f"  ⚠️  Translation update failed: {result.stderr}")
+            return False
+
+        # Step 3: Compile translations
+        print("  ⚙️  Compiling translations...")
+        result = subprocess.run(
+            ["pybabel", "compile", "-d", "translations"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode == 0:
+            print("✅ Translations updated and compiled successfully")
+            return True
+        else:
+            print(f"⚠️  Translation compilation failed: {result.stderr}")
+            print("   Continuing anyway...")
+            return False
+
+    except FileNotFoundError:
+        print("⚠️  pybabel not found. Install with: pip install babel")
+        print("   Continuing without updating translations...")
+        return False
+    except subprocess.TimeoutExpired:
+        print("⚠️  Translation update timed out")
+        print("   Continuing anyway...")
+        return False
+    except Exception as e:
+        print(f"⚠️  Translation update error: {e}")
+        print("   Continuing anyway...")
+        return False
+
+
 def main():
     """Start the application with uvicorn"""
     project_root = Path(__file__).parent
     os.chdir(project_root)
 
     print("🔧 Preparing to start application...")
+
+    # Update and compile translations first
+    update_translations()
 
     # Kill any existing processes that might be using the port
     kill_existing_processes()

@@ -9,7 +9,13 @@ class Settings(BaseSettings):
     ENV: str
     SECRET_KEY: SecretStr
     DATABASE_URL: str
-    debug: bool = True
+    DEBUG: bool = False
+    LOG_FILE: str | None = None
+
+    @property
+    def debug(self) -> bool:
+        """Alias for DEBUG to maintain compatibility."""
+        return self.DEBUG
 
 
 settings = Settings()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-18 14:58-0300\n"
+"POT-Creation-Date: 2025-11-19 07:15-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -19,66 +19,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: app/schemas.py:17 templates/_form.html:120
+#: app/main.py:156 app/schemas.py:17 templates/_form_alpine.html:148
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/schemas.py:24 templates/_form.html:124
+#: app/main.py:158 app/schemas.py:24 templates/_form_alpine.html:152
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
-#: templates/_form.html:4 templates/admin_index.html:21
-msgid "Name"
-msgstr "Nome"
-
-#: templates/_form.html:33 templates/admin_index.html:22
-msgid "Email"
-msgstr "E-mail"
-
-#: templates/_form.html:63 templates/admin_index.html:23
-msgid "Message"
-msgstr "Mensagem"
-
-#: templates/_form.html:102
-msgid "Send Message"
-msgstr "Enviar Mensagem"
-
-#: templates/_form.html:111
-msgid "Reset"
-msgstr "Limpar"
-
-#: templates/_form.html:119
-msgid "Name is required"
-msgstr "O nome é obrigatório"
-
-#: templates/_form.html:121
-msgid "Email is required"
-msgstr "O e-mail é obrigatório"
-
-#: templates/_form.html:122
+#: app/main.py:160 templates/_form_alpine.html:150
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: templates/_form.html:123
+#: app/main.py:163 templates/_form_alpine.html:147
+msgid "Name is required"
+msgstr "O nome é obrigatório"
+
+#: app/main.py:165 templates/_form_alpine.html:149
+msgid "Email is required"
+msgstr "O e-mail é obrigatório"
+
+#: app/main.py:167 templates/_form_alpine.html:151
 msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
-#: templates/_form.html:125
-msgid "Please fix the errors before submitting."
-msgstr "Por favor, corrija os erros antes de enviar."
-
-#: templates/_success.html:3 templates/_success.html:22
-#, python-format
-msgid "Thanks %(name)s — your message has been received!"
-msgstr "Obrigado %(name)s — sua mensagem foi recebida!"
-
-#: templates/_success.html:20
+#: templates/_form_alpine.html:11
 msgid "Message Sent!"
 msgstr "Mensagem Enviada!"
 
-#: templates/_success.html:32
+#: templates/_form_alpine.html:20
 msgid "Send Another Message"
 msgstr "Enviar Outra Mensagem"
+
+#: templates/_form_alpine.html:28 templates/admin_index.html:21
+msgid "Name"
+msgstr "Nome"
+
+#: templates/_form_alpine.html:53 templates/admin_index.html:22
+msgid "Email"
+msgstr "E-mail"
+
+#: templates/_form_alpine.html:79 templates/admin_index.html:23
+msgid "Message"
+msgstr "Mensagem"
+
+#: templates/_form_alpine.html:114
+msgid "Sending..."
+msgstr ""
+
+#: templates/_form_alpine.html:114
+msgid "Send Message"
+msgstr "Enviar Mensagem"
+
+#: templates/_form_alpine.html:123
+msgid "Reset"
+msgstr "Limpar"
+
+#: templates/_form_alpine.html:153
+msgid "Please fix the errors before submitting."
+msgstr "Por favor, corrija os erros antes de enviar."
+
+#: templates/_form_alpine.html:154
+msgid "Thanks"
+msgstr ""
+
+#: templates/_form_alpine.html:154
+#, fuzzy
+msgid "your message has been received!"
+msgstr "Obrigado %(name)s — sua mensagem foi recebida!"
+
+#: templates/_recent_contacts.html:2
+msgid "Recent contacts"
+msgstr "Contatos recentes"
+
+#: templates/_recent_contacts.html:22
+msgid "No contacts yet. Be the first to submit!"
+msgstr ""
 
 #: templates/admin_index.html:13
 msgid "Admin - Contacts"
@@ -141,30 +157,35 @@ msgid "ContactFlow"
 msgstr "ContactFlow"
 
 #: templates/index.html:10
-msgid "FastAPI + Alpine starter — now with Tailwind UI v4"
-msgstr "Aplicação inicial FastAPI + Alpine — agora com Tailwind UI v4"
+msgid ""
+"FastAPI + Alpine.js starter — now with Tailwind UI\n"
+"        v4"
+msgstr ""
 
-#: templates/index.html:23
+#: templates/index.html:24
 msgid "Contact us"
 msgstr "Entre em contato"
-
-#: templates/index.html:31
-msgid "Recent contacts"
-msgstr "Contatos recentes"
-
-#: templates/index.html:33
-msgid ""
-"This scaffold includes a ready-to-use DB and migrations. Extend "
-"repository to show recent entries."
-msgstr ""
-"Este modelo inclui um banco de dados pronto para uso e migrações. Estenda"
-" o repositório para mostrar entradas recentes."
-
-#: templates/index.html:36
-msgid "⏳ Coming soon..."
-msgstr "⏳ Em breve..."
 
 #: templates/components/_language_selector.html:80
 msgid "Changing language..."
 msgstr "Alterando idioma..."
+
+#~ msgid ""
+#~ "This scaffold includes a ready-to-"
+#~ "use DB and migrations. Extend repository"
+#~ " to show recent entries."
+#~ msgstr ""
+#~ "Este modelo inclui um banco de "
+#~ "dados pronto para uso e migrações. "
+#~ "Estenda o repositório para mostrar "
+#~ "entradas recentes."
+
+#~ msgid "⏳ Coming soon..."
+#~ msgstr "⏳ Em breve..."
+
+#~ msgid ""
+#~ "FastAPI + Alpine.js starter — now with Tailwind UI\n"
+#~ "        v4\n"
+#~ "        UI"
+#~ msgstr ""
 

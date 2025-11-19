@@ -48,8 +48,9 @@ pip install -r requirements.txt
 npm install
 npm run build:css
 
-# 3. Configure database
-# configure DATABASE_URL in .env (example below)
+# 3. Configure environment
+cp .env.example .env
+# Edit .env with your settings (DATABASE_URL, SECRET_KEY, DEBUG, LOG_FILE)
 python -m app.create_db  # create tables for dev
 
 # 4. Compile translations (required for i18n)
@@ -88,8 +89,18 @@ docker run -p 8000:8000 alpine-fastapi
 DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/fastapi_alpine
 SECRET_KEY=change-me
 ENV=development
+DEBUG=true
+LOG_FILE=logs/app.log
 ```
 
 Notes:
+- For production, run Alembic migrations instead of create_db.
+- Set `DEBUG=true` in `.env` to enable DEBUG-level logging
+- Set `LOG_FILE=logs/app.log` to enable file logging (optional, defaults to console-only)
+- Log files auto-rotate at 10MB, kept for 7 days, and compressed as zip
+- The scaffold focuses on patterns and a clean separation of concerns.
+
+Notes:
+- **Logging**: Set `DEBUG=true` to enable debug logs. Set `LOG_FILE` to enable file logging (rotated at 10MB, kept for 7 days).
 - For production, run Alembic migrations instead of create_db.
 - The scaffold focuses on patterns and a clean separation of concerns.

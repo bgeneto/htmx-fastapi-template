@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -17,7 +19,21 @@ from .schemas import ContactCreate
 
 logger = get_logger("main")
 
-app = FastAPI(title=settings.app_name, debug=settings.debug)
+
+# Lifespan context manager for startup and shutdown events
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    try:
+        await init_db()
+        logger.info("DB initialized on startup")
+    except Exception as e:
+        logger.error("DB init failed: {}", e)
+    yield
+    # Shutdown (if needed in the future)
+
+
+app = FastAPI(title=settings.app_name, debug=settings.debug, lifespan=lifespan)
 
 # Add GZip compression for responses > 1KB
 app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -68,17 +84,6 @@ class LocaleMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(LocaleMiddleware)
-
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    # For development convenience; in production use alembic migrations
-    try:
-        await init_db()
-        logger.info("DB initialized on startup")
-    except Exception as e:
-        logger.error("DB init failed: {}", e)
 
 
 @app.get("/", response_class=HTMLResponse)
