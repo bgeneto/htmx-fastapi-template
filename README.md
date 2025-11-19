@@ -8,9 +8,8 @@ Features:
 - Async DB session management and simple repository pattern
 - Structured logging with Loguru + logging adapter
 - Environment config via pydantic BaseSettings
-- Development helper script to create the DB schema
 - Simple migration hint using Alembic (template included)
-- Tailwind CSS 3.x for styling
+- Tailwind CSS 4.x for styling
 
 ## 🌍 Internationalization
 
@@ -80,13 +79,13 @@ The Dockerfile automatically:
 
 **Production Docker build:**
 ```bash
-docker build -t htmx-fastapi .
-docker run -p 8000:8000 htmx-fastapi
+docker build -t alpine-fastapi .
+docker run -p 8000:8000 alpine-fastapi
 ```
 
 .env example:
 ```
-DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/fastapi_htmx
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/fastapi_alpine
 SECRET_KEY=change-me
 ENV=development
 ```

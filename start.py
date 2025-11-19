@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple startup script for the HTMX + FastAPI application
+Simple startup script for the Alpine + FastAPI application
 """
 import os
 import subprocess
@@ -94,7 +94,7 @@ def main():
         "8000",
     ]
 
-    print("🚀 Starting HTMX + FastAPI application...")
+    print("🚀 Starting Alpine + FastAPI application...")
     print(f"📂 Working directory: {project_root}")
     print(f"💻 Command: {' '.join(cmd)}")
     print()

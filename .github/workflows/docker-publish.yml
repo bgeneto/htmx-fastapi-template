@@ -29,6 +29,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-htmx-enterprise:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-alpine-starter:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

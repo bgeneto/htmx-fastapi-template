@@ -17,7 +17,7 @@ echo -e "${BLUE}=== Translation Management Script ===${NC}\n"
 # Function to extract messages
 extract() {
     echo -e "${YELLOW}→${NC} Extracting translatable messages..."
-    pybabel extract -F babel.cfg -o "$POT_FILE" . --project=htmx-fastapi-app
+    pybabel extract -F babel.cfg -o "$POT_FILE" . --project=alpine-fastapi-app
     echo -e "${GREEN}✓${NC} Messages extracted to $POT_FILE\n"
 }
 
