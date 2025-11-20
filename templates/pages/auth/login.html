@@ -155,30 +155,19 @@
                     const formData = new FormData();
                     formData.append('email', this.form.email);
 
-                    const response = await fetch('/auth/login', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'text/html'
-                        }
+                    const response = await axios.post('/auth/login', formData, {
+                        headers: { 'Accept': 'text/html' }
                     });
 
                     // Server redirects to check_email page on success
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else if (response.ok) {
+                    // Note: Axios follows redirects automatically
+                    if (response.status === 200 && response.request.responseURL) {
+                        window.location.href = response.request.responseURL;
+                    } else {
                         // For JSON responses
-                        const data = await response.json();
+                        const data = response.data;
                         if (window.showToast && data.message) {
                             window.showToast(data.message, 'info');
-                        }
-                    } else {
-                        const data = await response.json();
-                        if (data.errors) {
-                            this.errors = data.errors;
-                        }
-                        if (window.showToast) {
-                            window.showToast(this.i18n.fixErrors, 'error');
                         }
                     }
                 } catch (error) {

@@ -5,6 +5,7 @@ A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, 
 **Features:**
 - FastAPI with async/await and dependency injection
 - Alpine.js for reactive client-side components
+- Axios for clean, consistent AJAX calls (replaces fetch)
 - HTMX for seamless server-driven HTML updates
 - **Internationalization (i18n)** - Multi-language support with Babel
 - Pydantic v2 for validation (server-side + client-side)
@@ -17,7 +18,6 @@ A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, 
 - Professional folder structure (templates, static organization)
 - Full authentication system with magic link login
 - Role-based access control (PENDING, USER, MODERATOR, ADMIN)
-- Resend email integration for transactional emails
 
 ## 📁 Project Structure
 

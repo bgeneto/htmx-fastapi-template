@@ -142,19 +142,17 @@
 
         this.loading = true;
         try {
-          const response = await fetch(window.location.pathname, {
-            method: 'POST',
-            body: new FormData(document.querySelector('form'))
+          const response = await axios.post(window.location.pathname, new FormData(document.querySelector('form')), {
+            headers: { 'Accept': 'application/json' }
           });
-          const data = await response.json();
+          const data = response.data;
 
-          if (response.ok) {
-            window.location.href = data.redirect_url || '/admin';
-          } else {
-            this.errors = data.errors || {};
-          }
+          window.location.href = data.redirect_url || '/admin';
         } catch (error) {
           console.error('Login error:', error);
+          if (error.response && error.response.data) {
+            this.errors = error.response.data.errors || {};
+          }
         } finally {
           this.loading = false;
         }

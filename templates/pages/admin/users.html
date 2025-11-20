@@ -294,27 +294,26 @@
             const formData = new FormData();
             formData.append('role', 'user');
 
-            const response = await fetch(`/admin/users/${userId}/approve`, {
-                method: 'POST',
-                body: formData
+            const response = await axios.post(`/admin/users/${userId}/approve`, formData, {
+                headers: { 'Accept': 'application/json' }
             });
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
-                if (window.showToast) {
-                    window.showToast(data.message, 'success');
-                }
-                window.location.reload();
-            } else {
-                if (window.showToast) {
-                    window.showToast(data.error || 'Failed to approve user', 'error');
-                }
+            if (window.showToast) {
+                window.showToast(data.message, 'success');
             }
+            window.location.reload();
         } catch (error) {
             console.error('Error approving user:', error);
-            if (window.showToast) {
-                window.showToast('An error occurred', 'error');
+            if (error.response && error.response.data) {
+                if (window.showToast) {
+                    window.showToast(error.response.data.error || 'Failed to approve user', 'error');
+                }
+            } else {
+                if (window.showToast) {
+                    window.showToast('An error occurred', 'error');
+                }
             }
         }
     },
@@ -331,25 +330,18 @@
                 formData.append('password', this.newUser.password);
             }
 
-            const response = await fetch('/admin/users/create', {
-                method: 'POST',
-                body: formData
+            const response = await axios.post('/admin/users/create', formData, {
+                headers: { 'Accept': 'application/json' }
             });
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
-                if (window.showToast) {
-                    window.showToast(data.message, 'success');
-                }
-                this.showCreateForm = false;
-                this.newUser = { email: '', full_name: '', role: 'user', password: '' };
-                window.location.reload();
-            } else {
-                if (window.showToast) {
-                    window.showToast(data.errors?.email || data.error || 'Failed to create user', 'error');
-                }
+            if (window.showToast) {
+                window.showToast(data.message, 'success');
             }
+            this.showCreateForm = false;
+            this.newUser = { email: '', full_name: '', role: 'user', password: '' };
+            window.location.reload();
         } catch (error) {
             console.error('Error creating user:', error);
             if (window.showToast) {
@@ -377,24 +369,17 @@
             formData.append('role', this.editingUser.role);
             formData.append('is_active', this.editingUser.is_active);
 
-            const response = await fetch(`/admin/users/${this.editingUser.id}/update-role`, {
-                method: 'POST',
-                body: formData
+            const response = await axios.post(`/admin/users/${this.editingUser.id}/update-role`, formData, {
+                headers: { 'Accept': 'application/json' }
             });
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
-                if (window.showToast) {
-                    window.showToast(data.message, 'success');
-                }
-                this.showEditForm = false;
-                window.location.reload();
-            } else {
-                if (window.showToast) {
-                    window.showToast(data.error || 'Failed to update user', 'error');
-                }
+            if (window.showToast) {
+                window.showToast(data.message, 'success');
             }
+            this.showEditForm = false;
+            window.location.reload();
         } catch (error) {
             console.error('Error updating user:', error);
             if (window.showToast) {

@@ -221,35 +221,33 @@
                     formData.append('email', this.form.email);
                     formData.append('message', this.form.message);
 
-                    const response = await fetch('/contact', {
-                        method: 'POST',
-                        body: formData
+                    const response = await axios.post('/contact', formData, {
+                        headers: { 'Accept': 'application/json' }
                     });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        this.success = true;
-                        this.successMessage = this.i18n.successTemplate.replace('{name}', this.form.name);
+                    const data = response.data;
+                    this.success = true;
+                    this.successMessage = this.i18n.successTemplate.replace('{name}', this.form.name);
 
-                        if (window.showToast) {
-                            window.showToast(this.successMessage, 'success');
-                        }
+                    if (window.showToast) {
+                        window.showToast(this.successMessage, 'success');
+                    }
 
-                        // Refresh recent contacts
-                        this.refreshRecentContacts();
-                    } else {
-                        const errorData = await response.json();
-                        if (errorData.errors) {
-                            this.errors = errorData.errors;
+                    // Refresh recent contacts
+                    this.refreshRecentContacts();
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    if (error.response && error.response.data) {
+                        if (error.response.data.errors) {
+                            this.errors = error.response.data.errors;
                         }
                         if (window.showToast) {
                             window.showToast(this.i18n.fixErrors, 'error');
                         }
-                    }
-                } catch (error) {
-                    console.error('Form submission error:', error);
-                    if (window.showToast) {
-                        window.showToast('An error occurred. Please try again.', 'error');
+                    } else {
+                        if (window.showToast) {
+                            window.showToast('An error occurred. Please try again.', 'error');
+                        }
                     }
                 } finally {
                     this.loading = false;
@@ -269,8 +267,10 @@
 
             async refreshRecentContacts() {
                 try {
-                    const response = await fetch('/recent-contacts');
-                    const html = await response.text();
+                    const response = await axios.get('/recent-contacts', {
+                        headers: { 'Accept': 'text/html' }
+                    });
+                    const html = response.data;
                     const recentContactsArea = document.getElementById('recent-contacts-area');
                     if (recentContactsArea) {
                         recentContactsArea.outerHTML = html;

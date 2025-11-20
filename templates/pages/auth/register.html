@@ -217,27 +217,17 @@
                     formData.append('email', this.form.email);
                     formData.append('full_name', this.form.full_name);
 
-                    const response = await fetch('/auth/register', {
-                        method: 'POST',
-                        body: formData
+                    const response = await axios.post('/auth/register', formData, {
+                        headers: { 'Accept': 'application/json' }
                     });
 
-                    const data = await response.json();
+                    const data = response.data;
 
-                    if (response.ok) {
-                        this.success = true;
-                        this.successMessage = data.message || this.i18n.successMessage;
+                    this.success = true;
+                    this.successMessage = data.message || this.i18n.successMessage;
 
-                        if (window.showToast) {
-                            window.showToast(this.successMessage, 'success');
-                        }
-                    } else {
-                        if (data.errors) {
-                            this.errors = data.errors;
-                        }
-                        if (window.showToast) {
-                            window.showToast(this.i18n.fixErrors, 'error');
-                        }
+                    if (window.showToast) {
+                        window.showToast(this.successMessage, 'success');
                     }
                 } catch (error) {
                     console.error('Registration error:', error);
