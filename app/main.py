@@ -114,6 +114,52 @@ class LocaleMiddleware(BaseHTTPMiddleware):
 app.add_middleware(LocaleMiddleware)
 
 
+class NextUrlMiddleware(BaseHTTPMiddleware):
+    """
+    Middleware to handle "next URL" redirects for authenticated pages.
+
+    This middleware intercepts requests to admin routes that require authentication.
+    If the user is not authenticated, it redirects them to the login page with
+    the original URL stored as a "next" parameter for post-login redirect.
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        # Check if this is an admin route that might require authentication
+        if (
+            request.url.path.startswith("/admin/")
+            and request.url.path != "/admin/login"
+        ):
+            # Quick check for session cookie - if no cookie, redirect to login
+            session_cookie = request.cookies.get(COOKIE_NAME)
+            if not session_cookie:
+                # No session cookie - redirect to login with next URL
+                from urllib.parse import quote
+
+                next_url = quote(str(request.url), safe="")
+                login_url = f"/admin/login?next={next_url}"
+                return RedirectResponse(url=login_url, status_code=302)
+
+        # Continue processing the request
+        response = await call_next(request)
+        return response
+
+
+app.add_middleware(NextUrlMiddleware)
+
+
+@app.exception_handler(HTTPException)
+async def custom_http_exception_handler(request: Request, exc: HTTPException):
+    """
+    Custom exception handler for HTTP exceptions.
+
+    Admin authentication redirects are now handled by NextUrlMiddleware.
+    This handler provides JSON responses for API requests and HTML error pages for browsers.
+    """
+    # For all cases, use default JSON error handling
+    # Admin HTML redirects are handled by NextUrlMiddleware before exceptions occur
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request, session: AsyncSession = Depends(get_session)):
     recent_contacts = await get_recent_contacts(session, limit=4)
@@ -376,41 +422,113 @@ async def logout():
 # Simple login form for admin (development). For production, use proper auth.
 @app.get("/admin/login", response_class=HTMLResponse)
 async def admin_login_form(request: Request):
+    """Display admin login form with optional 'next' parameter for post-login redirect"""
     return templates.TemplateResponse(
         "pages/admin/login.html", {"request": request, "error": None}
     )
 
 
-@app.post("/admin/login", response_class=HTMLResponse)
+# Safe URL passthrough for JS - avoids Jinja2 escaping issues
+@app.get("/admin/login-url")
+async def admin_login_url(request: Request, next: Optional[str] = None):
+    """Return just the next URL safely for JavaScript"""
+    from urllib.parse import unquote
+
+    if next:
+        try:
+            decoded = unquote(next)
+            # Basic validation
+            from urllib.parse import urlparse
+
+            parsed = urlparse(decoded)
+            if (
+                parsed.scheme == ""
+                and parsed.netloc == ""
+                and parsed.path.startswith("/admin")
+            ):
+                return {"next_url": decoded}
+        except:
+            pass
+    return {"next_url": ""}
+
+
+@app.post("/admin/login")
 async def admin_login(
     request: Request,
     email: str = Form(...),
     password: str = Form(...),
+    next: Optional[str] = None,  # From query parameter (middleware)
     session: AsyncSession = Depends(get_session),
 ):
     """Bootstrap admin login with password (admin only)"""
+    form_data = {"email": email, "password": password}
+
     # Get user by email
     user = await get_user_by_email(session, email)
 
     # Check if user exists
     if not user:
-        return templates.TemplateResponse(
-            "pages/admin/login.html",
-            {"request": request, "error": _("Invalid credentials")},
+        return JSONResponse(
+            status_code=400,
+            content={
+                "errors": {"email": _("Invalid credentials")},
+                "form": form_data,
+            },
         )
 
     # Verify with strategy
     verifier = create_admin_login_verifier(user)
     if not verifier.verify(password=password):
-        return templates.TemplateResponse(
-            "pages/admin/login.html",
-            {"request": request, "error": _("Invalid credentials")},
+        return JSONResponse(
+            status_code=400,
+            content={
+                "errors": {"email": _("Invalid credentials")},
+                "form": form_data,
+            },
         )
 
     # Create session cookie - user exists and has ID at this point
     assert user.id is not None, "User must have an ID"
     cookie = create_session_cookie(user.id, user.email, user.role)
-    response = RedirectResponse(url="/admin", status_code=303)
+
+    # Determine redirect URL - use 'next' if provided and valid, otherwise default to /admin
+    redirect_url = "/admin"
+    if next:
+        from urllib.parse import unquote, urlparse
+
+        try:
+            decoded_next = unquote(next)
+            # Parse the URL to check its path
+            parsed_url = urlparse(decoded_next)
+
+            # Security validation: prevent redirects to sensitive endpoints
+            sensitive_endpoints = [
+                "/admin/logout",  # Don't auto-logout user after login
+                "/admin/login",  # Don't redirect back to login
+                "/auth/logout",  # Don't redirect to auth logout
+                "/auth/login",  # Don't redirect to general login
+            ]
+
+            # Check if the path is safe:
+            # 1. Must be relative (not external domain)
+            # 2. Must not be in sensitive endpoints
+            # 3. Must start with /admin to stay within admin area
+            if (
+                parsed_url.scheme == ""
+                and parsed_url.netloc == ""
+                and parsed_url.path.startswith("/admin")
+                and parsed_url.path not in sensitive_endpoints
+            ):
+                redirect_url = decoded_next
+
+        except Exception:
+            # If decoding or validation fails, use default
+            pass
+
+    # Return success response - JavaScript will handle redirect
+    response = JSONResponse(content={"success": True, "redirect_url": redirect_url})
+
+    # Set session cookie on the response
     response.set_cookie(
         COOKIE_NAME, cookie, httponly=True, samesite="lax", secure=not settings.debug
     )

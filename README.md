@@ -17,7 +17,7 @@ A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, 
 - Professional folder structure (templates, static organization)
 - Full authentication system with magic link login
 - Role-based access control (PENDING, USER, MODERATOR, ADMIN)
-- Brevo email integration for transactional emails
+- Resend email integration for transactional emails
 
 ## 📁 Project Structure
 
@@ -30,7 +30,7 @@ alpine-fastapi/
 │   ├── schemas.py                    # Pydantic validation schemas
 │   ├── repository.py                 # Data access layer (CRUD)
 │   ├── auth.py                       # Session & authentication
-│   ├── email.py                      # Email service (Brevo)
+│   ├── email.py                      # Email service (Resend)
 │   ├── i18n.py                       # i18n utilities
 │   ├── logger.py                     # Logging configuration
 │   ├── db.py                         # Database engine & sessions

@@ -11,7 +11,7 @@ The authentication system features:
 - **Admin Approval Workflow** - New registrations require admin approval before activation
 - **Role-Based Access Control** - Four user roles: Pending, User, Moderator, Admin
 - **Bootstrap Admin** - Initial admin account with password-based login for setup
-- **Email Integration** - Transactional emails via Brevo (Sendinblue) API
+- **Email Integration** - Transactional emails via Resend API
 - **Session Management** - Secure, signed cookie-based sessions with expiration
 - **i18n Support** - All auth flows fully translated
 
@@ -153,7 +153,7 @@ POST /admin/users/{user_id}/update-role
 
 ## Email Templates
 
-All emails sent via Brevo API (`app/email.py`):
+All emails sent via Resend API (`app/email.py`):
 
 ### Magic Link Email
 
@@ -274,8 +274,8 @@ MAGIC_LINK_EXPIRY_MINUTES=15
 BOOTSTRAP_ADMIN_EMAIL=admin@example.com
 BOOTSTRAP_ADMIN_PASSWORD=strong-password-here
 
-# Brevo Email
-BREVO_API_KEY=your-api-key
+# Resend Email
+EMAIL_API_KEY=your-api-key
 EMAIL_FROM_ADDRESS=noreply@example.com
 EMAIL_FROM_NAME=Your App Name
 
@@ -285,13 +285,13 @@ SECRET_KEY=your-secret-key
 DATABASE_URL=postgresql+asyncpg://user:pass@host/db
 ```
 
-### Brevo Setup
+### Resend Setup
 
-1. Sign up at https://www.brevo.com
+1. Sign up at https://resend.com
 2. Navigate to Settings → API Keys
 3. Create a new API key
-4. Add to `.env` as `BREVO_API_KEY`
-5. Verify sender email in Brevo dashboard
+4. Add to `.env` as `EMAIL_API_KEY`
+5. Note: Resend doesn't require sender email verification
 
 ## Security Considerations
 
@@ -470,10 +470,9 @@ _("Welcome back!")  # Translated based on user locale
 ### Issue: Magic link emails not sending
 
 **Check:**
-1. `BREVO_API_KEY` is set correctly
-2. Sender email is verified in Brevo dashboard
-3. Check logs for Brevo API errors
-4. Verify API key has transactional email permissions
+1. `EMAIL_API_KEY` is set correctly
+2. Check logs for Resend API errors
+3. Verify API key is valid and has correct permissions
 
 ### Issue: Cannot log in as bootstrap admin
 
@@ -496,7 +495,7 @@ _("Welcome back!")  # Translated based on user locale
 **Check:**
 1. Admin user exists in database
 2. Admin email is correct
-3. Brevo API key has permission
+3. Resend API key has correct permissions
 4. Check spam folder
 5. Review logs for email sending errors
 
@@ -507,7 +506,7 @@ _("Welcome back!")  # Translated based on user locale
 - [ ] Change `BOOTSTRAP_ADMIN_PASSWORD` from default
 - [ ] Use PostgreSQL instead of SQLite
 - [ ] Set `APP_BASE_URL` to production domain (HTTPS)
-- [ ] Verify Brevo sender email
+- [ ] Configure Resend domain and verify email sending
 - [ ] Set `SESSION_EXPIRY_DAYS` appropriately (30 default)
 - [ ] Set `MAGIC_LINK_EXPIRY_MINUTES` conservatively (15 default)
 - [ ] Enable HTTPS (for `secure` cookie flag)

@@ -1,21 +1,100 @@
-"""Email service using Brevo (Sendinblue) API for transactional emails"""
+"""Email service using Resend API for transactional emails"""
 
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
+import resend
 
 from .config import settings
 from .logger import get_logger
 
 logger = get_logger(__name__)
 
+# Configure Resend API key
+resend.api_key = settings.EMAIL_API_KEY.get_secret_value()
 
-def _get_brevo_client():
-    """Initialize Brevo API client"""
-    configuration = sib_api_v3_sdk.Configuration()
-    configuration.api_key["api-key"] = settings.BREVO_API_KEY.get_secret_value()
-    return sib_api_v3_sdk.TransactionalEmailsApi(
-        sib_api_v3_sdk.ApiClient(configuration)
-    )
+
+def _create_safe_html_template(
+    preheader_text: str, subject: str, content_body: str, sender_footer: bool = False
+) -> str:
+    """
+    Create a transactional email HTML template that follows best practices.
+    """
+    unsubscribe_footer = ""
+    if sender_footer:
+        unsubscribe_footer = f"""
+        <tr>
+            <td style="padding: 20px; font-size: 12px; color: #666; border-top: 1px solid #eee; text-align: center;">
+                This is an automated message from {settings.EMAIL_FROM_NAME}.<br>
+                If you have questions, please contact us or reply to this email.<br><br>
+                <a href="{settings.APP_BASE_URL}" style="color: #666; text-decoration: none;">{settings.app_name}</a>
+            </td>
+        </tr>
+        """
+
+    return f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no" />
+    <!--[if mso]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+    <title>{subject}</title>
+    <style type="text/css">
+        body {{margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333;}}
+        table {{border-collapse: collapse;}}
+        td {{vertical-align: top;}}
+        @media only screen and (max-width: 480px) {{
+            .mobile-padding {{ padding-left: 10px !important; padding-right: 10px !important; }}
+            .mobile-font-size {{ font-size: 16px !important; }}
+        }}
+    </style>
+    <!-- Preheader text for email clients -->
+    <div style="display: none; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0;">{preheader_text}</div>
+</head>
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+        <tr>
+            <td align="center" valign="top">
+                <table width="600" border="0" cellspacing="0" cellpadding="0" class="mobile-padding">
+                    <tr>
+                        <td align="center" valign="top" style="padding: 20px 0;">
+                            <h1 style="margin: 0; font-size: 24px; font-weight: normal; color: #333;">{settings.app_name}</h1>
+                        </td>
+                    </tr>
+                </table>
+                <table width="600" border="0" cellspacing="0" cellpadding="0" class="mobile-padding">
+                    {content_body}
+                    {unsubscribe_footer}
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>"""
+
+
+def _create_plain_text_version(html_content: str, key_action_text: str = "") -> str:
+    """
+    Generate a plain text version from HTML content for accessibility and spam prevention.
+    """
+    # Remove HTML tags and decode entities (simplified version)
+    import re
+
+    plain_text = re.sub(r"<[^>]+>", " ", html_content)
+    plain_text = re.sub(r"&[^;]+;", " ", plain_text)
+    plain_text = re.sub(r"\s+", " ", plain_text).strip()
+
+    return f"""{settings.app_name}
+
+{plain_text}
+
+---
+This is an automated message. Please do not reply.
+
+{key_action_text}
+
+Sent by {settings.EMAIL_FROM_NAME}
+{settings.APP_BASE_URL}
+"""
 
 
 async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
@@ -30,48 +109,73 @@ async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
     Returns:
         True if email sent successfully, False otherwise
     """
-    api_instance = _get_brevo_client()
-
     subject = "Your login link"
+    preheader_text = f"Click your login link from {settings.app_name} - expires in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes"
 
-    html_content = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #2563eb;">Login to {settings.app_name}</h2>
-            <p>Hi {full_name},</p>
-            <p>Click the button below to log in to your account. This link will expire in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes.</p>
-            <div style="margin: 30px 0;">
-                <a href="{magic_link}"
-                   style="background-color: #2563eb; color: white; padding: 12px 30px;
-                          text-decoration: none; border-radius: 5px; display: inline-block;">
-                    Log In
-                </a>
-            </div>
-            <p style="color: #666; font-size: 14px;">
-                Or copy and paste this link into your browser:<br>
-                <a href="{magic_link}" style="color: #2563eb;">{magic_link}</a>
-            </p>
-            <p style="color: #666; font-size: 12px; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
-                If you didn't request this login link, you can safely ignore this email.
-            </p>
-        </div>
-    </body>
-    </html>
+    content_body = f"""
+        <tr>
+            <td style="padding: 40px 30px; text-align: center; background-color: #ffffff;">
+                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #2563eb;">Login to {settings.app_name}</h2>
+                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #333;">
+                    Hi {full_name},<br><br>
+                    Click the button below to log in to your account. This link will expire in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes.
+                </p>
+                <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
+                    <tr>
+                        <td style="border-radius: 5px; background-color: #2563eb;" bgcolor="#2563eb">
+                            <a href="{magic_link}" style="padding: 12px 30px; border: 1px solid #2563eb; border-radius: 5px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; text-transform: capitalize;" class="mobile-font-size">
+                                Log In
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <p style="margin: 30px 0 0 0; font-size: 14px; line-height: 1.6; color: #666;">
+                    Or copy and paste this link into your browser:<br>
+                    <a href="{magic_link}" style="color: #2563eb; word-break: break-all;">{magic_link}</a>
+                </p>
+                <hr style="border: none; border-top: 1px solid #eeeeee; margin: 40px 0;">
+                <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #666;">
+                    <strong>Security note:</strong> If you didn't request this login link, you can safely ignore this email.<br>
+                    Links expire quickly for your security.
+                </p>
+            </td>
+        </tr>
     """
 
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-        to=[{"email": email, "name": full_name}],
-        sender={"email": settings.EMAIL_FROM_ADDRESS, "name": settings.EMAIL_FROM_NAME},
-        subject=subject,
-        html_content=html_content,
+    html_content = _create_safe_html_template(
+        preheader_text, subject, content_body, sender_footer=True
     )
 
+    plain_text = _create_plain_text_version(
+        f"{subject} - Hi {full_name}, click this link to log in: {magic_link} (expires in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes)",
+        f"Login link: {magic_link}",
+    )
+
+    # Create escape URL for List-Unsubscribe header
+    from urllib.parse import quote
+
+    unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
+
     try:
-        api_response = api_instance.send_transac_email(send_smtp_email)
+        api_response = resend.Emails.send(
+            {
+                "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
+                "to": [email],
+                "subject": subject,
+                "html": html_content,
+                "text": plain_text,
+                "headers": {
+                    "List-Unsubscribe": f"<{unsubscribe_url}>",
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    "X-Auto-Response-Suppress": "AutoReply, DR, NDR, RN, NRN",
+                    "X-Transaction-Type": "transactional",
+                    "X-Email-Type": "authentication",
+                },
+            }
+        )
         logger.info(f"Magic link email sent to {email}: {api_response}")
         return True
-    except ApiException as e:
+    except Exception as e:
         logger.error(f"Failed to send magic link email to {email}: {e}")
         return False
 
@@ -91,48 +195,82 @@ async def send_registration_notification(
     Returns:
         True if email sent successfully, False otherwise
     """
-    api_instance = _get_brevo_client()
-
     subject = f"New user registration: {new_user_name}"
+    preheader_text = f"New user {new_user_name} has registered and needs approval"
 
-    html_content = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #2563eb;">New User Registration</h2>
-            <p>A new user has registered and is waiting for approval:</p>
-            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                <p style="margin: 5px 0;"><strong>Name:</strong> {new_user_name}</p>
-                <p style="margin: 5px 0;"><strong>Email:</strong> {new_user_email}</p>
-            </div>
-            <div style="margin: 30px 0;">
-                <a href="{approval_url}"
-                   style="background-color: #2563eb; color: white; padding: 12px 30px;
-                          text-decoration: none; border-radius: 5px; display: inline-block;">
-                    Review User
-                </a>
-            </div>
-            <p style="color: #666; font-size: 14px;">
-                Or visit the admin panel at:<br>
-                <a href="{approval_url}" style="color: #2563eb;">{approval_url}</a>
-            </p>
-        </div>
-    </body>
-    </html>
+    content_body = f"""
+        <tr>
+            <td style="padding: 40px 30px; background-color: #f9fafb;">
+                <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: normal; color: #2563eb;">New User Registration Pending</h2>
+                <p style="margin: 0 0 25px 0; font-size: 16px; line-height: 1.6; color: #374151;">
+                    Hello admin,<br><br>
+                    A new user has registered and is waiting for your approval:
+                </p>
+
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; margin: 20px 0;">
+                    <tr>
+                        <td style="padding: 20px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">
+                                        <strong style="color: #374151;">Name:</strong> <span style="color: #6b7280;">{new_user_name}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0;">
+                                        <strong style="color: #374151;">Email:</strong> <span style="color: #6b7280;">{new_user_email}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
+                    <tr>
+                        <td style="border-radius: 6px; background-color: #2563eb;" bgcolor="#2563eb">
+                            <a href="{approval_url}" style="padding: 14px 28px; border: 1px solid #2563eb; border-radius: 6px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none;" class="mobile-font-size">
+                                Review & Approve User
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="margin: 25px 0 0 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                    Or manage all users from the admin panel:<br>
+                    <a href="{approval_url}" style="color: #2563eb; word-break: break-all;">{approval_url}</a>
+                </p>
+            </td>
+        </tr>
     """
 
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-        to=[{"email": admin_email}],
-        sender={"email": settings.EMAIL_FROM_ADDRESS, "name": settings.EMAIL_FROM_NAME},
-        subject=subject,
-        html_content=html_content,
+    html_content = _create_safe_html_template(
+        preheader_text, subject, content_body, sender_footer=True
+    )
+
+    plain_text = _create_plain_text_version(
+        f"New user {new_user_name} ({new_user_email}) has registered and needs your approval. Review: {approval_url}",
+        f"Review user: {approval_url}",
     )
 
     try:
-        api_response = api_instance.send_transac_email(send_smtp_email)
+        api_response = resend.Emails.send(
+            {
+                "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
+                "to": [admin_email],
+                "subject": subject,
+                "html": html_content,
+                "text": plain_text,
+                "headers": {
+                    "X-Auto-Response-Suppress": "AutoReply, DR, NDR, RN, NRN",
+                    "X-Transaction-Type": "transactional",
+                    "X-Email-Type": "notification",
+                },
+            }
+        )
         logger.info(f"Registration notification sent to {admin_email}: {api_response}")
         return True
-    except ApiException as e:
+    except Exception as e:
         logger.error(f"Failed to send registration notification to {admin_email}: {e}")
         return False
 
@@ -149,44 +287,76 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
     Returns:
         True if email sent successfully, False otherwise
     """
-    api_instance = _get_brevo_client()
-
     subject = "Your account has been approved"
+    preheader_text = f"Welcome to {settings.app_name} - your account is now approved!"
 
-    html_content = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #10b981;">Account Approved!</h2>
-            <p>Hi {full_name},</p>
-            <p>Great news! Your account has been approved and you can now log in to {settings.app_name}.</p>
-            <div style="margin: 30px 0;">
-                <a href="{login_url}"
-                   style="background-color: #2563eb; color: white; padding: 12px 30px;
-                          text-decoration: none; border-radius: 5px; display: inline-block;">
-                    Log In Now
-                </a>
-            </div>
-            <p style="color: #666; font-size: 14px;">
-                We use passwordless authentication for your security. Simply enter your email address
-                and we'll send you a secure login link.
-            </p>
-        </div>
-    </body>
-    </html>
+    content_body = f"""
+        <tr>
+            <td style="padding: 40px 30px; background-color: #ecfdf5;">
+                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #065f46;">Account Approved! 🎉</h2>
+                <p style="margin: 0 0 25px 0; font-size: 16px; line-height: 1.6; color: #374151;">
+                    Congratulations {full_name}!<br><br>
+                    Your account has been approved and you can now log in to {settings.app_name}.
+                </p>
+
+                <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
+                    <tr>
+                        <td style="border-radius: 6px; background-color: #10b981;" bgcolor="#10b981">
+                            <a href="{login_url}" style="padding: 14px 28px; border: 1px solid #10b981; border-radius: 6px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none;" class="mobile-font-size">
+                                Get Started Now
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="margin: 25px 0 15px 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                    You can now access all features by entering your email address at:<br>
+                    <a href="{login_url}" style="color: #10b981; word-break: break-all;">{login_url}</a>
+                </p>
+
+                <hr style="border: none; border-top: 1px solid #d1fae5; margin: 30px 0;">
+                <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                    <strong>What happens next?</strong><br>
+                    You can now request magic links for passwordless login, upload files, and access your account securely.
+                    We use passwordless authentication for your security - no passwords needed!
+                </p>
+            </td>
+        </tr>
     """
 
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-        to=[{"email": email, "name": full_name}],
-        sender={"email": settings.EMAIL_FROM_ADDRESS, "name": settings.EMAIL_FROM_NAME},
-        subject=subject,
-        html_content=html_content,
+    html_content = _create_safe_html_template(
+        preheader_text, subject, content_body, sender_footer=True
     )
 
+    plain_text = _create_plain_text_version(
+        f"Great news {full_name}! Your account has been approved and you can now login to {settings.app_name}. Get started: {login_url}",
+        f"Login to your account: {login_url}",
+    )
+
+    # Create escape URL for List-Unsubscribe header (though unlikely to be used for approval emails)
+    from urllib.parse import quote
+
+    unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
+
     try:
-        api_response = api_instance.send_transac_email(send_smtp_email)
+        api_response = resend.Emails.send(
+            {
+                "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
+                "to": [email],
+                "subject": subject,
+                "html": html_content,
+                "text": plain_text,
+                "headers": {
+                    "List-Unsubscribe": f"<{unsubscribe_url}>",
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    "X-Auto-Response-Suppress": "AutoReply, DR, NDR, RN, NRN",
+                    "X-Transaction-Type": "transactional",
+                    "X-Email-Type": "notification",
+                },
+            }
+        )
         logger.info(f"Account approved email sent to {email}: {api_response}")
         return True
-    except ApiException as e:
+    except Exception as e:
         logger.error(f"Failed to send account approved email to {email}: {e}")
         return False

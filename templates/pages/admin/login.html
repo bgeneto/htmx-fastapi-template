@@ -1,14 +1,14 @@
 {% extends "_base.html" %}
 
-{% block title %}{{ _('Admin login') }}{% endblock %}
+{% block title %}Admin Login{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto p-6">
-  <!-- Header with theme toggle and language selector -->
   <header class="flex items-center justify-between mb-8">
     <div>
-      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{
-        _('Admin Login') }}</h1>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        Admin Login
+      </h1>
     </div>
     <div class="flex items-center gap-3">
       {% include "components/_language_selector.html" %}
@@ -18,7 +18,6 @@
 
   <!-- Login form -->
   <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
-    <!-- Title -->
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-4">
         <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,26 +26,17 @@
           </path>
         </svg>
       </div>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ _('Secure Access') }}</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">{{ _('Please enter your credentials') }}</p>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Secure Access</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">Please enter your credentials</p>
     </div>
 
-    <!-- Error message -->
-    {% if error %}<div class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
-      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      <span>{{ _('Invalid credentials') }}</span>
-    </div>{% endif %}
-
-    <!-- Login form -->
     <div x-data="adminLoginForm()">
       <form @submit.prevent="submitForm" novalidate class="space-y-6">
         <!-- Email field -->
         <div>
-          <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Email')
-            }}</label>
+          <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+            Email
+          </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,8 +60,9 @@
 
         <!-- Password field -->
         <div>
-          <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Password')
-            }}</label>
+          <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+            Password
+          </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +99,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
           </svg>
-          <span x-text="loading ? '{{ _(" Signing in...") }}' : '{{ _("Sign In") }}'"></span>
+          <span x-text="loading ? 'Signing in...' : 'Sign In'"></span>
         </button>
       </form>
     </div>
@@ -119,52 +110,56 @@
   function adminLoginForm() {
     return {
       loading: false,
-      form: {
-        email: '',
-        password: ''
-      },
-      errors: {
-        email: '',
-        password: ''
-      },
-      i18n: {
-        emailRequired: " {{ _('Email is required') }}", invalidEmail: "{{ _('Please enter a valid email address') }}",
-        passwordRequired: "{{ _('Password is required') }}",
-        passwordMinLength: "{{ _('Password must be at least 8 characters') }}"
-      }, validate(field) {
-        this.errors[field] = ''; if (field === 'email') {
-          if (!this.form.email) {
-            this.errors.email = this.i18n.emailRequired;
+      nextUrl: '',
+      form: { email: '', password: '' },
+      errors: { email: '', password: '' },
+
+      validate(field) {
+        this.errors[field] = '';
+        if (field === 'email') {
+          if (!this.form.email.trim()) {
+            this.errors.email = 'Email is required';
           } else if (!this.isValidEmail(this.form.email)) {
-            this.errors.email = this.i18n.invalidEmail;
-          }
-        } if (field === 'password') {
-          if (!this.form.password) {
-            this.errors.password = this.i18n.passwordRequired;
-          } else if (this.form.password.length < 8) {
-            this.errors.password = this.i18n.passwordMinLength;
+            this.errors.email = 'Please enter a valid email address';
           }
         }
-      }, isValidEmail(email) {
-        const
-        emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return emailRegex.test(email);
-      }, async submitForm() {
-        this.validate('email'); this.validate('password'); if (this.errors.email || this.errors.password) {
-          return;
-        } this.loading = true; try {
-          const formData = new FormData(); formData.append('email', this.form.email);
-          formData.append('password', this.form.password); const response = await fetch(window.location.pathname, {
-            method: 'POST', body: formData
-          }); if (response.ok) { window.location.href = '/admin'; } else {
-            const
-            error = await response.text(); this.errors.email = error || "{{ _('Invalid credentials') }}";
+        if (field === 'password') {
+          if (!this.form.password) {
+            this.errors.password = 'Password is required';
           }
-        } catch (err) {
-          console.error(err); this.errors.email = "{{ _('An error occurred. Please try again.') }}";
+        }
+      },
+
+      isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      },
+
+      async submitForm() {
+        this.validate('email');
+        this.validate('password');
+
+        if (this.errors.email || this.errors.password) return;
+
+        this.loading = true;
+        try {
+          const response = await fetch(window.location.pathname, {
+            method: 'POST',
+            body: new FormData(document.querySelector('form'))
+          });
+          const data = await response.json();
+
+          if (response.ok) {
+            window.location.href = data.redirect_url || '/admin';
+          } else {
+            this.errors = data.errors || {};
+          }
+        } catch (error) {
+          console.error('Login error:', error);
         } finally {
           this.loading = false;
         }
       }
-    }
-  } </script>
-            {% endblock %}
+    };
+  }
+</script>
+{% endblock %}

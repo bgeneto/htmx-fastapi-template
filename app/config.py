@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     BOOTSTRAP_ADMIN_EMAIL: str = Field(...)
     BOOTSTRAP_ADMIN_PASSWORD: SecretStr = Field(...)
 
-    # Email settings (Brevo/Sendinblue)
-    BREVO_API_KEY: SecretStr = Field(...)
+    # Email settings (Resend)
+    EMAIL_API_KEY: SecretStr = Field(...)
     EMAIL_FROM_ADDRESS: str = Field(...)
     EMAIL_FROM_NAME: str = "Alpine FastAPI"
 
@@ -56,7 +56,7 @@ settings = Settings(
     BOOTSTRAP_ADMIN_PASSWORD=SecretStr(
         os.getenv("BOOTSTRAP_ADMIN_PASSWORD", "changeme")
     ),
-    BREVO_API_KEY=SecretStr(os.getenv("BREVO_API_KEY", "")),
+    EMAIL_API_KEY=SecretStr(os.getenv("EMAIL_API_KEY", "")),
     EMAIL_FROM_ADDRESS=os.getenv("EMAIL_FROM_ADDRESS", "noreply@example.com"),
     APP_BASE_URL=os.getenv("APP_BASE_URL", "http://localhost:8000"),
 )

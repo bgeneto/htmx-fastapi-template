@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-20 07:58-0300\n"
+"POT-Creation-Date: 2025-11-20 09:39-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -23,44 +23,43 @@ msgstr ""
 msgid "Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:233
+#: app/main.py:279
 msgid "An account with this email already exists"
 msgstr ""
 
-#: app/main.py:265 templates/pages/auth/register.html:162
+#: app/main.py:311 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:332
+#: app/main.py:378
 msgid "Invalid or expired login link. Please request a new one."
 msgstr ""
 
-#: app/main.py:399 app/main.py:407 templates/pages/admin/login.html:40
-#: templates/pages/admin/login.html:160
+#: app/main.py:474 app/main.py:485
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:479
+#: app/main.py:598
 msgid "User is not pending approval"
 msgstr ""
 
-#: app/main.py:494
+#: app/main.py:613
 msgid "User approved successfully"
 msgstr ""
 
-#: app/main.py:531
+#: app/main.py:650
 msgid "User with this email already exists"
 msgstr ""
 
-#: app/main.py:563
+#: app/main.py:682
 msgid "User created successfully"
 msgstr ""
 
-#: app/main.py:596
+#: app/main.py:715
 msgid "You cannot deactivate your own account"
 msgstr ""
 
-#: app/main.py:608
+#: app/main.py:727
 msgid "User updated successfully"
 msgstr ""
 
@@ -76,8 +75,7 @@ msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
 #: app/strategies.py:25 templates/components/_form_alpine.html:150
-#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:120
-#: templates/pages/auth/register.html:158
+#: templates/pages/auth/login.html:120 templates/pages/auth/register.html:158
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
@@ -100,8 +98,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: templates/components/_form_alpine.html:53
-#: templates/pages/admin/index.html:23 templates/pages/admin/login.html:48
-#: templates/pages/auth/login.html:38 templates/pages/auth/register.html:45
+#: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
+#: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
@@ -128,8 +126,7 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_form_alpine.html:149
-#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:119
-#: templates/pages/auth/register.html:157
+#: templates/pages/auth/login.html:119 templates/pages/auth/register.html:157
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
 
@@ -200,49 +197,6 @@ msgstr "Ação"
 #: templates/pages/admin/index.html:40
 msgid "Delete"
 msgstr "Excluir"
-
-#: templates/pages/admin/login.html:3
-msgid "Admin login"
-msgstr "Login do Admin"
-
-#: templates/pages/admin/login.html:11
-msgid "Admin Login"
-msgstr "Login do Admin"
-
-#: templates/pages/admin/login.html:30
-msgid "Secure Access"
-msgstr "Acesso Seguro"
-
-#: templates/pages/admin/login.html:31
-msgid "Please enter your credentials"
-msgstr "Por favor, insira suas credenciais"
-
-#: templates/pages/admin/login.html:73
-msgid "Password"
-msgstr "Senha"
-
-#: templates/pages/admin/login.html:111
-#, fuzzy
-msgid " Signing in..."
-msgstr "Entrar"
-
-#: templates/pages/admin/login.html:111
-msgid "Sign In"
-msgstr "Entrar"
-
-#: templates/pages/admin/login.html:132
-#, fuzzy
-msgid "Password is required"
-msgstr "O nome é obrigatório"
-
-#: templates/pages/admin/login.html:133
-#, fuzzy
-msgid "Password must be at least 8 characters"
-msgstr "O nome deve ter pelo menos 2 caracteres"
-
-#: templates/pages/admin/login.html:163
-msgid "An error occurred. Please try again."
-msgstr ""
 
 #: templates/pages/auth/login.html:3
 #, fuzzy
@@ -345,5 +299,35 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Account is disabled"
+#~ msgstr ""
+
+#~ msgid "Admin login"
+#~ msgstr "Login do Admin"
+
+#~ msgid "Admin Login"
+#~ msgstr "Login do Admin"
+
+#~ msgid "Secure Access"
+#~ msgstr "Acesso Seguro"
+
+#~ msgid "Please enter your credentials"
+#~ msgstr "Por favor, insira suas credenciais"
+
+#~ msgid "Password"
+#~ msgstr "Senha"
+
+#~ msgid " Signing in..."
+#~ msgstr "Entrar"
+
+#~ msgid "Sign In"
+#~ msgstr "Entrar"
+
+#~ msgid "Password is required"
+#~ msgstr "O nome é obrigatório"
+
+#~ msgid "Password must be at least 8 characters"
+#~ msgstr "O nome deve ter pelo menos 2 caracteres"
+
+#~ msgid "An error occurred. Please try again."
 #~ msgstr ""
 
