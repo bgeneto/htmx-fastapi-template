@@ -20,7 +20,6 @@ from .config import settings
 from .db import init_db
 from .email import (
     send_account_approved,
-    send_magic_link,
     send_registration_notification,
 )
 from .i18n import get_locale, get_translations, set_locale
@@ -30,7 +29,6 @@ from .models import Contact, User, UserRole
 from .repository import (
     approve_user,
     create_contact,
-    create_login_token,
     create_user,
     get_recent_contacts,
     get_session,
@@ -41,7 +39,6 @@ from .repository import (
     list_users,
     mark_token_used,
     update_user,
-    verify_password,
 )
 from .schemas import (
     AdminCreateUser,
@@ -50,6 +47,7 @@ from .schemas import (
     UserRegister,
     UserUpdate,
 )
+from .strategies import create_admin_login_verifier, handle_validation_error
 
 logger = get_logger("main")
 
@@ -99,23 +97,9 @@ app.mount("/static", StaticFiles(directory="static", html=False), name="static")
 # Middleware for locale detection
 class LocaleMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        # Try to get locale from cookie first
-        locale = request.cookies.get("locale")
+        from .locale import default_locale_resolver
 
-        # Fall back to Accept-Language header
-        if not locale:
-            accept_language = request.headers.get("Accept-Language", "en")
-            # Parse Accept-Language header (simple parsing)
-            locale = accept_language.split(",")[0].split(";")[0].strip()
-            # Normalize locale (e.g., en-US -> en, pt-BR -> pt_BR)
-            if "-" in locale:
-                parts = locale.split("-")
-                if len(parts[1]) == 2 and parts[1].isupper():
-                    # Country code: pt-BR -> pt_BR
-                    locale = f"{parts[0]}_{parts[1]}"
-                else:
-                    # Language only: en-US -> en
-                    locale = parts[0]
+        locale = default_locale_resolver.resolve_locale(request)
 
         # Set locale for this request
         set_locale(locale)
@@ -186,32 +170,7 @@ async def contact(
             form_data["email"],
             str(e),
         )
-        # Translate Pydantic validation errors to user's language
-        from .i18n import gettext as _
-
-        errors = {}
-        for err in e.errors():
-            field = err["loc"][-1]
-            msg = err["msg"]
-
-            # Translate common Pydantic error messages
-            if "String should have at least" in msg:
-                if field == "name":
-                    errors[field] = _("Name must be at least 2 characters")
-                elif field == "message":
-                    errors[field] = _("Message must be at least 5 characters")
-            elif "value is not a valid email address" in msg.lower():
-                errors[field] = _("Please enter a valid email address")
-            elif "Field required" in msg:
-                if field == "name":
-                    errors[field] = _("Name is required")
-                elif field == "email":
-                    errors[field] = _("Email is required")
-                elif field == "message":
-                    errors[field] = _("Message is required")
-            else:
-                # Use the message from validator if it's already translated
-                errors[field] = msg
+        errors = handle_validation_error(e)
 
         # Return JSON for Alpine.js
         return JSONResponse(
@@ -280,19 +239,7 @@ async def register(
     try:
         payload = UserRegister.model_validate(form_data)
     except ValidationError as e:
-        errors = {}
-        for err in e.errors():
-            field = err["loc"][-1]
-            msg = err["msg"]
-            if "String should have at least" in msg:
-                errors[field] = _("Name must be at least 2 characters")
-            elif "value is not a valid email address" in msg.lower():
-                errors[field] = _("Please enter a valid email address")
-            elif "Field required" in msg:
-                errors[field] = _("This field is required")
-            else:
-                errors[field] = msg
-
+        errors = handle_validation_error(e)
         return JSONResponse(
             status_code=400, content={"errors": errors, "form": form_data}
         )
@@ -345,41 +292,24 @@ async def login(
     try:
         LoginRequest.model_validate(form_data)
     except ValidationError as e:
-        errors = {}
-        for err in e.errors():
-            field = err["loc"][-1]
-            errors[field] = _("Please enter a valid email address")
-
+        errors = handle_validation_error(e)
         return JSONResponse(
             status_code=400, content={"errors": errors, "form": form_data}
         )
 
-    # Get user
-    user = await get_user_by_email(session, email)
+    from .auth_strategies import (
+        AuthenticationRequest,
+        default_auth_strategy,
+    )
 
-    # Always return success to prevent email enumeration
-    # But only send email if user exists and is active
-    if user and user.is_active:
-        # Check if user is pending
-        if user.role == UserRole.PENDING:
-            return JSONResponse(
-                content={
-                    "success": True,
-                    "message": _("Your account is pending admin approval."),
-                }
-            )
+    # Use authentication strategy
+    auth_request = AuthenticationRequest(email, session)
+    response = await default_auth_strategy.handle_login(auth_request)
 
-        # Generate magic link token
-        raw_token = await create_login_token(session, user)
-        magic_link = f"{settings.APP_BASE_URL}/auth/verify/{raw_token}"
+    if response:
+        return response.to_response()
 
-        # Send magic link email
-        await send_magic_link(user.email, user.full_name, magic_link)
-        logger.info(f"Magic link sent to {user.email}")
-    else:
-        logger.warning(f"Login attempt for non-existent/inactive user: {email}")
-
-    # Always show check email page
+    # Redirect to check email page
     return templates.TemplateResponse(
         "pages/auth/check_email.html", {"request": request, "email": email}
     )
@@ -462,29 +392,23 @@ async def admin_login(
     # Get user by email
     user = await get_user_by_email(session, email)
 
-    # Verify user exists, has password, and is admin
-    if not user or not user.hashed_password or user.role != UserRole.ADMIN:
+    # Check if user exists
+    if not user:
         return templates.TemplateResponse(
             "pages/admin/login.html",
             {"request": request, "error": _("Invalid credentials")},
         )
 
-    # Verify password
-    if not verify_password(password, user.hashed_password):
+    # Verify with strategy
+    verifier = create_admin_login_verifier(user)
+    if not verifier.verify(password=password):
         return templates.TemplateResponse(
             "pages/admin/login.html",
             {"request": request, "error": _("Invalid credentials")},
         )
 
-    # Check if user is active
-    if not user.is_active:
-        return templates.TemplateResponse(
-            "pages/admin/login.html",
-            {"request": request, "error": _("Account is disabled")},
-        )
-
-    # Create session cookie
-    assert user.id is not None  # User should exist from get_user_by_email
+    # Create session cookie - user exists and has ID at this point
+    assert user.id is not None, "User must have an ID"
     cookie = create_session_cookie(user.id, user.email, user.role)
     response = RedirectResponse(url="/admin", status_code=303)
     response.set_cookie(
@@ -614,18 +538,7 @@ async def admin_create_user(
     try:
         payload = AdminCreateUser.model_validate(form_data)
     except ValidationError as e:
-        errors = {}
-        for err in e.errors():
-            field = err["loc"][-1]
-            msg = err["msg"]
-            if "at least" in msg.lower():
-                if field == "full_name":
-                    errors[field] = _("Name must be at least 2 characters")
-                elif field == "password":
-                    errors[field] = _("Password must be at least 8 characters")
-            else:
-                errors[field] = msg
-
+        errors = handle_validation_error(e)
         return JSONResponse(
             status_code=400, content={"errors": errors, "form": form_data}
         )

@@ -33,6 +33,15 @@ This is a **FastAPI + Alpine.js + HTMX** starter template with full i18n support
 - **Error translation**: Pydantic validators use `_()` for i18n-friendly error messages
 - When handling `ValidationError`, manually translate field errors for the user's locale (see `app/main.py` contact endpoint)
 
+### 5. Strategy Patterns (app/strategies.py)
+- **Purpose**: Reduces CC in endpoints via polymorphism (ValidationErrorStrategy, AuthVerifier).
+- **Validation**: `from .strategies import handle_validation_error`; `errors = handle_validation_error(e)` - registry maps msg/field to translated str.
+  - Extend: Add `(snippet, field): MyStrategy()` to VALIDATION_REGISTRY.
+  - Benefit: CC -8 in contact/register/etc., i18n centralized.
+- **Auth**: `verifier = create_admin_login_verifier(user)`; `verifier.verify(password)` - combines user/role/pw/active.
+  - Benefit: CC -4 in admin_login, extensible to other roles.
+- Used in `app/main.py` top5 complex funcs post-audit.
+
 ### 4. Tailwind CSS Build Process
 - **Version**: Tailwind CSS v4 via `@tailwindcss/postcss` plugin
 - **Source**: `static/css/input.css` (uses `@import "tailwindcss"` instead of `@tailwind` directives)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-19 21:36-0300\n"
+"POT-Creation-Date: 2025-11-20 07:58-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -19,97 +19,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: app/main.py:200 app/main.py:288 app/main.py:623 app/schemas.py:21
-#: app/schemas.py:55 app/schemas.py:84
+#: app/auth_strategies.py:48
+msgid "Your account is pending admin approval."
+msgstr ""
+
+#: app/main.py:233
+msgid "An account with this email already exists"
+msgstr ""
+
+#: app/main.py:265 templates/pages/auth/register.html:162
+msgid "Registration successful! Your account is pending admin approval."
+msgstr ""
+
+#: app/main.py:332
+msgid "Invalid or expired login link. Please request a new one."
+msgstr ""
+
+#: app/main.py:399 app/main.py:407 templates/pages/admin/login.html:40
+#: templates/pages/admin/login.html:160
+msgid "Invalid credentials"
+msgstr "Credenciais inválidas"
+
+#: app/main.py:479
+msgid "User is not pending approval"
+msgstr ""
+
+#: app/main.py:494
+msgid "User approved successfully"
+msgstr ""
+
+#: app/main.py:531
+msgid "User with this email already exists"
+msgstr ""
+
+#: app/main.py:563
+msgid "User created successfully"
+msgstr ""
+
+#: app/main.py:596
+msgid "You cannot deactivate your own account"
+msgstr ""
+
+#: app/main.py:608
+msgid "User updated successfully"
+msgstr ""
+
+#: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
 #: templates/components/_form_alpine.html:148
 #: templates/pages/auth/register.html:160
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/main.py:202 app/schemas.py:28 templates/components/_form_alpine.html:152
+#: app/schemas.py:28 app/strategies.py:20
+#: templates/components/_form_alpine.html:152
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
-#: app/main.py:204 app/main.py:290 app/main.py:351
-#: templates/components/_form_alpine.html:150
+#: app/strategies.py:25 templates/components/_form_alpine.html:150
 #: templates/pages/admin/login.html:131 templates/pages/auth/login.html:120
 #: templates/pages/auth/register.html:158
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/main.py:207 templates/components/_form_alpine.html:147
-#: templates/pages/auth/register.html:159
-msgid "Name is required"
-msgstr "O nome é obrigatório"
-
-#: app/main.py:209 templates/components/_form_alpine.html:149
-#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:119
-#: templates/pages/auth/register.html:157
-msgid "Email is required"
-msgstr "O e-mail é obrigatório"
-
-#: app/main.py:211 templates/components/_form_alpine.html:151
-msgid "Message is required"
-msgstr "A mensagem é obrigatória"
-
-#: app/main.py:274
-msgid "An account with this email already exists"
-msgstr ""
-
-#: app/main.py:292
+#: app/strategies.py:30
 #, fuzzy
 msgid "This field is required"
 msgstr "O e-mail é obrigatório"
-
-#: app/main.py:318 templates/pages/auth/register.html:162
-msgid "Registration successful! Your account is pending admin approval."
-msgstr ""
-
-#: app/main.py:368
-msgid "Your account is pending admin approval."
-msgstr ""
-
-#: app/main.py:402
-msgid "Invalid or expired login link. Please request a new one."
-msgstr ""
-
-#: app/main.py:469 app/main.py:476 templates/pages/admin/login.html:40
-#: templates/pages/admin/login.html:160
-msgid "Invalid credentials"
-msgstr "Credenciais inválidas"
-
-#: app/main.py:483
-msgid "Account is disabled"
-msgstr ""
-
-#: app/main.py:556
-msgid "User is not pending approval"
-msgstr ""
-
-#: app/main.py:571
-msgid "User approved successfully"
-msgstr ""
-
-#: app/main.py:608
-msgid "User with this email already exists"
-msgstr ""
-
-#: app/main.py:625 templates/pages/admin/login.html:133
-#, fuzzy
-msgid "Password must be at least 8 characters"
-msgstr "O nome deve ter pelo menos 2 caracteres"
-
-#: app/main.py:651
-msgid "User created successfully"
-msgstr ""
-
-#: app/main.py:684
-msgid "You cannot deactivate your own account"
-msgstr ""
-
-#: app/main.py:696
-msgid "User updated successfully"
-msgstr ""
 
 #: templates/components/_form_alpine.html:11
 msgid "Message Sent!"
@@ -146,6 +121,21 @@ msgstr "Enviar Mensagem"
 #: templates/components/_form_alpine.html:123
 msgid "Reset"
 msgstr "Limpar"
+
+#: templates/components/_form_alpine.html:147
+#: templates/pages/auth/register.html:159
+msgid "Name is required"
+msgstr "O nome é obrigatório"
+
+#: templates/components/_form_alpine.html:149
+#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:119
+#: templates/pages/auth/register.html:157
+msgid "Email is required"
+msgstr "O e-mail é obrigatório"
+
+#: templates/components/_form_alpine.html:151
+msgid "Message is required"
+msgstr "A mensagem é obrigatória"
 
 #: templates/components/_form_alpine.html:153
 #: templates/pages/auth/login.html:121 templates/pages/auth/register.html:161
@@ -244,6 +234,11 @@ msgstr "Entrar"
 #, fuzzy
 msgid "Password is required"
 msgstr "O nome é obrigatório"
+
+#: templates/pages/admin/login.html:133
+#, fuzzy
+msgid "Password must be at least 8 characters"
+msgstr "O nome deve ter pelo menos 2 caracteres"
 
 #: templates/pages/admin/login.html:163
 msgid "An error occurred. Please try again."
@@ -347,5 +342,8 @@ msgstr ""
 #~ msgstr "Usuário"
 
 #~ msgid "Registering..."
+#~ msgstr ""
+
+#~ msgid "Account is disabled"
 #~ msgstr ""
 
