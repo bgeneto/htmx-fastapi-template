@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-20 14:17-0300\n"
+"POT-Creation-Date: 2025-11-20 16:34-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: app/auth_strategies.py:48
 msgid "Your account is pending admin approval."
-msgstr ""
+msgstr "Sua conta está aguardando aprovação do administrador."
 
 #: app/main.py:293 templates/pages/admin/index.html:21
 msgid "ID"
@@ -45,51 +45,53 @@ msgstr "Mensagem"
 
 #: app/main.py:316
 msgid "Submitted"
-msgstr ""
+msgstr "Enviado"
 
 #: app/main.py:321
 msgid "Search by name or email..."
-msgstr ""
+msgstr "Pesquisar por nome ou e-mail..."
 
 #: app/main.py:396
 msgid "An account with this email already exists"
-msgstr ""
+msgstr "Já existe uma conta com este e-mail"
 
 #: app/main.py:428 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
+"Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
+"administrador."
 
 #: app/main.py:495
 msgid "Invalid or expired login link. Please request a new one."
-msgstr ""
+msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
 #: app/main.py:591 app/main.py:602
 msgid "Invalid credentials"
-msgstr "Credenciais inválidas"
+msgstr ""
 
 #: app/main.py:838
 msgid "User is not pending approval"
-msgstr ""
+msgstr "O usuário não está aguardando aprovação"
 
 #: app/main.py:853
 msgid "User approved successfully"
-msgstr ""
+msgstr "Usuário aprovado com sucesso"
 
 #: app/main.py:890
 msgid "User with this email already exists"
-msgstr ""
+msgstr "Já existe um usuário com este e-mail"
 
 #: app/main.py:922
 msgid "User created successfully"
-msgstr ""
+msgstr "Usuário criado com sucesso"
 
 #: app/main.py:955
 msgid "You cannot deactivate your own account"
-msgstr ""
+msgstr "Você não pode desativar sua própria conta"
 
 #: app/main.py:967
 msgid "User updated successfully"
-msgstr ""
+msgstr "Usuário atualizado com sucesso"
 
 #: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
 #: templates/components/_form_alpine.html:148
@@ -115,69 +117,68 @@ msgstr "O e-mail é obrigatório"
 #: templates/components/_datagrid.html:25
 #: templates/components/_datagrid_grid.html:7
 msgid "Managing"
-msgstr ""
+msgstr "Gerenciando"
 
 #: templates/components/_datagrid.html:25
 #: templates/components/_datagrid_grid.html:8
 msgid "records"
-msgstr ""
+msgstr "registros"
 
 #: templates/components/_datagrid.html:29
 #: templates/components/_datagrid_grid.html:13
 msgid "Search..."
-msgstr ""
+msgstr "Pesquisar..."
 
 #: templates/components/_datagrid.html:73
 #: templates/components/_datagrid_grid.html:72
-#, fuzzy
 msgid "Filter..."
-msgstr "Limpar"
+msgstr "Filtrar..."
 
 #: templates/components/_datagrid.html:102
 #: templates/components/_datagrid_grid.html:128
 msgid "No records found matching your criteria."
-msgstr ""
+msgstr "Nenhum registro encontrado correspondendo aos seus critérios."
 
 #: templates/components/_datagrid.html:115
 #: templates/components/_datagrid_grid.html:141
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"
 
 #: templates/components/_datagrid.html:123
 #: templates/components/_datagrid_grid.html:149
 msgid "per page"
-msgstr ""
+msgstr "por página"
 
 #: templates/components/_datagrid.html:129
 #: templates/components/_datagrid_grid.html:155
 #: templates/components/_datagrid_grid.html:187
 msgid "of"
-msgstr ""
+msgstr "de"
 
 #: templates/components/_datagrid.html:131
 #: templates/components/_datagrid_grid.html:158
 msgid "No results"
-msgstr ""
+msgstr "Nenhum resultado"
 
 #: templates/components/_datagrid.html:138
 msgid "Prev"
-msgstr ""
+msgstr "Anterior"
 
 #: templates/components/_datagrid.html:142
 msgid "Next"
-msgstr ""
+msgstr "Próximo"
 
 #: templates/components/_datagrid_grid.html:24
 msgid "Clear Filters"
-msgstr ""
+msgstr "Limpar Filtros"
 
 #: templates/components/_datagrid_grid.html:32
 msgid "Add"
-msgstr ""
+msgstr "Adicionar"
 
 #: templates/components/_datagrid_grid.html:103
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: templates/components/_datagrid_grid.html:112
 #: templates/components/_datagrid_grid.html:290
@@ -187,72 +188,71 @@ msgstr "Excluir"
 
 #: templates/components/_datagrid_grid.html:155
 msgid "Showing"
-msgstr ""
+msgstr "Mostrando"
 
 #: templates/components/_datagrid_grid.html:156
 msgid "items"
-msgstr ""
+msgstr "itens"
 
 #: templates/components/_datagrid_grid.html:166
 msgid "First page"
-msgstr ""
+msgstr "Primeira página"
 
 #: templates/components/_datagrid_grid.html:176
 msgid "Previous page"
-msgstr ""
+msgstr "Página anterior"
 
 #: templates/components/_datagrid_grid.html:194
 msgid "Next page"
-msgstr ""
+msgstr "Próxima página"
 
 #: templates/components/_datagrid_grid.html:203
 msgid "Last page"
-msgstr ""
+msgstr "Última página"
 
 #: templates/components/_datagrid_grid.html:220
 msgid "Add New Car"
-msgstr ""
+msgstr "Adicionar Novo Carro"
 
 #: templates/components/_datagrid_grid.html:221
 msgid "Edit Car"
-msgstr ""
+msgstr "Editar Carro"
 
 #: templates/components/_datagrid_grid.html:222
-#, fuzzy
 msgid "Delete Car"
-msgstr "Excluir"
+msgstr "Excluir Carro"
 
 #: templates/components/_datagrid_grid.html:237
 msgid "Are you sure you want to delete this car?"
-msgstr ""
+msgstr "Tem certeza de que deseja excluir este carro?"
 
 #: templates/components/_datagrid_grid.html:250
 msgid "Make"
-msgstr ""
+msgstr "Marca"
 
 #: templates/components/_datagrid_grid.html:256
 msgid "Model"
-msgstr ""
+msgstr "Modelo"
 
 #: templates/components/_datagrid_grid.html:262
 msgid "Version"
-msgstr ""
+msgstr "Versão"
 
 #: templates/components/_datagrid_grid.html:268
 msgid "Year"
-msgstr ""
+msgstr "Ano"
 
 #: templates/components/_datagrid_grid.html:274
 msgid "Price"
-msgstr ""
+msgstr "Preço"
 
 #: templates/components/_datagrid_grid.html:286
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: templates/components/_datagrid_grid.html:294
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: templates/components/_form_alpine.html:11
 msgid "Message Sent!"
@@ -264,7 +264,7 @@ msgstr "Enviar Outra Mensagem"
 
 #: templates/components/_form_alpine.html:114
 msgid "Sending..."
-msgstr ""
+msgstr "Enviando..."
 
 #: templates/components/_form_alpine.html:114
 msgid "Send Message"
@@ -371,11 +371,11 @@ msgstr "Entrar"
 
 #: templates/pages/auth/login.html:15
 msgid "Welcome Back"
-msgstr ""
+msgstr "Bem-vindo de Volta"
 
 #: templates/pages/auth/login.html:16
 msgid "Enter your email to receive a magic link"
-msgstr ""
+msgstr "Digite seu e-mail para receber um link mágico"
 
 #: templates/pages/auth/login.html:51
 msgid "you@example.com"
