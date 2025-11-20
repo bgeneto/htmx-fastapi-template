@@ -88,6 +88,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.VSCodeCounter/
 
 # Spyder project settings
 .spyderproject
