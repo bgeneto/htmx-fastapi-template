@@ -29,6 +29,9 @@ jobs:
       - name: Build Tailwind CSS
         run: npm run build:css
 
+      - name: Verify CSS build output
+        run: test -f static/css/output.css && echo "✅ CSS built successfully" || (echo "❌ CSS build failed" && exit 1)
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -57,7 +60,14 @@ jobs:
 
       - name: Create DB (dev)
         run: |
+          # Clean up any existing database
+          rm -f test.db
           python -m app.create_db
+        env:
+          ENV: development
+          SECRET_KEY: ci-secret-key-for-testing-purpose-only
+          DATABASE_URL: sqlite+aiosqlite:///./test.db
+          DEBUG: true
 
       - name: Run Alembic migrations (check)
         run: |
@@ -66,3 +76,8 @@ jobs:
       - name: Run tests
         run: |
           pytest -q
+        env:
+          ENV: development
+          SECRET_KEY: ci-secret-key-for-testing-purpose-only
+          DATABASE_URL: sqlite+aiosqlite:///./test.db
+          DEBUG: true

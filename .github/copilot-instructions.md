@@ -35,8 +35,8 @@ This is a **FastAPI + Alpine.js + HTMX** starter template with full i18n support
 
 ### 4. Tailwind CSS Build Process
 - **Version**: Tailwind CSS v4 via `@tailwindcss/postcss` plugin
-- **Source**: `static/input.css` (uses `@import "tailwindcss"` instead of `@tailwind` directives)
-- **Output**: `static/output.css` (compiled via PostCSS, gitignored)
+- **Source**: `static/css/input.css` (uses `@import "tailwindcss"` instead of `@tailwind` directives)
+- **Output**: `static/css/output.css` (compiled via PostCSS, auto-generated)
 - **Configuration**: `postcss.config.js` with `@tailwindcss/postcss`, `postcss-nesting`, and `autoprefixer`
 - **No tailwind.config.js**: V4 uses CSS-based configuration, don't create `tailwind.config.js`
 - **Dark mode**: Class-based with `@custom-variant dark (&:where(.dark, .dark *))` in `input.css`
@@ -81,13 +81,78 @@ uvicorn app.main:app --reload
 
 ## Project-Specific Conventions
 
-### File Organization
+### File Organization & Folder Structure
+
+The project uses a professional, enterprise-grade folder organization that supports scalability and team collaboration:
+
+```
+app/                         # Application core (Python modules)
+  ├── main.py               # FastAPI app initialization & routes
+  ├── config.py             # Configuration (Pydantic BaseSettings)
+  ├── models.py             # SQLModel table definitions
+  ├── schemas.py            # Pydantic validation schemas
+  ├── repository.py         # Data access layer (CRUD operations)
+  ├── auth.py               # Session management & authentication
+  ├── email.py              # Brevo email service integration
+  ├── i18n.py               # i18n translation utilities
+  ├── logger.py             # Loguru logging configuration
+  ├── db.py                 # Database engine & session management
+  └── create_db.py          # Database initialization for development
+
+templates/                   # Jinja2 templates (organized by feature)
+  ├── _base.html            # Root template (HTML structure, common elements)
+  ├── components/           # Reusable template components
+  │   ├── _theme_toggle.html
+  │   ├── _language_selector.html
+  │   ├── _form_alpine.html (forms with Alpine.js validation)
+  │   └── _recent_contacts.html
+  └── pages/                # Full-page templates
+      ├── index.html
+      ├── auth/             # Authentication pages
+      │   ├── login.html
+      │   ├── register.html
+      │   └── check_email.html
+      └── admin/            # Admin panel pages
+          ├── login.html
+          ├── index.html
+          └── users.html
+
+static/                      # Static assets
+  ├── css/                  # Stylesheets
+  │   ├── input.css         # Tailwind source (DO NOT edit output.css)
+  │   └── output.css        # Compiled CSS (auto-generated)
+  ├── icons/                # SVG icons (Heroicons)
+  ├── images/               # Image assets
+  └── style.css             # Custom CSS overrides
+
+docs/                        # Project documentation
+  ├── ARCHITECTURE.md       # Folder structure & design decisions
+  ├── AUTHENTICATION.md     # Auth system implementation
+  ├── MIGRATIONS.md         # Database migrations guide
+  ├── TAILWIND_SETUP.md     # CSS build process
+  └── I18N.md               # i18n implementation details
+```
+
+**Key Organization Principles:**
+- **app/** - All Python logic (routes, models, database access)
+- **templates/** - HTML templates, organized by feature/area
+- **static/css/** - CSS files (input source and compiled output separate)
+- **docs/** - All documentation files (NEVER in root directory)
+
+**When Adding New Files:**
+- Python modules → `app/`
+- Page templates → `templates/pages/{feature}/`
+- Reusable components → `templates/components/`
+- CSS changes → Edit `static/css/input.css`, rebuild with `npm run build:css`
+- Documentation → Always use `docs/` folder
+
 - `app/main.py`: FastAPI app, routes, middleware setup
 - `app/models.py`: SQLModel table definitions (inherit from `SQLModel, table=True`)
 - `app/schemas.py`: Pydantic validation schemas (separate from DB models)
 - `app/repository.py`: All database queries (session dependency + CRUD functions)
 - `app/i18n.py`: Translation utilities (context-based locale storage)
 - `templates/_*.html`: Reusable partials (forms, components)
+- **Documentation**: ALL `.md` files and guides must be placed in `docs/` folder, NEVER in root directory. Examples: `docs/AUTHENTICATION.md`, `docs/MIGRATIONS.md`, `docs/SETUP_GUIDE.md`
 
 ### Jinja2 Template Patterns
 - **Template engine**: Jinja2 configured in `app/main.py` with i18n extension enabled
@@ -151,9 +216,14 @@ uvicorn app.main:app --reload
 
 - **Adding routes**: Follow the pattern in `app/main.py` - use dependency injection for `session`
 - **New models**: Add to `app/models.py` (table) + `app/schemas.py` (validation)
-- **New templates**: Extend `_base.html`, use Tailwind classes, wrap strings in `_('...')`
-  - Always pass `request` in template context
+- **New templates**: Organize by feature:
+  - Page templates: `templates/pages/{feature}/page.html`
+  - Auth pages: `templates/pages/auth/login.html`, `templates/pages/auth/register.html`
+  - Admin pages: `templates/pages/admin/users.html`, `templates/pages/admin/index.html`
+  - Reusable components: `templates/components/_component_name.html`
+  - Extend from `_base.html`, use Tailwind classes, wrap strings in `_('...')`
+  - Always pass `request` in template context: `{"request": request, ...}`
   - Use `{% block title %}`, `{% block content %}`, `{% block extra_head %}` for customization
 - **Alpine components**: Define state/methods in inline `<script>` with `i18n` object for translations
-- **CSS changes**: Edit `static/input.css` or add Tailwind classes (never edit `output.css`)
+- **CSS changes**: Edit `static/css/input.css` or add Tailwind classes (never edit `static/css/output.css`)
 - **Jinja2 configuration**: Template globals/filters configured in `app/main.py` via `templates.env`

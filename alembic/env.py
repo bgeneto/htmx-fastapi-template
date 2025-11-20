@@ -5,7 +5,6 @@ import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
-from sqlmodel import SQLModel
 
 from alembic import context
 
@@ -20,7 +19,8 @@ fileConfig(config.config_file_name)
 logger = logging.getLogger("alembic.env")
 
 # The metadata for autogenerate:
-target_metadata = SQLModel.metadata
+# NOTE: We use manual migrations (not autogenerate) so target_metadata should be None
+target_metadata = None
 
 
 def _make_sync_url(async_url: str) -> str:
@@ -42,11 +42,18 @@ def _make_sync_url(async_url: str) -> str:
 
 
 def get_database_url() -> str:
-    # 1) environment variable wins
+    # 1) Try to load from Pydantic settings (respects .env file)
+    try:
+        from app.config import settings
+
+        return settings.DATABASE_URL
+    except (ImportError, ValueError):
+        pass
+    # 2) environment variable
     url = os.environ.get("DATABASE_URL")
     if url:
         return url
-    # 2) fallback to alembic.ini sqlalchemy.url
+    # 3) fallback to alembic.ini sqlalchemy.url
     url = config.get_main_option("sqlalchemy.url")
     return url
 

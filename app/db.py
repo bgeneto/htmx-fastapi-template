@@ -1,7 +1,5 @@
 # app/db.py
-from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .config import settings
@@ -16,11 +14,15 @@ DATABASE_URL = settings.DATABASE_URL
 engine: AsyncEngine = create_async_engine(
     DATABASE_URL, echo=settings.debug, pool_pre_ping=True
 )
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+AsyncSessionLocal = async_sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def init_db():
-    # dev convenience - create tables
-    async with engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.create_all)
-    logger.debug("Database initialized (create_all used for dev).")
+    """Initialize database - migration approach now handles table creation."""
+    # Note: With Alembic migrations, table creation is handled by:
+    # 1. Alembic migrations on startup (via start.py run_migrations())
+    # 2. For tests/dev: pytest conftest.py handles migrations
+    # Avoid using create_all() here as it conflicts with migration tracking
+    logger.debug("Database initialized (migrations manage schema).")

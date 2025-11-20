@@ -71,6 +71,45 @@ def kill_existing_processes():
         time.sleep(2)
 
 
+def run_migrations():
+    """Run Alembic database migrations"""
+    try:
+        print("🗄️  Running database migrations...")
+
+        # Run alembic upgrade head
+        result = subprocess.run(
+            ["alembic", "upgrade", "head"],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+
+        if result.returncode == 0:
+            # Check if there were actual migrations
+            if "done" in result.stdout.lower() or result.stdout.strip() == "":
+                print("✅ Database migrations completed successfully")
+            else:
+                print("✅ Database is up to date")
+            return True
+        else:
+            print(f"⚠️  Migration failed: {result.stderr}")
+            print("   Continuing anyway - database may be out of sync")
+            return False
+
+    except FileNotFoundError:
+        print("⚠️  Alembic not found. Install with: pip install alembic")
+        print("   Continuing without migrations...")
+        return False
+    except subprocess.TimeoutExpired:
+        print("⚠️  Migration timed out")
+        print("   Continuing anyway...")
+        return False
+    except Exception as e:
+        print(f"⚠️  Migration error: {e}")
+        print("   Continuing anyway...")
+        return False
+
+
 def update_translations():
     """Extract, update, and compile translation files before starting the application"""
     try:
@@ -146,7 +185,10 @@ def main():
 
     print("🔧 Preparing to start application...")
 
-    # Update and compile translations first
+    # Run database migrations first (critical for auth tables)
+    run_migrations()
+
+    # Update and compile translations
     update_translations()
 
     # Kill any existing processes that might be using the port

@@ -1,3 +1,4 @@
+{% if enable_i18n %}
 <!-- Language Selector Component -->
 <div class="relative" x-data="{ open: false }" @click.away="open = false">
     <button @click="open = !open" data-lang-toggle
@@ -115,4 +116,6 @@
             currentCheck.classList.remove('hidden');
         }
     });
+</script>
+{% endif %}
 </script>

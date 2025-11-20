@@ -1,0 +1,254 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ _('Register') }} - {{ super() }}{% endblock %}
+
+{% block content %}
+<div
+    class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto">
+        <!-- Header with theme and language toggles -->
+        <div class="flex items-center justify-end gap-3 mb-8">
+            {% include "components/_language_selector.html" %}
+            {% include "components/_theme_toggle.html" %}
+        </div>
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Create Account') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ _('Register for an account') }}</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div x-data="registerForm()" x-init="init()">
+                <!-- Success message -->
+                <div x-show="success" x-transition class="text-center py-8">
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+                        <svg class="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ _('Registration Successful!')
+                        }}</h3>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8" x-text="successMessage"></p>
+                    <a href="/"
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                        {{ _('Back to Home') }}
+                    </a>
+                </div>
+
+                <!-- Registration form -->
+                <form x-show="!success" @submit.prevent="submitForm" novalidate class="space-y-6">
+                    <!-- Email field -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                            {{ _('Email Address') }}
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input id="email" type="email" x-model="form.email" @blur="validate('email')"
+                                @input="validate('email')" required autocomplete="email"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                        </div>
+                        <div x-show="errors.email" x-transition
+                            class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span x-text="errors.email"></span>
+                        </div>
+                    </div>
+
+                    <!-- Full Name field -->
+                    <div>
+                        <label for="full_name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                            {{ _('Full Name') }}
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <input id="full_name" type="text" x-model="form.full_name" @blur="validate('full_name')"
+                                @input="validate('full_name')" required minlength="2" autocomplete="name"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                        </div>
+                        <div x-show="errors.full_name" x-transition
+                            class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span x-text="errors.full_name"></span>
+                        </div>
+                    </div>
+
+                    <!-- Info message -->
+                    <div
+                        class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <div class="flex">
+                            <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-sm text-blue-700 dark:text-blue-300">
+                                {{ _('Your account will be pending admin approval. You will receive an email once
+                                approved.') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="space-y-3">
+                        <button type="submit" :disabled="loading"
+                            class="w-full inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg x-show="loading" class="h-5 w-5 mr-2 animate-spin text-white"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            <span x-text="loading ? '{{ _(" Registering...") }}' : '{{ _("Register") }}'"></span>
+                        </button>
+
+                        <div class=" text-center">
+                                <a href="/auth/login"
+                                    class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                    {{ _('Already have an account? Log in') }}
+                                </a>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function registerForm() {
+        return {
+            form: {
+                email: '',
+                full_name: ''
+            },
+            errors: {
+                email: '',
+                full_name: ''
+            },
+            loading: false,
+            success: false,
+            successMessage: '',
+
+            i18n: {
+                emailRequired: "{{ _('Email is required') }}",
+                emailInvalid: "{{ _('Please enter a valid email address') }}",
+                nameRequired: "{{ _('Name is required') }}",
+                nameMinLength: "{{ _('Name must be at least 2 characters') }}",
+                fixErrors: "{{ _('Please fix the errors before submitting.') }}",
+                successMessage: "{{ _('Registration successful! Your account is pending admin approval.') }}"
+            },
+
+            init() {
+                // Clear server-side errors after displaying them
+                if (this.errors.email || this.errors.full_name) {
+                    setTimeout(() => {
+                        this.errors = { email: '', full_name: '' };
+                    }, 100);
+                }
+            },
+
+            validate(field) {
+                const value = this.form[field]?.trim() || '';
+
+                if (field === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!value) {
+                        this.errors.email = this.i18n.emailRequired;
+                    } else if (!emailRegex.test(value)) {
+                        this.errors.email = this.i18n.emailInvalid;
+                    } else {
+                        this.errors.email = '';
+                    }
+                }
+
+                if (field === 'full_name') {
+                    if (!value) {
+                        this.errors.full_name = this.i18n.nameRequired;
+                    } else if (value.length < 2) {
+                        this.errors.full_name = this.i18n.nameMinLength;
+                    } else {
+                        this.errors.full_name = '';
+                    }
+                }
+            },
+
+            validateAll() {
+                this.validate('email');
+                this.validate('full_name');
+                return !this.errors.email && !this.errors.full_name;
+            },
+
+            async submitForm() {
+                if (!this.validateAll()) {
+                    if (window.showToast) {
+                        window.showToast(this.i18n.fixErrors, 'error');
+                    }
+                    return;
+                }
+
+                this.loading = true;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('email', this.form.email);
+                    formData.append('full_name', this.form.full_name);
+
+                    const response = await fetch('/auth/register', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        this.success = true;
+                        this.successMessage = data.message || this.i18n.successMessage;
+
+                        if (window.showToast) {
+                            window.showToast(this.successMessage, 'success');
+                        }
+                    } else {
+                        if (data.errors) {
+                            this.errors = data.errors;
+                        }
+                        if (window.showToast) {
+                            window.showToast(this.i18n.fixErrors, 'error');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    if (window.showToast) {
+                        window.showToast('An error occurred. Please try again.', 'error');
+                    }
+                } finally {
+                    this.loading = false;
+                }
+            }
+        };
+    }
+</script>
+{% endblock %}
