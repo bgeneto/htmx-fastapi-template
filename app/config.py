@@ -50,11 +50,11 @@ class Settings(BaseSettings):
 # import-time errors in static analysis or during tooling runs.
 settings = Settings(
     ENV=os.getenv("ENV", "development"),
-    SECRET_KEY=SecretStr(os.getenv("SECRET_KEY", "dev-secret")),
+    SECRET_KEY=SecretStr(os.getenv("SECRET_KEY", "")),  # Must be set in env
     DATABASE_URL=os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./app.db"),
     BOOTSTRAP_ADMIN_EMAIL=os.getenv("BOOTSTRAP_ADMIN_EMAIL", "admin@example.com"),
     BOOTSTRAP_ADMIN_PASSWORD=SecretStr(
-        os.getenv("BOOTSTRAP_ADMIN_PASSWORD", "changeme")
+        os.getenv("BOOTSTRAP_ADMIN_PASSWORD", "")  # Must be set in env
     ),
     EMAIL_API_KEY=SecretStr(os.getenv("EMAIL_API_KEY", "")),
     EMAIL_FROM_ADDRESS=os.getenv("EMAIL_FROM_ADDRESS", "noreply@example.com"),

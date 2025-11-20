@@ -17,8 +17,7 @@ from .schemas import AdminCreateUser, ContactCreate, UserRegister, UserUpdate
 logger = get_logger("repo")
 
 # Password hashing context (for bootstrap admin and admin-created users)
-# Using sha256_crypt instead of bcrypt due to bcrypt library issues
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:

@@ -45,6 +45,7 @@ from .schemas import (
     LoginRequest,
     UserRegister,
 )
+from .response_helpers import ResponseHelper
 
 logger = get_logger("main")
 
@@ -166,6 +167,20 @@ class NextUrlMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(NextUrlMiddleware)
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+        return response
+
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 
 @app.exception_handler(HTTPException)
@@ -629,7 +644,7 @@ async def admin_delete_contact(
 @app.get("/admin/cars", response_class=HTMLResponse)
 async def admin_cars(
     request: Request,
-    # current_user: User = Depends(require_admin),  # Commented out for public access
+    current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
     """Admin page for cars inventory - publicly accessible"""
@@ -637,7 +652,7 @@ async def admin_cars(
         "pages/admin/cars.html",
         {
             "request": request,
-            # "current_user": current_user,  # Not passed to template since public
+            "current_user": current_user,
         },
     )
 
@@ -649,7 +664,7 @@ async def get_admin_cars(
     limit: int = 10,
     sort: str = "id",
     dir: str = "asc",
-    # current_user: User = Depends(require_admin),  # Removed for debugging
+    current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
     """API endpoint for cars grid"""
@@ -667,6 +682,7 @@ async def get_admin_cars(
 @app.post("/api/admin/cars", response_model=Car)
 async def create_car(
     car_data: dict,
+    current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
     """Create a new car"""
@@ -810,12 +826,12 @@ async def admin_create_user(
     """Admin creates a new user with optional password"""
     from .response_helpers import FormResponseHelper
 
-    form_data = {
-        "email": email,
-        "full_name": full_name,
-        "role": role,
-        "password": password,
-    }
+    # form_data = {
+    #     "email": email,
+    #     "full_name": full_name,
+    #     "role": role,
+    #     "password": password,
+    # }
 
     try:
         # Create user using service with proper validation
