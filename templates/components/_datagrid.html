@@ -1,0 +1,147 @@
+{#
+Reusable Data Grid Component
+
+A Tailwind-styled, fully responsive data grid that integrates with the GridEngine backend.
+
+Usage in template:
+{% include "components/_datagrid.html" with context %}
+
+Context variables required:
+- grid_id: Unique identifier for this grid (e.g., "contacts-grid")
+- api_url: Backend API endpoint (e.g., "/api/contacts")
+- columns: List of column definitions with keys, labels, widths
+- search_placeholder: Placeholder text for search input
+#}
+
+<div x-data="datagrid({
+    apiUrl: '{{ api_url }}',
+    columns: {{ columns | tojson }}
+  })" x-cloak class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+
+  <!-- Header with Search and Stats -->
+  <div
+    class="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center bg-gradient-to-r from-white to-slate-50">
+    <div class="text-sm text-slate-600">
+      {{ _('Managing') }} <span x-text="total" class="font-semibold text-slate-900"></span> {{ _('records') }}
+    </div>
+
+    <div class="relative w-full sm:w-80">
+      <input type="text" x-model="search" placeholder="{{ search_placeholder | default(_('Search...')) }}"
+        class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+      <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Table Container with Loading Overlay -->
+  <div class="overflow-x-auto relative">
+    <!-- Loading Indicator -->
+    <div x-show="loading" x-transition
+      class="absolute inset-0 bg-white/60 z-20 flex items-center justify-center backdrop-blur-sm">
+      <div class="w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="w-full text-left border-collapse min-w-[600px] text-sm">
+
+      <!-- Header Row -->
+      <thead class="bg-slate-50 border-b border-slate-200">
+        <tr>
+          <template x-for="col in cols" :key="col.key">
+            <th class="sticky top-0 bg-slate-50 p-0 border-r border-slate-200 last:border-r-0 group select-none"
+              :style="`width: ${col.width}px; min-width: ${col.width}px`">
+
+              <div class="px-4 py-3 h-full flex flex-col gap-2 relative">
+
+                <!-- Column Label + Sort Indicator -->
+                <div @click="col.sortable && sortBy(col.key)"
+                  :class="col.sortable ? 'cursor-pointer hover:text-blue-600' : ''"
+                  class="flex items-center justify-between transition font-semibold text-xs uppercase text-slate-600">
+                  <span x-text="col.label"></span>
+                  <div x-show="sortCol === col.key" class="text-blue-500 text-xs ml-1">
+                    <span x-show="sortAsc">▲</span>
+                    <span x-show="!sortAsc">▼</span>
+                  </div>
+                </div>
+
+                <!-- Filter Input -->
+                <template x-if="col.filterable">
+                  <input type="text" x-model="filters[col.key]"
+                    class="w-full text-xs px-2 py-1.5 rounded border border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                    placeholder="{{ _('Filter...') }}">
+                </template>
+
+                <!-- Column Resize Handle -->
+                <div @mousedown="startResize($event, col.key)"
+                  class="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 active:bg-blue-600 transition-colors opacity-0 group-hover:opacity-100">
+                </div>
+              </div>
+            </th>
+          </template>
+        </tr>
+      </thead>
+
+      <!-- Body Rows -->
+      <tbody class="divide-y divide-slate-100">
+        <template x-for="(row, rowIdx) in rows" :key="rowIdx">
+          <tr class="hover:bg-blue-50 transition-colors">
+            <template x-for="col in cols" :key="col.key">
+              <td class="px-4 py-3 truncate border-r border-slate-100 last:border-r-0"
+                :style="`max-width: ${col.width}px`" :title="row[col.key]">
+                <span x-text="row[col.key]" class="text-slate-700"></span>
+              </td>
+            </template>
+          </tr>
+        </template>
+
+        <!-- Empty State -->
+        <tr x-show="rows.length === 0 && !loading">
+          <td :colspan="cols.length" class="px-4 py-12 text-center text-slate-400">
+            {{ _('No records found matching your criteria.') }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer with Pagination -->
+  <div
+    class="border-t border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+    <!-- Page Size Selector -->
+    <div class="flex items-center gap-2 text-sm text-slate-600">
+      <span>{{ _('Show') }}</span>
+      <select x-model.number="limit"
+        class="border border-slate-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <span>{{ _('per page') }}</span>
+    </div>
+
+    <!-- Pagination Info -->
+    <div class="text-sm text-slate-600 hidden sm:inline">
+      <span x-show="total > 0">
+        <span x-text="from"></span>–<span x-text="to"></span> {{ _('of') }} <span x-text="total"></span>
+      </span>
+      <span x-show="total === 0">{{ _('No results') }}</span>
+    </div>
+
+    <!-- Pagination Buttons -->
+    <div class="flex gap-2">
+      <button @click="prevPage()" :disabled="page === 1"
+        class="px-4 py-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium">
+        {{ _('Prev') }}
+      </button>
+      <button @click="nextPage()" :disabled="page === lastPage"
+        class="px-4 py-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium">
+        {{ _('Next') }}
+      </button>
+    </div>
+  </div>
+
+</div>

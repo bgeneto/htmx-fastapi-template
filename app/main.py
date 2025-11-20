@@ -1,4 +1,6 @@
 from contextlib import asynccontextmanager
+from datetime import datetime
+from json import JSONEncoder
 from typing import Optional
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
@@ -22,10 +24,11 @@ from .email import (
     send_account_approved,
     send_registration_notification,
 )
+from .grid_engine import GridEngine, PaginatedResponse
 from .i18n import get_locale, get_translations, set_locale
 from .i18n import gettext as _
 from .logger import get_logger
-from .models import Contact, User, UserRole
+from .models import Car, Contact, User, UserRole
 from .repository import (
     approve_user,
     create_contact,
@@ -38,6 +41,7 @@ from .repository import (
     list_contacts,
     list_users,
     mark_token_used,
+    seed_cars,
     update_user,
 )
 from .schemas import (
@@ -59,13 +63,33 @@ async def lifespan(app: FastAPI):
     try:
         await init_db()
         logger.info("DB initialized on startup")
+
+        # Seed cars if needed
+        from .db import AsyncSessionLocal
+
+        async with AsyncSessionLocal() as session:
+            await seed_cars(session, count=500)
     except Exception as e:
-        logger.error("DB init failed: {}", e)
+        logger.error("Startup failed: {}", e)
     yield
     # Shutdown (if needed in the future)
 
 
-app = FastAPI(title=settings.app_name, debug=settings.debug, lifespan=lifespan)
+class DateTimeJSONEncoder(JSONEncoder):
+    """Custom JSON encoder for datetime objects"""
+
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
+
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+    lifespan=lifespan,
+    json_encoders={datetime: lambda v: v.isoformat()},
+)
 
 # Add GZip compression for responses > 1KB
 app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -123,11 +147,15 @@ class NextUrlMiddleware(BaseHTTPMiddleware):
     the original URL stored as a "next" parameter for post-login redirect.
     """
 
+    # Registry of admin routes that don't require authentication
+    PUBLIC_ADMIN_ROUTES = ["/admin/cars"]
+
     async def dispatch(self, request: Request, call_next):
         # Check if this is an admin route that might require authentication
         if (
             request.url.path.startswith("/admin/")
             and request.url.path != "/admin/login"
+            and request.url.path not in self.PUBLIC_ADMIN_ROUTES
         ):
             # Quick check for session cookie - if no cookie, redirect to login
             session_cookie = request.cookies.get(COOKIE_NAME)
@@ -246,6 +274,94 @@ async def contact(
                 "message": contact.message,
             },
         }
+    )
+
+
+# ============= Data Grid Routes =============
+
+
+@app.get("/contacts", response_class=HTMLResponse)
+async def contacts_page(request: Request):
+    """Display contacts directory page with data grid"""
+    return templates.TemplateResponse(
+        "pages/contacts.html",
+        {
+            "request": request,
+            "api_url": "/api/contacts",
+            "columns": [
+                {"key": "id", "label": _("ID"), "width": 70, "sortable": True},
+                {
+                    "key": "name",
+                    "label": _("Name"),
+                    "width": 200,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "email",
+                    "label": _("Email"),
+                    "width": 250,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "message",
+                    "label": _("Message"),
+                    "width": 300,
+                    "sortable": False,
+                },
+                {
+                    "key": "created_at",
+                    "label": _("Submitted"),
+                    "width": 180,
+                    "sortable": True,
+                },
+            ],
+            "search_placeholder": _("Search by name or email..."),
+        },
+    )
+
+
+@app.get("/api/contacts", response_model=PaginatedResponse[Contact])
+async def get_contacts_grid(
+    request: Request,
+    page: int = 1,
+    limit: int = 10,
+    sort: str = "id",
+    dir: str = "asc",
+    session: AsyncSession = Depends(get_session),
+):
+    """API endpoint for contacts data grid with server-side pagination, filtering, and sorting"""
+    grid = GridEngine(session, Contact)
+    return await grid.get_page(
+        request=request,
+        page=page,
+        limit=limit,
+        sort_col=sort,
+        sort_dir=dir,
+        search_fields=["name", "email"],
+    )
+
+
+@app.get("/api/admin/users", response_model=PaginatedResponse[User])
+async def get_users_grid(
+    request: Request,
+    page: int = 1,
+    limit: int = 10,
+    sort: str = "id",
+    dir: str = "asc",
+    current_user: User = Depends(require_admin),
+    session: AsyncSession = Depends(get_session),
+):
+    """API endpoint for users data grid (admin only)"""
+    grid = GridEngine(session, User)
+    return await grid.get_page(
+        request=request,
+        page=page,
+        limit=limit,
+        sort_col=sort,
+        sort_dir=dir,
+        search_fields=["email", "full_name"],
     )
 
 
@@ -561,6 +677,47 @@ async def admin_delete_contact(
     await db.execute(__import__("sqlmodel").sql.delete(Contact).where(Contact.id == id))
     await db.commit()
     return RedirectResponse(url="/admin", status_code=303)
+
+
+# ============= Admin Cars Routes =============
+
+
+@app.get("/admin/cars", response_class=HTMLResponse)
+async def admin_cars(
+    request: Request,
+    # current_user: User = Depends(require_admin),  # Commented out for public access
+    session: AsyncSession = Depends(get_session),
+):
+    """Admin page for cars inventory - publicly accessible"""
+    return templates.TemplateResponse(
+        "pages/admin/cars.html",
+        {
+            "request": request,
+            # "current_user": current_user,  # Not passed to template since public
+        },
+    )
+
+
+@app.get("/api/admin/cars", response_model=PaginatedResponse[Car])
+async def get_admin_cars(
+    request: Request,
+    page: int = 1,
+    limit: int = 10,
+    sort: str = "id",
+    dir: str = "asc",
+    current_user: User = Depends(require_admin),
+    session: AsyncSession = Depends(get_session),
+):
+    """API endpoint for cars grid (admin only)"""
+    grid = GridEngine(session, Car)
+    return await grid.get_page(
+        request=request,
+        page=page,
+        limit=limit,
+        sort_col=sort,
+        sort_dir=dir,
+        search_fields=["make", "model"],
+    )
 
 
 # ============= Admin User Management Routes =============

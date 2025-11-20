@@ -11,7 +11,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from .config import settings
 from .db import AsyncSessionLocal
 from .logger import get_logger
-from .models import Contact, LoginToken, User, UserRole
+from .models import Car, Contact, LoginToken, User, UserRole
 from .schemas import AdminCreateUser, ContactCreate, UserRegister, UserUpdate
 
 logger = get_logger("repo")
@@ -247,3 +247,66 @@ async def list_contacts(session: AsyncSession, limit: int = 100):
 async def get_recent_contacts(session: AsyncSession, limit: int = 4):
     """Get the most recent contacts ordered by creation date"""
     return await list_contacts(session, limit=limit)
+
+
+# ============= Car CRUD =============
+
+
+async def create_car(session: AsyncSession, make: str, model: str, version: str, year: int, price: float) -> Car:
+    """Create a new car"""
+    car = Car(make=make, model=model, version=version, year=year, price=price)
+    session.add(car)
+    await session.commit()
+    await session.refresh(car)
+    return car
+
+
+async def list_cars(session: AsyncSession, limit: int = 100) -> list[Car]:
+    """List all cars"""
+    result = await session.exec(select(Car).order_by(desc(Car.id)).limit(limit))  # type: ignore[arg-type]
+    return result.all()
+
+
+async def seed_cars(session: AsyncSession, count: int = 500):
+    """Seed database with fake cars using faker"""
+    try:
+        from faker import Faker
+    except ImportError:
+        logger.warning("Faker not installed, skipping car seeding")
+        return
+
+    # Check if cars already exist
+    result = await session.exec(select(Car).limit(1))
+    if result.first():
+        logger.info("Cars already exist, skipping seed")
+        return
+
+    faker = Faker()
+    
+    # Car makes and models
+    cars_data = [
+        ("Toyota", ["Camry", "Corolla", "RAV4", "Civic", "Accord"]),
+        ("Honda", ["Civic", "Accord", "CR-V", "Pilot", "Fit"]),
+        ("Ford", ["Mustang", "F-150", "Explorer", "Escape", "Fusion"]),
+        ("BMW", ["3 Series", "5 Series", "X5", "X3", "M340i"]),
+        ("Mercedes", ["C-Class", "E-Class", "GLE", "A-Class", "GLA"]),
+        ("Audi", ["A4", "A6", "Q5", "Q7", "A8"]),
+        ("Tesla", ["Model 3", "Model Y", "Model S", "Model X", "Roadster"]),
+        ("Volkswagen", ["Golf", "Passat", "Tiguan", "Jetta", "Beetle"]),
+        ("Hyundai", ["Elantra", "Sonata", "Tucson", "Santa Fe", "Kona"]),
+        ("Kia", ["Forte", "Optima", "Sportage", "Sorento", "Niro"]),
+    ]
+
+    cars = []
+    for i in range(count):
+        make, models = faker.random.choice(cars_data)
+        model = faker.random.choice(models)
+        version = faker.random.choice(["LE", "SE", "XLE", "Sport", "Limited", "Platinum", "GT", "RS"])
+        year = faker.random.randint(2010, 2024)
+        price = faker.random.uniform(15000, 150000)
+
+        cars.append(Car(make=make, model=model, version=version, year=year, price=round(price, 2)))
+
+    session.add_all(cars)
+    await session.commit()
+    logger.info(f"Seeded {count} cars")

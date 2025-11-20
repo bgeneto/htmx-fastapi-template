@@ -2,7 +2,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Session, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class UserRole(str, Enum):
@@ -54,3 +55,14 @@ class Contact(SQLModel, table=True):
     email: str = Field(index=True, max_length=320)
     message: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Car(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    make: str = Field(index=True, max_length=100)
+    model: str = Field(index=True, max_length=100)
+    version: str = Field(max_length=100)
+    year: int = Field(index=True)
+    price: float
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)

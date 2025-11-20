@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-20 09:39-0300\n"
+"POT-Creation-Date: 2025-11-20 12:50-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -23,43 +23,71 @@ msgstr ""
 msgid "Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:279
+#: app/main.py:292 templates/pages/admin/index.html:21
+msgid "ID"
+msgstr "ID"
+
+#: app/main.py:295 templates/components/_form_alpine.html:28
+#: templates/pages/admin/index.html:22
+msgid "Name"
+msgstr "Nome"
+
+#: app/main.py:302 templates/components/_form_alpine.html:53
+#: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
+#: templates/pages/auth/register.html:45
+msgid "Email"
+msgstr "E-mail"
+
+#: app/main.py:309 templates/components/_form_alpine.html:79
+#: templates/pages/admin/index.html:24
+msgid "Message"
+msgstr "Mensagem"
+
+#: app/main.py:315
+msgid "Submitted"
+msgstr ""
+
+#: app/main.py:320
+msgid "Search by name or email..."
+msgstr ""
+
+#: app/main.py:395
 msgid "An account with this email already exists"
 msgstr ""
 
-#: app/main.py:311 templates/pages/auth/register.html:162
+#: app/main.py:427 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:378
+#: app/main.py:494
 msgid "Invalid or expired login link. Please request a new one."
 msgstr ""
 
-#: app/main.py:474 app/main.py:485
+#: app/main.py:590 app/main.py:601
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:598
+#: app/main.py:755
 msgid "User is not pending approval"
 msgstr ""
 
-#: app/main.py:613
+#: app/main.py:770
 msgid "User approved successfully"
 msgstr ""
 
-#: app/main.py:650
+#: app/main.py:807
 msgid "User with this email already exists"
 msgstr ""
 
-#: app/main.py:682
+#: app/main.py:839
 msgid "User created successfully"
 msgstr ""
 
-#: app/main.py:715
+#: app/main.py:872
 msgid "You cannot deactivate your own account"
 msgstr ""
 
-#: app/main.py:727
+#: app/main.py:884
 msgid "User updated successfully"
 msgstr ""
 
@@ -84,6 +112,62 @@ msgstr "Por favor, insira um endereço de e-mail válido"
 msgid "This field is required"
 msgstr "O e-mail é obrigatório"
 
+#: templates/components/_datagrid.html:25
+#: templates/components/_datagrid_grid.html:6
+msgid "Managing"
+msgstr ""
+
+#: templates/components/_datagrid.html:25
+#: templates/components/_datagrid_grid.html:6
+msgid "records"
+msgstr ""
+
+#: templates/components/_datagrid.html:29
+#: templates/components/_datagrid_grid.html:10
+msgid "Search..."
+msgstr ""
+
+#: templates/components/_datagrid.html:73
+#: templates/components/_datagrid_grid.html:54
+#, fuzzy
+msgid "Filter..."
+msgstr "Limpar"
+
+#: templates/components/_datagrid.html:102
+#: templates/components/_datagrid_grid.html:83
+msgid "No records found matching your criteria."
+msgstr ""
+
+#: templates/components/_datagrid.html:115
+#: templates/components/_datagrid_grid.html:95
+msgid "Show"
+msgstr ""
+
+#: templates/components/_datagrid.html:123
+#: templates/components/_datagrid_grid.html:103
+msgid "per page"
+msgstr ""
+
+#: templates/components/_datagrid.html:129
+#: templates/components/_datagrid_grid.html:109
+msgid "of"
+msgstr ""
+
+#: templates/components/_datagrid.html:131
+#: templates/components/_datagrid_grid.html:111
+msgid "No results"
+msgstr ""
+
+#: templates/components/_datagrid.html:138
+#: templates/components/_datagrid_grid.html:118
+msgid "Prev"
+msgstr ""
+
+#: templates/components/_datagrid.html:142
+#: templates/components/_datagrid_grid.html:122
+msgid "Next"
+msgstr ""
+
 #: templates/components/_form_alpine.html:11
 msgid "Message Sent!"
 msgstr "Mensagem Enviada!"
@@ -91,22 +175,6 @@ msgstr "Mensagem Enviada!"
 #: templates/components/_form_alpine.html:20
 msgid "Send Another Message"
 msgstr "Enviar Outra Mensagem"
-
-#: templates/components/_form_alpine.html:28
-#: templates/pages/admin/index.html:22
-msgid "Name"
-msgstr "Nome"
-
-#: templates/components/_form_alpine.html:53
-#: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
-#: templates/pages/auth/register.html:45
-msgid "Email"
-msgstr "E-mail"
-
-#: templates/components/_form_alpine.html:79
-#: templates/pages/admin/index.html:24
-msgid "Message"
-msgstr "Mensagem"
 
 #: templates/components/_form_alpine.html:114
 msgid "Sending..."
@@ -160,6 +228,14 @@ msgstr "Contatos recentes"
 msgid "No contacts yet. Be the first to submit!"
 msgstr ""
 
+#: templates/pages/contacts.html:3 templates/pages/contacts.html:8
+msgid "Contacts Directory"
+msgstr ""
+
+#: templates/pages/contacts.html:9
+msgid "Browse and manage all contact submissions"
+msgstr ""
+
 #: templates/pages/index.html:9
 msgid "ContactFlow"
 msgstr "ContactFlow"
@@ -174,6 +250,18 @@ msgstr ""
 msgid "Contact us"
 msgstr "Entre em contato"
 
+#: templates/pages/admin/cars.html:3 templates/pages/admin/cars.html:14
+msgid "Cars Inventory"
+msgstr ""
+
+#: templates/pages/admin/cars.html:15
+msgid "Browse and manage vehicle inventory"
+msgstr ""
+
+#: templates/pages/admin/cars.html:21
+msgid "Back to Admin"
+msgstr ""
+
 #: templates/pages/admin/index.html:3 templates/pages/admin/index.html:14
 msgid "Admin - Contacts"
 msgstr "Admin - Contatos"
@@ -181,10 +269,6 @@ msgstr "Admin - Contatos"
 #: templates/pages/admin/index.html:15
 msgid "Logout"
 msgstr "Sair"
-
-#: templates/pages/admin/index.html:21
-msgid "ID"
-msgstr "ID"
 
 #: templates/pages/admin/index.html:25
 msgid "Created"
@@ -329,5 +413,23 @@ msgstr ""
 #~ msgstr "O nome deve ter pelo menos 2 caracteres"
 
 #~ msgid "An error occurred. Please try again."
+#~ msgstr ""
+
+#~ msgid "Make"
+#~ msgstr ""
+
+#~ msgid "Model"
+#~ msgstr ""
+
+#~ msgid "Version"
+#~ msgstr ""
+
+#~ msgid "Year"
+#~ msgstr ""
+
+#~ msgid "Price"
+#~ msgstr ""
+
+#~ msgid "Search by make or model..."
 #~ msgstr ""
 

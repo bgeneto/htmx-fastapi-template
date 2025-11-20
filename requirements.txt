@@ -20,3 +20,5 @@ email-validator
 pytest
 pytest-asyncio
 babel
+faker
+

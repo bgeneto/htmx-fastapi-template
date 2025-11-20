@@ -21,11 +21,14 @@
     <!-- Self-hosted Tailwind CSS (compiled) -->
     <link rel="stylesheet" href="/static/css/output.css">
 
-    <!-- Alpine.js for reactive components -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
-
     <!-- Axios for AJAX calls -->
     <script defer src="https://cdn.jsdelivr.net/npm/axios@1/dist/axios.min.js"></script>
+
+    <!-- Data Grid Component (load before Alpine) -->
+    <script src="/static/js/datagrid.js"></script>
+
+    <!-- Alpine.js for reactive components (load last) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
 
     <link rel="stylesheet" href="/static/style.css" />
     {% block extra_head %}{% endblock %}

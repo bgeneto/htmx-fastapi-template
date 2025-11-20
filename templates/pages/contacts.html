@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ _('Contacts Directory') }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-8">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-slate-900 mb-2">{{ _('Contacts Directory') }}</h1>
+    <p class="text-lg text-slate-600">{{ _('Browse and manage all contact submissions') }}</p>
+  </div>
+
+  {% include "components/_datagrid.html" with context %}
+</div>
+{% endblock %}
