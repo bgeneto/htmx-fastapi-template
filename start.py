@@ -110,6 +110,41 @@ def run_migrations():
         return False
 
 
+def build_css():
+    """Build CSS using Tailwind CSS v4"""
+    try:
+        print("🎨 Building CSS...")
+
+        # Run npm build:css
+        result = subprocess.run(
+            ["npm", "run", "build:css"],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+
+        if result.returncode == 0:
+            print("✅ CSS built successfully")
+            return True
+        else:
+            print(f"⚠️  CSS build failed: {result.stderr}")
+            print("   Continuing anyway - CSS may be out of date")
+            return False
+
+    except FileNotFoundError:
+        print("⚠️  npm not found. Make sure Node.js and npm are installed")
+        print("   Continuing anyway...")
+        return False
+    except subprocess.TimeoutExpired:
+        print("⚠️  CSS build timed out")
+        print("   Continuing anyway...")
+        return False
+    except Exception as e:
+        print(f"⚠️  CSS build error: {e}")
+        print("   Continuing anyway...")
+        return False
+
+
 def update_translations():
     """Extract, update, and compile translation files before starting the application"""
     try:
@@ -190,6 +225,9 @@ def main():
 
     # Update and compile translations
     update_translations()
+
+    # Build CSS using Tailwind v4 (includes Inter font configuration)
+    build_css()
 
     # Kill any existing processes that might be using the port
     kill_existing_processes()

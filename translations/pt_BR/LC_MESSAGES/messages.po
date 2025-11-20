@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-19 21:24-0300\n"
+"POT-Creation-Date: 2025-11-19 21:36-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -32,7 +32,8 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
 #: app/main.py:204 app/main.py:290 app/main.py:351
 #: templates/components/_form_alpine.html:150
-#: templates/pages/auth/login.html:120 templates/pages/auth/register.html:158
+#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:120
+#: templates/pages/auth/register.html:158
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
@@ -42,7 +43,8 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: app/main.py:209 templates/components/_form_alpine.html:149
-#: templates/pages/auth/login.html:119 templates/pages/auth/register.html:157
+#: templates/pages/admin/login.html:131 templates/pages/auth/login.html:119
+#: templates/pages/auth/register.html:157
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
 
@@ -71,7 +73,8 @@ msgstr ""
 msgid "Invalid or expired login link. Please request a new one."
 msgstr ""
 
-#: app/main.py:469 app/main.py:476 templates/pages/admin/login.html:41
+#: app/main.py:469 app/main.py:476 templates/pages/admin/login.html:40
+#: templates/pages/admin/login.html:160
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
@@ -91,7 +94,7 @@ msgstr ""
 msgid "User with this email already exists"
 msgstr ""
 
-#: app/main.py:625
+#: app/main.py:625 templates/pages/admin/login.html:133
 #, fuzzy
 msgid "Password must be at least 8 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
@@ -122,7 +125,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: templates/components/_form_alpine.html:53
-#: templates/pages/admin/index.html:23 templates/pages/admin/login.html:49
+#: templates/pages/admin/index.html:23 templates/pages/admin/login.html:48
+#: templates/pages/auth/login.html:38 templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
@@ -223,13 +227,27 @@ msgstr "Acesso Seguro"
 msgid "Please enter your credentials"
 msgstr "Por favor, insira suas credenciais"
 
-#: templates/pages/admin/login.html:66
+#: templates/pages/admin/login.html:73
 msgid "Password"
 msgstr "Senha"
 
-#: templates/pages/admin/login.html:88
+#: templates/pages/admin/login.html:111
+#, fuzzy
+msgid " Signing in..."
+msgstr "Entrar"
+
+#: templates/pages/admin/login.html:111
 msgid "Sign In"
 msgstr "Entrar"
+
+#: templates/pages/admin/login.html:132
+#, fuzzy
+msgid "Password is required"
+msgstr "O nome é obrigatório"
+
+#: templates/pages/admin/login.html:163
+msgid "An error occurred. Please try again."
+msgstr ""
 
 #: templates/pages/auth/login.html:3
 #, fuzzy
@@ -242,10 +260,6 @@ msgstr ""
 
 #: templates/pages/auth/login.html:16
 msgid "Enter your email to receive a magic link"
-msgstr ""
-
-#: templates/pages/auth/login.html:38 templates/pages/auth/register.html:45
-msgid "Email Address"
 msgstr ""
 
 #: templates/pages/auth/login.html:51

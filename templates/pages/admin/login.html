@@ -32,62 +32,139 @@
     </div>
 
     <!-- Error message -->
-    {% if error %}<div class="mb-4 p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
-      <div class="flex items-center">
-        <svg class="h-5 w-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span class="text-red-700 dark:text-red-300 font-medium">{{ _('Invalid credentials') }}</span>
-      </div>
+    {% if error %}<div class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>{{ _('Invalid credentials') }}</span>
     </div>{% endif %}
 
     <!-- Login form -->
-    <form method="post" class="space-y-6">
-      <!-- Email field -->
-      <div>
-        <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Email')
-          }}</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-              </path>
-            </svg>
+    <div x-data="adminLoginForm()">
+      <form @submit.prevent="submitForm" novalidate class="space-y-6">
+        <!-- Email field -->
+        <div>
+          <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Email')
+            }}</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                </path>
+              </svg>
+            </div>
+            <input id="email" name="email" type="email" x-model="form.email" @blur="validate('email')"
+              @input="validate('email')" required autocomplete="email"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
           </div>
-          <input id="email" name="email" type="email" required autocomplete="email"
-            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm">
-        </div>
-      </div>
-
-      <!-- Password field -->
-      <div>
-        <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Password')
-          }}</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div x-show="errors.email" x-transition class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-              </path>
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
+            <span x-text="errors.email"></span>
           </div>
-          <input id="password" name="password" type="password" required
-            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm">
         </div>
-      </div>
 
-      <!-- Submit button -->
-      <button type="submit"
-        class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-        </svg>
-        {{ _('Sign In') }}
-      </button>
-    </form>
+        <!-- Password field -->
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ _('Password')
+            }}</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                </path>
+              </svg>
+            </div>
+            <input id="password" name="password" type="password" x-model="form.password" @blur="validate('password')"
+              @input="validate('password')" required
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+          </div>
+          <div x-show="errors.password" x-transition
+            class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span x-text="errors.password"></span>
+          </div>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" :disabled="loading"
+          class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg x-show="loading" class="h-5 w-5 mr-2 animate-spin text-white" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          <svg x-show="!loading" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+          </svg>
+          <span x-text="loading ? '{{ _(" Signing in...") }}' : '{{ _("Sign In") }}'"></span>
+        </button>
+      </form>
+    </div>
   </div>
 </div>
-{% endblock %}
+
+<script>
+  function adminLoginForm() {
+    return {
+      loading: false,
+      form: {
+        email: '',
+        password: ''
+      },
+      errors: {
+        email: '',
+        password: ''
+      },
+      i18n: {
+        emailRequired: " {{ _('Email is required') }}", invalidEmail: "{{ _('Please enter a valid email address') }}",
+        passwordRequired: "{{ _('Password is required') }}",
+        passwordMinLength: "{{ _('Password must be at least 8 characters') }}"
+      }, validate(field) {
+        this.errors[field] = ''; if (field === 'email') {
+          if (!this.form.email) {
+            this.errors.email = this.i18n.emailRequired;
+          } else if (!this.isValidEmail(this.form.email)) {
+            this.errors.email = this.i18n.invalidEmail;
+          }
+        } if (field === 'password') {
+          if (!this.form.password) {
+            this.errors.password = this.i18n.passwordRequired;
+          } else if (this.form.password.length < 8) {
+            this.errors.password = this.i18n.passwordMinLength;
+          }
+        }
+      }, isValidEmail(email) {
+        const
+        emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return emailRegex.test(email);
+      }, async submitForm() {
+        this.validate('email'); this.validate('password'); if (this.errors.email || this.errors.password) {
+          return;
+        } this.loading = true; try {
+          const formData = new FormData(); formData.append('email', this.form.email);
+          formData.append('password', this.form.password); const response = await fetch(window.location.pathname, {
+            method: 'POST', body: formData
+          }); if (response.ok) { window.location.href = '/admin'; } else {
+            const
+            error = await response.text(); this.errors.email = error || "{{ _('Invalid credentials') }}";
+          }
+        } catch (err) {
+          console.error(err); this.errors.email = "{{ _('An error occurred. Please try again.') }}";
+        } finally {
+          this.loading = false;
+        }
+      }
+    }
+  } </script>
+            {% endblock %}
