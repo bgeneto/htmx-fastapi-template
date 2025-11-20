@@ -53,3 +53,18 @@
     }
   }
 }
+
+/* Style number input spinner arrows - must be outside @layer */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: inner-spin-button !important;
+  opacity: 1 !important;
+  position: relative;
+  cursor: pointer;
+  width: 16px;
+}
+
+input[type="number"]::-webkit-inner-spin-button:hover,
+input[type="number"]::-webkit-outer-spin-button:hover {
+  background-color: rgba(59, 130, 246, 0.15);
+}

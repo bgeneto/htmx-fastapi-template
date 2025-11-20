@@ -1,3 +1,31 @@
 /* minimal overrides and error/success styles */
 .err { color: #b00020; }
 .success { color: #0a8a0a; font-weight:600; }
+
+/* Number input spinner button theming - works with Tailwind dark mode */
+input[type="number"].pagination-input {
+  /* Light mode */
+  --spinner-bg: white;
+  --spinner-border: #cbd5e1;
+}
+
+/* Dark mode spinner button theming */
+.dark input[type="number"].pagination-input {
+  --spinner-bg: #374151; /* gray-700 */
+  --spinner-border: #4b5563; /* gray-600 */
+}
+
+/* Apply to WebKit browsers (Chrome, Safari, Edge) */
+input[type="number"].pagination-input::-webkit-outer-spin-button,
+input[type="number"].pagination-input::-webkit-inner-spin-button {
+  background: var(--spinner-bg);
+  border-left: 1px solid var(--spinner-border);
+}
+
+/* Optional: Firefox spinner button overrides (if needed) */
+input[type="number"].pagination-input {
+  -moz-appearance: textfield; /* Hide Firefox default spinner */
+}
+
+/* Re-add custom spinner for Firefox if needed */
+/* Firefox spinner styling would go here if we implement it */

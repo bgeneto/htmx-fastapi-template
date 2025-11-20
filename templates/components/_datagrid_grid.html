@@ -1,18 +1,36 @@
 {# Grid table structure (without x-data wrapper) #}
 
 <!-- Header with Search and Stats -->
-<div class="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center bg-gradient-to-r from-white to-slate-50">
-    <div class="text-sm text-slate-600">
-        {{ _('Managing') }} <span x-text="total" class="font-semibold text-slate-900"></span> {{ _('records') }}
+<div
+    class="px-6 py-4 border-b border-slate-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center bg-white dark:bg-gray-800">
+    <div class="text-sm text-slate-700 dark:text-gray-100 font-medium">
+        {{ _('Managing') }} <span x-text="total" class="font-semibold text-slate-900 dark:text-white"></span> {{
+        _('records') }}
     </div>
 
-    <div class="relative w-full sm:w-80">
-        <input type="text" x-model="search" placeholder="{{ _('Search...') }}"
-            class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
+    <div class="flex gap-2 w-full sm:w-auto">
+        <div class="relative flex-1 sm:w-80">
+            <input type="text" x-model="search" placeholder="{{ _('Search...') }}"
+                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500 absolute left-3 top-2.5" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+
+        <button @click="clearFilters()"
+            class="px-4 py-2 bg-slate-200 dark:bg-gray-700 hover:bg-slate-300 dark:hover:bg-gray-600 text-slate-800 dark:text-white rounded-lg transition text-sm font-medium whitespace-nowrap">
+            {{ _('Clear Filters') }}
+        </button>
+
+        <button @click="openAddModal()"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition text-sm font-medium whitespace-nowrap flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            {{ _('Add') }}
+        </button>
     </div>
 </div>
 
@@ -20,7 +38,7 @@
 <div class="overflow-x-auto relative">
     <!-- Loading Indicator -->
     <div x-show="loading" x-transition
-        class="absolute inset-0 bg-white/60 z-20 flex items-center justify-center backdrop-blur-sm">
+        class="absolute inset-0 bg-white/60 dark:bg-gray-800/60 z-20 flex items-center justify-center backdrop-blur-sm">
         <div class="w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
@@ -28,20 +46,20 @@
     <table class="w-full text-left border-collapse min-w-[600px] text-sm">
 
         <!-- Header Row -->
-        <thead class="bg-slate-50 border-b border-slate-200">
+        <thead class="bg-slate-100 dark:bg-gray-800 border-b-2 border-slate-300 dark:border-gray-600">
             <tr>
                 <template x-for="col in cols" :key="col.key">
-                    <th class="sticky top-0 bg-slate-50 p-0 border-r border-slate-200 last:border-r-0 group select-none"
+                    <th class="sticky top-0 bg-slate-100 dark:bg-gray-800 p-0 border-r border-slate-200 dark:border-gray-700 last:border-r-0 group select-none"
                         :style="`width: ${col.width}px; min-width: ${col.width}px`">
 
                         <div class="px-4 py-3 h-full flex flex-col gap-2 relative">
 
                             <!-- Column Label + Sort Indicator -->
                             <div @click="col.sortable && sortBy(col.key)"
-                                :class="col.sortable ? 'cursor-pointer hover:text-blue-600' : ''"
-                                class="flex items-center justify-between transition font-semibold text-xs uppercase text-slate-600">
+                                :class="col.sortable ? 'cursor-pointer hover:text-blue-600 dark:hover:text-blue-400' : ''"
+                                class="flex items-center justify-between transition font-semibold text-xs uppercase text-slate-700 dark:text-gray-200">
                                 <span x-text="col.label"></span>
-                                <div x-show="sortCol === col.key" class="text-blue-500 text-xs ml-1">
+                                <div x-show="sortCol === col.key" class="text-blue-500 dark:text-blue-400 text-xs ml-1">
                                     <span x-show="sortAsc">▲</span>
                                     <span x-show="!sortAsc">▼</span>
                                 </div>
@@ -50,12 +68,12 @@
                             <!-- Filter Input -->
                             <template x-if="col.filterable">
                                 <input type="text" x-model="filters[col.key]"
-                                    class="w-full text-xs px-2 py-1.5 rounded border border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                                    class="w-full text-xs px-2 py-1.5 rounded border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
                                     placeholder="{{ _('Filter...') }}">
                             </template>
 
                             <!-- Column Resize Handle -->
-                            <div @mousedown="startResize($event, col.key)"
+                            <div x-show="col.key !== 'actions'" @mousedown="startResize($event, col.key)"
                                 class="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 active:bg-blue-600 transition-colors opacity-0 group-hover:opacity-100">
                             </div>
                         </div>
@@ -65,13 +83,40 @@
         </thead>
 
         <!-- Body Rows -->
-        <tbody class="divide-y divide-slate-100">
+        <tbody class="divide-y divide-slate-100 dark:divide-gray-700">
             <template x-for="(row, rowIdx) in rows" :key="rowIdx">
-                <tr class="hover:bg-blue-50 transition-colors">
+                <tr class="hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                     <template x-for="col in cols" :key="col.key">
-                        <td class="px-4 py-3 truncate border-r border-slate-100 last:border-r-0"
-                            :style="`max-width: ${col.width}px`" :title="row[col.key]">
-                            <span x-text="row[col.key]" class="text-slate-700"></span>
+                        <td class="px-4 py-3 border-r border-slate-100 dark:border-gray-700 last:border-r-0"
+                            :class="col.key === 'actions' ? '' : 'truncate'"
+                            :style="col.key !== 'actions' ? `max-width: ${col.width}px` : ''"
+                            :title="col.key !== 'actions' ? row[col.key] : ''">
+
+                            <!-- Regular cell content -->
+                            <span x-show="col.key !== 'actions'" x-text="row[col.key]"
+                                class="text-slate-700 dark:text-gray-300"></span>
+
+                            <!-- Actions cell -->
+                            <div x-show="col.key === 'actions'" class="flex items-center gap-2">
+                                <button @click="openEditModal(row)"
+                                    class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition"
+                                    title="{{ _('Edit') }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button @click="openDeleteModal(row)"
+                                    class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition"
+                                    title="{{ _('Delete') }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     </template>
                 </tr>
@@ -79,7 +124,7 @@
 
             <!-- Empty State -->
             <tr x-show="rows.length === 0 && !loading">
-                <td :colspan="cols.length" class="px-4 py-12 text-center text-slate-400">
+                <td :colspan="cols.length" class="px-4 py-12 text-center text-slate-400 dark:text-gray-500">
                     {{ _('No records found matching your criteria.') }}
                 </td>
             </tr>
@@ -88,13 +133,14 @@
 </div>
 
 <!-- Footer with Pagination -->
-<div class="border-t border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div
+    class="border-t border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
 
     <!-- Page Size Selector -->
-    <div class="flex items-center gap-2 text-sm text-slate-600">
+    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-gray-100 font-medium">
         <span>{{ _('Show') }}</span>
         <select x-model.number="limit"
-            class="border border-slate-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            class="border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -104,22 +150,149 @@
     </div>
 
     <!-- Pagination Info -->
-    <div class="text-sm text-slate-600 hidden sm:inline">
+    <div class="text-sm text-slate-700 dark:text-gray-100 font-medium hidden sm:inline">
         <span x-show="total > 0">
-            <span x-text="from"></span>–<span x-text="to"></span> {{ _('of') }} <span x-text="total"></span>
+            {{ _('Showing') }} <span x-text="from"></span>–<span x-text="to"></span> {{ _('of') }} <span
+                x-text="total"></span> {{ _('items') }}
         </span>
         <span x-show="total === 0">{{ _('No results') }}</span>
     </div>
 
-    <!-- Pagination Buttons -->
-    <div class="flex gap-2">
+    <!-- Pagination Buttons with Advanced Navigation -->
+    <div class="flex items-center gap-2">
+        <!-- First Page -->
+        <button @click="gotoPage(1)" :disabled="page === 1"
+            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            title="{{ _('First page') }}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7">
+                </path>
+            </svg>
+        </button>
+
+        <!-- Previous Page -->
         <button @click="prevPage()" :disabled="page === 1"
-            class="px-4 py-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium">
-            {{ _('Prev') }}
+            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            title="{{ _('Previous page') }}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
         </button>
+
+        <!-- Page Input -->
+        <div class="flex items-center gap-2">
+            <input type="number" x-model.number="pageInput" @input="gotoPage(pageInput)"
+                @keyup.enter="gotoPage(pageInput)" min="1" :max="lastPage"
+                class="pagination-input w-16 px-2 py-1 text-center border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+            <span class="text-sm text-slate-700 dark:text-gray-100 font-medium">{{ _('of') }} <span
+                    x-text="lastPage"></span></span>
+        </div>
+
+        <!-- Next Page -->
         <button @click="nextPage()" :disabled="page === lastPage"
-            class="px-4 py-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium">
-            {{ _('Next') }}
+            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            title="{{ _('Next page') }}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
         </button>
+
+        <!-- Last Page -->
+        <button @click="gotoPage(lastPage)" :disabled="page === lastPage"
+            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            title="{{ _('Last page') }}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7">
+                </path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- CRUD Modal -->
+<div x-show="showModal" x-cloak @click.self="closeModal()"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+
+    <div @click.stop class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+                <span x-show="modalMode === 'add'">{{ _('Add New Car') }}</span>
+                <span x-show="modalMode === 'edit'">{{ _('Edit Car') }}</span>
+                <span x-show="modalMode === 'delete'">{{ _('Delete Car') }}</span>
+            </h3>
+            <button @click="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-6 py-4">
+            <!-- Delete Confirmation -->
+            <div x-show="modalMode === 'delete'" class="text-center">
+                <p class="text-slate-600 dark:text-gray-400 mb-4">
+                    {{ _('Are you sure you want to delete this car?') }}
+                </p>
+                <div class="bg-slate-100 dark:bg-gray-700 rounded p-3 mb-4">
+                    <p class="text-sm text-slate-700 dark:text-gray-300">
+                        <span x-text="currentRow.make"></span> <span x-text="currentRow.model"></span> (<span
+                            x-text="currentRow.year"></span>)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Add/Edit Form -->
+            <div x-show="modalMode !== 'delete'" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Make')
+                        }}</label>
+                    <input type="text" x-model="currentRow.make"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Model')
+                        }}</label>
+                    <input type="text" x-model="currentRow.model"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Version')
+                        }}</label>
+                    <input type="text" x-model="currentRow.version"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Year')
+                        }}</label>
+                    <input type="number" x-model.number="currentRow.year"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Price')
+                        }}</label>
+                    <input type="number" step="0.01" x-model.number="currentRow.price"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 flex justify-end gap-3">
+            <button @click="closeModal()"
+                class="px-4 py-2 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg transition">
+                {{ _('Cancel') }}
+            </button>
+            <button x-show="modalMode === 'delete'" @click="deleteRow()"
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                {{ _('Delete') }}
+            </button>
+            <button x-show="modalMode !== 'delete'" @click="saveRow()"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                {{ _('Save') }}
+            </button>
+        </div>
     </div>
 </div>

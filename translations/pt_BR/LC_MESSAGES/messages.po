@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-20 12:50-0300\n"
+"POT-Creation-Date: 2025-11-20 14:17-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -23,71 +23,71 @@ msgstr ""
 msgid "Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:292 templates/pages/admin/index.html:21
+#: app/main.py:293 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:295 templates/components/_form_alpine.html:28
+#: app/main.py:296 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:302 templates/components/_form_alpine.html:53
+#: app/main.py:303 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:309 templates/components/_form_alpine.html:79
+#: app/main.py:310 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:315
+#: app/main.py:316
 msgid "Submitted"
 msgstr ""
 
-#: app/main.py:320
+#: app/main.py:321
 msgid "Search by name or email..."
 msgstr ""
 
-#: app/main.py:395
+#: app/main.py:396
 msgid "An account with this email already exists"
 msgstr ""
 
-#: app/main.py:427 templates/pages/auth/register.html:162
+#: app/main.py:428 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 
-#: app/main.py:494
+#: app/main.py:495
 msgid "Invalid or expired login link. Please request a new one."
 msgstr ""
 
-#: app/main.py:590 app/main.py:601
+#: app/main.py:591 app/main.py:602
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:755
+#: app/main.py:838
 msgid "User is not pending approval"
 msgstr ""
 
-#: app/main.py:770
+#: app/main.py:853
 msgid "User approved successfully"
 msgstr ""
 
-#: app/main.py:807
+#: app/main.py:890
 msgid "User with this email already exists"
 msgstr ""
 
-#: app/main.py:839
+#: app/main.py:922
 msgid "User created successfully"
 msgstr ""
 
-#: app/main.py:872
+#: app/main.py:955
 msgid "You cannot deactivate your own account"
 msgstr ""
 
-#: app/main.py:884
+#: app/main.py:967
 msgid "User updated successfully"
 msgstr ""
 
@@ -113,59 +113,145 @@ msgid "This field is required"
 msgstr "O e-mail é obrigatório"
 
 #: templates/components/_datagrid.html:25
-#: templates/components/_datagrid_grid.html:6
+#: templates/components/_datagrid_grid.html:7
 msgid "Managing"
 msgstr ""
 
 #: templates/components/_datagrid.html:25
-#: templates/components/_datagrid_grid.html:6
+#: templates/components/_datagrid_grid.html:8
 msgid "records"
 msgstr ""
 
 #: templates/components/_datagrid.html:29
-#: templates/components/_datagrid_grid.html:10
+#: templates/components/_datagrid_grid.html:13
 msgid "Search..."
 msgstr ""
 
 #: templates/components/_datagrid.html:73
-#: templates/components/_datagrid_grid.html:54
+#: templates/components/_datagrid_grid.html:72
 #, fuzzy
 msgid "Filter..."
 msgstr "Limpar"
 
 #: templates/components/_datagrid.html:102
-#: templates/components/_datagrid_grid.html:83
+#: templates/components/_datagrid_grid.html:128
 msgid "No records found matching your criteria."
 msgstr ""
 
 #: templates/components/_datagrid.html:115
-#: templates/components/_datagrid_grid.html:95
+#: templates/components/_datagrid_grid.html:141
 msgid "Show"
 msgstr ""
 
 #: templates/components/_datagrid.html:123
-#: templates/components/_datagrid_grid.html:103
+#: templates/components/_datagrid_grid.html:149
 msgid "per page"
 msgstr ""
 
 #: templates/components/_datagrid.html:129
-#: templates/components/_datagrid_grid.html:109
+#: templates/components/_datagrid_grid.html:155
+#: templates/components/_datagrid_grid.html:187
 msgid "of"
 msgstr ""
 
 #: templates/components/_datagrid.html:131
-#: templates/components/_datagrid_grid.html:111
+#: templates/components/_datagrid_grid.html:158
 msgid "No results"
 msgstr ""
 
 #: templates/components/_datagrid.html:138
-#: templates/components/_datagrid_grid.html:118
 msgid "Prev"
 msgstr ""
 
 #: templates/components/_datagrid.html:142
-#: templates/components/_datagrid_grid.html:122
 msgid "Next"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:24
+msgid "Clear Filters"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:32
+msgid "Add"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:103
+msgid "Edit"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:112
+#: templates/components/_datagrid_grid.html:290
+#: templates/pages/admin/index.html:40
+msgid "Delete"
+msgstr "Excluir"
+
+#: templates/components/_datagrid_grid.html:155
+msgid "Showing"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:156
+msgid "items"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:166
+msgid "First page"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:176
+msgid "Previous page"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:194
+msgid "Next page"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:203
+msgid "Last page"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:220
+msgid "Add New Car"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:221
+msgid "Edit Car"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:222
+#, fuzzy
+msgid "Delete Car"
+msgstr "Excluir"
+
+#: templates/components/_datagrid_grid.html:237
+msgid "Are you sure you want to delete this car?"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:250
+msgid "Make"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:256
+msgid "Model"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:262
+msgid "Version"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:268
+msgid "Year"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:274
+msgid "Price"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:286
+msgid "Cancel"
+msgstr ""
+
+#: templates/components/_datagrid_grid.html:294
+msgid "Save"
 msgstr ""
 
 #: templates/components/_form_alpine.html:11
@@ -277,10 +363,6 @@ msgstr "Criado"
 #: templates/pages/admin/index.html:26
 msgid "Action"
 msgstr "Ação"
-
-#: templates/pages/admin/index.html:40
-msgid "Delete"
-msgstr "Excluir"
 
 #: templates/pages/auth/login.html:3
 #, fuzzy

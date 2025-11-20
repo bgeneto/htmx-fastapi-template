@@ -29,6 +29,7 @@ document.addEventListener("alpine:init", () => {
 
     // Pagination state
     page: 1,
+    pageInput: 1,
     limit: 10,
     total: 0,
     lastPage: 1,
@@ -41,6 +42,11 @@ document.addEventListener("alpine:init", () => {
     startX: 0,
     startWidth: 0,
 
+    // Modal state for CRUD operations
+    showModal: false,
+    modalMode: 'add', // 'add', 'edit', 'delete'
+    currentRow: {},
+
     init() {
       // Initialize filter objects for filterable columns
       this.cols.forEach((col) => {
@@ -52,8 +58,12 @@ document.addEventListener("alpine:init", () => {
       // Fetch initial data
       this.fetchData();
 
-      // Watch pagination
-      this.$watch("page", () => this.fetchData());
+      // Watch pagination - sync pageInput with page changes and fetch
+      this.$watch("page", (val) => {
+        this.pageInput = val;
+        this.fetchData();
+      });
+      // Watch limit - reset page and fetch data
       this.$watch("limit", () => {
         this.page = 1;
         this.fetchData();
@@ -69,7 +79,7 @@ document.addEventListener("alpine:init", () => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           this.page = 1;
-          this.fetchData();
+          this.fetchData(); // Trigger data fetch after debouncing
         }, 300);
       };
 
@@ -144,8 +154,9 @@ document.addEventListener("alpine:init", () => {
     },
 
     gotoPage(p) {
-      if (p >= 1 && p <= this.lastPage) {
-        this.page = p;
+      const pageNum = parseInt(p);
+      if (pageNum >= 1 && pageNum <= this.lastPage) {
+        this.page = pageNum;
       }
     },
 
@@ -176,6 +187,178 @@ document.addEventListener("alpine:init", () => {
 
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onUp);
+    },
+
+    /**
+     * Clear all filters
+     */
+    clearFilters() {
+      this.search = "";
+      Object.keys(this.filters).forEach(key => {
+        this.filters[key] = "";
+      });
+      // Reset to first page and fetch immediately (no debounce needed for clear)
+      this.page = 1;
+      this.fetchData();
+    },
+
+    /**
+     * CRUD Modal Actions
+     */
+    openAddModal() {
+      this.modalMode = 'add';
+      this.currentRow = {};
+      this.showModal = true;
+    },
+
+    openEditModal(row) {
+      this.modalMode = 'edit';
+      this.currentRow = { ...row };
+      this.showModal = true;
+    },
+
+    openDeleteModal(row) {
+      this.modalMode = 'delete';
+      this.currentRow = { ...row };
+      this.showModal = true;
+    },
+
+    closeModal() {
+      this.showModal = false;
+      this.currentRow = {};
+    },
+
+    async saveRow() {
+      try {
+        const url = this.modalMode === 'add'
+          ? apiUrl
+          : `${apiUrl}/${this.currentRow.id}`;
+
+        const method = this.modalMode === 'add' ? 'POST' : 'PUT';
+        const action = this.modalMode === 'add' ? 'added' : 'updated';
+
+        // Exclude timestamp fields that should not be updated
+        const payload = { ...this.currentRow };
+        delete payload.created_at;
+        delete payload.updated_at;
+
+        const response = await fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          this.closeModal();
+          this.fetchData();
+          this.showToast(`Record ${action} successfully`, 'success');
+        } else {
+          const errorText = await response.text();
+          console.error('Save failed:', errorText);
+
+          let errorMessage = `Failed to ${action} record`;
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.detail || errorMessage;
+          } catch (e) {
+            // Keep default error message
+          }
+
+          this.showToast(errorMessage, 'error');
+        }
+      } catch (error) {
+        console.error('Save error:', error);
+        this.showToast(`Network error while saving record`, 'error');
+      }
+    },
+
+    async deleteRow() {
+      try {
+        const response = await fetch(`${apiUrl}/${this.currentRow.id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          this.closeModal();
+          this.fetchData();
+
+          // Show success toast
+          this.showToast('Record deleted successfully', 'success');
+        } else {
+          const errorText = await response.text();
+          console.error('Delete failed:', errorText);
+
+          let errorMessage = 'Failed to delete record';
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.detail || errorMessage;
+          } catch (e) {
+            // Not JSON, use text
+          }
+
+          this.showToast(errorMessage, 'error');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        this.showToast('Network error while deleting record', 'error');
+      }
+    },
+
+    /**
+     * Show a toast notification
+     */
+    showToast(message, type = 'info') {
+      console.log(`[TOAST ${type.toUpperCase()}]: ${message}`); // Always log for debugging
+
+      // Try to use the toast system from _base.html if available
+      if (typeof window.showToast === 'function') {
+        console.log('Using window.showToast');
+        window.showToast(message, type);
+      } else {
+        console.log('Using fallback toast notification');
+
+        // Create a more visible fallback notification
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+          color: white;
+          padding: 12px 16px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          z-index: 10000;
+          max-width: 300px;
+          word-wrap: break-word;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Ensure the notification is visible by scrolling it into view if needed
+        setTimeout(() => notification.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+
+        // Remove after 5 seconds with fade out
+        setTimeout(() => {
+          notification.style.transition = 'opacity 0.3s ease-out';
+          notification.style.opacity = '0';
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }, 5000);
+
+        // Add click to dismiss
+        notification.addEventListener('click', () => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        });
+      }
     },
   }));
 });

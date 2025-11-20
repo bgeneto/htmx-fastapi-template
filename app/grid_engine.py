@@ -84,18 +84,59 @@ class GridEngine:
         # 1. Start with base query
         query = select(self.model)
 
-        # 2. Global search (the 'q' param)
+        # 2. Global search (the 'q' param) - with partial matching (ILIKE)
         q = request.query_params.get("q", "").strip()
         if q and search_fields:
             conditions = []
             for field_name in search_fields:
                 if hasattr(self.model, field_name):
                     col_attr = getattr(self.model, field_name)
-                    conditions.append(col_attr.ilike(f"%{q}%"))
+                    col_type = col_attr.type
+
+                    # Use ILIKE for string columns, cast to string for numbers
+                    if isinstance(col_type, (String, Text)):
+                        conditions.append(col_attr.ilike(f"%{q}%"))
+                    else:
+                        # For numeric/other fields, try exact match or fallback to string contains
+                        try:
+                            # For numeric fields, try to convert the search value
+                            if hasattr(col_type, "python_type"):
+                                python_type = col_type.python_type
+                                if python_type:
+                                    converted_value = python_type(q)
+                                    conditions.append(col_attr == converted_value)
+                                else:
+                                    # Fallback to string search
+                                    from sqlalchemy import Text as SQLText
+                                    from sqlalchemy import cast
+
+                                    conditions.append(
+                                        cast(col_attr, SQLText).ilike(f"%{q}%")
+                                    )
+                            else:
+                                # Type doesn't define python_type (like some custom types)
+                                from sqlalchemy import Text as SQLText
+                                from sqlalchemy import cast
+
+                                conditions.append(
+                                    cast(col_attr, SQLText).ilike(f"%{q}%")
+                                )
+                        except (
+                            ValueError,
+                            TypeError,
+                            AttributeError,
+                            NotImplementedError,
+                        ):
+                            # If any conversion fails, fallback to string-based search in the database
+                            from sqlalchemy import Text as SQLText
+                            from sqlalchemy import cast
+
+                            conditions.append(cast(col_attr, SQLText).ilike(f"%{q}%"))
+
             if conditions:
                 query = query.where(or_(*conditions))
 
-        # 3. Dynamic column filtering (auto-inspection)
+        # 3. Dynamic column filtering (auto-inspection) - these work WITH search
         reserved = {"page", "limit", "q", "sort", "dir"}
         for key, value in request.query_params.items():
             if key not in reserved and value:
@@ -103,17 +144,17 @@ class GridEngine:
                     col_attr = getattr(self.model, key)
                     col_type = col_attr.type
 
-                    # Type-aware filtering
+                    # Always use partial matching for better UX
                     if isinstance(col_type, (String, Text)):
                         # String columns: ILIKE for partial matching
                         query = query.where(col_attr.ilike(f"%{value}%"))
                     else:
-                        # Numeric/other: exact match
-                        try:
-                            query = query.where(col_attr == value)
-                        except (ValueError, TypeError):
-                            # Skip invalid filters
-                            pass
+                        # For numeric fields, use string-based partial matching
+                        # This allows "202" to match "2020", "2021", "2022" etc.
+                        from sqlalchemy import Text as SQLText
+                        from sqlalchemy import cast
+
+                        query = query.where(cast(col_attr, SQLText).ilike(f"%{value}%"))
 
         # 4. Sorting (with fallback to primary key)
         if hasattr(self.model, sort_col) and sort_col in self.mapper.columns:
