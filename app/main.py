@@ -13,7 +13,6 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 
-from . import repository
 from .auth import (
     COOKIE_NAME,
     create_session_cookie,
@@ -22,7 +21,6 @@ from .auth import (
 from .config import settings
 from .db import init_db
 from .email import (
-    send_account_approved,
     send_registration_notification,
 )
 from .grid_engine import GridEngine, PaginatedResponse
@@ -31,28 +29,22 @@ from .i18n import gettext as _
 from .logger import get_logger
 from .models import Car, Contact, User, UserRole
 from .repository import (
-    approve_user,
     create_contact,
     create_user,
     get_recent_contacts,
     get_session,
     get_user_by_email,
     get_valid_token,
-    hash_password,
     list_contacts,
     list_users,
     mark_token_used,
     seed_cars,
-    update_user,
 )
 from .schemas import (
-    AdminCreateUser,
     ContactCreate,
     LoginRequest,
     UserRegister,
-    UserUpdate,
 )
-from .strategies import create_admin_login_verifier, handle_validation_error
 
 logger = get_logger("main")
 
@@ -245,12 +237,8 @@ async def contact(
             form_data["email"],
             str(e),
         )
-        errors = handle_validation_error(e)
-
-        # Return JSON for Alpine.js
-        return JSONResponse(
-            status_code=400, content={"errors": errors, "form": form_data}
-        )
+        # Return JSON for Alpine.js using helper
+        return ResponseHelper.pydantic_validation_error(e, form_data)
 
     # Persist contact
     try:
@@ -385,26 +373,24 @@ async def register(
     session: AsyncSession = Depends(get_session),
 ):
     """Handle user self-registration (creates pending user)"""
+    from .response_helpers import FormResponseHelper
+
     form_data = {"email": email, "full_name": full_name}
 
     # Check if user already exists
     existing_user = await get_user_by_email(session, email)
     if existing_user:
-        return JSONResponse(
-            status_code=400,
-            content={
-                "errors": {"email": _("An account with this email already exists")},
-                "form": form_data,
-            },
+        return FormResponseHelper.form_error(
+            message=_("An account with this email already exists"), form_data=form_data
         )
 
     # Validate with Pydantic
     try:
         payload = UserRegister.model_validate(form_data)
     except ValidationError as e:
-        errors = handle_validation_error(e)
-        return JSONResponse(
-            status_code=400, content={"errors": errors, "form": form_data}
+        return FormResponseHelper.form_error(
+            message=_("Registration failed"),
+            field_errors=ResponseHelper.pydantic_validation_error(e),
         )
 
     # Create pending user
@@ -421,13 +407,10 @@ async def register(
                 admin_users[0].email, user.email, user.full_name, admin_url
             )
 
-        return JSONResponse(
-            content={
-                "success": True,
-                "message": _(
-                    "Registration successful! Your account is pending admin approval."
-                ),
-            }
+        return FormResponseHelper.form_success(
+            message=_(
+                "Registration successful! Your account is pending admin approval."
+            )
         )
     except Exception as exc:
         logger.error(f"Failed to create user: {exc}")
@@ -449,15 +432,17 @@ async def login(
     session: AsyncSession = Depends(get_session),
 ):
     """Request magic link for passwordless login"""
+    from .response_helpers import FormResponseHelper
+
     form_data = {"email": email}
 
     # Validate email format
     try:
         LoginRequest.model_validate(form_data)
     except ValidationError as e:
-        errors = handle_validation_error(e)
-        return JSONResponse(
-            status_code=400, content={"errors": errors, "form": form_data}
+        return FormResponseHelper.form_error(
+            message=_("Login failed"),
+            field_errors=ResponseHelper.pydantic_validation_error(e),
         )
 
     from .auth_strategies import (
@@ -578,80 +563,38 @@ async def admin_login(
     session: AsyncSession = Depends(get_session),
 ):
     """Bootstrap admin login with password (admin only)"""
+    from .admin_services import AdminLoginService, InvalidCredentialsError
+
     form_data = {"email": email, "password": password}
 
-    # Get user by email
-    user = await get_user_by_email(session, email)
+    login_service = AdminLoginService(session)
 
-    # Check if user exists
-    if not user:
-        return JSONResponse(
-            status_code=400,
-            content={
-                "errors": {"email": _("Invalid credentials")},
-                "form": form_data,
-            },
+    try:
+        # Authenticate user using service with guard clauses
+        result = await login_service.authenticate(email, password, next)
+
+        # Return success response - JavaScript will handle redirect
+        response = JSONResponse(
+            content={"success": True, "redirect_url": result.redirect_url}
         )
 
-    # Verify with strategy
-    verifier = create_admin_login_verifier(user)
-    if not verifier.verify(password=password):
-        return JSONResponse(
-            status_code=400,
-            content={
-                "errors": {"email": _("Invalid credentials")},
-                "form": form_data,
-            },
+        # Set session cookie on response
+        response.set_cookie(
+            COOKIE_NAME,
+            result.session_cookie,
+            httponly=True,
+            samesite="lax",
+            secure=not settings.debug,
         )
 
-    # Create session cookie - user exists and has ID at this point
-    assert user.id is not None, "User must have an ID"
-    cookie = create_session_cookie(user.id, user.email, user.role)
+        logger.info(f"Bootstrap admin logged in: {result.user.email}")
+        return response
 
-    # Determine redirect URL - use 'next' if provided and valid, otherwise default to /admin
-    redirect_url = "/admin"
-    if next:
-        from urllib.parse import unquote, urlparse
-
-        try:
-            decoded_next = unquote(next)
-            # Parse the URL to check its path
-            parsed_url = urlparse(decoded_next)
-
-            # Security validation: prevent redirects to sensitive endpoints
-            sensitive_endpoints = [
-                "/admin/logout",  # Don't auto-logout user after login
-                "/admin/login",  # Don't redirect back to login
-                "/auth/logout",  # Don't redirect to auth logout
-                "/auth/login",  # Don't redirect to general login
-            ]
-
-            # Check if the path is safe:
-            # 1. Must be relative (not external domain)
-            # 2. Must not be in sensitive endpoints
-            # 3. Must start with /admin to stay within admin area
-            if (
-                parsed_url.scheme == ""
-                and parsed_url.netloc == ""
-                and parsed_url.path.startswith("/admin")
-                and parsed_url.path not in sensitive_endpoints
-            ):
-                redirect_url = decoded_next
-
-        except Exception:
-            # If decoding or validation fails, use default
-            pass
-
-    # Return success response - JavaScript will handle redirect
-    response = JSONResponse(content={"success": True, "redirect_url": redirect_url})
-
-    # Set session cookie on the response
-    response.set_cookie(
-        COOKIE_NAME, cookie, httponly=True, samesite="lax", secure=not settings.debug
-    )
-
-    logger.info(f"Bootstrap admin logged in: {user.email}")
-    return response
+    except InvalidCredentialsError:
+        # Return standardized error response using helper
+        return ResponseHelper.validation_error(
+            {"email": _("Invalid credentials")}, form_data
+        )
 
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -828,39 +771,30 @@ async def admin_approve_user(
     session: AsyncSession = Depends(get_session),
 ):
     """Approve a pending user and set their role"""
-    user = await repository.get_user_by_id(session, user_id)
+    from .admin_services import UserManagementService
+    from .response_helpers import FormResponseHelper
 
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+    user_service = UserManagementService(session)
 
-    if user.role != UserRole.PENDING:
-        return JSONResponse(
-            status_code=400, content={"error": _("User is not pending approval")}
-        )
+    try:
+        # Approve user using service with proper validation
+        approved_user = await user_service.approve_user(user_id, role, current_user)
 
-    # Approve user
-    user = await approve_user(session, user, role)
-
-    # Send approval notification
-    login_url = f"{settings.APP_BASE_URL}/auth/login"
-    await send_account_approved(user.email, user.full_name, login_url)
-
-    logger.info(f"User {user.email} approved by {current_user.email}")
-
-    return JSONResponse(
-        content={
-            "success": True,
-            "message": _("User approved successfully"),
-            "user": {
-                "id": user.id,
-                "email": user.email,
-                "full_name": user.full_name,
-                "role": user.role.value,
-                "is_active": user.is_active,
-                "email_verified": user.email_verified,
+        # Return success response using helper
+        return FormResponseHelper.form_success(
+            message=_("User approved successfully"),
+            user={
+                "id": approved_user.id,
+                "email": approved_user.email,
+                "full_name": approved_user.full_name,
+                "role": approved_user.role.value,
+                "is_active": approved_user.is_active,
+                "email_verified": approved_user.email_verified,
             },
-        }
-    )
+        )
+    except Exception as exc:
+        logger.error(f"Failed to approve user: {exc}")
+        raise HTTPException(status_code=500, detail="Failed to approve user")
 
 
 @app.post("/admin/users/create")
@@ -874,6 +808,8 @@ async def admin_create_user(
     session: AsyncSession = Depends(get_session),
 ):
     """Admin creates a new user with optional password"""
+    from .response_helpers import FormResponseHelper
+
     form_data = {
         "email": email,
         "full_name": full_name,
@@ -881,53 +817,22 @@ async def admin_create_user(
         "password": password,
     }
 
-    # Check if user exists
-    existing_user = await get_user_by_email(session, email)
-    if existing_user:
-        return JSONResponse(
-            status_code=400,
-            content={
-                "errors": {"email": _("User with this email already exists")},
-                "form": form_data,
+    try:
+        # Create user using service with proper validation
+        created_user = await user_service.create_user(
+            email, full_name, role, password, current_user
+        )
+
+        # Return success response using helper
+        return FormResponseHelper.form_success(
+            message=_("User created successfully"),
+            user={
+                "id": created_user.id,
+                "email": created_user.email,
+                "full_name": created_user.full_name,
+                "role": created_user.role.value,
+                "is_active": created_user.is_active,
             },
-        )
-
-    # Validate
-    try:
-        payload = AdminCreateUser.model_validate(form_data)
-    except ValidationError as e:
-        errors = handle_validation_error(e)
-        return JSONResponse(
-            status_code=400, content={"errors": errors, "form": form_data}
-        )
-
-    # Hash password if provided
-    hashed_password = hash_password(password) if password else None
-
-    # Create user
-    try:
-        user = await create_user(
-            session, payload, role=payload.role, hashed_password=hashed_password
-        )
-
-        # Mark as verified since admin created it
-        user.email_verified = True
-        await session.commit()
-
-        logger.info(f"Admin {current_user.email} created user {user.email}")
-
-        return JSONResponse(
-            content={
-                "success": True,
-                "message": _("User created successfully"),
-                "user": {
-                    "id": user.id,
-                    "email": user.email,
-                    "full_name": user.full_name,
-                    "role": user.role.value,
-                    "is_active": user.is_active,
-                },
-            }
         )
     except Exception as exc:
         logger.error(f"Failed to create user: {exc}")
@@ -943,37 +848,31 @@ async def admin_update_user_role(
     session: AsyncSession = Depends(get_session),
 ):
     """Update user role and active status"""
-    user = await repository.get_user_by_id(session, user_id)
+    from .admin_services import UserManagementService
+    from .response_helpers import FormResponseHelper
 
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+    user_service = UserManagementService(session)
 
-    # Prevent admin from deactivating themselves
-    if user.id == current_user.id and is_active is False:
-        return JSONResponse(
-            status_code=400,
-            content={"error": _("You cannot deactivate your own account")},
+    try:
+        # Update user using service with safety checks
+        updated_user = await user_service.update_user_role(
+            user_id, role, is_active, current_user
         )
 
-    # Update user
-    update_data = UserUpdate(role=role, is_active=is_active, full_name=None)
-    updated_user = await update_user(session, user, update_data)
-
-    logger.info(f"Admin {current_user.email} updated user {updated_user.email}")
-
-    return JSONResponse(
-        content={
-            "success": True,
-            "message": _("User updated successfully"),
-            "user": {
+        # Return success response using helper
+        return FormResponseHelper.form_success(
+            message=_("User updated successfully"),
+            user={
                 "id": updated_user.id,
                 "email": updated_user.email,
                 "full_name": updated_user.full_name,
                 "role": updated_user.role.value,
                 "is_active": updated_user.is_active,
             },
-        }
-    )
+        )
+    except Exception as exc:
+        logger.error(f"Failed to update user: {exc}")
+        raise HTTPException(status_code=500, detail="Failed to update user")
 
 
 @app.get("/admin/logout")

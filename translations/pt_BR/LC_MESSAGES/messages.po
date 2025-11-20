@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-20 16:34-0300\n"
+"POT-Creation-Date: 2025-11-20 17:22-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -19,79 +19,104 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
+#: app/admin_services.py:164
+msgid "User is not pending approval"
+msgstr "O usuário não está aguardando aprovação"
+
+#: app/admin_services.py:221
+msgid "User with this email already exists"
+msgstr "Já existe um usuário com este e-mail"
+
+#: app/admin_services.py:286
+msgid "You cannot deactivate your own account"
+msgstr "Você não pode desativar sua própria conta"
+
 #: app/auth_strategies.py:48
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:293 templates/pages/admin/index.html:21
+#: app/main.py:281 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:296 templates/components/_form_alpine.html:28
+#: app/main.py:284 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:303 templates/components/_form_alpine.html:53
+#: app/main.py:291 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:310 templates/components/_form_alpine.html:79
+#: app/main.py:298 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:316
+#: app/main.py:304
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:321
+#: app/main.py:309
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:396
+#: app/main.py:384
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:428 templates/pages/auth/register.html:162
+#: app/main.py:392
+msgid "Registration failed"
+msgstr ""
+
+#: app/main.py:412 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:495
+#: app/main.py:444
+msgid "Login failed"
+msgstr ""
+
+#: app/main.py:480
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:591 app/main.py:602
+#: app/main.py:596
 msgid "Invalid credentials"
 msgstr ""
 
-#: app/main.py:838
-msgid "User is not pending approval"
-msgstr "O usuário não está aguardando aprovação"
-
-#: app/main.py:853
+#: app/main.py:785
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:890
-msgid "User with this email already exists"
-msgstr "Já existe um usuário com este e-mail"
-
-#: app/main.py:922
+#: app/main.py:828
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:955
-msgid "You cannot deactivate your own account"
-msgstr "Você não pode desativar sua própria conta"
-
-#: app/main.py:967
+#: app/main.py:864
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
+
+#: app/response_helpers.py:117
+#, fuzzy
+msgid "Authentication required"
+msgstr "O nome é obrigatório"
+
+#: app/response_helpers.py:132
+msgid "Insufficient permissions"
+msgstr ""
+
+#: app/response_helpers.py:147
+msgid "Resource not found"
+msgstr ""
+
+#: app/response_helpers.py:162
+msgid "Internal server error"
+msgstr ""
 
 #: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
 #: templates/components/_form_alpine.html:148
