@@ -8,9 +8,10 @@ from .models import UserRole
 
 
 class AuthenticationRequest:
-    def __init__(self, email: str, session: AsyncSession):
+    def __init__(self, email: str, session: AsyncSession, next_url: Optional[str] = None):
         self.email = email
         self.session = session
+        self.next_url = next_url
 
 
 class AuthenticationResponse(Protocol):
@@ -50,6 +51,10 @@ class MagicLinkHandler:
             # Generate magic link token
             raw_token = await create_login_token(request.session, user)
             magic_link = f"{settings.APP_BASE_URL}/auth/verify/{raw_token}"
+            
+            if request.next_url:
+                from urllib.parse import quote
+                magic_link += f"?next={quote(request.next_url)}"
 
             # Send magic link email
             await send_magic_link(user.email, user.full_name, magic_link)

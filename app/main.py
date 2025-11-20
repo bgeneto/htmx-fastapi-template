@@ -132,41 +132,7 @@ class LocaleMiddleware(BaseHTTPMiddleware):
 app.add_middleware(LocaleMiddleware)
 
 
-class NextUrlMiddleware(BaseHTTPMiddleware):
-    """
-    Middleware to handle "next URL" redirects for authenticated pages.
 
-    This middleware intercepts requests to admin routes that require authentication.
-    If the user is not authenticated, it redirects them to the login page with
-    the original URL stored as a "next" parameter for post-login redirect.
-    """
-
-    # Registry of admin routes that don't require authentication
-    PUBLIC_ADMIN_ROUTES = ["/admin/cars"]
-
-    async def dispatch(self, request: Request, call_next):
-        # Check if this is an admin route that might require authentication
-        if (
-            request.url.path.startswith("/admin/")
-            and request.url.path != "/admin/login"
-            and request.url.path not in self.PUBLIC_ADMIN_ROUTES
-        ):
-            # Quick check for session cookie - if no cookie, redirect to login
-            session_cookie = request.cookies.get(COOKIE_NAME)
-            if not session_cookie:
-                # No session cookie - redirect to login with next URL
-                from urllib.parse import quote
-
-                next_url = quote(str(request.url), safe="")
-                login_url = f"/admin/login?next={next_url}"
-                return RedirectResponse(url=login_url, status_code=302)
-
-        # Continue processing the request
-        response = await call_next(request)
-        return response
-
-
-app.add_middleware(NextUrlMiddleware)
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -188,11 +154,31 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     """
     Custom exception handler for HTTP exceptions.
 
-    Admin authentication redirects are now handled by NextUrlMiddleware.
-    This handler provides JSON responses for API requests and HTML error pages for browsers.
+    Handles redirects for authentication errors (401) and returns JSON/HTML
+    appropriate for the request type.
     """
-    # For all cases, use default JSON error handling
-    # Admin HTML redirects are handled by NextUrlMiddleware before exceptions occur
+    if exc.status_code == 401:
+        # Check if it's an API request
+        if request.url.path.startswith("/api/"):
+            return JSONResponse(
+                status_code=exc.status_code, content={"detail": exc.detail}
+            )
+
+        # For HTML requests, redirect to appropriate login page
+        from urllib.parse import quote
+
+        next_url = quote(str(request.url), safe="")
+
+        if request.url.path.startswith("/admin"):
+            return RedirectResponse(
+                url=f"/admin/login?next={next_url}", status_code=302
+            )
+        else:
+            return RedirectResponse(
+                url=f"/auth/login?next={next_url}", status_code=302
+            )
+
+    # For other errors, return JSON
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
@@ -444,6 +430,7 @@ async def login_form(request: Request):
 async def login(
     request: Request,
     email: str = Form(...),
+    next: Optional[str] = None,
     session: AsyncSession = Depends(get_session),
 ):
     """Request magic link for passwordless login"""
@@ -466,7 +453,7 @@ async def login(
     )
 
     # Use authentication strategy
-    auth_request = AuthenticationRequest(email, session)
+    auth_request = AuthenticationRequest(email, session, next)
     response = await default_auth_strategy.handle_login(auth_request)
 
     if response:
@@ -510,8 +497,18 @@ async def verify_magic_link(
     assert user.id is not None  # User should exist from get_valid_token
     cookie = create_session_cookie(user.id, user.email, user.role)
 
-    # Redirect based on role
+    # Redirect based on role or next URL
     redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
+    
+    # Check for next URL
+    next_url = request.query_params.get("next")
+    if next_url:
+        from .url_validator import validate_admin_redirect
+        # Validate redirect URL to prevent open redirects
+        # We use validate_admin_redirect but it works for general URLs too if we want strict checking
+        # Or we can implement a more general validator
+        redirect_url = validate_admin_redirect(next_url, redirect_url)
+
     response = RedirectResponse(url=redirect_url, status_code=303)
     response.set_cookie(
         COOKIE_NAME,
@@ -564,7 +561,7 @@ async def admin_login_url(request: Request, next: Optional[str] = None):
                 and parsed.path.startswith("/admin")
             ):
                 return {"next_url": decoded}
-        except:
+        except Exception:
             pass
     return {"next_url": ""}
 
@@ -824,14 +821,10 @@ async def admin_create_user(
     session: AsyncSession = Depends(get_session),
 ):
     """Admin creates a new user with optional password"""
+    from .admin_services import UserManagementService
     from .response_helpers import FormResponseHelper
 
-    # form_data = {
-    #     "email": email,
-    #     "full_name": full_name,
-    #     "role": role,
-    #     "password": password,
-    # }
+    user_service = UserManagementService(session)
 
     try:
         # Create user using service with proper validation

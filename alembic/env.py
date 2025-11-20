@@ -18,9 +18,10 @@ config = context.config
 fileConfig(config.config_file_name)
 logger = logging.getLogger("alembic.env")
 
+from sqlmodel import SQLModel
+
 # The metadata for autogenerate:
-# NOTE: We use manual migrations (not autogenerate) so target_metadata should be None
-target_metadata = None
+target_metadata = SQLModel.metadata
 
 
 def _make_sync_url(async_url: str) -> str:

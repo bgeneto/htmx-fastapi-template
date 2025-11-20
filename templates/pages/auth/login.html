@@ -154,6 +154,13 @@
                 try {
                     const formData = new FormData();
                     formData.append('email', this.form.email);
+                    
+                    // Add next parameter if present in URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const nextParam = urlParams.get('next');
+                    if (nextParam) {
+                        formData.append('next', nextParam);
+                    }
 
                     const response = await axios.post('/auth/login', formData, {
                         headers: { 'Accept': 'text/html' }

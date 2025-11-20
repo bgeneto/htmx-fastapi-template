@@ -7,10 +7,11 @@ for admin operations, reducing complexity in route handlers.
 from typing import Optional
 
 from fastapi import HTTPException
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .auth import create_session_cookie
-from .auth_strategies import create_admin_login_verifier
+from .strategies import create_admin_login_verifier
 from .models import User
 from .repository import get_user_by_email
 from .url_validator import validate_admin_redirect

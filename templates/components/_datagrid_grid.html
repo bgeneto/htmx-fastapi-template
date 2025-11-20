@@ -43,7 +43,8 @@
     </div>
 
     <!-- Table -->
-    <table class="w-full text-left border-collapse min-w-[600px] text-sm">
+    <table class="w-full text-left border-collapse min-w-[600px] text-sm"
+        style="font-family: 'Fira Sans Condensed', 'Fira Sans', sans-serif;">
 
         <!-- Header Row -->
         <thead class="bg-slate-100 dark:bg-gray-800 border-b-2 border-slate-300 dark:border-gray-600">
@@ -52,7 +53,7 @@
                     <th class="sticky top-0 bg-slate-100 dark:bg-gray-800 p-0 border-r border-slate-200 dark:border-gray-700 last:border-r-0 group select-none"
                         :style="`width: ${col.width}px; min-width: ${col.width}px`">
 
-                        <div class="px-4 py-3 h-full flex flex-col gap-2 relative">
+                        <div class="px-3 py-2 h-full flex flex-col gap-1.5 relative">
 
                             <!-- Column Label + Sort Indicator -->
                             <div @click="col.sortable && sortBy(col.key)"
@@ -68,7 +69,7 @@
                             <!-- Filter Input -->
                             <template x-if="col.filterable">
                                 <input type="text" x-model="filters[col.key]"
-                                    class="w-full text-xs px-2 py-1.5 rounded border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                                    class="w-full text-xs px-2 py-1 rounded border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
                                     placeholder="{{ _('Filter...') }}">
                             </template>
 
@@ -87,19 +88,19 @@
             <template x-for="(row, rowIdx) in rows" :key="rowIdx">
                 <tr class="hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                     <template x-for="col in cols" :key="col.key">
-                        <td class="px-4 py-3 border-r border-slate-100 dark:border-gray-700 last:border-r-0"
+                        <td class="px-3 py-1.5 border-r border-slate-100 dark:border-gray-700 last:border-r-0"
                             :class="col.key === 'actions' ? '' : 'truncate'"
                             :style="col.key !== 'actions' ? `max-width: ${col.width}px` : ''"
                             :title="col.key !== 'actions' ? row[col.key] : ''">
 
                             <!-- Regular cell content -->
                             <span x-show="col.key !== 'actions'" x-text="row[col.key]"
-                                class="text-slate-700 dark:text-gray-300"></span>
+                                class="text-slate-700 dark:text-gray-300 text-sm"></span>
 
                             <!-- Actions cell -->
                             <div x-show="col.key === 'actions'" class="flex items-center gap-2">
                                 <button @click="openEditModal(row)"
-                                    class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition"
+                                    class="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition"
                                     title="{{ _('Edit') }}">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -108,7 +109,7 @@
                                     </svg>
                                 </button>
                                 <button @click="openDeleteModal(row)"
-                                    class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition"
+                                    class="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition"
                                     title="{{ _('Delete') }}">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -162,7 +163,7 @@
     <div class="flex items-center gap-2">
         <!-- First Page -->
         <button @click="gotoPage(1)" :disabled="page === 1"
-            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            class="px-2 py-1 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
             title="{{ _('First page') }}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7">
@@ -172,7 +173,7 @@
 
         <!-- Previous Page -->
         <button @click="prevPage()" :disabled="page === 1"
-            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            class="px-2 py-1 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
             title="{{ _('Previous page') }}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -190,7 +191,7 @@
 
         <!-- Next Page -->
         <button @click="nextPage()" :disabled="page === lastPage"
-            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            class="px-2 py-1 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
             title="{{ _('Next page') }}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -199,7 +200,7 @@
 
         <!-- Last Page -->
         <button @click="gotoPage(lastPage)" :disabled="page === lastPage"
-            class="p-2 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            class="px-2 py-1 rounded-md border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
             title="{{ _('Last page') }}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7">
@@ -210,88 +211,257 @@
 </div>
 
 <!-- CRUD Modal -->
-<div x-show="showModal" x-cloak @click.self="closeModal()"
-    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<div x-show="showModal" x-cloak @click.self="closeModal()" x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
 
-    <div @click.stop class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-        <!-- Modal Header -->
-        <div class="px-6 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
-                <span x-show="modalMode === 'add'">{{ _('Add New Car') }}</span>
-                <span x-show="modalMode === 'edit'">{{ _('Edit Car') }}</span>
-                <span x-show="modalMode === 'delete'">{{ _('Delete Car') }}</span>
-            </h3>
-            <button @click="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
+    <div @click.stop x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
+
+        <!-- Modal Header with Gradient Background -->
+        <div class="relative px-6 py-6 overflow-hidden" :class="{
+                'bg-gradient-to-br from-blue-500 to-blue-600': modalMode === 'add',
+                'bg-gradient-to-br from-indigo-500 to-indigo-600': modalMode === 'edit',
+                'bg-gradient-to-br from-red-500 to-red-600': modalMode === 'delete'
+            }">
+
+            <!-- Decorative background pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <circle cx="10" cy="10" r="1" fill="white" />
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
                 </svg>
-            </button>
+            </div>
+
+            <div class="relative flex items-center gap-4">
+                <!-- Large Icon -->
+                <div
+                    class="flex-shrink-0 w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <!-- Add Icon -->
+                    <svg x-show="modalMode === 'add'" class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <!-- Edit Icon -->
+                    <svg x-show="modalMode === 'edit'" class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                        </path>
+                    </svg>
+                    <!-- Delete Icon -->
+                    <svg x-show="modalMode === 'delete'" class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                        </path>
+                    </svg>
+                </div>
+
+                <!-- Title -->
+                <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-white">
+                        <span x-show="modalMode === 'add'">{{ _('Add New Car') }}</span>
+                        <span x-show="modalMode === 'edit'">{{ _('Edit Car') }}</span>
+                        <span x-show="modalMode === 'delete'">{{ _('Delete Car') }}</span>
+                    </h3>
+                    <p class="text-sm text-white/80 mt-1">
+                        <span x-show="modalMode === 'add'">{{ _('Fill in the details below') }}</span>
+                        <span x-show="modalMode === 'edit'">{{ _('Update car information') }}</span>
+                        <span x-show="modalMode === 'delete'">{{ _('This action cannot be undone') }}</span>
+                    </p>
+                </div>
+
+                <!-- Close Button -->
+                <button @click="closeModal()"
+                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Modal Body -->
-        <div class="px-6 py-4">
+        <div class="px-6 py-6">
             <!-- Delete Confirmation -->
-            <div x-show="modalMode === 'delete'" class="text-center">
-                <p class="text-slate-600 dark:text-gray-400 mb-4">
-                    {{ _('Are you sure you want to delete this car?') }}
-                </p>
-                <div class="bg-slate-100 dark:bg-gray-700 rounded p-3 mb-4">
-                    <p class="text-sm text-slate-700 dark:text-gray-300">
-                        <span x-text="currentRow.make"></span> <span x-text="currentRow.model"></span> (<span
-                            x-text="currentRow.year"></span>)
-                    </p>
+            <div x-show="modalMode === 'delete'" class="space-y-4">
+                <div
+                    class="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-1.964-1.333-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                    <div>
+                        <p class="font-medium text-red-900 dark:text-red-100">
+                            {{ _('Are you sure you want to delete this car?') }}
+                        </p>
+                        <p class="text-sm text-red-700 dark:text-red-300 mt-1">
+                            {{ _('This action cannot be undone and all data will be permanently removed.') }}
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-700 dark:to-gray-750 rounded-xl p-4 border border-slate-200 dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm">
+                            <svg class="w-6 h-6 text-slate-600 dark:text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-900 dark:text-white">
+                                <span x-text="currentRow.make"></span> <span x-text="currentRow.model"></span>
+                            </p>
+                            <p class="text-sm text-slate-600 dark:text-gray-400">
+                                <span x-text="currentRow.version"></span> • <span x-text="currentRow.year"></span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Add/Edit Form -->
             <div x-show="modalMode !== 'delete'" class="space-y-4">
+                <!-- Make -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Make')
-                        }}</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                </path>
+                            </svg>
+                            {{ _('Make') }}
+                        </span>
+                    </label>
                     <input type="text" x-model="currentRow.make"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
+                        placeholder="{{ _('e.g., Toyota') }}">
                 </div>
+
+                <!-- Model -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Model')
-                        }}</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            {{ _('Model') }}
+                        </span>
+                    </label>
                     <input type="text" x-model="currentRow.model"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
+                        placeholder="{{ _('e.g., Camry') }}">
                 </div>
+
+                <!-- Version -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Version')
-                        }}</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
+                                </path>
+                            </svg>
+                            {{ _('Version') }}
+                        </span>
+                    </label>
                     <input type="text" x-model="currentRow.version"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
+                        placeholder="{{ _('e.g., XLE') }}">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Year')
-                        }}</label>
-                    <input type="number" x-model.number="currentRow.year"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">{{ _('Price')
-                        }}</label>
-                    <input type="number" step="0.01" x-model.number="currentRow.price"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+
+                <!-- Year and Price in a grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Year -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                                {{ _('Year') }}
+                            </span>
+                        </label>
+                        <input type="number" x-model.number="currentRow.year"
+                            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
+                            placeholder="2024">
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                    </path>
+                                </svg>
+                                {{ _('Price') }}
+                            </span>
+                        </label>
+                        <input type="number" step="0.01" x-model.number="currentRow.price"
+                            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
+                            placeholder="0.00">
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal Footer -->
-        <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 flex justify-end gap-3">
+        <div
+            class="px-6 py-4 bg-slate-50 dark:bg-gray-750 border-t border-slate-200 dark:border-gray-700 flex justify-end gap-3">
             <button @click="closeModal()"
-                class="px-4 py-2 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg transition">
+                class="px-5 py-2.5 border-2 border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 rounded-xl transition-all font-medium flex items-center gap-2 shadow-sm hover:shadow">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
                 {{ _('Cancel') }}
             </button>
+
+            <!-- Delete Button -->
             <button x-show="modalMode === 'delete'" @click="deleteRow()"
-                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                class="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all font-medium flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                </svg>
                 {{ _('Delete') }}
             </button>
+
+            <!-- Save Button (Add/Edit) -->
             <button x-show="modalMode !== 'delete'" @click="saveRow()"
-                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                {{ _('Save') }}
+                class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all font-medium flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span x-show="modalMode === 'add'">{{ _('Add Car') }}</span>
+                <span x-show="modalMode === 'edit'">{{ _('Save Changes') }}</span>
             </button>
         </div>
     </div>
