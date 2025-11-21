@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 10:01-0300\n"
+"POT-Creation-Date: 2025-11-21 10:43-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -35,7 +35,7 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:282 templates/pages/admin/index.html:21
+#: app/main.py:282 app/main.py:777 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
@@ -89,15 +89,38 @@ msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 msgid "Invalid credentials"
 msgstr ""
 
-#: app/main.py:798
+#: app/main.py:778 templates/pages/books_form.html:3
+#, fuzzy
+msgid "Title"
+msgstr "itens"
+
+#: app/main.py:779 templates/pages/books_form.html:9
+msgid "Author"
+msgstr ""
+
+#: app/main.py:780 templates/pages/admin/cars_form.html:63
+#: templates/pages/books_form.html:16
+msgid "Year"
+msgstr "Ano"
+
+#: app/main.py:781 templates/pages/books_form.html:21
+#, fuzzy
+msgid "Pages"
+msgstr "por página"
+
+#: app/main.py:782 templates/pages/books_form.html:28
+msgid "Summary"
+msgstr ""
+
+#: app/main.py:899
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:837
+#: app/main.py:938
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:873
+#: app/main.py:974
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -198,15 +221,18 @@ msgid "Clear Filters"
 msgstr "Limpar Filtros"
 
 #: templates/components/_datagrid_grid.html:32
+#: templates/components/_datagrid_grid.html:388
 msgid "Add"
 msgstr "Adicionar"
 
 #: templates/components/_datagrid_grid.html:104
+#: templates/components/_datagrid_grid.html:274
 msgid "Edit"
 msgstr "Editar"
 
 #: templates/components/_datagrid_grid.html:113
-#: templates/components/_datagrid_grid.html:454
+#: templates/components/_datagrid_grid.html:276
+#: templates/components/_datagrid_grid.html:379
 #: templates/pages/admin/index.html:40
 msgid "Delete"
 msgstr "Excluir"
@@ -236,79 +262,44 @@ msgid "Last page"
 msgstr "Última página"
 
 #: templates/components/_datagrid_grid.html:272
-msgid "Add New Car"
+#, fuzzy
+msgid "Add New"
 msgstr "Adicionar Novo Carro"
 
-#: templates/components/_datagrid_grid.html:273
-msgid "Edit Car"
-msgstr "Editar Carro"
-
+#: templates/components/_datagrid_grid.html:272
 #: templates/components/_datagrid_grid.html:274
-msgid "Delete Car"
-msgstr "Excluir Carro"
+#: templates/components/_datagrid_grid.html:276
+#: templates/components/_datagrid_grid.html:388
+#, fuzzy
+msgid "Item"
+msgstr "itens"
 
-#: templates/components/_datagrid_grid.html:277
+#: templates/components/_datagrid_grid.html:280
 msgid "Fill in the details below"
 msgstr ""
 
-#: templates/components/_datagrid_grid.html:278
-msgid "Update car information"
+#: templates/components/_datagrid_grid.html:281
+msgid "Update information"
 msgstr ""
 
-#: templates/components/_datagrid_grid.html:279
+#: templates/components/_datagrid_grid.html:282
 msgid "This action cannot be undone"
 msgstr ""
 
-#: templates/components/_datagrid_grid.html:308
-msgid "Are you sure you want to delete this car?"
+#: templates/components/_datagrid_grid.html:311
+#, fuzzy
+msgid "Are you sure you want to delete this item?"
 msgstr "Tem certeza de que deseja excluir este carro?"
 
-#: templates/components/_datagrid_grid.html:311
+#: templates/components/_datagrid_grid.html:314
 msgid "This action cannot be undone and all data will be permanently removed."
 msgstr ""
 
-#: templates/components/_datagrid_grid.html:351
-msgid "Make"
-msgstr "Marca"
-
-#: templates/components/_datagrid_grid.html:356
-msgid "e.g., Toyota"
-msgstr ""
-
 #: templates/components/_datagrid_grid.html:368
-msgid "Model"
-msgstr "Modelo"
-
-#: templates/components/_datagrid_grid.html:373
-msgid "e.g., Camry"
-msgstr ""
-
-#: templates/components/_datagrid_grid.html:385
-msgid "Version"
-msgstr "Versão"
-
-#: templates/components/_datagrid_grid.html:390
-msgid "e.g., XLE"
-msgstr ""
-
-#: templates/components/_datagrid_grid.html:405
-msgid "Year"
-msgstr "Ano"
-
-#: templates/components/_datagrid_grid.html:423
-msgid "Price"
-msgstr "Preço"
-
-#: templates/components/_datagrid_grid.html:443
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/components/_datagrid_grid.html:463
-#, fuzzy
-msgid "Add Car"
-msgstr "Adicionar Novo Carro"
-
-#: templates/components/_datagrid_grid.html:464
+#: templates/components/_datagrid_grid.html:389
 msgid "Save Changes"
 msgstr ""
 
@@ -372,6 +363,22 @@ msgstr "Contatos recentes"
 msgid "No contacts yet. Be the first to submit!"
 msgstr ""
 
+#: templates/pages/books.html:3 templates/pages/books.html:14
+msgid "Books Library"
+msgstr ""
+
+#: templates/pages/books.html:15
+msgid "Universal Grid Engine Demo"
+msgstr ""
+
+#: templates/pages/auth/register.html:36 templates/pages/books.html:21
+msgid "Back to Home"
+msgstr ""
+
+#: templates/pages/books.html:40
+msgid "Book"
+msgstr ""
+
 #: templates/pages/contacts.html:3 templates/pages/contacts.html:8
 msgid "Contacts Directory"
 msgstr ""
@@ -405,6 +412,39 @@ msgstr ""
 #: templates/pages/admin/cars.html:21
 msgid "Back to Admin"
 msgstr ""
+
+#: templates/pages/admin/cars.html:39
+#, fuzzy
+msgid "Car"
+msgstr "Adicionar Novo Carro"
+
+#: templates/pages/admin/cars_form.html:10
+msgid "Make"
+msgstr "Marca"
+
+#: templates/pages/admin/cars_form.html:15
+msgid "e.g., Toyota"
+msgstr ""
+
+#: templates/pages/admin/cars_form.html:27
+msgid "Model"
+msgstr "Modelo"
+
+#: templates/pages/admin/cars_form.html:32
+msgid "e.g., Camry"
+msgstr ""
+
+#: templates/pages/admin/cars_form.html:44
+msgid "Version"
+msgstr "Versão"
+
+#: templates/pages/admin/cars_form.html:49
+msgid "e.g., XLE"
+msgstr ""
+
+#: templates/pages/admin/cars_form.html:80
+msgid "Price"
+msgstr "Preço"
 
 #: templates/pages/admin/index.html:3 templates/pages/admin/index.html:14
 msgid "Admin - Contacts"
@@ -470,10 +510,6 @@ msgstr ""
 
 #: templates/pages/auth/register.html:31
 msgid "Registration Successful!"
-msgstr ""
-
-#: templates/pages/auth/register.html:36
-msgid "Back to Home"
 msgstr ""
 
 #: templates/pages/auth/register.html:73
@@ -575,4 +611,13 @@ msgstr ""
 
 #~ msgid "Save"
 #~ msgstr "Salvar"
+
+#~ msgid "Edit Car"
+#~ msgstr "Editar Carro"
+
+#~ msgid "Delete Car"
+#~ msgstr "Excluir Carro"
+
+#~ msgid "Update car information"
+#~ msgstr ""
 

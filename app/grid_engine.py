@@ -206,7 +206,26 @@ class GridEngine:
             PaginatedResponse with items, pagination info, and metadata
         """
         if search_fields is None:
+            # Auto-detect search fields (all String/Text columns)
             search_fields = []
+            
+            # Try to import AutoString from sqlmodel
+            try:
+                from sqlmodel.sql.sqltypes import AutoString
+                string_types = (String, Text, AutoString)
+            except ImportError:
+                string_types = (String, Text)
+
+            for column in self.mapper.columns:
+                if isinstance(column.type, string_types):
+                    search_fields.append(column.name)
+                else:
+                    # Fallback: check python_type if available
+                    try:
+                        if column.type.python_type is str:
+                            search_fields.append(column.name)
+                    except (NotImplementedError, AttributeError):
+                        pass
 
         # Build query using strategy pattern
         query_builder = QueryBuilder(self.model)

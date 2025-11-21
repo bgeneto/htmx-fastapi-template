@@ -4,6 +4,7 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel, Session, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.types import Text
 
 
 class UserRole(str, Enum):
@@ -66,3 +67,13 @@ class Car(SQLModel, table=True):
     price: float
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Book(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str = Field(index=True, max_length=200)
+    author: str = Field(index=True, max_length=200)
+    year: int = Field(index=True)
+    pages: int
+    summary: str = Field(sa_type=Text)  # Use Text for longer content
+    created_at: datetime = Field(default_factory=datetime.utcnow)

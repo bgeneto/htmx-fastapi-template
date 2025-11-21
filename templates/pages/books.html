@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 
-{% block title %}{{ _('Cars Inventory') }} - Admin{% endblock %}
+{% block title %}{{ _('Books Library') }} - Admin{% endblock %}
 
 {% block content %}
 <div class="fixed top-4 right-4 z-50 flex items-center gap-3">
@@ -11,33 +11,35 @@
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Cars Inventory') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400">{{ _('Browse and manage vehicle inventory') }}</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Books Library') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ _('Universal Grid Engine Demo') }}</p>
         </div>
 
         <div class="mb-6">
-            <a href="/admin"
+            <a href="/"
                 class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors">
-                ← {{ _('Back to Admin') }}
+                ← {{ _('Back to Home') }}
             </a>
         </div>
 
         <div x-cloak x-data="datagrid({
-            apiUrl: '/api/admin/cars',
+            apiUrl: '/api/books',
             columns: [
                 {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'make', label: 'Make', width: 150, sortable: true, filterable: true},
-                {key: 'model', label: 'Model', width: 150, sortable: true, filterable: true},
-                {key: 'version', label: 'Version', width: 130, sortable: true, filterable: true},
+                {key: 'title', label: 'Title', width: 250, sortable: true, filterable: true},
+                {key: 'author', label: 'Author', width: 200, sortable: true, filterable: true},
                 {key: 'year', label: 'Year', width: 100, sortable: true, filterable: true},
-                {key: 'price', label: 'Price', width: 120, sortable: true},
+                {key: 'pages', label: 'Pages', width: 100, sortable: true},
+                {key: 'summary', label: 'Summary', width: 300, sortable: false},
                 {key: 'actions', label: 'Actions', width: 100, sortable: false}
             ]
         })"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
-            {% set form_template = "pages/admin/cars_form.html" %}
-            {% set resource_name = _('Car') %}
+
+            {% set form_template = "pages/books_form.html" %}
+            {% set resource_name = _('Book') %}
             {% include "components/_datagrid_grid.html" %}
+
         </div>
     </div>
 </div>
