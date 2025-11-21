@@ -51,7 +51,7 @@ class SearchFilterStrategy:
             if hasattr(model, field_name):
                 col_attr = getattr(model, field_name)
                 condition = self._create_search_condition(col_attr)
-                if condition:
+                if condition is not None:
                     conditions.append(condition)
 
         if conditions:
@@ -65,17 +65,7 @@ class SearchFilterStrategy:
         if isinstance(col_type, (String, Text)):
             return col_attr.ilike(f"%{self.search_query}%")
 
-        # For numeric/other fields, try exact match or fallback to string contains
-        try:
-            if hasattr(col_type, "python_type"):
-                python_type = col_type.python_type
-                if python_type:
-                    converted_value = python_type(self.search_query)
-                    return col_attr == converted_value
-        except (ValueError, TypeError, AttributeError, NotImplementedError):
-            pass
-
-        # Fallback to string-based search
+        # Fallback to string-based search for all other types (numeric, etc)
         from sqlalchemy import Text as SQLText
         from sqlalchemy import cast
 
