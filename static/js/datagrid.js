@@ -74,7 +74,7 @@ document.addEventListener("alpine:init", () => {
 
       const template = templates[errorType];
       if (!template) {
-        return originalMsg || (this.i18n.invalidValue || 'Validation error');
+        return originalMsg || (this.i18n.validationError || 'Validation error');
       }
 
       // Replace {0} with the appropriate context value
@@ -300,12 +300,15 @@ document.addEventListener("alpine:init", () => {
         // Success case
         this.closeModal();
         this.fetchData();
-        this.showToast(`Record ${action} successfully`, 'success');
+        const successKey = action === 'added' ? 'recordAddSuccess' : 'recordUpdateSuccess';
+        const successMessage = this.i18n[successKey] || `Record ${action} successfully`;
+        this.showToast(successMessage, 'success');
 
       } catch (error) {
         console.error('[DATAGRID] Save failed with error:', error);
 
-        let errorMessage = `Failed to ${this.modalMode === 'add' ? 'add' : 'update'} record`;
+        const errorKey = this.modalMode === 'add' ? 'recordAddFailed' : 'recordUpdateFailed';
+        let errorMessage = this.i18n[errorKey] || `Failed to ${this.modalMode === 'add' ? 'add' : 'update'} record`;
         let hasFieldErrors = false;
 
         // Handle Axios error response
@@ -345,10 +348,10 @@ document.addEventListener("alpine:init", () => {
           }
         } else if (error.request) {
           // Network error (no response received)
-          errorMessage = 'Network error - no response from server';
+          errorMessage = this.i18n.networkError || 'Network error - no response from server';
         } else {
           // Other error (request setup, etc.)
-          errorMessage = error.message || 'Unknown error occurred';
+          errorMessage = error.message || (this.i18n.unknownError || 'Unknown error occurred');
         }
 
         console.log('[DATAGRID] Final errors object:', this.errors);
@@ -364,12 +367,13 @@ document.addEventListener("alpine:init", () => {
         // Success case
         this.closeModal();
         this.fetchData();
-        this.showToast('Record deleted successfully', 'success');
+        const successMessage = this.i18n.recordDeleteSuccess || 'Record deleted successfully';
+        this.showToast(successMessage, 'success');
 
       } catch (error) {
         console.error('Delete error:', error);
 
-        let errorMessage = 'Failed to delete record';
+        let errorMessage = this.i18n.recordDeleteFailed || 'Failed to delete record';
 
         // Handle Axios error response
         if (error.response) {
@@ -381,10 +385,10 @@ document.addEventListener("alpine:init", () => {
           }
         } else if (error.request) {
           // Network error (no response received)
-          errorMessage = 'Network error - no response from server';
+          errorMessage = this.i18n.networkError || 'Network error - no response from server';
         } else {
           // Other error (request setup, etc.)
-          errorMessage = error.message || 'Unknown error occurred';
+          errorMessage = error.message || (this.i18n.unknownError || 'Unknown error occurred');
         }
 
         this.showToast(errorMessage, 'error');

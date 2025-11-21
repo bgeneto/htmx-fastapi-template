@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 13:53-0300\n"
+"POT-Creation-Date: 2025-11-21 14:21-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -35,7 +35,7 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:282 app/main.py:781 templates/pages/admin/index.html:21
+#: app/main.py:282 app/main.py:777 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
@@ -89,41 +89,41 @@ msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:782 templates/pages/books.html:42
+#: app/main.py:778 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:783 templates/pages/books.html:43
+#: app/main.py:779 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:784 templates/pages/admin/cars.html:43
+#: app/main.py:780 templates/pages/admin/cars.html:43
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:785 templates/pages/books.html:45
+#: app/main.py:781 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:786 templates/pages/books.html:46
+#: app/main.py:782 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:909
+#: app/main.py:905
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:948
+#: app/main.py:944
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:984
+#: app/main.py:980
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -291,9 +291,11 @@ msgid "Are you sure you want to delete this item?"
 msgstr "Tem certeza de que deseja excluir este item?"
 
 #: templates/components/_datagrid_grid.html:314
-msgid "This action cannot be undone and all data will be permanently removed."
+msgid ""
+"This action cannot be undone and all data below will be permanently "
+"removed."
 msgstr ""
-"Esta ação não pode ser desfeita e todos os dados serão removidos "
+"Esta ação não pode ser desfeita e todos os dados abaixo serão removidos "
 "permanentemente."
 
 #: templates/components/_datagrid_grid.html:368
@@ -380,7 +382,6 @@ msgid "Book"
 msgstr "Livro"
 
 #: templates/pages/admin/cars.html:45 templates/pages/books.html:47
-#, fuzzy
 msgid "Actions"
 msgstr "Ação"
 
@@ -428,6 +429,42 @@ msgstr "Valor inválido"
 msgid "Please fix the validation errors below."
 msgstr "Por favor, corrija os erros antes de enviar."
 
+#: templates/pages/admin/cars.html:60 templates/pages/books.html:62
+msgid "Record added successfully"
+msgstr "Registro adicionado com sucesso"
+
+#: templates/pages/admin/cars.html:61 templates/pages/books.html:63
+msgid "Record updated successfully"
+msgstr "Registro atualizado com sucesso"
+
+#: templates/pages/admin/cars.html:62 templates/pages/books.html:64
+msgid "Record deleted successfully"
+msgstr "Registro excluído com sucesso"
+
+#: templates/pages/admin/cars.html:63 templates/pages/books.html:65
+msgid "Failed to add record"
+msgstr "Falha ao adicionar o registro"
+
+#: templates/pages/admin/cars.html:64 templates/pages/books.html:66
+msgid "Failed to update record"
+msgstr "Falha ao atualizar o registro"
+
+#: templates/pages/admin/cars.html:65 templates/pages/books.html:67
+msgid "Failed to delete record"
+msgstr "Falha ao excluir o registro"
+
+#: templates/pages/admin/cars.html:66 templates/pages/books.html:68
+msgid "Network error - no response from server"
+msgstr "Erro de rede - sem resposta do servidor"
+
+#: templates/pages/admin/cars.html:67 templates/pages/books.html:69
+msgid "Unknown error occurred"
+msgstr "Um erro desconhecido ocorreu"
+
+#: templates/pages/admin/cars.html:68 templates/pages/books.html:70
+msgid "Validation error"
+msgstr "Erro de validação"
+
 #: templates/pages/contacts.html:3 templates/pages/contacts.html:8
 msgid "Contacts Directory"
 msgstr "Diretório de Contatos"
@@ -451,23 +488,20 @@ msgid "Contact us"
 msgstr "Entre em contato"
 
 #: templates/pages/admin/cars.html:3 templates/pages/admin/cars.html:14
-#, fuzzy
 msgid "Cars Inventory"
 msgstr "Diretório de Contatos"
 
 #: templates/pages/admin/cars.html:15
-#, fuzzy
 msgid "Browse and manage vehicle inventory"
 msgstr "Navegue e gerencie todos os envios de contato"
 
 #: templates/pages/admin/cars.html:21
-#, fuzzy
 msgid "Back to Admin"
 msgstr "Voltar ao Início"
 
 #: templates/pages/admin/cars.html:28
 msgid "Car"
-msgstr ""
+msgstr "Carro"
 
 #: templates/pages/admin/cars.html:40 templates/pages/admin/cars_form.html:10
 msgid "Make"
