@@ -58,7 +58,7 @@ class Contact(SQLModel, table=True):
 
 
 class CarBase(SQLModel):
-    """Base Car model for validation (table=False, validates like Pydantic)"""
+    """Base Car model class is required for proper validation (table=False, validates like Pydantic)"""
 
     make: str = Field(index=True, max_length=100, min_length=1)
     model: str = Field(index=True, max_length=100, min_length=1)
@@ -76,7 +76,7 @@ class Car(CarBase, table=True):
 
 
 class BookBase(SQLModel):
-    """Base Book model for validation (table=False, validates like Pydantic)"""
+    """Base Book model class is required for proper validation (table=False, validates like Pydantic)"""
 
     title: str = Field(index=True, max_length=200, min_length=1)
     author: str = Field(index=True, max_length=200, min_length=1)

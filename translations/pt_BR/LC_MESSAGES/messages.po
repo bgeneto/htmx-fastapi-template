@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 12:45-0300\n"
+"POT-Creation-Date: 2025-11-21 13:05-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -159,7 +159,7 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30
+#: app/strategies.py:30 templates/pages/books.html:39
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
@@ -378,7 +378,53 @@ msgstr "Voltar ao Início"
 msgid "Actions"
 msgstr "Ações"
 
+#: templates/pages/books.html:37
+msgid "Value must be greater than or equal to {0}"
+msgstr "O valor deve ser maior ou igual a {0}"
+
+#: templates/pages/books.html:38
+msgid "Value must be greater than {0}"
+msgstr "O valor deve ser maior que {0}"
+
+#: templates/pages/books.html:38
+msgid "Value must be less than or equal to {0}"
+msgstr "O valor deve ser menor ou igual a {0}"
+
+#: templates/pages/books.html:39
+msgid "Value must be less than {0}"
+msgstr "O valor deve ser menor que {0}"
+
 #: templates/pages/books.html:40
+msgid "Must be a valid number"
+msgstr "Deve ser um número válido"
+
+#: templates/pages/books.html:40
+msgid "Must be a valid integer"
+msgstr "Deve ser um número inteiro válido"
+
+#: templates/pages/books.html:41
+msgid "Must be at least {0} character(s)"
+msgstr "Deve ter no mínimo {0} caractere(s)"
+
+#: templates/pages/books.html:41
+msgid ""
+"Must be at most {0}\n"
+"            character(s)"
+msgstr "Deve ter no máximo {0} caractere(s)"
+
+#: templates/pages/books.html:42
+msgid "Must be a valid text"
+msgstr "Deve ser um texto válido"
+
+#: templates/pages/books.html:42
+msgid "Invalid value"
+msgstr "Valor inválido"
+
+#: templates/pages/books.html:43
+msgid "Please fix the validation errors below."
+msgstr "Por favor, corrija os erros de validação abaixo."
+
+#: templates/pages/books.html:47
 msgid "Book"
 msgstr "Livro"
 

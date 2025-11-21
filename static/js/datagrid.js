@@ -11,14 +11,18 @@
  *       { key: 'id', label: 'ID', width: 70, sortable: true },
  *       { key: 'name', label: 'Name', width: 200, sortable: true, filterable: true },
  *       { key: 'email', label: 'Email', width: 250, sortable: true, filterable: true }
- *     ]
+ *     ],
+ *     i18n: {
+ *       valueGreaterEqual: "Value must be greater than or equal to {0}",
+ *       // ... other translations
+ *     }
  *   })">
  *     <!-- grid content -->
  *   </div>
  */
 
 document.addEventListener("alpine:init", () => {
-  Alpine.data("datagrid", ({ columns, apiUrl }) => ({
+  Alpine.data("datagrid", ({ columns, apiUrl, i18n = {} }) => ({
     // State
     rows: [],
     cols: columns || [],
@@ -27,6 +31,7 @@ document.addEventListener("alpine:init", () => {
     sortCol: "id",
     sortAsc: true,
     errors: {}, // Validation errors
+    i18n: i18n, // Translation strings from template
 
     // Pagination state
     page: 1,
@@ -47,6 +52,42 @@ document.addEventListener("alpine:init", () => {
     showModal: false,
     modalMode: 'add', // 'add', 'edit', 'delete'
     currentRow: {},
+
+    /**
+     * Translate validation error based on type and context
+     */
+    translateError(errorType, context = {}, originalMsg = '') {
+      const templates = {
+        'greater_than_equal': this.i18n.valueGreaterEqual || 'Value must be greater than or equal to {0}',
+        'greater_than': this.i18n.valueGreater || 'Value must be greater than {0}',
+        'less_than_equal': this.i18n.valueLessEqual || 'Value must be less than or equal to {0}',
+        'less_than': this.i18n.valueLess || 'Value must be less than {0}',
+        'value_error.missing': this.i18n.fieldRequired || 'This field is required',
+        'missing': this.i18n.fieldRequired || 'This field is required',
+        'type_error.integer': this.i18n.validNumber || 'Must be a valid number',
+        'int_type': this.i18n.validInteger || 'Must be a valid integer',
+        'string_too_short': this.i18n.minLength || 'Must be at least {0} character(s)',
+        'string_too_long': this.i18n.maxLength || 'Must be at most {0} character(s)',
+        'string_type': this.i18n.validText || 'Must be a valid text',
+        'value_error': this.i18n.invalidValue || 'Invalid value',
+      };
+
+      const template = templates[errorType];
+      if (!template) {
+        return originalMsg || (this.i18n.invalidValue || 'Validation error');
+      }
+
+      // Replace {0} with the appropriate context value
+      let message = template;
+      if (context.ge !== undefined) message = message.replace('{0}', context.ge);
+      else if (context.gt !== undefined) message = message.replace('{0}', context.gt);
+      else if (context.le !== undefined) message = message.replace('{0}', context.le);
+      else if (context.lt !== undefined) message = message.replace('{0}', context.lt);
+      else if (context.min_length !== undefined) message = message.replace('{0}', context.min_length);
+      else if (context.max_length !== undefined) message = message.replace('{0}', context.max_length);
+
+      return message;
+    },
 
     init() {
       // Initialize filter objects for filterable columns
@@ -285,18 +326,8 @@ document.addEventListener("alpine:init", () => {
                   // err.loc is usually ["body", "field_name"] or just ["field_name"]
                   const field = err.loc[err.loc.length - 1];
 
-                  // Make error message more user-friendly
-                  let message = err.msg;
-                  if (err.type === 'greater_than') {
-                    const limit = err.ctx?.gt || 0;
-                    message = `Value must be greater than ${limit}`;
-                  } else if (err.type === 'value_error.missing') {
-                    message = 'This field is required';
-                  } else if (err.type === 'type_error.integer') {
-                    message = 'Must be a valid number';
-                  } else if (err.type === 'string_too_short') {
-                    message = 'This field cannot be empty';
-                  }
+                  // Translate error message using i18n from template
+                  const message = this.translateError(err.type, err.ctx || {}, err.msg);
 
                   this.errors[field] = message;
                   console.log(`[DATAGRID] Set error for field '${field}':`, message);
@@ -304,7 +335,8 @@ document.addEventListener("alpine:init", () => {
                 });
 
                 if (hasFieldErrors) {
-                  errorMessage = "Please fix the validation errors below.";
+                  // Use translated error message from i18n
+                  errorMessage = this.i18n.fixErrors || "Please fix the validation errors below.";
                 }
               } else if (typeof errorData.detail === 'string') {
                 errorMessage = errorData.detail;
