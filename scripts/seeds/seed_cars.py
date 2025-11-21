@@ -1,9 +1,15 @@
 """
 Seed the database with fake car data using Faker
-Run: python seed_cars.py
+Run: python scripts/seeds/seed_cars.py
 """
 
 import random
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 from faker import Faker
 

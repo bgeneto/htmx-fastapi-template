@@ -1,6 +1,6 @@
 import asyncio
 import httpx
-from app.config import settings
+
 
 BASE_URL = "http://localhost:8000"
 
@@ -72,6 +72,25 @@ async def verify_books():
             print(f"PASS: Successfully found book using numeric search for Year {book_year}! (Found {data['total']} results)")
         else:
             print(f"FAIL: Could not find book with Year {book_year}")
+
+        # 5. Test Validation (Empty Fields)
+        print("Testing validation (creating book with empty fields)...")
+        try:
+            response = await client.post("/api/books", json={
+                "title": "",
+                "author": "",
+                "year": 0,
+                "pages": 0,
+                "summary": ""
+            })
+            if response.status_code == 422:
+                print("PASS: Validation correctly returned 422 Unprocessable Entity for empty fields.")
+                print(f"Errors: {response.json()}")
+            else:
+                print(f"FAIL: Expected 422, got {response.status_code}")
+                print(response.text)
+        except Exception as e:
+            print(f"FAIL: Exception during validation test: {e}")
 
 if __name__ == "__main__":
     asyncio.run(verify_books())

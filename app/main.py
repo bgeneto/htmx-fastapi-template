@@ -808,11 +808,12 @@ async def get_books_grid(
 
 @app.post("/api/books", response_model=Book)
 async def create_book(
-    book_data: dict,
+    book: Book,
     session: AsyncSession = Depends(get_session),
 ):
     """Create a new book"""
-    book = Book(**book_data)
+    from app.logger import logger
+    logger.info(f"Creating book with data: {book}")
     session.add(book)
     await session.commit()
     await session.refresh(book)
@@ -822,7 +823,7 @@ async def create_book(
 @app.put("/api/books/{book_id}", response_model=Book)
 async def update_book(
     book_id: int,
-    book_data: dict,
+    book_update: Book,
     session: AsyncSession = Depends(get_session),
 ):
     """Update an existing book"""
@@ -832,6 +833,7 @@ async def update_book(
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
 
+    book_data = book_update.model_dump(exclude_unset=True)
     protected_fields = {"id", "created_at"}
 
     for key, value in book_data.items():

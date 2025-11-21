@@ -1,31 +1,41 @@
 <!-- Title -->
 <div>
     <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Title') }}</label>
-    <input type="text" x-model="currentRow.title"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    <input type="text" x-model="currentRow.title" @input="errors.title = ''"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.title}">
+    <div x-show="errors.title" x-text="errors.title" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
 </div>
 <!-- Author -->
 <div>
     <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Author') }}</label>
-    <input type="text" x-model="currentRow.author"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    <input type="text" x-model="currentRow.author" @input="errors.author = ''"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.author}">
+    <div x-show="errors.author" x-text="errors.author" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
 </div>
 <!-- Year & Pages -->
 <div class="grid grid-cols-2 gap-4">
     <div>
         <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Year') }}</label>
-        <input type="number" x-model.number="currentRow.year"
-            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <input type="number" x-model.number="currentRow.year" @input="errors.year = ''"
+            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+            :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.year}">
+        <div x-show="errors.year" x-text="errors.year" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
     </div>
     <div>
         <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Pages') }}</label>
-        <input type="number" x-model.number="currentRow.pages"
-            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <input type="number" x-model.number="currentRow.pages" @input="errors.pages = ''"
+            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+            :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.pages}">
+        <div x-show="errors.pages" x-text="errors.pages" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
     </div>
 </div>
 <!-- Summary -->
 <div>
     <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Summary') }}</label>
-    <textarea x-model="currentRow.summary" rows="3"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"></textarea>
+    <textarea x-model="currentRow.summary" rows="3" @input="errors.summary = ''"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.summary}"></textarea>
+    <div x-show="errors.summary" x-text="errors.summary" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
 </div>

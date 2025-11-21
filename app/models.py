@@ -2,8 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from sqlmodel import Field, SQLModel, Session, select
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import Field, SQLModel
 from sqlalchemy.types import Text
 
 
@@ -60,20 +59,20 @@ class Contact(SQLModel, table=True):
 
 class Car(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    make: str = Field(index=True, max_length=100)
-    model: str = Field(index=True, max_length=100)
-    version: str = Field(max_length=100)
-    year: int = Field(index=True)
-    price: float
+    make: str = Field(index=True, max_length=100, min_length=1)
+    model: str = Field(index=True, max_length=100, min_length=1)
+    version: str = Field(max_length=100, min_length=1)
+    year: int = Field(index=True, gt=1886) # First car invented in 1886
+    price: float = Field(gt=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
 class Book(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    title: str = Field(index=True, max_length=200)
-    author: str = Field(index=True, max_length=200)
-    year: int = Field(index=True)
-    pages: int
-    summary: str = Field(sa_type=Text)  # Use Text for longer content
+    title: str = Field(index=True, max_length=200, min_length=1)
+    author: str = Field(index=True, max_length=200, min_length=1)
+    year: int = Field(index=True, gt=0)
+    pages: int = Field(gt=0)
+    summary: str = Field(sa_type=Text, min_length=1)  # Use Text for longer content
     created_at: datetime = Field(default_factory=datetime.utcnow)

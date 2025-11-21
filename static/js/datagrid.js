@@ -19,13 +19,14 @@
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("datagrid", ({ columns, apiUrl }) => ({
-    // Table state
+    // State
     rows: [],
     cols: columns || [],
     search: "",
     filters: {},
     sortCol: "id",
     sortAsc: true,
+    errors: {}, // Validation errors
 
     // Pagination state
     page: 1,
@@ -208,27 +209,32 @@ document.addEventListener("alpine:init", () => {
     openAddModal() {
       this.modalMode = 'add';
       this.currentRow = {};
+      this.errors = {};
       this.showModal = true;
     },
 
     openEditModal(row) {
       this.modalMode = 'edit';
       this.currentRow = { ...row };
+      this.errors = {};
       this.showModal = true;
     },
 
     openDeleteModal(row) {
       this.modalMode = 'delete';
       this.currentRow = { ...row };
+      this.errors = {};
       this.showModal = true;
     },
 
     closeModal() {
       this.showModal = false;
       this.currentRow = {};
+      this.errors = {};
     },
 
     async saveRow() {
+      this.errors = {}; // Clear previous errors
       try {
         const url = this.modalMode === 'add'
           ? apiUrl
@@ -259,7 +265,23 @@ document.addEventListener("alpine:init", () => {
           let errorMessage = `Failed to ${action} record`;
           try {
             const errorData = JSON.parse(errorText);
-            errorMessage = errorData.detail || errorMessage;
+
+            // Handle 422 Validation Errors
+            if (response.status === 422 && errorData.detail) {
+              // Convert array of errors to object: { field: message }
+              if (Array.isArray(errorData.detail)) {
+                errorData.detail.forEach(err => {
+                  // err.loc is usually ["body", "field_name"]
+                  const field = err.loc[err.loc.length - 1];
+                  this.errors[field] = err.msg;
+                });
+                errorMessage = "Please fix the validation errors.";
+              } else {
+                errorMessage = errorData.detail;
+              }
+            } else {
+              errorMessage = errorData.detail || errorMessage;
+            }
           } catch (e) {
             // Keep default error message
           }

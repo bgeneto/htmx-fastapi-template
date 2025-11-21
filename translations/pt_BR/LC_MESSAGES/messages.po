@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 10:56-0300\n"
+"POT-Creation-Date: 2025-11-21 11:46-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -69,7 +69,7 @@ msgstr "Já existe uma conta com este e-mail"
 
 #: app/main.py:393
 msgid "Registration failed"
-msgstr ""
+msgstr "Falha no cadastro"
 
 #: app/main.py:412 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
@@ -79,7 +79,7 @@ msgstr ""
 
 #: app/main.py:446
 msgid "Login failed"
-msgstr ""
+msgstr "Falha no login"
 
 #: app/main.py:482
 msgid "Invalid or expired login link. Please request a new one."
@@ -87,59 +87,61 @@ msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
 #: app/main.py:608
 msgid "Invalid credentials"
-msgstr ""
+msgstr "Credenciais inválidas"
 
-#: app/main.py:778 templates/pages/books_form.html:3
-#, fuzzy
+#: app/main.py:778 templates/pages/books.html:29
+#: templates/pages/books_form.html:3
 msgid "Title"
-msgstr "itens"
+msgstr "Título"
 
-#: app/main.py:779 templates/pages/books_form.html:9
+#: app/main.py:779 templates/pages/books.html:30
+#: templates/pages/books_form.html:11
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
-#: app/main.py:780 templates/pages/admin/cars_form.html:63
-#: templates/pages/books_form.html:16
+#: app/main.py:780 templates/pages/admin/cars.html:32
+#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:31
+#: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:781 templates/pages/books_form.html:21
-#, fuzzy
+#: app/main.py:781 templates/pages/books.html:32
+#: templates/pages/books_form.html:27
 msgid "Pages"
-msgstr "por página"
+msgstr "Páginas"
 
-#: app/main.py:782 templates/pages/books_form.html:28
+#: app/main.py:782 templates/pages/books.html:33
+#: templates/pages/books_form.html:36
 msgid "Summary"
-msgstr ""
+msgstr "Resumo"
 
-#: app/main.py:899
+#: app/main.py:901
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:938
+#: app/main.py:940
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:974
+#: app/main.py:976
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
 #: app/response_helpers.py:117
-#, fuzzy
 msgid "Authentication required"
-msgstr "O nome é obrigatório"
+msgstr "Autenticação necessária"
 
 #: app/response_helpers.py:132
 msgid "Insufficient permissions"
-msgstr ""
+msgstr "Permissões insuficientes"
 
 #: app/response_helpers.py:147
 msgid "Resource not found"
-msgstr ""
+msgstr "Recurso não encontrado"
 
 #: app/response_helpers.py:162
 msgid "Internal server error"
-msgstr ""
+msgstr "Erro interno do servidor"
 
 #: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
 #: templates/components/_form_alpine.html:148
@@ -158,9 +160,8 @@ msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
 #: app/strategies.py:30
-#, fuzzy
 msgid "This field is required"
-msgstr "O e-mail é obrigatório"
+msgstr "Este campo é obrigatório"
 
 #: templates/components/_datagrid.html:25
 #: templates/components/_datagrid_grid.html:7
@@ -262,38 +263,37 @@ msgid "Last page"
 msgstr "Última página"
 
 #: templates/components/_datagrid_grid.html:272
-#, fuzzy
 msgid "Add New"
-msgstr "Adicionar Novo Carro"
+msgstr "Adicionar Novo"
 
 #: templates/components/_datagrid_grid.html:272
 #: templates/components/_datagrid_grid.html:274
 #: templates/components/_datagrid_grid.html:276
 #: templates/components/_datagrid_grid.html:388
-#, fuzzy
 msgid "Item"
-msgstr "itens"
+msgstr "Item"
 
 #: templates/components/_datagrid_grid.html:280
 msgid "Fill in the details below"
-msgstr ""
+msgstr "Preencha os detalhes abaixo"
 
 #: templates/components/_datagrid_grid.html:281
 msgid "Update information"
-msgstr ""
+msgstr "Atualizar informações"
 
 #: templates/components/_datagrid_grid.html:282
 msgid "This action cannot be undone"
-msgstr ""
+msgstr "Esta ação não pode ser desfeita"
 
 #: templates/components/_datagrid_grid.html:311
-#, fuzzy
 msgid "Are you sure you want to delete this item?"
-msgstr "Tem certeza de que deseja excluir este carro?"
+msgstr "Tem certeza de que deseja excluir este item?"
 
 #: templates/components/_datagrid_grid.html:314
 msgid "This action cannot be undone and all data will be permanently removed."
 msgstr ""
+"Esta ação não pode ser desfeita e todos os dados serão removidos "
+"permanentemente."
 
 #: templates/components/_datagrid_grid.html:368
 msgid "Cancel"
@@ -301,7 +301,7 @@ msgstr "Cancelar"
 
 #: templates/components/_datagrid_grid.html:389
 msgid "Save Changes"
-msgstr ""
+msgstr "Salvar Alterações"
 
 #: templates/components/_form_alpine.html:11
 msgid "Message Sent!"
@@ -344,12 +344,11 @@ msgstr "Por favor, corrija os erros antes de enviar."
 
 #: templates/components/_form_alpine.html:154
 msgid "Thanks"
-msgstr ""
+msgstr "Obrigado"
 
 #: templates/components/_form_alpine.html:154
-#, fuzzy
 msgid "your message has been received!"
-msgstr "Obrigado %(name)s — sua mensagem foi recebida!"
+msgstr "sua mensagem foi recebida!"
 
 #: templates/components/_language_selector.html:81
 msgid "Changing language..."
@@ -361,31 +360,35 @@ msgstr "Contatos recentes"
 
 #: templates/components/_recent_contacts.html:22
 msgid "No contacts yet. Be the first to submit!"
-msgstr ""
+msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
 #: templates/pages/books.html:3 templates/pages/books.html:14
 msgid "Books Library"
-msgstr ""
+msgstr "Biblioteca de Livros"
 
 #: templates/pages/books.html:15
 msgid "Universal Grid Engine Demo"
-msgstr ""
+msgstr "Demonstração do Motor de Grade Universal"
 
 #: templates/pages/auth/register.html:36 templates/pages/books.html:21
 msgid "Back to Home"
-msgstr ""
+msgstr "Voltar ao Início"
+
+#: templates/pages/admin/cars.html:34 templates/pages/books.html:34
+msgid "Actions"
+msgstr "Ações"
 
 #: templates/pages/books.html:40
 msgid "Book"
-msgstr ""
+msgstr "Livro"
 
 #: templates/pages/contacts.html:3 templates/pages/contacts.html:8
 msgid "Contacts Directory"
-msgstr ""
+msgstr "Diretório de Contatos"
 
 #: templates/pages/contacts.html:9
 msgid "Browse and manage all contact submissions"
-msgstr ""
+msgstr "Navegue e gerencie todos os envios de contato"
 
 #: templates/pages/index.html:9
 msgid "ContactFlow"
@@ -403,48 +406,47 @@ msgstr "Entre em contato"
 
 #: templates/pages/admin/cars.html:3 templates/pages/admin/cars.html:14
 msgid "Cars Inventory"
-msgstr ""
+msgstr "Inventário de Carros"
 
 #: templates/pages/admin/cars.html:15
 msgid "Browse and manage vehicle inventory"
-msgstr ""
+msgstr "Navegue e gerencie o inventário de veículos"
 
 #: templates/pages/admin/cars.html:21
 msgid "Back to Admin"
-msgstr ""
+msgstr "Voltar ao Admin"
 
-#: templates/pages/admin/cars.html:39
-#, fuzzy
-msgid "Car"
-msgstr "Adicionar Novo Carro"
-
-#: templates/pages/admin/cars_form.html:10
+#: templates/pages/admin/cars.html:29 templates/pages/admin/cars_form.html:10
 msgid "Make"
 msgstr "Marca"
 
-#: templates/pages/admin/cars_form.html:15
-msgid "e.g., Toyota"
-msgstr ""
-
-#: templates/pages/admin/cars_form.html:27
+#: templates/pages/admin/cars.html:30 templates/pages/admin/cars_form.html:29
 msgid "Model"
 msgstr "Modelo"
 
-#: templates/pages/admin/cars_form.html:32
-msgid "e.g., Camry"
-msgstr ""
-
-#: templates/pages/admin/cars_form.html:44
+#: templates/pages/admin/cars.html:31 templates/pages/admin/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
 
-#: templates/pages/admin/cars_form.html:49
-msgid "e.g., XLE"
-msgstr ""
-
-#: templates/pages/admin/cars_form.html:80
+#: templates/pages/admin/cars.html:33 templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
+
+#: templates/pages/admin/cars.html:39
+msgid "Car"
+msgstr "Carro"
+
+#: templates/pages/admin/cars_form.html:16
+msgid "e.g., Toyota"
+msgstr "ex: Toyota"
+
+#: templates/pages/admin/cars_form.html:35
+msgid "e.g., Camry"
+msgstr "ex: Camry"
+
+#: templates/pages/admin/cars_form.html:54
+msgid "e.g., XLE"
+msgstr "ex: XLE"
 
 #: templates/pages/admin/index.html:3 templates/pages/admin/index.html:14
 msgid "Admin - Contacts"
@@ -463,7 +465,6 @@ msgid "Action"
 msgstr "Ação"
 
 #: templates/pages/auth/login.html:3
-#, fuzzy
 msgid "Log In"
 msgstr "Entrar"
 
@@ -477,45 +478,45 @@ msgstr "Digite seu e-mail para receber um link mágico"
 
 #: templates/pages/auth/login.html:51
 msgid "you@example.com"
-msgstr ""
+msgstr "voce@exemplo.com"
 
 #: templates/pages/auth/login.html:74
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
+"Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
+"senha!"
 
 #: templates/pages/auth/login.html:91
 msgid " Sending..."
-msgstr ""
+msgstr " Enviando..."
 
 #: templates/pages/auth/login.html:91
 msgid "Send Magic Link"
-msgstr ""
+msgstr "Enviar Link Mágico"
 
 #: templates/pages/auth/login.html:97
 msgid "Don't have an account? Register"
-msgstr ""
+msgstr "Não tem uma conta? Cadastre-se"
 
 #: templates/pages/auth/register.html:3 templates/pages/auth/register.html:125
-#, fuzzy
 msgid "Register"
-msgstr "Limpar"
+msgstr "Cadastrar"
 
 #: templates/pages/auth/register.html:15
 msgid "Create Account"
-msgstr ""
+msgstr "Criar Conta"
 
 #: templates/pages/auth/register.html:16
 msgid "Register for an account"
-msgstr ""
+msgstr "Cadastre-se para uma conta"
 
 #: templates/pages/auth/register.html:31
 msgid "Registration Successful!"
-msgstr ""
+msgstr "Cadastro Realizado com Sucesso!"
 
 #: templates/pages/auth/register.html:73
-#, fuzzy
 msgid "Full Name"
-msgstr "Nome"
+msgstr "Nome Completo"
 
 #: templates/pages/auth/register.html:107
 msgid ""
@@ -523,15 +524,16 @@ msgid ""
 "once\n"
 "                                approved."
 msgstr ""
+"Sua conta ficará pendente de aprovação do administrador. Você receberá um"
+" e-mail assim que for aprovada."
 
 #: templates/pages/auth/register.html:125
-#, fuzzy
 msgid " Registering..."
-msgstr "Limpar"
+msgstr " Cadastrando..."
 
 #: templates/pages/auth/register.html:131
 msgid "Already have an account? Log in"
-msgstr ""
+msgstr "Já tem uma conta? Entrar"
 
 #~ msgid ""
 #~ "This scaffold includes a ready-to-"
@@ -556,10 +558,10 @@ msgstr ""
 #~ msgstr "Usuário"
 
 #~ msgid "Registering..."
-#~ msgstr ""
+#~ msgstr "Registrando..."
 
 #~ msgid "Account is disabled"
-#~ msgstr ""
+#~ msgstr "A conta está desabilitada"
 
 #~ msgid "Admin login"
 #~ msgstr "Login do Admin"
@@ -589,25 +591,25 @@ msgstr ""
 #~ msgstr "O nome deve ter pelo menos 2 caracteres"
 
 #~ msgid "An error occurred. Please try again."
-#~ msgstr ""
+#~ msgstr "Ocorreu um erro. Por favor, tente novamente."
 
 #~ msgid "Make"
-#~ msgstr ""
+#~ msgstr "Marca"
 
 #~ msgid "Model"
-#~ msgstr ""
+#~ msgstr "Modelo"
 
 #~ msgid "Version"
-#~ msgstr ""
+#~ msgstr "Versão"
 
 #~ msgid "Year"
-#~ msgstr ""
+#~ msgstr "Ano"
 
 #~ msgid "Price"
-#~ msgstr ""
+#~ msgstr "Preço"
 
 #~ msgid "Search by make or model..."
-#~ msgstr ""
+#~ msgstr "Pesquisar por marca ou modelo..."
 
 #~ msgid "Save"
 #~ msgstr "Salvar"
@@ -619,5 +621,5 @@ msgstr ""
 #~ msgstr "Excluir Carro"
 
 #~ msgid "Update car information"
-#~ msgstr ""
+#~ msgstr "Atualizar informações do carro"
 

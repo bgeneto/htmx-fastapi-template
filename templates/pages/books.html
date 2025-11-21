@@ -26,12 +26,12 @@
             apiUrl: '/api/books',
             columns: [
                 {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'title', label: 'Title', width: 250, sortable: true, filterable: true},
-                {key: 'author', label: 'Author', width: 200, sortable: true, filterable: true},
-                {key: 'year', label: 'Year', width: 100, sortable: true, filterable: true},
-                {key: 'pages', label: 'Pages', width: 100, sortable: true, filterable: true},
-                {key: 'summary', label: 'Summary', width: 300, sortable: false, filterable: true},
-                {key: 'actions', label: 'Actions', width: 100, sortable: false}
+                {key: 'title', label: '{{ _('Title') }}', width: 250, sortable: true, filterable: true},
+                {key: 'author', label: '{{ _('Author') }}', width: 200, sortable: true, filterable: true},
+                {key: 'year', label: '{{ _('Year') }}', width: 100, sortable: true, filterable: true},
+                {key: 'pages', label: '{{ _('Pages') }}', width: 100, sortable: true, filterable: true},
+                {key: 'summary', label: '{{ _('Summary') }}', width: 300, sortable: false, filterable: true},
+                {key: 'actions', label: '{{ _('Actions') }}', width: 100, sortable: false}
             ]
         })"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">

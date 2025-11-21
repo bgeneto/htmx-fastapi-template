@@ -26,12 +26,12 @@
             apiUrl: '/api/admin/cars',
             columns: [
                 {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'make', label: 'Make', width: 150, sortable: true, filterable: true},
-                {key: 'model', label: 'Model', width: 150, sortable: true, filterable: true},
-                {key: 'version', label: 'Version', width: 130, sortable: true, filterable: true},
-                {key: 'year', label: 'Year', width: 100, sortable: true, filterable: true},
-                {key: 'price', label: 'Price', width: 120, sortable: true},
-                {key: 'actions', label: 'Actions', width: 100, sortable: false}
+                {key: 'make', label: '{{ _('Make') }}', width: 150, sortable: true, filterable: true},
+                {key: 'model', label: '{{ _('Model') }}', width: 150, sortable: true, filterable: true},
+                {key: 'version', label: '{{ _('Version') }}', width: 150, sortable: true, filterable: true},
+                {key: 'year', label: '{{ _('Year') }}', width: 100, sortable: true, filterable: true},
+                {key: 'price', label: '{{ _('Price') }}', width: 120, sortable: true, filterable: true},
+                {key: 'actions', label: '{{ _('Actions') }}', width: 100, sortable: false}
             ]
         })"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
