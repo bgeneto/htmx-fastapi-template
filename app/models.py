@@ -57,22 +57,36 @@ class Contact(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
-class Car(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+class CarBase(SQLModel):
+    """Base Car model for validation (table=False, validates like Pydantic)"""
+
     make: str = Field(index=True, max_length=100, min_length=1)
     model: str = Field(index=True, max_length=100, min_length=1)
     version: str = Field(max_length=100, min_length=1)
-    year: int = Field(index=True, gt=1886) # First car invented in 1886
-    price: float = Field(gt=0)
+    year: int = Field(index=True, gt=1886, description="Year must be after 1886")
+    price: float = Field(gt=0, description="Price must be greater than 0")
+
+
+class Car(CarBase, table=True):
+    """Car table model - inherits validation from CarBase"""
+
+    id: Optional[int] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
-class Book(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+class BookBase(SQLModel):
+    """Base Book model for validation (table=False, validates like Pydantic)"""
+
     title: str = Field(index=True, max_length=200, min_length=1)
     author: str = Field(index=True, max_length=200, min_length=1)
-    year: int = Field(index=True, gt=0)
-    pages: int = Field(gt=0)
-    summary: str = Field(sa_type=Text, min_length=1)  # Use Text for longer content
+    year: int = Field(index=True, ge=1, description="Year must be at least 1")
+    pages: int = Field(ge=1, description="Pages must be at least 1")
+    summary: str = Field(sa_type=Text, min_length=1)
+
+
+class Book(BookBase, table=True):
+    """Book table model - inherits validation from BookBase"""
+
+    id: Optional[int] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)

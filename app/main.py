@@ -27,7 +27,7 @@ from .grid_engine import GridEngine, PaginatedResponse
 from .i18n import get_locale, get_translations, set_locale
 from .i18n import gettext as _
 from .logger import get_logger
-from .models import Car, Contact, User, UserRole, Book
+from .models import Car, Contact, User, UserRole, Book, BookBase
 from .repository import (
     create_contact,
     create_user,
@@ -808,12 +808,15 @@ async def get_books_grid(
 
 @app.post("/api/books", response_model=Book)
 async def create_book(
-    book: Book,
+    book_data: BookBase,
     session: AsyncSession = Depends(get_session),
 ):
-    """Create a new book"""
+    """Create a new book with validation via BookBase"""
     from app.logger import logger
-    logger.info(f"Creating book with data: {book}")
+    logger.info(f"Creating book with data: {book_data}")
+    
+    # Create Book instance from validated BookBase data
+    book = Book(**book_data.model_dump())
     session.add(book)
     await session.commit()
     await session.refresh(book)
@@ -823,20 +826,21 @@ async def create_book(
 @app.put("/api/books/{book_id}", response_model=Book)
 async def update_book(
     book_id: int,
-    book_update: Book,
+    book_data: BookBase,
     session: AsyncSession = Depends(get_session),
 ):
-    """Update an existing book"""
+    """Update an existing book with validation via BookBase"""
     result = await session.execute(select(Book).where(Book.id == book_id))
     book = result.scalar_one_or_none()
 
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    book_data = book_update.model_dump(exclude_unset=True)
+    # Only update fields that were provided (exclude_unset=True)
+    update_data = book_data.model_dump(exclude_unset=True)
     protected_fields = {"id", "created_at"}
 
-    for key, value in book_data.items():
+    for key, value in update_data.items():
         if key not in protected_fields and hasattr(book, key):
             setattr(book, key, value)
 

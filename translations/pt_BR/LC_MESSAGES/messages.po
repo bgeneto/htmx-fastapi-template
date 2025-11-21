@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 11:46-0300\n"
+"POT-Creation-Date: 2025-11-21 12:45-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -115,15 +115,15 @@ msgstr "Páginas"
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:901
+#: app/main.py:905
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:940
+#: app/main.py:944
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:976
+#: app/main.py:980
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 

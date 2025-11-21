@@ -235,6 +235,8 @@ document.addEventListener("alpine:init", () => {
 
     async saveRow() {
       this.errors = {}; // Clear previous errors
+      console.log('[DATAGRID] Saving row:', this.currentRow);
+
       try {
         const url = this.modalMode === 'add'
           ? apiUrl
@@ -248,11 +250,15 @@ document.addEventListener("alpine:init", () => {
         delete payload.created_at;
         delete payload.updated_at;
 
+        console.log('[DATAGRID] Sending payload:', payload);
+
         const response = await fetch(url, {
           method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+
+        console.log('[DATAGRID] Response status:', response.status);
 
         if (response.ok) {
           this.closeModal();
@@ -260,36 +266,63 @@ document.addEventListener("alpine:init", () => {
           this.showToast(`Record ${action} successfully`, 'success');
         } else {
           const errorText = await response.text();
-          console.error('Save failed:', errorText);
+          console.error('[DATAGRID] Save failed with response:', errorText);
 
           let errorMessage = `Failed to ${action} record`;
+          let hasFieldErrors = false;
+
           try {
             const errorData = JSON.parse(errorText);
+            console.log('[DATAGRID] Parsed error data:', errorData);
 
-            // Handle 422 Validation Errors
+            // Handle 422 Validation Errors from FastAPI/Pydantic
             if (response.status === 422 && errorData.detail) {
-              // Convert array of errors to object: { field: message }
               if (Array.isArray(errorData.detail)) {
+                console.log('[DATAGRID] Processing validation errors:', errorData.detail);
+
                 errorData.detail.forEach(err => {
-                  // err.loc is usually ["body", "field_name"]
+                  console.log('[DATAGRID] Processing error:', err);
+                  // err.loc is usually ["body", "field_name"] or just ["field_name"]
                   const field = err.loc[err.loc.length - 1];
-                  this.errors[field] = err.msg;
+
+                  // Make error message more user-friendly
+                  let message = err.msg;
+                  if (err.type === 'greater_than') {
+                    const limit = err.ctx?.gt || 0;
+                    message = `Value must be greater than ${limit}`;
+                  } else if (err.type === 'value_error.missing') {
+                    message = 'This field is required';
+                  } else if (err.type === 'type_error.integer') {
+                    message = 'Must be a valid number';
+                  } else if (err.type === 'string_too_short') {
+                    message = 'This field cannot be empty';
+                  }
+
+                  this.errors[field] = message;
+                  console.log(`[DATAGRID] Set error for field '${field}':`, message);
+                  hasFieldErrors = true;
                 });
-                errorMessage = "Please fix the validation errors.";
-              } else {
+
+                if (hasFieldErrors) {
+                  errorMessage = "Please fix the validation errors below.";
+                }
+              } else if (typeof errorData.detail === 'string') {
                 errorMessage = errorData.detail;
               }
-            } else {
-              errorMessage = errorData.detail || errorMessage;
+            } else if (errorData.detail) {
+              errorMessage = errorData.detail;
             }
           } catch (e) {
+            console.error('[DATAGRID] Failed to parse error response:', e);
             // Keep default error message
           }
 
+          console.log('[DATAGRID] Final errors object:', this.errors);
+          console.log('[DATAGRID] Final error message:', errorMessage);
           this.showToast(errorMessage, 'error');
         }
       } catch (error) {
-        console.error('Save error:', error);
+        console.error('[DATAGRID] Network error:', error);
         this.showToast(`Network error while saving record`, 'error');
       }
     },
