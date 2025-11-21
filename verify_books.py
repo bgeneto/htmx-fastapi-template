@@ -43,7 +43,7 @@ async def verify_books():
         search_data = search_response.json()
         search_items = search_data.get("items", [])
         
-        # Verify we found at least one book and it matches
+        # 3. Verify results for substring search
         found = False
         for item in search_items:
             if search_term.lower() in item["title"].lower():
@@ -56,6 +56,22 @@ async def verify_books():
             print(f"FAIL: Could not find book with title containing '{search_term}'")
             print(f"First 5 results: {[b['title'] for b in search_items[:5]]}")
 
+        # 4. Test Numeric Search (Year)
+        book_year = sample_book["year"]
+        print(f"Testing numeric search for Year: {book_year}...")
+        response = await client.get(f"/api/books?q={book_year}")
+        data = response.json()
+        
+        found_year = False
+        for book in data["items"]:
+            if book["year"] == book_year:
+                found_year = True
+                break
+                
+        if found_year:
+            print(f"PASS: Successfully found book using numeric search for Year {book_year}! (Found {data['total']} results)")
+        else:
+            print(f"FAIL: Could not find book with Year {book_year}")
+
 if __name__ == "__main__":
     asyncio.run(verify_books())
-

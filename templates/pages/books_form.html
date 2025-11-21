@@ -1,0 +1,31 @@
+<!-- Title -->
+<div>
+    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Title') }}</label>
+    <input type="text" x-model="currentRow.title"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+</div>
+<!-- Author -->
+<div>
+    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Author') }}</label>
+    <input type="text" x-model="currentRow.author"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+</div>
+<!-- Year & Pages -->
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Year') }}</label>
+        <input type="number" x-model.number="currentRow.year"
+            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Pages') }}</label>
+        <input type="number" x-model.number="currentRow.pages"
+            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+    </div>
+</div>
+<!-- Summary -->
+<div>
+    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">{{ _('Summary') }}</label>
+    <textarea x-model="currentRow.summary" rows="3"
+        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"></textarea>
+</div>

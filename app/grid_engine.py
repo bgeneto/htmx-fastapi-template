@@ -14,7 +14,7 @@ from typing import Generic, List, Optional, Type, TypeVar
 
 from fastapi import Request
 from pydantic import BaseModel
-from sqlalchemy import asc, desc, func, inspect, or_
+from sqlalchemy import asc, desc, func, inspect, or_, Integer, Float, Numeric
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.types import String, Text
 from sqlmodel import SQLModel, select
@@ -62,10 +62,25 @@ class SearchFilterStrategy:
     def _create_search_condition(self, col_attr):
         col_type = col_attr.type
 
+        # String/Text: Contains match
         if isinstance(col_type, (String, Text)):
             return col_attr.ilike(f"%{self.search_query}%")
 
-        # Fallback to string-based search for all other types (numeric, etc)
+        # Numeric: Exact match
+        if isinstance(col_type, (Integer, Float, Numeric)):
+            try:
+                # Try to convert query to number
+                if isinstance(col_type, Integer):
+                    val = int(self.search_query)
+                else:
+                    val = float(self.search_query)
+                return col_attr == val
+            except ValueError:
+                # If query is not a number, return False (no match)
+                from sqlalchemy import false
+                return false()
+
+        # Fallback to string-based search for other types
         from sqlalchemy import Text as SQLText
         from sqlalchemy import cast
 
@@ -206,7 +221,7 @@ class GridEngine:
             PaginatedResponse with items, pagination info, and metadata
         """
         if search_fields is None:
-            # Auto-detect search fields (all String/Text columns)
+            # Auto-detect search fields (String/Text and Numeric columns)
             search_fields = []
             
             # Try to import AutoString from sqlmodel
@@ -215,14 +230,19 @@ class GridEngine:
                 string_types = (String, Text, AutoString)
             except ImportError:
                 string_types = (String, Text)
+            
+            # Numeric types to include in search
+            numeric_types = (Integer, Float, Numeric)
 
             for column in self.mapper.columns:
                 if isinstance(column.type, string_types):
                     search_fields.append(column.name)
+                elif isinstance(column.type, numeric_types):
+                    search_fields.append(column.name)
                 else:
                     # Fallback: check python_type if available
                     try:
-                        if column.type.python_type is str:
+                        if column.type.python_type in (str, int, float):
                             search_fields.append(column.name)
                     except (NotImplementedError, AttributeError):
                         pass
