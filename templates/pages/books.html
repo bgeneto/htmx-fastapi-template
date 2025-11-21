@@ -22,27 +22,7 @@
             </a>
         </div>
 
-        <div x-cloak x-data="datagrid({
-            apiUrl: '/api/books',
-            columns: [
-                {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'title', label: '{{ _('Title') }}', width: 250, sortable: true, filterable: true},
-                {key: 'author', label: '{{ _('Author') }}', width: 200, sortable: true, filterable: true},
-                {key: 'year', label: '{{ _('Year') }}', width: 100, sortable: true, filterable: true},
-                {key: 'pages', label: '{{ _('Pages') }}', width: 100, sortable: true, filterable: true},
-                {key: 'summary', label: '{{ _('Summary') }}', width: 300, sortable: false, filterable: true},
-                {key: 'actions', label: '{{ _('Actions') }}', width: 100, sortable: false}
-            ],
-            i18n: {
-                valueGreaterEqual: " {{ _('Value must be greater than or equal to {0}') }}",
-            valueGreater: "{{ _('Value must be greater than {0}') }}" ,
-            valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}" ,
-            valueLess: "{{ _('Value must be less than {0}') }}" , fieldRequired: "{{ _('This field is required') }}" ,
-            validNumber: "{{ _('Must be a valid number') }}" , validInteger: "{{ _('Must be a valid integer') }}" ,
-            minLength: "{{ _('Must be at least {0} character(s)') }}" ,
-            maxLength: "{{ _('Must be at most {0} character(s)') }}" , validText: "{{ _('Must be a valid text') }}" ,
-            invalidValue: "{{ _('Invalid value') }}" , fixErrors: "{{ _('Please fix the validation errors below.') }}" }
-            })"
+        <div x-cloak x-data="datagrid(booksDatagrid())"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
 
             {% set form_template = "pages/books_form.html" %}
@@ -52,4 +32,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    function booksDatagrid() {
+        return {
+            apiUrl: '/api/books',
+            columns: [
+                {key: 'id', label: "ID", width: 70, sortable: true},
+                {key: 'title', label: "{{ _('Title') }}", width: 250, sortable: true, filterable: true},
+                {key: 'author', label: "{{ _('Author') }}", width: 200, sortable: true, filterable: true},
+                {key: 'year', label: "{{ _('Year') }}", width: 100, sortable: true, filterable: true},
+                {key: 'pages', label: "{{ _('Pages') }}", width: 100, sortable: true, filterable: true},
+                {key: 'summary', label: "{{ _('Summary') }}", width: 300, sortable: false, filterable: true},
+                {key: 'actions', label: "{{ _('Actions') }}", width: 100, sortable: false}
+            ],
+            i18n: {
+                valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
+                valueGreater: "{{ _('Value must be greater than {0}') }}",
+                valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}",
+                valueLess: "{{ _('Value must be less than {0}') }}",
+                fieldRequired: "{{ _('This field is required') }}",
+                validNumber: "{{ _('Must be a valid number') }}",
+                validInteger: "{{ _('Must be a valid integer') }}",
+                minLength: "{{ _('Must be at least {0} character(s)') }}",
+                maxLength: "{{ _('Must be at most {0} character(s)') }}",
+                validText: "{{ _('Must be a valid text') }}",
+                invalidValue: "{{ _('Invalid value') }}",
+                fixErrors: "{{ _('Please fix the validation errors below.') }}"
+            }
+        };
+    }
+</script>
 {% endblock %}

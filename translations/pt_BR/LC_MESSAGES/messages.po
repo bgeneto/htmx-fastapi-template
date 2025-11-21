@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alpine-fastapi-app VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 13:05-0300\n"
+"POT-Creation-Date: 2025-11-21 13:53-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -35,7 +35,7 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:282 app/main.py:777 templates/pages/admin/index.html:21
+#: app/main.py:282 app/main.py:781 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
@@ -89,41 +89,41 @@ msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:778 templates/pages/books.html:29
+#: app/main.py:782 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:779 templates/pages/books.html:30
+#: app/main.py:783 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:780 templates/pages/admin/cars.html:32
-#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:31
+#: app/main.py:784 templates/pages/admin/cars.html:43
+#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:781 templates/pages/books.html:32
+#: app/main.py:785 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:782 templates/pages/books.html:33
+#: app/main.py:786 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:905
+#: app/main.py:909
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:944
+#: app/main.py:948
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:980
+#: app/main.py:984
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -159,7 +159,8 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30 templates/pages/books.html:39
+#: app/strategies.py:30 templates/pages/admin/cars.html:52
+#: templates/pages/books.html:54
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
@@ -374,59 +375,58 @@ msgstr "Demonstração do Motor de Grade Universal"
 msgid "Back to Home"
 msgstr "Voltar ao Início"
 
-#: templates/pages/admin/cars.html:34 templates/pages/books.html:34
-msgid "Actions"
-msgstr "Ações"
+#: templates/pages/books.html:29
+msgid "Book"
+msgstr "Livro"
 
-#: templates/pages/books.html:37
+#: templates/pages/admin/cars.html:45 templates/pages/books.html:47
+#, fuzzy
+msgid "Actions"
+msgstr "Ação"
+
+#: templates/pages/admin/cars.html:48 templates/pages/books.html:50
 msgid "Value must be greater than or equal to {0}"
 msgstr "O valor deve ser maior ou igual a {0}"
 
-#: templates/pages/books.html:38
+#: templates/pages/admin/cars.html:49 templates/pages/books.html:51
 msgid "Value must be greater than {0}"
 msgstr "O valor deve ser maior que {0}"
 
-#: templates/pages/books.html:38
+#: templates/pages/admin/cars.html:50 templates/pages/books.html:52
 msgid "Value must be less than or equal to {0}"
 msgstr "O valor deve ser menor ou igual a {0}"
 
-#: templates/pages/books.html:39
+#: templates/pages/admin/cars.html:51 templates/pages/books.html:53
 msgid "Value must be less than {0}"
 msgstr "O valor deve ser menor que {0}"
 
-#: templates/pages/books.html:40
+#: templates/pages/admin/cars.html:53 templates/pages/books.html:55
 msgid "Must be a valid number"
 msgstr "Deve ser um número válido"
 
-#: templates/pages/books.html:40
+#: templates/pages/admin/cars.html:54 templates/pages/books.html:56
 msgid "Must be a valid integer"
 msgstr "Deve ser um número inteiro válido"
 
-#: templates/pages/books.html:41
+#: templates/pages/admin/cars.html:55 templates/pages/books.html:57
 msgid "Must be at least {0} character(s)"
-msgstr "Deve ter no mínimo {0} caractere(s)"
+msgstr "Deve ter pelo menos {0} caractere(s)"
 
-#: templates/pages/books.html:41
-msgid ""
-"Must be at most {0}\n"
-"            character(s)"
+#: templates/pages/admin/cars.html:56 templates/pages/books.html:58
+msgid "Must be at most {0} character(s)"
 msgstr "Deve ter no máximo {0} caractere(s)"
 
-#: templates/pages/books.html:42
+#: templates/pages/admin/cars.html:57 templates/pages/books.html:59
 msgid "Must be a valid text"
 msgstr "Deve ser um texto válido"
 
-#: templates/pages/books.html:42
+#: templates/pages/admin/cars.html:58 templates/pages/books.html:60
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: templates/pages/books.html:43
+#: templates/pages/admin/cars.html:59 templates/pages/books.html:61
 msgid "Please fix the validation errors below."
-msgstr "Por favor, corrija os erros de validação abaixo."
-
-#: templates/pages/books.html:47
-msgid "Book"
-msgstr "Livro"
+msgstr "Por favor, corrija os erros antes de enviar."
 
 #: templates/pages/contacts.html:3 templates/pages/contacts.html:8
 msgid "Contacts Directory"
@@ -451,36 +451,39 @@ msgid "Contact us"
 msgstr "Entre em contato"
 
 #: templates/pages/admin/cars.html:3 templates/pages/admin/cars.html:14
+#, fuzzy
 msgid "Cars Inventory"
-msgstr "Inventário de Carros"
+msgstr "Diretório de Contatos"
 
 #: templates/pages/admin/cars.html:15
+#, fuzzy
 msgid "Browse and manage vehicle inventory"
-msgstr "Navegue e gerencie o inventário de veículos"
+msgstr "Navegue e gerencie todos os envios de contato"
 
 #: templates/pages/admin/cars.html:21
+#, fuzzy
 msgid "Back to Admin"
-msgstr "Voltar ao Admin"
+msgstr "Voltar ao Início"
 
-#: templates/pages/admin/cars.html:29 templates/pages/admin/cars_form.html:10
+#: templates/pages/admin/cars.html:28
+msgid "Car"
+msgstr ""
+
+#: templates/pages/admin/cars.html:40 templates/pages/admin/cars_form.html:10
 msgid "Make"
 msgstr "Marca"
 
-#: templates/pages/admin/cars.html:30 templates/pages/admin/cars_form.html:29
+#: templates/pages/admin/cars.html:41 templates/pages/admin/cars_form.html:29
 msgid "Model"
 msgstr "Modelo"
 
-#: templates/pages/admin/cars.html:31 templates/pages/admin/cars_form.html:48
+#: templates/pages/admin/cars.html:42 templates/pages/admin/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
 
-#: templates/pages/admin/cars.html:33 templates/pages/admin/cars_form.html:87
+#: templates/pages/admin/cars.html:44 templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
-
-#: templates/pages/admin/cars.html:39
-msgid "Car"
-msgstr "Carro"
 
 #: templates/pages/admin/cars_form.html:16
 msgid "e.g., Toyota"
@@ -668,4 +671,66 @@ msgstr "Já tem uma conta? Entrar"
 
 #~ msgid "Update car information"
 #~ msgstr "Atualizar informações do carro"
+
+#~ msgid ""
+#~ "Must be at most {0}\n"
+#~ "            character(s)"
+#~ msgstr "Deve ter no máximo {0} caractere(s)"
+
+#~ msgid "Cars Inventory"
+#~ msgstr "Inventário de Carros"
+
+#~ msgid "Browse and manage vehicle inventory"
+#~ msgstr "Navegue e gerencie o inventário de veículos"
+
+#~ msgid "Back to Admin"
+#~ msgstr "Voltar ao Admin"
+
+#~ msgid "Car"
+#~ msgstr "Carro"
+
+#~ msgid "Books Library"
+#~ msgstr "Biblioteca de Livros"
+
+#~ msgid "Universal Grid Engine Demo"
+#~ msgstr "Demonstração do Motor de Grade Universal"
+
+#~ msgid "Actions"
+#~ msgstr "Ações"
+
+#~ msgid "Value must be greater than or equal to {0}"
+#~ msgstr "O valor deve ser maior ou igual a {0}"
+
+#~ msgid "Value must be greater than {0}"
+#~ msgstr "O valor deve ser maior que {0}"
+
+#~ msgid "Value must be less than or equal to {0}"
+#~ msgstr "O valor deve ser menor ou igual a {0}"
+
+#~ msgid "Value must be less than {0}"
+#~ msgstr "O valor deve ser menor que {0}"
+
+#~ msgid "Must be a valid number"
+#~ msgstr "Deve ser um número válido"
+
+#~ msgid "Must be a valid integer"
+#~ msgstr "Deve ser um número inteiro válido"
+
+#~ msgid "Must be at least {0} character(s)"
+#~ msgstr "Deve ter no mínimo {0} caractere(s)"
+
+#~ msgid "Must be at most {0} character(s)"
+#~ msgstr "Deve ter no mínimo {0} caractere(s)"
+
+#~ msgid "Must be a valid text"
+#~ msgstr "Deve ser um texto válido"
+
+#~ msgid "Invalid value"
+#~ msgstr "Valor inválido"
+
+#~ msgid "Please fix the validation errors below."
+#~ msgstr "Por favor, corrija os erros de validação abaixo."
+
+#~ msgid "Book"
+#~ msgstr "Livro"
 

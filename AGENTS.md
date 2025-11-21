@@ -33,7 +33,26 @@ This is a **FastAPI + Alpine.js + HTMX** starter template with full i18n support
 - **Error translation**: Pydantic validators use `_()` for i18n-friendly error messages
 - When handling `ValidationError`, manually translate field errors for the user's locale (see `app/main.py` contact endpoint)
 
-### 5. Strategy Patterns (app/strategies.py)
+### 4. API Validation Contract (CRITICAL)
+- **MANDATORY**: All FastAPI endpoints accepting user data MUST use proper Pydantic validation schemas, NEVER raw `dict`
+- **CREATE endpoints**: Use `{Model}Base` schema (e.g., `car_data: CarBase`, `book_data: BookBase`)
+- **UPDATE endpoints**: Use `{Model}Base` schema with `exclude_unset=True` for partial updates
+- **NEVER use**: `dict` type for user input - it bypasses ALL validation and allows invalid data
+- **Example CORRECT**:
+  ```python
+  @app.post("/api/cars") async def create_car(car_data: CarBase, ...):  # ✅ VALIDATES
+  @app.put("/api/cars/{id}") async def update_car(car_id: int, car_data: CarBase, ...):  # ✅ VALIDATES
+  ```
+- **Example WRONG**:
+  ```python
+  @app.post("/api/cars") async def create_car(car_data: dict, ...):  # ❌ BYPASSES VALIDATION
+  @app.put("/api/cars/{id}") async def update_car(car_id: int, car_data: dict, ...):  # ❌ BYPASSES VALIDATION
+  ```
+- **Validation errors**: Return 422 status with field-specific Pydantic error details for datagrid components
+- **Critical incident**: Cars edit/update modal bypassed validation because update endpoint used `dict` instead of `CarBase`
+- **Testing**: Always test with invalid data (empty strings, wrong types) to ensure validation triggers
+
+### 6. Strategy Patterns (app/strategies.py)
 - **Purpose**: Reduces CC in endpoints via polymorphism (ValidationErrorStrategy, AuthVerifier).
 - **Validation**: `from .strategies import handle_validation_error`; `errors = handle_validation_error(e)` - registry maps msg/field to translated str.
   - Extend: Add `(snippet, field): MyStrategy()` to VALIDATION_REGISTRY.

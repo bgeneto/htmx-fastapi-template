@@ -143,12 +143,8 @@ document.addEventListener("alpine:init", () => {
       });
 
       try {
-        const response = await fetch(`${apiUrl}?${params}`);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
+        const response = await axios.get(`${apiUrl}?${params}`);
+        const data = response.data;
 
         // Update grid state from response
         this.rows = data.items || [];
@@ -283,7 +279,6 @@ document.addEventListener("alpine:init", () => {
           ? apiUrl
           : `${apiUrl}/${this.currentRow.id}`;
 
-        const method = this.modalMode === 'add' ? 'POST' : 'PUT';
         const action = this.modalMode === 'add' ? 'added' : 'updated';
 
         // Exclude timestamp fields that should not be updated
@@ -293,101 +288,106 @@ document.addEventListener("alpine:init", () => {
 
         console.log('[DATAGRID] Sending payload:', payload);
 
-        const response = await fetch(url, {
-          method: method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        let response;
+        if (this.modalMode === 'add') {
+          response = await axios.post(url, payload);
+        } else {
+          response = await axios.put(url, payload);
+        }
 
         console.log('[DATAGRID] Response status:', response.status);
 
-        if (response.ok) {
-          this.closeModal();
-          this.fetchData();
-          this.showToast(`Record ${action} successfully`, 'success');
-        } else {
-          const errorText = await response.text();
-          console.error('[DATAGRID] Save failed with response:', errorText);
+        // Success case
+        this.closeModal();
+        this.fetchData();
+        this.showToast(`Record ${action} successfully`, 'success');
 
-          let errorMessage = `Failed to ${action} record`;
-          let hasFieldErrors = false;
+      } catch (error) {
+        console.error('[DATAGRID] Save failed with error:', error);
 
-          try {
-            const errorData = JSON.parse(errorText);
-            console.log('[DATAGRID] Parsed error data:', errorData);
+        let errorMessage = `Failed to ${this.modalMode === 'add' ? 'add' : 'update'} record`;
+        let hasFieldErrors = false;
 
-            // Handle 422 Validation Errors from FastAPI/Pydantic
-            if (response.status === 422 && errorData.detail) {
-              if (Array.isArray(errorData.detail)) {
-                console.log('[DATAGRID] Processing validation errors:', errorData.detail);
+        // Handle Axios error response
+        if (error.response) {
+          const status = error.response.status;
+          const errorData = error.response.data;
 
-                errorData.detail.forEach(err => {
-                  console.log('[DATAGRID] Processing error:', err);
-                  // err.loc is usually ["body", "field_name"] or just ["field_name"]
-                  const field = err.loc[err.loc.length - 1];
+          console.log('[DATAGRID] Error response data:', errorData);
 
-                  // Translate error message using i18n from template
-                  const message = this.translateError(err.type, err.ctx || {}, err.msg);
+          // Handle 422 Validation Errors from FastAPI/Pydantic
+          if (status === 422 && errorData.detail) {
+            if (Array.isArray(errorData.detail)) {
+              console.log('[DATAGRID] Processing validation errors:', errorData.detail);
 
-                  this.errors[field] = message;
-                  console.log(`[DATAGRID] Set error for field '${field}':`, message);
-                  hasFieldErrors = true;
-                });
+              errorData.detail.forEach(err => {
+                console.log('[DATAGRID] Processing error:', err);
+                // err.loc is usually ["body", "field_name"] or just ["field_name"]
+                const field = err.loc[err.loc.length - 1];
 
-                if (hasFieldErrors) {
-                  // Use translated error message from i18n
-                  errorMessage = this.i18n.fixErrors || "Please fix the validation errors below.";
-                }
-              } else if (typeof errorData.detail === 'string') {
-                errorMessage = errorData.detail;
+                // Translate error message using i18n from template
+                const message = this.translateError(err.type, err.ctx || {}, err.msg);
+
+                this.errors[field] = message;
+                console.log(`[DATAGRID] Set error for field '${field}':`, message);
+                hasFieldErrors = true;
+              });
+
+              if (hasFieldErrors) {
+                // Use translated error message from i18n
+                errorMessage = this.i18n.fixErrors || "Please fix the validation errors below.";
               }
-            } else if (errorData.detail) {
+            } else if (typeof errorData.detail === 'string') {
               errorMessage = errorData.detail;
             }
-          } catch (e) {
-            console.error('[DATAGRID] Failed to parse error response:', e);
-            // Keep default error message
+          } else if (errorData.detail) {
+            errorMessage = errorData.detail;
           }
-
-          console.log('[DATAGRID] Final errors object:', this.errors);
-          console.log('[DATAGRID] Final error message:', errorMessage);
-          this.showToast(errorMessage, 'error');
+        } else if (error.request) {
+          // Network error (no response received)
+          errorMessage = 'Network error - no response from server';
+        } else {
+          // Other error (request setup, etc.)
+          errorMessage = error.message || 'Unknown error occurred';
         }
-      } catch (error) {
-        console.error('[DATAGRID] Network error:', error);
-        this.showToast(`Network error while saving record`, 'error');
+
+        console.log('[DATAGRID] Final errors object:', this.errors);
+        console.log('[DATAGRID] Final error message:', errorMessage);
+        this.showToast(errorMessage, 'error');
       }
     },
 
     async deleteRow() {
       try {
-        const response = await fetch(`${apiUrl}/${this.currentRow.id}`, {
-          method: 'DELETE'
-        });
+        await axios.delete(`${apiUrl}/${this.currentRow.id}`);
 
-        if (response.ok) {
-          this.closeModal();
-          this.fetchData();
+        // Success case
+        this.closeModal();
+        this.fetchData();
+        this.showToast('Record deleted successfully', 'success');
 
-          // Show success toast
-          this.showToast('Record deleted successfully', 'success');
-        } else {
-          const errorText = await response.text();
-          console.error('Delete failed:', errorText);
-
-          let errorMessage = 'Failed to delete record';
-          try {
-            const errorData = JSON.parse(errorText);
-            errorMessage = errorData.detail || errorMessage;
-          } catch (e) {
-            // Not JSON, use text
-          }
-
-          this.showToast(errorMessage, 'error');
-        }
       } catch (error) {
         console.error('Delete error:', error);
-        this.showToast('Network error while deleting record', 'error');
+
+        let errorMessage = 'Failed to delete record';
+
+        // Handle Axios error response
+        if (error.response) {
+          const errorData = error.response.data;
+          console.log('Delete failed with response:', errorData);
+
+          if (errorData.detail) {
+            errorMessage = errorData.detail;
+          }
+        } else if (error.request) {
+          // Network error (no response received)
+          errorMessage = 'Network error - no response from server';
+        } else {
+          // Other error (request setup, etc.)
+          errorMessage = error.message || 'Unknown error occurred';
+        }
+
+        this.showToast(errorMessage, 'error');
       }
     },
 

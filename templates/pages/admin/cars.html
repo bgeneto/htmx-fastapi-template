@@ -22,27 +22,7 @@
             </a>
         </div>
 
-        <div x-cloak x-data="datagrid({
-            apiUrl: '/api/admin/cars',
-            columns: [
-                {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'make', label: '{{ _('Make') }}', width: 150, sortable: true, filterable: true},
-                {key: 'model', label: '{{ _('Model') }}', width: 150, sortable: true, filterable: true},
-                {key: 'version', label: '{{ _('Version') }}', width: 150, sortable: true, filterable: true},
-                {key: 'year', label: '{{ _('Year') }}', width: 100, sortable: true, filterable: true},
-                {key: 'price', label: '{{ _('Price') }}', width: 120, sortable: true, filterable: true},
-                {key: 'actions', label: '{{ _('Actions') }}', width: 100, sortable: false}
-            ],
-            i18n: {
-                valueGreaterEqual: " {{ _('Value must be greater than or equal to {0}') }}",
-            valueGreater: "{{ _('Value must be greater than {0}') }}" ,
-            valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}" ,
-            valueLess: "{{ _('Value must be less than {0}') }}" , fieldRequired: "{{ _('This field is required') }}" ,
-            validNumber: "{{ _('Must be a valid number') }}" , validInteger: "{{ _('Must be a valid integer') }}" ,
-            minLength: "{{ _('Must be at least {0} character(s)') }}" ,
-            maxLength: "{{ _('Must be at most {0} character(s)') }}" , validText: "{{ _('Must be a valid text') }}" ,
-            invalidValue: "{{ _('Invalid value') }}" , fixErrors: "{{ _('Please fix the validation errors below.') }}" }
-            })"
+        <div x-cloak x-data="datagrid(adminCarsDatagrid())"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
             {% set form_template = "pages/admin/cars_form.html" %}
             {% set resource_name = _('Car') %}
@@ -50,4 +30,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    function adminCarsDatagrid() {
+        return {
+            apiUrl: '/api/admin/cars',
+            columns: [
+                {key: 'id', label: 'ID', width: 70, sortable: true},
+                {key: 'make', label: "{{ _('Make') }}", width: 150, sortable: true, filterable: true},
+                {key: 'model', label: "{{ _('Model') }}", width: 150, sortable: true, filterable: true},
+                {key: 'version', label: "{{ _('Version') }}", width: 150, sortable: true, filterable: true},
+                {key: 'year', label: "{{ _('Year') }}", width: 100, sortable: true, filterable: true},
+                {key: 'price', label: "{{ _('Price') }}", width: 120, sortable: true, filterable: true},
+                {key: 'actions', label: "{{ _('Actions') }}", width: 100, sortable: false}
+            ],
+            i18n: {
+                valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
+                valueGreater: "{{ _('Value must be greater than {0}') }}",
+                valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}",
+                valueLess: "{{ _('Value must be less than {0}') }}",
+                fieldRequired: "{{ _('This field is required') }}",
+                validNumber: "{{ _('Must be a valid number') }}",
+                validInteger: "{{ _('Must be a valid integer') }}",
+                minLength: "{{ _('Must be at least {0} character(s)') }}",
+                maxLength: "{{ _('Must be at most {0} character(s)') }}",
+                validText: "{{ _('Must be a valid text') }}",
+                invalidValue: "{{ _('Invalid value') }}",
+                fixErrors: "{{ _('Please fix the validation errors below.') }}"
+            }
+        };
+    }
+</script>
 {% endblock %}

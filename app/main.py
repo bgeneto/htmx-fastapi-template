@@ -27,7 +27,7 @@ from .grid_engine import GridEngine, PaginatedResponse
 from .i18n import get_locale, get_translations, set_locale
 from .i18n import gettext as _
 from .logger import get_logger
-from .models import Car, Contact, User, UserRole, Book, BookBase
+from .models import Book, BookBase, Car, CarBase, Contact, User, UserRole
 from .repository import (
     create_contact,
     create_user,
@@ -40,12 +40,12 @@ from .repository import (
     mark_token_used,
     seed_cars,
 )
+from .response_helpers import ResponseHelper
 from .schemas import (
     ContactCreate,
     LoginRequest,
     UserRegister,
 )
-from .response_helpers import ResponseHelper
 
 logger = get_logger("main")
 
@@ -499,7 +499,7 @@ async def verify_magic_link(
 
     # Redirect based on role or next URL
     redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
-    
+
     # Check for next URL
     next_url = request.query_params.get("next")
     if next_url:
@@ -678,12 +678,16 @@ async def get_admin_cars(
 
 @app.post("/api/admin/cars", response_model=Car)
 async def create_car(
-    car_data: dict,
+    car_data: CarBase,
     current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
     """Create a new car"""
-    car = Car(**car_data)
+    from app.logger import logger
+    logger.info(f"Creating car with data: {car_data}")
+
+    # Create Car instance from validated CarBase data
+    car = Car(**car_data.model_dump())
     session.add(car)
     await session.commit()
     await session.refresh(car)
@@ -693,7 +697,7 @@ async def create_car(
 @app.put("/api/admin/cars/{car_id}", response_model=Car)
 async def update_car(
     car_id: int,
-    car_data: dict,
+    car_data: CarBase,
     session: AsyncSession = Depends(get_session),
 ):
     """Update an existing car"""
@@ -703,17 +707,13 @@ async def update_car(
     if not car:
         raise HTTPException(status_code=404, detail="Car not found")
 
-    # Fields that should not be updated from frontend
-    protected_fields = {"id", "created_at", "updated_at"}
+    # Only update fields that were provided (exclude_unset=True)
+    update_data = car_data.model_dump(exclude_unset=True)
+    protected_fields = {"id", "created_at"}
 
-    for key, value in car_data.items():
+    for key, value in update_data.items():
         if key not in protected_fields and hasattr(car, key):
             setattr(car, key, value)
-
-    # Always update the updated_at timestamp
-    from datetime import datetime
-
-    car.updated_at = datetime.now()
 
     await session.commit()
     await session.refresh(car)
@@ -814,7 +814,7 @@ async def create_book(
     """Create a new book with validation via BookBase"""
     from app.logger import logger
     logger.info(f"Creating book with data: {book_data}")
-    
+
     # Create Book instance from validated BookBase data
     book = Book(**book_data.model_dump())
     session.add(book)
