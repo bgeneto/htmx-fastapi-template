@@ -3,7 +3,6 @@ import secrets
 from datetime import datetime, timedelta
 from typing import AsyncGenerator, Optional
 
-from passlib.context import CryptContext  # type: ignore[import]
 from sqlalchemy import desc  # type: ignore[import]
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -16,10 +15,6 @@ from .schemas import AdminCreateUser, ContactCreate, UserRegister, UserUpdate
 
 logger = get_logger("repo")
 
-# Password hashing context (for bootstrap admin and admin-created users)
-# Using sha256_crypt instead of bcrypt due to bcrypt library compatibility issues with Python 3.13
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
-
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
@@ -27,16 +22,30 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 # ============= Password Hashing =============
+# Password hashing is now delegated to fastapi-users' PasswordHelper
+# which uses pwdlib (Argon2 + Bcrypt) instead of the deprecated passlib
 
 
 def hash_password(password: str) -> str:
-    """Hash password using bcrypt"""
-    return pwd_context.hash(password)
+    """
+    Hash password using fastapi-users' PasswordHelper (pwdlib with Argon2/Bcrypt).
+    
+    This replaces the old passlib-based sha256_crypt hashing.
+    """
+    from .users import password_helper
+    return password_helper.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify password against hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    """
+    Verify password against hash using fastapi-users' PasswordHelper.
+    
+    Supports both new pwdlib hashes and legacy passlib hashes for backward compatibility.
+    """
+    from .users import password_helper
+    # password_helper.verify returns tuple (verified, updated_hash)
+    verified, _ = password_helper.verify_and_update(plain_password, hashed_password)
+    return verified
 
 
 # ============= User CRUD =============
@@ -69,9 +78,11 @@ async def create_user(
                 else UserRole.PENDING
             )
         ),
-        hashed_password=hashed_password,
+        hashed_password=hashed_password or "",  # Empty string when no password provided
+        is_verified=False,
         email_verified=False,
         is_active=True,
+        is_superuser=(role == UserRole.ADMIN) if role else False,
     )
 
     session.add(user)
@@ -112,6 +123,8 @@ async def update_user(session: AsyncSession, user: User, payload: UserUpdate) ->
         user.full_name = payload.full_name
     if payload.role is not None:
         user.role = payload.role
+        # Sync is_superuser with ADMIN role
+        user.is_superuser = (payload.role == UserRole.ADMIN)
     if payload.is_active is not None:
         user.is_active = payload.is_active
 
@@ -128,7 +141,10 @@ async def approve_user(
 ) -> User:
     """Approve a pending user by setting their role"""
     user.role = role
+    user.is_verified = True
     user.email_verified = True
+    # Sync is_superuser with ADMIN role
+    user.is_superuser = (role == UserRole.ADMIN)
     user.updated_at = datetime.utcnow()
 
     await session.commit()

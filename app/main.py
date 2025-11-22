@@ -16,11 +16,15 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from .auth import (
-    COOKIE_NAME,
-    create_session_cookie,
+# Import fastapi-users components
+from .users import (
+    fastapi_users,
+    auth_backend,
     require_admin,
+    require_user,
+    require_moderator,
 )
+
 from .config import settings
 from .db import init_db
 from .email import (
@@ -48,6 +52,16 @@ from .schemas import (
     ContactCreate,
     LoginRequest,
     UserRegister,
+    UserRead,
+    UserCreate,
+    UserUpdate,
+)
+
+# Keep legacy auth for magic links
+from .auth import (
+    COOKIE_NAME,
+    create_session_cookie,
+    get_current_user,
 )
 
 logger = get_logger("main")
@@ -165,6 +179,31 @@ app.add_middleware(
 # (like Nginx or Caddy) that handles compression more efficiently. 
 # If you're not using a reverse proxy, you can uncomment the line below:
 # app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# Include fastapi-users routers for auth
+# Note: We keep our custom magic link authentication alongside fastapi-users
+# fastapi-users provides: /auth/login (JWT), /auth/logout, /auth/register
+# We also keep our custom routes for magic link and admin login
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/api/auth",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    prefix="/api/auth",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_users_router(UserRead, UserUpdate),
+    prefix="/api/users",
+    tags=["users"],
+)
+app.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    prefix="/api/auth",
+    tags=["auth"],
+)
 
 templates = Jinja2Templates(directory="templates")
 
