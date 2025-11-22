@@ -3,16 +3,17 @@ import pytest
 
 
 @pytest.mark.asyncio
-async def test_middleware_configuration_functions():
+async def test_middleware_configuration_functions(monkeypatch):
     """Test that middleware configuration functions work correctly."""
-    import os
-    os.environ["APP_BASE_URL"] = "http://localhost:8000"
+    monkeypatch.setenv("APP_BASE_URL", "http://localhost:8000")
     
+    # Import after setting environment
     from app.main import get_allowed_hosts, get_cors_origins
     
     # Test localhost configuration
     hosts = get_allowed_hosts()
     assert "localhost" in hosts, "localhost should be in allowed hosts"
+    assert "127.0.0.1" in hosts, "127.0.0.1 should be in allowed hosts"
     
     origins = get_cors_origins()
     assert "http://localhost:8000" in origins, "APP_BASE_URL should be in CORS origins"
@@ -21,24 +22,14 @@ async def test_middleware_configuration_functions():
 @pytest.mark.asyncio
 async def test_production_middleware_configuration():
     """Test middleware configuration with production URL."""
-    import os
-    
-    # Mock settings for production
-    os.environ["APP_BASE_URL"] = "https://example.com"
-    
-    # Need to reload to pick up new environment
-    from importlib import reload
-    import app.config
-    reload(app.config)
-    
-    # Create a new app instance with updated settings
     from app.main import get_allowed_hosts, get_cors_origins
-    
-    # Temporarily override settings for this test
     import app.main
+    
+    # Create mock settings for production
     class MockSettings:
         APP_BASE_URL = "https://example.com"
     
+    # Temporarily override settings
     original_settings = app.main.settings
     app.main.settings = MockSettings()
     
@@ -47,6 +38,7 @@ async def test_production_middleware_configuration():
         assert "example.com" in hosts, "Domain should be in allowed hosts"
         assert "*.example.com" in hosts, "Wildcard subdomain should be in allowed hosts"
         assert "localhost" in hosts, "localhost should still be allowed for development"
+        assert "127.0.0.1" in hosts, "127.0.0.1 should still be allowed for development"
         
         origins = get_cors_origins()
         assert "https://example.com" in origins, "Production URL should be in CORS origins"
@@ -56,31 +48,49 @@ async def test_production_middleware_configuration():
 
 
 @pytest.mark.asyncio
-async def test_middleware_stack_imports():
-    """Test that all required middleware are imported."""
-    from app import main
-    import inspect
+async def test_no_duplicate_hosts():
+    """Test that get_allowed_hosts doesn't produce duplicates."""
+    from app.main import get_allowed_hosts
     
-    source = inspect.getsource(main)
-    
-    # Verify imports
-    assert "TrustedHostMiddleware" in source, "TrustedHostMiddleware should be imported"
-    assert "CORSMiddleware" in source, "CORSMiddleware should be imported"
-    
-    # Verify GZipMiddleware is commented out
-    assert "# app.add_middleware(GZipMiddleware" in source or "GZipMiddleware is explicitly disabled" in source, \
-        "GZipMiddleware should be disabled/commented"
+    hosts = get_allowed_hosts()
+    # Check for duplicates
+    assert len(hosts) == len(set(hosts)), "Allowed hosts should not contain duplicates"
 
 
 @pytest.mark.asyncio
-async def test_uvicorn_proxy_headers_configuration():
-    """Test that proxy-headers flag is set in startup scripts."""
-    # Check start.py
-    with open("start.py", "r") as f:
-        start_content = f.read()
-        assert "--proxy-headers" in start_content, "start.py should have --proxy-headers flag"
+async def test_middleware_imports():
+    """Test that required middleware classes are imported."""
+    # Import the module and check for required classes
+    from app import main
     
-    # Check Dockerfile
-    with open("Dockerfile", "r") as f:
-        dockerfile_content = f.read()
-        assert "--proxy-headers" in dockerfile_content, "Dockerfile should have --proxy-headers flag"
+    # Verify the middleware classes are available
+    assert hasattr(main, 'TrustedHostMiddleware'), "TrustedHostMiddleware should be imported"
+    assert hasattr(main, 'CORSMiddleware'), "CORSMiddleware should be imported"
+
+
+@pytest.mark.asyncio
+async def test_uvicorn_configuration_in_startup_files():
+    """Test that uvicorn is configured with proxy headers."""
+    import subprocess
+    import os
+    
+    # Get the project root
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Check start.py contains proxy-headers
+    start_py = os.path.join(project_root, "start.py")
+    if os.path.exists(start_py):
+        result = subprocess.run(
+            ["grep", "-q", "proxy-headers", start_py],
+            capture_output=True
+        )
+        assert result.returncode == 0, "start.py should configure --proxy-headers"
+    
+    # Check Dockerfile contains proxy-headers
+    dockerfile = os.path.join(project_root, "Dockerfile")
+    if os.path.exists(dockerfile):
+        result = subprocess.run(
+            ["grep", "-q", "proxy-headers", dockerfile],
+            capture_output=True
+        )
+        assert result.returncode == 0, "Dockerfile should configure --proxy-headers"

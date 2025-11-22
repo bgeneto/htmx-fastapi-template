@@ -65,13 +65,17 @@ def get_allowed_hosts() -> list[str]:
     if parsed.hostname:
         hosts.append(parsed.hostname)
         
-        # Add wildcard subdomain variant for flexibility
-        if not parsed.hostname.startswith("localhost"):
+        # Add wildcard subdomain variant only for real domains (not localhost or IPs)
+        if not (parsed.hostname.startswith("localhost") or 
+                parsed.hostname.startswith("127.") or
+                parsed.hostname.replace(".", "").replace(":", "").isdigit()):
             hosts.append(f"*.{parsed.hostname}")
     
-    # Always allow localhost for development
-    if "localhost" not in hosts:
-        hosts.extend(["localhost", "127.0.0.1"])
+    # Always allow localhost for development (use set to avoid duplicates)
+    localhost_hosts = {"localhost", "127.0.0.1"}
+    for host in localhost_hosts:
+        if host not in hosts:
+            hosts.append(host)
     
     return hosts
 
