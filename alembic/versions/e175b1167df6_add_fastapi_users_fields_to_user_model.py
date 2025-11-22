@@ -23,8 +23,8 @@ def upgrade() -> None:
     # Add new fastapi-users fields with default values
     # Note: hashed_password was already VARCHAR(255), so we keep it as is
     # The model will handle empty strings for magic link users
-    op.add_column('user', sa.Column('is_superuser', sa.Boolean(), nullable=False, server_default='0'))
-    op.add_column('user', sa.Column('is_verified', sa.Boolean(), nullable=False, server_default='0'))
+    op.add_column('user', sa.Column('is_superuser', sa.Boolean(), nullable=False, server_default=sa.false()))
+    op.add_column('user', sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.false()))
     
     # Update existing users: set is_verified based on email_verified
     op.execute("UPDATE user SET is_verified = email_verified WHERE email_verified = 1")

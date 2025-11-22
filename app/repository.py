@@ -69,7 +69,7 @@ async def create_user(
                 else UserRole.PENDING
             )
         ),
-        hashed_password=hashed_password or "",  # Empty string for magic link users
+        hashed_password=hashed_password or "",  # Empty string when no password provided
         is_verified=False,
         email_verified=False,
         is_active=True,
