@@ -150,7 +150,9 @@ node_modules/
 # Translation files
 # Note: .mo files are committed for production deployment
 # Only ignore the .pot template (auto-generated)
-messages.pot
+**/messages.pot
+**/messages.po
+**/messages.mo~
 
 # Build artifacts
 # Tailwind CSS compiled output (regenerate with npm run build:css)

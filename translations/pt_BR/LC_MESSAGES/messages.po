@@ -1,17 +1,16 @@
 # Portuguese (Brazil) translations for fastapi-alpine-starter
-.
 # Copyright (C) 2025 ORGANIZATION
-# This file is distributed under the same license as the fastapi-alpine-starter
-
+# This file is distributed under the same license as the
+# fastapi-alpine-starter
 # project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fastapi-alpine-starter
- VERSION\n"
+"Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
+"EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 14:59-0300\n"
+"POT-Creation-Date: 2025-11-22 20:52-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -38,95 +37,95 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:282 app/main.py:777 templates/pages/admin/index.html:21
+#: app/main.py:320 app/main.py:817 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:285 templates/components/_form_alpine.html:28
+#: app/main.py:323 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:292 templates/components/_form_alpine.html:53
+#: app/main.py:330 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:299 templates/components/_form_alpine.html:79
+#: app/main.py:337 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:305
+#: app/main.py:343
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:310
+#: app/main.py:348
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:385
+#: app/main.py:423
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:393
+#: app/main.py:431
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:412 templates/pages/auth/register.html:162
+#: app/main.py:450 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:446
+#: app/main.py:484
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:482
+#: app/main.py:520
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:608
+#: app/main.py:647
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:778 templates/pages/books.html:42
+#: app/main.py:820 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:779 templates/pages/books.html:43
+#: app/main.py:827 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:780 templates/pages/admin/cars.html:43
+#: app/main.py:834 templates/pages/admin/cars.html:43
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:781 templates/pages/books.html:45
+#: app/main.py:839 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:782 templates/pages/books.html:46
+#: app/main.py:842 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:905
+#: app/main.py:969
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:944
+#: app/main.py:1008
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:980
+#: app/main.py:1044
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -146,13 +145,13 @@ msgstr "Recurso não encontrado"
 msgid "Internal server error"
 msgstr "Erro interno do servidor"
 
-#: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
-#: templates/components/_form_alpine.html:148
+#: app/schemas.py:22 app/schemas.py:63 app/schemas.py:86 app/schemas.py:115
+#: app/strategies.py:15 templates/components/_form_alpine.html:148
 #: templates/pages/auth/register.html:160
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/schemas.py:28 app/strategies.py:20
+#: app/schemas.py:29 app/strategies.py:20
 #: templates/components/_form_alpine.html:152
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
