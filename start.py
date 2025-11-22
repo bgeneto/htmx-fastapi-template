@@ -161,7 +161,7 @@ def update_translations():
                 "-o",
                 "messages.pot",
                 ".",
-                "--project=alpine-fastapi-app",
+                "--project=fastapi-alpine-starter",
             ],
             capture_output=True,
             text=True,

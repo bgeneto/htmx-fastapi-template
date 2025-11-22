@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Alpine-FastAPI Data Grid is a **full-stack, reusable system** for displaying large datasets with server-side pagination, filtering, and sorting. It combines a backend introspection engine with a lightweight Alpine.js frontend.
+The fastapi-alpine-starter Data Grid is a **full-stack, reusable system** for displaying large datasets with server-side pagination, filtering, and sorting. It combines a backend introspection engine with a lightweight Alpine.js frontend.
 
 ### Three Core Components
 

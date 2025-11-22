@@ -525,4 +525,4 @@ _("Welcome back!")  # Translated based on user locale
 
 ## License
 
-This authentication system is part of the Alpine-FastAPI template project.
+This authentication system is part of the fastapi-alpine-starter template project.

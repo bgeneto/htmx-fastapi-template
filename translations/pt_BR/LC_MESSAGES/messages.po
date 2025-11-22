@@ -1,12 +1,15 @@
-# Portuguese (Brazil) translations for htmx-fastapi-app.
+# Portuguese (Brazil) translations for fastapi-alpine-starter
+.
 # Copyright (C) 2025 ORGANIZATION
-# This file is distributed under the same license as the alpine-fastapi-app
+# This file is distributed under the same license as the fastapi-alpine-starter
+
 # project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: alpine-fastapi-app VERSION\n"
+"Project-Id-Version: fastapi-alpine-starter
+ VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-11-21 14:59-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"

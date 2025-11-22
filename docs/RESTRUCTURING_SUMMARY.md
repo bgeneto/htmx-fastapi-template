@@ -2,7 +2,7 @@ o # ✅ Project Restructuring Complete
 
 ## Summary
 
-Successfully restructured the Alpine-FastAPI project to use a professional, enterprise-grade folder organization that supports scalability and team collaboration.
+Successfully restructured the fastapi-alpine-starter project to use a professional, enterprise-grade folder organization that supports scalability and team collaboration.
 
 ## What Changed
 

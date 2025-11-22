@@ -1,5 +1,5 @@
 {
-    "name": "alpine-fastapi",
+    "name": "fastapi-alpine-starter",
     "version": "1.0.0",
     "description": "FastAPI + Alpine Contact Form with Tailwind CSS",
     "scripts": {

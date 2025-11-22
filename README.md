@@ -1,12 +1,12 @@
 # FastAPI + Alpine.js Starter
 
-A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, HTMX, and Tailwind CSS with full internationalization (i18n) support.
+A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, and Tailwind CSS with full internationalization (i18n) support.
 
 **Features:**
 - FastAPI with async/await and dependency injection
 - Alpine.js for reactive client-side components
 - Axios for clean, consistent AJAX calls (replaces fetch)
-- HTMX for seamless server-driven HTML updates
+- HTMX for seamless server-driven HTML updates (prefer Alpine.js + Axios though)
 - **Internationalization (i18n)** - Multi-language support with Babel
 - Pydantic v2 for validation (server-side + client-side)
 - SQLModel (async SQLAlchemy) for DB models and persistence
@@ -22,7 +22,7 @@ A professional, enterprise-grade starter template featuring FastAPI, Alpine.js, 
 ## 📁 Project Structure
 
 ```
-alpine-fastapi/
+fastapi-alpine-starter/
 ├── app/                              # Application core
 │   ├── main.py                       # FastAPI app & route handlers
 │   ├── config.py                     # Configuration (Pydantic BaseSettings)
@@ -193,8 +193,8 @@ The Dockerfile automatically:
 
 **Production Docker build:**
 ```bash
-docker build -t alpine-fastapi .
-docker run -p 8000:8000 alpine-fastapi
+docker build -t fastapi-alpine-starter .
+docker run -p 8000:8000 fastapi-alpine-starter
 ```
 
 .env example:

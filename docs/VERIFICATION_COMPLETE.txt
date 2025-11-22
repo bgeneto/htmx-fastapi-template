@@ -373,7 +373,7 @@ How authentication works     All documents                 Various sections
 ```
 ╔═══════════════════════════════════════════════════════════════════════╗
 ║                                                                       ║
-║     The Alpine-FastAPI authentication system is:                     ║
+║     The fastapi-alpine-starter authentication system is:                     ║
 ║                                                                       ║
 ║     ✅ Fully Implemented (100% coverage)                             ║
 ║     ✅ Production Ready (with configuration)                         ║

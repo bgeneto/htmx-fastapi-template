@@ -40,7 +40,7 @@ jobs:
       - name: Extract and compile translations
         run: |
           # Extract messages to ensure all strings are translatable
-          pybabel extract -F babel.cfg -o messages.pot . --project=alpine-fastapi-app
+          pybabel extract -F babel.cfg -o messages.pot . --project=fastapi-alpine-starter
 
           # Update translation files
           pybabel update -i messages.pot -d translations

@@ -1,11 +1,11 @@
 # Project Architecture & Folder Structure
 
-This document explains the professional, enterprise-grade folder structure of the Alpine-FastAPI template project.
+This document explains the professional, enterprise-grade folder structure of the fastapi-alpine-starter template project.
 
 ## 📁 Project Structure Overview
 
 ```
-alpine-fastapi/
+fastapi-alpine-starter/
 │
 ├── app/                              # Main application package
 │   ├── __init__.py

@@ -1,8 +1,8 @@
-# Copilot Instructions for Alpine-FastAPI Template
+# AI Coding Agents Instructions for Project fastapi-alpine-starter
 
 ## Project Overview
 
-This is a **FastAPI + Alpine.js + HTMX** starter template with full i18n support, async SQLModel persistence, and Tailwind CSS. The architecture favors **server-side rendering with progressive enhancement** via Alpine.js for client-side reactivity.
+This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n support, async SQLModel persistence, and Tailwind CSS. The architecture favors **server-side rendering with progressive enhancement** via Alpine.js for client-side reactivity.
 
 ### Tech Stack
 - **Backend**: FastAPI (async/await), Pydantic v2 validation, SQLModel (async SQLAlchemy)
