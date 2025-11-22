@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from json import JSONEncoder
 from typing import Optional
+from urllib.parse import urlparse
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -11,7 +12,8 @@ from pydantic import ValidationError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.middleware.gzip import GZipMiddleware
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from .auth import (
     COOKIE_NAME,
@@ -48,6 +50,48 @@ from .schemas import (
 )
 
 logger = get_logger("main")
+
+
+def get_allowed_hosts() -> list[str]:
+    """
+    Extract allowed hosts from APP_BASE_URL for TrustedHostMiddleware.
+    
+    Returns a list containing the domain and common variations.
+    """
+    parsed = urlparse(settings.APP_BASE_URL)
+    hosts = []
+    
+    # Add the main hostname
+    if parsed.hostname:
+        hosts.append(parsed.hostname)
+        
+        # Add wildcard subdomain variant for flexibility
+        if not parsed.hostname.startswith("localhost"):
+            hosts.append(f"*.{parsed.hostname}")
+    
+    # Always allow localhost for development
+    if "localhost" not in hosts:
+        hosts.extend(["localhost", "127.0.0.1"])
+    
+    return hosts
+
+
+def get_cors_origins() -> list[str]:
+    """
+    Get allowed CORS origins from APP_BASE_URL.
+    
+    Returns a list containing the full URL.
+    """
+    origins = [settings.APP_BASE_URL]
+    
+    # Allow localhost for development
+    if not settings.APP_BASE_URL.startswith("http://localhost"):
+        origins.extend([
+            "http://localhost:8000",
+            "http://127.0.0.1:8000",
+        ])
+    
+    return origins
 
 
 # Lifespan context manager for startup and shutdown events
@@ -89,8 +133,26 @@ app = FastAPI(
     json_encoders={datetime: lambda v: v.isoformat()},
 )
 
-# Add GZip compression for responses > 1KB
-app.add_middleware(GZipMiddleware, minimum_size=1000)
+# Security Middleware Configuration
+# TrustedHostMiddleware - validates Host header to prevent host header injection attacks
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=get_allowed_hosts(),
+)
+
+# CORSMiddleware - controls which origins can make cross-origin requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_cors_origins(),
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+# NOTE: GZipMiddleware is explicitly disabled because we're using a reverse proxy
+# (like Nginx or Caddy) that handles compression more efficiently. 
+# If you're not using a reverse proxy, you can uncomment the line below:
+# app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 templates = Jinja2Templates(directory="templates")
 

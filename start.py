@@ -243,6 +243,7 @@ def main():
         "0.0.0.0",
         "--port",
         "8000",
+        "--proxy-headers",  # Trust X-Forwarded-* headers from reverse proxy
     ]
 
     print("🚀 Starting Alpine + FastAPI application...")
