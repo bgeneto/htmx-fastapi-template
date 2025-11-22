@@ -158,9 +158,11 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     Handles redirects for authentication errors (401) and returns JSON/HTML
     appropriate for the request type.
     """
+    # Check if it's an API request
+    is_api_request = request.url.path.startswith("/api/")
+
     if exc.status_code == 401:
-        # Check if it's an API request
-        if request.url.path.startswith("/api/"):
+        if is_api_request:
             return JSONResponse(
                 status_code=exc.status_code, content={"detail": exc.detail}
             )
@@ -177,8 +179,97 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
         else:
             return RedirectResponse(url=f"/auth/login?next={next_url}", status_code=302)
 
-    # For other errors, return JSON
-    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    elif exc.status_code == 403:
+        # Forbidden - show nice error page for HTML requests
+        if is_api_request:
+            return JSONResponse(
+                status_code=exc.status_code, content={"detail": exc.detail}
+            )
+        return templates.TemplateResponse(
+            "errors/403.html", {"request": request}, status_code=403
+        )
+
+    elif exc.status_code == 404:
+        # Not Found - show nice error page for HTML requests
+        if is_api_request:
+            return JSONResponse(
+                status_code=exc.status_code, content={"detail": exc.detail}
+            )
+        return templates.TemplateResponse(
+            "errors/404.html", {"request": request}, status_code=404
+        )
+
+    elif exc.status_code == 500:
+        # Internal Server Error - show nice error page for HTML requests
+        if is_api_request:
+            return JSONResponse(
+                status_code=exc.status_code, content={"detail": exc.detail}
+            )
+        return templates.TemplateResponse(
+            "errors/500.html", {"request": request}, status_code=500
+        )
+
+    # For other errors, return JSON for API or raise for HTML
+    if is_api_request:
+        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    else:
+        # Let FastAPI handle other status codes
+        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+
+# Handle 404 errors for non-existent routes
+@app.exception_handler(404)
+async def not_found_handler(request: Request, exc):
+    """Handle 404 errors with custom template for HTML requests."""
+    # Check if it's an API request
+    if request.url.path.startswith("/api/"):
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Not found"}
+        )
+    return templates.TemplateResponse(
+        "errors/404.html",
+        {"request": request},
+        status_code=404
+    )
+
+
+# Handle 500 errors for unhandled exceptions
+@app.exception_handler(500)
+async def internal_error_handler(request: Request, exc):
+    """Handle 500 errors with custom template for HTML requests."""
+    logger.error(f"Internal server error: {exc}")
+    
+    # Check if it's an API request
+    if request.url.path.startswith("/api/"):
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error"}
+        )
+    return templates.TemplateResponse(
+        "errors/500.html",
+        {"request": request},
+        status_code=500
+    )
+
+
+# Handle all other unhandled exceptions
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Catch-all exception handler for unhandled errors."""
+    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    
+    # Check if it's an API request
+    if request.url.path.startswith("/api/"):
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error"}
+        )
+    return templates.TemplateResponse(
+        "errors/500.html",
+        {"request": request},
+        status_code=500
+    )
 
 
 @app.get("/", response_class=HTMLResponse)
