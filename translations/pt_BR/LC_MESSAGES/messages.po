@@ -1,17 +1,16 @@
 # Portuguese (Brazil) translations for fastapi-alpine-starter
-.
 # Copyright (C) 2025 ORGANIZATION
-# This file is distributed under the same license as the fastapi-alpine-starter
-
+# This file is distributed under the same license as the
+# fastapi-alpine-starter
 # project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fastapi-alpine-starter
- VERSION\n"
+"Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
+"EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-21 14:59-0300\n"
+"POT-Creation-Date: 2025-11-22 19:57+0000\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -38,95 +37,95 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:282 app/main.py:777 templates/pages/admin/index.html:21
+#: app/main.py:372 app/main.py:869 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:285 templates/components/_form_alpine.html:28
+#: app/main.py:375 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:292 templates/components/_form_alpine.html:53
+#: app/main.py:382 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:299 templates/components/_form_alpine.html:79
+#: app/main.py:389 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:305
+#: app/main.py:395
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:310
+#: app/main.py:400
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:385
+#: app/main.py:475
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:393
+#: app/main.py:483
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:412 templates/pages/auth/register.html:162
+#: app/main.py:502 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:446
+#: app/main.py:536
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:482
+#: app/main.py:572
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:608
+#: app/main.py:699
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:778 templates/pages/books.html:42
+#: app/main.py:872 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:779 templates/pages/books.html:43
+#: app/main.py:879 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:780 templates/pages/admin/cars.html:43
+#: app/main.py:886 templates/pages/admin/cars.html:43
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:781 templates/pages/books.html:45
+#: app/main.py:891 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:782 templates/pages/books.html:46
+#: app/main.py:894 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:905
+#: app/main.py:1021
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:944
+#: app/main.py:1060
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:980
+#: app/main.py:1096
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -367,6 +366,67 @@ msgstr "Contatos recentes"
 #: templates/components/_recent_contacts.html:22
 msgid "No contacts yet. Be the first to submit!"
 msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
+
+#: templates/errors/403.html:3 templates/errors/403.html:32
+msgid "Access Denied"
+msgstr "Acesso Negado"
+
+#: templates/errors/403.html:35
+msgid "You don't have permission to access this resource."
+msgstr "Você não tem permissão para acessar este recurso."
+
+#: templates/errors/403.html:45 templates/errors/404.html:45
+#: templates/errors/500.html:45
+msgid "Go Home"
+msgstr "Voltar ao Início"
+
+#: templates/errors/403.html:52 templates/errors/404.html:62
+msgid "Login"
+msgstr "Entrar"
+
+#: templates/errors/403.html:59
+msgid "If you believe you should have access, please contact an administrator."
+msgstr "Se você acredita que deveria ter acesso, por favor contate um administrador."
+
+#: templates/errors/404.html:3 templates/errors/404.html:32
+msgid "Page Not Found"
+msgstr "Página Não Encontrada"
+
+#: templates/errors/404.html:35
+msgid "Sorry, the page you are looking for does not exist or has been moved."
+msgstr "Desculpe, a página que você está procurando não existe ou foi movida."
+
+#: templates/errors/404.html:52
+msgid "Go Back"
+msgstr "Voltar"
+
+#: templates/errors/404.html:58
+msgid "Here are some helpful links instead:"
+msgstr "Aqui estão alguns links úteis:"
+
+#: templates/errors/404.html:60
+msgid "Contacts"
+msgstr "Contatos"
+
+#: templates/errors/404.html:61
+msgid "Books"
+msgstr "Livros"
+
+#: templates/errors/500.html:3 templates/errors/500.html:32
+msgid "Internal Server Error"
+msgstr "Erro Interno do Servidor"
+
+#: templates/errors/500.html:35
+msgid "Oops! Something went wrong on our end. We're working to fix it."
+msgstr "Ops! Algo deu errado do nosso lado. Estamos trabalhando para corrigir."
+
+#: templates/errors/500.html:52
+msgid "Try Again"
+msgstr "Tentar Novamente"
+
+#: templates/errors/500.html:59
+msgid "If this problem persists, please contact support."
+msgstr "Se este problema persistir, por favor contate o suporte."
 
 #: templates/pages/books.html:3 templates/pages/books.html:14
 msgid "Books Library"
