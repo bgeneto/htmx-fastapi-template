@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-22 20:46-0300\n"
+"POT-Creation-Date: 2025-11-22 20:56-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,95 +37,95 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:372 app/main.py:869 templates/pages/admin/index.html:21
+#: app/main.py:485 app/main.py:982 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:375 templates/components/_form_alpine.html:28
+#: app/main.py:488 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:382 templates/components/_form_alpine.html:53
+#: app/main.py:495 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:389 templates/components/_form_alpine.html:79
+#: app/main.py:502 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:395
+#: app/main.py:508
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:400
+#: app/main.py:513
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:475
+#: app/main.py:588
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:483
+#: app/main.py:596
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:502 templates/pages/auth/register.html:162
+#: app/main.py:615 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:536
+#: app/main.py:649
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:572
+#: app/main.py:685
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:699
+#: app/main.py:812
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:872 templates/pages/books.html:42
+#: app/main.py:985 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:879 templates/pages/books.html:43
+#: app/main.py:992 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:886 templates/pages/admin/cars.html:43
+#: app/main.py:999 templates/pages/admin/cars.html:43
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:891 templates/pages/books.html:45
+#: app/main.py:1004 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:894 templates/pages/books.html:46
+#: app/main.py:1007 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1021
+#: app/main.py:1134
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1060
+#: app/main.py:1173
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1096
+#: app/main.py:1209
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -145,13 +145,13 @@ msgstr "Recurso não encontrado"
 msgid "Internal server error"
 msgstr "Erro interno do servidor"
 
-#: app/schemas.py:21 app/schemas.py:55 app/schemas.py:84 app/strategies.py:15
-#: templates/components/_form_alpine.html:148
+#: app/schemas.py:22 app/schemas.py:63 app/schemas.py:86 app/schemas.py:115
+#: app/strategies.py:15 templates/components/_form_alpine.html:148
 #: templates/pages/auth/register.html:160
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/schemas.py:28 app/strategies.py:20
+#: app/schemas.py:29 app/strategies.py:20
 #: templates/components/_form_alpine.html:152
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
