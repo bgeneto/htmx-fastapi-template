@@ -22,6 +22,9 @@ RUN chown -R app:app /app
 # Switch to app user
 USER app
 
+# Add user's local bin to PATH so pybabel and other user-installed tools are available
+ENV PATH="$HOME/.local/bin:$PATH"
+
 # Copy package files and install Node dependencies (including devDependencies for build)
 COPY --chown=app:app package*.json ./
 RUN npm ci
