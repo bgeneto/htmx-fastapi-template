@@ -13,10 +13,10 @@ from fastapi_users.authentication import (
     CookieTransport,
     JWTStrategy,
 )
-from fastapi_users_db_sqlmodel import SQLModelUserDatabase
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .config import settings
+from .db_adapter import SQLModelUserDatabase
 from .models import User
 from .repository import get_session
 
