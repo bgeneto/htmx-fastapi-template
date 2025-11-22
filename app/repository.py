@@ -3,7 +3,6 @@ import secrets
 from datetime import datetime, timedelta
 from typing import AsyncGenerator, Optional
 
-from passlib.context import CryptContext  # type: ignore[import]
 from sqlalchemy import desc  # type: ignore[import]
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -16,10 +15,6 @@ from .schemas import AdminCreateUser, ContactCreate, UserRegister, UserUpdate
 
 logger = get_logger("repo")
 
-# Password hashing context (for bootstrap admin and admin-created users)
-# Using sha256_crypt instead of bcrypt due to bcrypt library compatibility issues with Python 3.13
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
-
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
@@ -27,16 +22,30 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 # ============= Password Hashing =============
+# Password hashing is now delegated to fastapi-users' PasswordHelper
+# which uses pwdlib (Argon2 + Bcrypt) instead of the deprecated passlib
 
 
 def hash_password(password: str) -> str:
-    """Hash password using bcrypt"""
-    return pwd_context.hash(password)
+    """
+    Hash password using fastapi-users' PasswordHelper (pwdlib with Argon2/Bcrypt).
+    
+    This replaces the old passlib-based sha256_crypt hashing.
+    """
+    from .users import password_helper
+    return password_helper.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify password against hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    """
+    Verify password against hash using fastapi-users' PasswordHelper.
+    
+    Supports both new pwdlib hashes and legacy passlib hashes for backward compatibility.
+    """
+    from .users import password_helper
+    # password_helper.verify returns tuple (verified, updated_hash)
+    verified, _ = password_helper.verify_and_update(plain_password, hashed_password)
+    return verified
 
 
 # ============= User CRUD =============

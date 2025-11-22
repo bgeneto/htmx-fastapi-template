@@ -13,12 +13,17 @@ from fastapi_users.authentication import (
     CookieTransport,
     JWTStrategy,
 )
+from fastapi_users.password import PasswordHelper
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .config import settings
 from .db_adapter import SQLModelUserDatabase
 from .models import User, UserRole
 from .repository import get_session
+
+# Centralized password helper using pwdlib (Argon2 + Bcrypt)
+# This replaces the old passlib-based password hashing
+password_helper = PasswordHelper()
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):

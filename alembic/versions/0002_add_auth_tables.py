@@ -11,7 +11,6 @@ from typing import Sequence, Union
 
 import sqlalchemy as sa
 import sqlmodel
-from passlib.context import CryptContext
 
 from alembic import op
 from app.config import settings
@@ -21,9 +20,6 @@ revision: str = "0002_add_auth_tables"
 down_revision: Union[str, None] = "0001_create_contact"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
-
-# Password hashing - using sha256_crypt instead of bcrypt due to bcrypt library issues
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 
 def upgrade() -> None:
@@ -85,11 +81,12 @@ def upgrade() -> None:
     # Seed bootstrap admin user
     now = datetime.utcnow()
     password_to_hash = settings.BOOTSTRAP_ADMIN_PASSWORD.get_secret_value()
-    # Bcrypt has a 72-byte limit; truncate if necessary
-    if len(password_to_hash.encode()) > 72:
-        password_to_hash = password_to_hash[:72]
+    
+    # Use fastapi-users' PasswordHelper for hashing (pwdlib with Argon2/Bcrypt)
     try:
-        hashed_password = pwd_context.hash(password_to_hash)
+        from fastapi_users.password import PasswordHelper
+        password_helper = PasswordHelper()
+        hashed_password = password_helper.hash(password_to_hash)
     except Exception as e:
         # If hashing fails, use a placeholder hash
         # This should not happen in normal operation
