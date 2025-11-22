@@ -55,5 +55,5 @@ class SQLModelUserDatabase(Generic[UP], BaseUserDatabase[UP, int]):
 
     async def delete(self, user: UP) -> None:
         """Delete a user"""
-        await self.session.delete(user)
+        self.session.delete(user)  # delete() is not async
         await self.session.commit()

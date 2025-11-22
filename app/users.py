@@ -6,7 +6,7 @@ Integrates with the existing User model and provides authentication backends.
 """
 from typing import Optional
 
-from fastapi import Depends, Request
+from fastapi import Depends, HTTPException, Request
 from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin
 from fastapi_users.authentication import (
     AuthenticationBackend,
@@ -17,7 +17,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .config import settings
 from .db_adapter import SQLModelUserDatabase
-from .models import User
+from .models import User, UserRole
 from .repository import get_session
 
 
@@ -107,9 +107,6 @@ async def require_user(user: User = Depends(current_active_user)) -> User:
 
 async def require_moderator(user: User = Depends(current_active_user)) -> User:
     """Dependency that requires moderator or admin role"""
-    from fastapi import HTTPException
-    from .models import UserRole
-    
     if user.role not in [UserRole.MODERATOR, UserRole.ADMIN]:
         raise HTTPException(status_code=403, detail="Insufficient permissions")
     return user
@@ -117,9 +114,6 @@ async def require_moderator(user: User = Depends(current_active_user)) -> User:
 
 async def require_admin(user: User = Depends(current_active_user)) -> User:
     """Dependency that requires admin role"""
-    from fastapi import HTTPException
-    from .models import UserRole
-    
     if user.role != UserRole.ADMIN and not user.is_superuser:
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
