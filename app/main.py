@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
+from ipaddress import ip_address
 from json import JSONEncoder
 from typing import Optional
 from urllib.parse import urlparse
@@ -66,9 +67,16 @@ def get_allowed_hosts() -> list[str]:
         hosts.append(parsed.hostname)
         
         # Add wildcard subdomain variant only for real domains (not localhost or IPs)
-        if not (parsed.hostname.startswith("localhost") or 
-                parsed.hostname.startswith("127.") or
-                parsed.hostname.replace(".", "").replace(":", "").isdigit()):
+        is_ip = False
+        try:
+            # Try to parse as IP address
+            ip_address(parsed.hostname)
+            is_ip = True
+        except ValueError:
+            # Not an IP address
+            pass
+        
+        if not (parsed.hostname.startswith("localhost") or is_ip):
             hosts.append(f"*.{parsed.hostname}")
     
     # Always allow localhost for development (use set to avoid duplicates)
