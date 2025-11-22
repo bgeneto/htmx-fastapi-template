@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
-RUN useradd --create-home --shell /bin/bash --uid 1001 --gid 1001 app
+RUN useradd --create-home --shell /bin/bash --uid 1001 -U app
 
 WORKDIR /app
 
