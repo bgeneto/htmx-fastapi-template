@@ -49,5 +49,5 @@ ENV PYTHONUNBUFFERED=1
 
 # Run migrations, fix database permissions, and start the application
 CMD alembic upgrade head && \
-    uvicorn app.main:app --host 0.0.0.0 --port 8000
+    uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers
 
