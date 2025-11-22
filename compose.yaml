@@ -1,0 +1,36 @@
+services:
+  fastapi-starter:
+    build: .
+    container_name: fastapi-starter
+    restart: unless-stopped
+    volumes:
+      - ./app.db:/app/app.db
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1024M
+        reservations:
+          cpus: "1.0"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

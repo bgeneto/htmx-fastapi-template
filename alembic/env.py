@@ -12,10 +12,11 @@ from alembic import context
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # import your models so metadata is populated
-from app.models import *  # noqa: F401
+from app.models import Book, Car, Contact, LoginToken, User, UserRole  # noqa: F401
 
 config = context.config
-fileConfig(config.config_file_name)
+if config.config_file_name:
+    fileConfig(config.config_file_name)
 logger = logging.getLogger("alembic.env")
 
 from sqlmodel import SQLModel
@@ -56,7 +57,9 @@ def get_database_url() -> str:
         return url
     # 3) fallback to alembic.ini sqlalchemy.url
     url = config.get_main_option("sqlalchemy.url")
-    return url
+    if url:
+        return url
+    raise ValueError("DATABASE_URL not found. Set it in .env or alembic.ini")
 
 
 def run_migrations_offline():
@@ -80,7 +83,7 @@ def run_migrations_online():
     config.set_main_option("sqlalchemy.url", sync_url)
 
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section) or {},
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
