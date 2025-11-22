@@ -58,13 +58,17 @@ async def lifespan(app: FastAPI):
         await init_db()
         logger.info("DB initialized on startup")
 
-        # Seed cars if needed
+        # Seed cars and books if needed
         from .db import AsyncSessionLocal
 
         async with AsyncSessionLocal() as session:
             await seed_cars(session, count=500)
-    except Exception as e:
-        logger.error("Startup failed: {}", e)
+            from .repository import seed_books
+
+            await seed_books(session, count=100)
+    except Exception as exc:
+        logger.error("Startup failed: {}", exc)
+        raise
     yield
     # Shutdown (if needed in the future)
 
@@ -92,7 +96,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Configure Jinja2 with i18n extension
 templates.env.add_extension("jinja2.ext.i18n")
-templates.env.install_gettext_callables(
+templates.env.install_gettext_callables(  # type: ignore[attr-defined]
     gettext=lambda x: get_translations(get_locale()).gettext(x),
     ngettext=lambda s, p, n: get_translations(get_locale()).ngettext(s, p, n),
     newstyle=True,
@@ -130,9 +134,6 @@ class LocaleMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(LocaleMiddleware)
-
-
-
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -174,9 +175,7 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
                 url=f"/admin/login?next={next_url}", status_code=302
             )
         else:
-            return RedirectResponse(
-                url=f"/auth/login?next={next_url}", status_code=302
-            )
+            return RedirectResponse(url=f"/auth/login?next={next_url}", status_code=302)
 
     # For other errors, return JSON
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
@@ -391,7 +390,7 @@ async def register(
     except ValidationError as e:
         return FormResponseHelper.form_error(
             message=_("Registration failed"),
-            field_errors=ResponseHelper.pydantic_validation_error(e),
+            field_errors={str(error["loc"][-1]): error["msg"] for error in e.errors()},
         )
 
     # Create pending user
@@ -444,7 +443,7 @@ async def login(
     except ValidationError as e:
         return FormResponseHelper.form_error(
             message=_("Login failed"),
-            field_errors=ResponseHelper.pydantic_validation_error(e),
+            field_errors={str(error["loc"][-1]): error["msg"] for error in e.errors()},
         )
 
     from .auth_strategies import (
@@ -504,6 +503,7 @@ async def verify_magic_link(
     next_url = request.query_params.get("next")
     if next_url:
         from .url_validator import validate_admin_redirect
+
         # Validate redirect URL to prevent open redirects
         # We use validate_admin_redirect but it works for general URLs too if we want strict checking
         # Or we can implement a more general validator
@@ -630,7 +630,7 @@ async def admin_delete_contact(
     db: AsyncSession = Depends(get_session),
 ):
     # simple delete operation
-    await db.execute(__import__("sqlmodel").sql.delete(Contact).where(Contact.id == id))
+    await db.execute(__import__("sqlmodel").sql.delete(Contact).where(Contact.id == id))  # type: ignore[arg-type]
     await db.commit()
     return RedirectResponse(url="/admin", status_code=303)
 
@@ -684,6 +684,7 @@ async def create_car(
 ):
     """Create a new car"""
     from app.logger import logger
+
     logger.info(f"Creating car with data: {car_data}")
 
     # Create Car instance from validated CarBase data
@@ -737,7 +738,7 @@ async def delete_car(
         # Use raw SQL delete with proper SQLAlchemy import
         from sqlalchemy import delete
 
-        await session.execute(delete(Car).where(Car.id == car_id))
+        await session.execute(delete(Car).where(Car.id == car_id))  # type: ignore[arg-type]
         await session.commit()
 
         # Verify deletion by checking if car still exists
@@ -775,11 +776,34 @@ async def books_page(request: Request):
             # The backend GridEngine WILL auto-detect search fields.
             "columns": [
                 {"key": "id", "label": _("ID"), "width": 70, "sortable": True},
-                {"key": "title", "label": _("Title"), "width": 250, "sortable": True, "filterable": True},
-                {"key": "author", "label": _("Author"), "width": 200, "sortable": True, "filterable": True},
-                {"key": "year", "label": _("Year"), "width": 100, "sortable": True, "filterable": True},
+                {
+                    "key": "title",
+                    "label": _("Title"),
+                    "width": 250,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "author",
+                    "label": _("Author"),
+                    "width": 200,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "year",
+                    "label": _("Year"),
+                    "width": 100,
+                    "sortable": True,
+                    "filterable": True,
+                },
                 {"key": "pages", "label": _("Pages"), "width": 100, "sortable": True},
-                {"key": "summary", "label": _("Summary"), "width": 300, "sortable": False},
+                {
+                    "key": "summary",
+                    "label": _("Summary"),
+                    "width": 300,
+                    "sortable": False,
+                },
             ],
         },
     )
@@ -813,6 +837,7 @@ async def create_book(
 ):
     """Create a new book with validation via BookBase"""
     from app.logger import logger
+
     logger.info(f"Creating book with data: {book_data}")
 
     # Create Book instance from validated BookBase data

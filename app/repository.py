@@ -3,7 +3,7 @@ import secrets
 from datetime import datetime, timedelta
 from typing import AsyncGenerator, Optional
 
-from passlib.context import CryptContext
+from passlib.context import CryptContext  # type: ignore[import]
 from sqlalchemy import desc  # type: ignore[import]
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -252,7 +252,9 @@ async def get_recent_contacts(session: AsyncSession, limit: int = 4):
 # ============= Car CRUD =============
 
 
-async def create_car(session: AsyncSession, make: str, model: str, version: str, year: int, price: float) -> Car:
+async def create_car(
+    session: AsyncSession, make: str, model: str, version: str, year: int, price: float
+) -> Car:
     """Create a new car"""
     car = Car(make=make, model=model, version=version, year=year, price=price)
     session.add(car)
@@ -264,7 +266,7 @@ async def create_car(session: AsyncSession, make: str, model: str, version: str,
 async def list_cars(session: AsyncSession, limit: int = 100) -> list[Car]:
     """List all cars"""
     result = await session.exec(select(Car).order_by(desc(Car.id)).limit(limit))  # type: ignore[arg-type]
-    return result.all()
+    return list(result.all())
 
 
 async def seed_cars(session: AsyncSession, count: int = 500):
@@ -282,7 +284,7 @@ async def seed_cars(session: AsyncSession, count: int = 500):
         return
 
     faker = Faker()
-    
+
     # Car makes and models
     cars_data = [
         ("Toyota", ["Camry", "Corolla", "RAV4", "Civic", "Accord"]),
@@ -301,12 +303,78 @@ async def seed_cars(session: AsyncSession, count: int = 500):
     for i in range(count):
         make, models = faker.random.choice(cars_data)
         model = faker.random.choice(models)
-        version = faker.random.choice(["LE", "SE", "XLE", "Sport", "Limited", "Platinum", "GT", "RS"])
+        version = faker.random.choice(
+            ["LE", "SE", "XLE", "Sport", "Limited", "Platinum", "GT", "RS"]
+        )
         year = faker.random.randint(2010, 2024)
         price = faker.random.uniform(15000, 150000)
 
-        cars.append(Car(make=make, model=model, version=version, year=year, price=round(price, 2)))
+        cars.append(
+            Car(
+                make=make,
+                model=model,
+                version=version,
+                year=year,
+                price=round(price, 2),
+            )
+        )
 
     session.add_all(cars)
     await session.commit()
     logger.info(f"Seeded {count} cars")
+
+
+# ============= Book CRUD =============
+
+
+from .models import Book
+
+
+async def create_book(
+    session: AsyncSession, title: str, author: str, year: int, pages: int, summary: str
+) -> Book:
+    """Create a new book"""
+    book = Book(title=title, author=author, year=year, pages=pages, summary=summary)
+    session.add(book)
+    await session.commit()
+    await session.refresh(book)
+    return book
+
+
+async def list_books(session: AsyncSession, limit: int = 100):
+    """List all books"""
+    result = await session.exec(select(Book).order_by(desc(Book.id)).limit(limit))  # type: ignore[arg-type]
+    return result.all()
+
+
+async def seed_books(session: AsyncSession, count: int = 100):
+    """Seed database with fake books using faker"""
+    try:
+        from faker import Faker
+    except ImportError:
+        logger.warning("Faker not installed, skipping book seeding")
+        return
+
+    # Check if books already exist
+    result = await session.exec(select(Book).limit(1))
+    if result.first():
+        logger.info("Books already exist, skipping seed")
+        return
+
+    faker = Faker()
+
+    books = []
+    for i in range(count):
+        title = faker.catch_phrase()  # More realistic book-like titles
+        author = faker.name()
+        year = faker.random_int(min=1800, max=2024)
+        pages = faker.random_int(min=100, max=1000)
+        summary = faker.text(max_nb_chars=500)
+
+        books.append(
+            Book(title=title, author=author, year=year, pages=pages, summary=summary)
+        )
+
+    session.add_all(books)
+    await session.commit()
+    logger.info(f"Seeded {count} books")
