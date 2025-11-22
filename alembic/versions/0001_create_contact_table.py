@@ -1,15 +1,16 @@
 """create contact table
 
 Revision ID: 0001_create_contact
-Revises: 
+Revises:
 Create Date: 2025-11-18 00:00:00.000000
 
 """
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
+
 # revision identifiers, used by Alembic.
-revision = '0001_create_contact'
+revision = '0001_create_contact_table'
 down_revision = None
 branch_labels = None
 depends_on = None

@@ -18,7 +18,7 @@ from app.config import settings
 
 # revision identifiers, used by Alembic.
 revision: str = "0002_add_auth_tables"
-down_revision: Union[str, None] = "0001_create_contact"
+down_revision: Union[str, None] = "0001_create_contact_table"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

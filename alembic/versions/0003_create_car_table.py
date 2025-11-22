@@ -7,13 +7,13 @@ Create Date: 2025-11-20 18:38:57.271394
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 import sqlmodel
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = '6fc3e9e1b7fb'
+revision: str = '0003_create_car_table'
 down_revision: Union[str, None] = '0002_add_auth_tables'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
