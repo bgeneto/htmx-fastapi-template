@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from fastapi_users import schemas
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from .i18n import gettext as _
@@ -39,7 +40,37 @@ class ContactRead(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# ============= Authentication Schemas =============
+# ============= FastAPI Users Schemas =============
+
+
+class UserRead(schemas.BaseUser[int]):
+    """Schema for reading user data"""
+    full_name: str
+    role: UserRole
+    email_verified: bool
+    created_at: datetime
+    updated_at: datetime
+
+
+class UserCreate(schemas.BaseUserCreate):
+    """Schema for creating users"""
+    full_name: str = Field(..., description="Full name", min_length=2, max_length=200)
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        if not v or len(v.strip()) < 2:
+            raise ValueError(_("Name must be at least 2 characters"))
+        return v.strip()
+
+
+class UserUpdate(schemas.BaseUserUpdate):
+    """Schema for updating users"""
+    full_name: Optional[str] = Field(None, min_length=2, max_length=200)
+    role: Optional[UserRole] = None
+
+
+# ============= Legacy Authentication Schemas (kept for compatibility) =============
 
 
 class UserRegister(BaseModel):
@@ -83,14 +114,6 @@ class AdminCreateUser(BaseModel):
         if not v or len(v.strip()) < 2:
             raise ValueError(_("Name must be at least 2 characters"))
         return v.strip()
-
-
-class UserUpdate(BaseModel):
-    """Schema for updating user details"""
-
-    full_name: Optional[str] = Field(None, min_length=2, max_length=200)
-    role: Optional[UserRole] = None
-    is_active: Optional[bool] = None
 
 
 class UserResponse(BaseModel):

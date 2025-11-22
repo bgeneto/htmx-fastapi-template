@@ -69,9 +69,11 @@ async def create_user(
                 else UserRole.PENDING
             )
         ),
-        hashed_password=hashed_password,
+        hashed_password=hashed_password or "",  # Empty string for magic link users
+        is_verified=False,
         email_verified=False,
         is_active=True,
+        is_superuser=(role == UserRole.ADMIN) if role else False,
     )
 
     session.add(user)
@@ -112,6 +114,8 @@ async def update_user(session: AsyncSession, user: User, payload: UserUpdate) ->
         user.full_name = payload.full_name
     if payload.role is not None:
         user.role = payload.role
+        # Sync is_superuser with ADMIN role
+        user.is_superuser = (payload.role == UserRole.ADMIN)
     if payload.is_active is not None:
         user.is_active = payload.is_active
 
@@ -128,7 +132,10 @@ async def approve_user(
 ) -> User:
     """Approve a pending user by setting their role"""
     user.role = role
+    user.is_verified = True
     user.email_verified = True
+    # Sync is_superuser with ADMIN role
+    user.is_superuser = (role == UserRole.ADMIN)
     user.updated_at = datetime.utcnow()
 
     await session.commit()
