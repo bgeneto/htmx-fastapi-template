@@ -36,14 +36,10 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 # Copy source code
 COPY --chown=app:app . .
 
-# Build Tailwind CSS
-RUN npm run build:css
-
-# Remove devDependencies to reduce image size
-RUN npm prune --production
-
-# Compile translations for production
-RUN pybabel compile -d translations
+# Install dependencies, build CSS and compile translations in one RUN
+RUN npm run build:css && \
+    npm prune --production && \
+    pybabel compile -d translations
 
 # Health check using FastAPI's built-in /docs endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
