@@ -99,7 +99,7 @@ def get_allowed_hosts() -> list[str]:
             logger.debug("Skipping wildcard subdomain for localhost or IP: {}", parsed.hostname)
 
     # Always allow localhost for development (use set to avoid duplicates)
-    localhost_hosts = {"localhost", "127.0.0.1"}
+    localhost_hosts = {"localhost", "localhost:8000", "127.0.0.1", "127.0.0.1:8000"}
     for host in localhost_hosts:
         if host not in hosts:
             hosts.append(host)
@@ -177,7 +177,7 @@ class HostHeaderLoggingMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-app.add_middleware(HostHeaderLoggingMiddleware)
+# app.add_middleware(HostHeaderLoggingMiddleware) # debug only
 
 # Security Middleware Configuration
 # TrustedHostMiddleware - validates Host header to prevent host header injection attacks
