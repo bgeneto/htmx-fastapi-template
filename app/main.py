@@ -1328,6 +1328,19 @@ async def admin_delete_contact(
 
 # ============= Admin Cars Routes =============
 
+async def invalidate_cars_cache():
+    """Invalidate all cached car data grid results"""
+    from .redis_utils import api_cache
+    try:
+        # Delete all cache keys matching the pattern for car grids
+        deleted_count = await api_cache.delete_pattern("admin_cars_grid:*")
+        if deleted_count > 0:
+            from app.logger import logger
+            logger.info(f"Invalidated {deleted_count} car grid cache entries")
+    except Exception as e:
+        from app.logger import logger
+        logger.error(f"Error invalidating car cache: {e}")
+
 
 @app.get("/admin/cars", response_class=HTMLResponse)
 async def admin_cars(
@@ -1376,7 +1389,22 @@ async def get_admin_cars(
     # Try to get from cache first
     cached_result = await api_cache.get(cache_key)
     if cached_result:
-        return cached_result
+        # Ensure cached result is properly serialized to dict for FastAPI response
+        if isinstance(cached_result, dict):
+            return cached_result
+        elif hasattr(cached_result, 'model_dump'):
+            return cached_result.model_dump()
+        elif hasattr(cached_result, 'dict'):
+            return cached_result.dict()
+        else:
+            # Fallback: convert to dict manually
+            return {
+                "items": cached_result.items if hasattr(cached_result, 'items') else [],
+                "total": cached_result.total if hasattr(cached_result, 'total') else 0,
+                "page": cached_result.page if hasattr(cached_result, 'page') else page,
+                "limit": cached_result.limit if hasattr(cached_result, 'limit') else limit,
+                "total_pages": cached_result.total_pages if hasattr(cached_result, 'total_pages') else 0,
+            }
 
     # If not in cache, execute the query
     grid = GridEngine(session, Car)
@@ -1390,7 +1418,9 @@ async def get_admin_cars(
     )
 
     # Cache the result for 5 minutes (300 seconds)
-    await api_cache.set(cache_key, result, ttl=300)
+    # Ensure proper serialization before caching
+    cache_data = result.model_dump() if hasattr(result, 'model_dump') else result.dict() if hasattr(result, 'dict') else result
+    await api_cache.set(cache_key, cache_data, ttl=300)
 
     return result
 
@@ -1411,6 +1441,10 @@ async def create_car(
     session.add(car)
     await session.commit()
     await session.refresh(car)
+
+    # Invalidate cache since we created a new car
+    await invalidate_cars_cache()
+
     return car
 
 
@@ -1437,6 +1471,10 @@ async def update_car(
 
     await session.commit()
     await session.refresh(car)
+
+    # Invalidate cache since we updated a car
+    await invalidate_cars_cache()
+
     return car
 
 
@@ -1471,6 +1509,10 @@ async def delete_car(
         logger.info(
             f"Successfully deleted car ID {car_id}: {car.make} {car.model} ({car.year})"
         )
+
+        # Invalidate cache since we deleted a car
+        await invalidate_cars_cache()
+
         return {"success": True, "message": "Car deleted successfully"}
 
     except Exception as e:
