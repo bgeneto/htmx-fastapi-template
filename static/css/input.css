@@ -29,6 +29,9 @@
     --text-primary: #111827;
     --border-color: #e5e7eb;
 
+    /* Sidebar width variable for dynamic resizing */
+    --sidebar-width: 240px;
+
     /* Modern Penguin UI theme variables */
     --color-surface: #ffffff;
     --color-onSurface: #64748b;
@@ -62,6 +65,26 @@
 
   .slide-in-from-right-2 {
     animation: slideInRight 0.3s ease-out;
+  }
+
+  /* Resize handle styles */
+  .resize-handle {
+    background: transparent;
+    width: 8px;
+    cursor: ew-resize;
+  }
+
+  .resize-handle:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.6);
+    outline-offset: 2px;
+  }
+
+  .handle-hit {
+    position: absolute;
+    right: -8px;
+    top: 0;
+    height: 100%;
+    width: 24px;
   }
 
   @keyframes slideIn {

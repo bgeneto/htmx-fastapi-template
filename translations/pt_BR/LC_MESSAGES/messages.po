@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 00:02-0300\n"
+"POT-Creation-Date: 2025-11-23 00:22-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -357,6 +357,7 @@ msgid "your message has been received!"
 msgstr "sua mensagem foi recebida!"
 
 #: templates/components/_language_selector.html:81
+#: templates/components/_top_navbar.html:179
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
@@ -372,33 +373,33 @@ msgstr "Contatos recentes"
 msgid "No contacts yet. Be the first to submit!"
 msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
-#: templates/components/_sidebar.html:27
+#: templates/components/_sidebar.html:52
 #: templates/components/_top_navbar.html:20
 msgid "Dashboard"
 msgstr ""
 
-#: templates/components/_sidebar.html:35
+#: templates/components/_sidebar.html:60
 msgid "Admin"
 msgstr ""
 
-#: templates/components/_sidebar.html:46
+#: templates/components/_sidebar.html:71
 msgid "Contacts"
 msgstr "Contatos"
 
-#: templates/components/_sidebar.html:55 templates/pages/admin/cars.html:3
+#: templates/components/_sidebar.html:80 templates/pages/admin/cars.html:3
 #: templates/pages/admin/cars.html:9
 msgid "Cars Inventory"
 msgstr "Diretório de Contatos"
 
-#: templates/components/_sidebar.html:64
+#: templates/components/_sidebar.html:89
 msgid "Users"
 msgstr ""
 
-#: templates/components/_sidebar.html:72
+#: templates/components/_sidebar.html:97
 msgid "Demo"
 msgstr ""
 
-#: templates/components/_sidebar.html:83
+#: templates/components/_sidebar.html:108
 msgid "Books"
 msgstr "Livros"
 
@@ -425,7 +426,15 @@ msgstr ""
 msgid "Payments"
 msgstr "Páginas"
 
-#: templates/components/_top_navbar.html:112
+#: templates/components/_top_navbar.html:116
+msgid "Toggle Theme"
+msgstr ""
+
+#: templates/components/_top_navbar.html:132
+msgid "Language"
+msgstr ""
+
+#: templates/components/_top_navbar.html:221
 msgid "Sign out"
 msgstr ""
 

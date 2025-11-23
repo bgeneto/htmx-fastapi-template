@@ -1,4 +1,4 @@
-<nav class="fixed top-0 z-30 w-full bg-surface border-b border-border-light dark:bg-surfaceDark dark:border-borderDark md:pl-60"
+<nav class="fixed top-0 z-30 w-full bg-surface border-b border-border-light dark:bg-surfaceDark dark:border-borderDark md:pl-[var(--sidebar-width)] transition-[padding-left] duration-200 ease-in-out"
     aria-label="top navigation bar">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -92,6 +92,115 @@
                                 </svg>
                                 <span>{{ _('Payments') }}</span>
                             </a>
+                        </div>
+
+                        <!-- Theme Toggle Section -->
+                        <div class="py-1 border-t border-border-light dark:border-borderDark">
+                            <button onclick="window.toggleTheme()" data-theme-toggle
+                                class="w-full flex items-center gap-3 px-4 py-2 text-sm text-onSurface hover:bg-primary/5 dark:text-onSurfaceDark dark:hover:bg-primaryDark/5"
+                                role="menuitem">
+                                <!-- Sun icon for dark mode -->
+                                <svg data-theme-sun class="w-5 h-5 text-yellow-500 hidden" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                                    </path>
+                                </svg>
+                                <!-- Moon icon for light mode -->
+                                <svg data-theme-moon class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                                    </path>
+                                </svg>
+                                <span>{{ _('Toggle Theme') }}</span>
+                            </button>
+
+                            <!-- Language Selector -->
+                            {% if enable_i18n %}
+                            <div x-data="{ langOpen: false }" class="relative">
+                                <button @click="langOpen = !langOpen" type="button"
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm text-onSurface hover:bg-primary/5 dark:text-onSurfaceDark dark:hover:bg-primaryDark/5"
+                                    role="menuitem">
+                                    <div class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-onSurface/60 dark:text-onSurfaceDark/60" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
+                                            </path>
+                                        </svg>
+                                        <span>{{ _('Language') }}</span>
+                                    </div>
+                                    <svg class="w-4 h-4 transition-transform" :class="langOpen ? 'rotate-180' : ''"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Language submenu -->
+                                <div x-show="langOpen" x-collapse class="bg-primary/5 dark:bg-primaryDark/5">
+                                    <button onclick="window.setLocale('en')" data-locale-option="en"
+                                        class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
+                                        <span class="flex items-center gap-2">
+                                            <span class="text-xl" aria-hidden="true">🇺🇸</span>
+                                            <span>English</span>
+                                        </span>
+                                        <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="en"
+                                            fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="window.setLocale('pt_BR')" data-locale-option="pt_BR"
+                                        class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
+                                        <span class="flex items-center gap-2">
+                                            <span class="text-xl" aria-hidden="true">🇧🇷</span>
+                                            <span>Português (Brasil)</span>
+                                        </span>
+                                        <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="pt_BR"
+                                            fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Language switching script -->
+                            <script>
+                                // Language switching functionality
+                                if (typeof window.setLocale === 'undefined') {
+                                    window.setLocale = function (locale) {
+                                        document.cookie = `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+                                        if (typeof window.showToast === 'function') {
+                                            window.showToast('{{ _("Changing language...") }}', 'info');
+                                        }
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 300);
+                                    };
+                                }
+
+                                // Initialize locale checkmarks on page load
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const currentLocale = document.cookie
+                                        .split('; ')
+                                        .find(row => row.startsWith('locale='))
+                                        ?.split('=')[1] || '{{ request.state.locale|default("en") }}';
+
+                                    document.querySelectorAll('[data-locale-check]').forEach(check => {
+                                        check.classList.add('hidden');
+                                    });
+                                    const currentCheck = document.querySelector(`[data-locale-check="${currentLocale}"]`);
+                                    if (currentCheck) {
+                                        currentCheck.classList.remove('hidden');
+                                    }
+                                });
+                            </script>
+                            {% endif %}
                         </div>
 
                         <!-- Sign Out Section -->

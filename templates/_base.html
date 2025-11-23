@@ -38,7 +38,7 @@
     <!-- Alpine Plugins -->
     <script defer src="/static/js/alpine-mask.js"></script>
     <script defer src="/static/js/alpine-collapse.js"></script>
-    <!--<script defer src="/static/js/alpine-focus.js"></script>-->
+    <script defer src="/static/js/alpine-focus.js"></script>
 
     <!-- Alpine.js Core for reactive components (load last) -->
     <script defer src="/static/js/alpine-min.js"></script>
@@ -53,7 +53,8 @@
     <div x-data="{ sidebarIsOpen: false }" class="relative flex w-full min-h-screen">
         {% include "components/_sidebar.html" %}
 
-        <div class="flex-1 flex flex-col min-h-screen md:pl-64 transition-all duration-300">
+        <div
+            class="flex-1 flex flex-col min-h-screen md:pl-[var(--sidebar-width)] transition-[padding-left] duration-200 ease-in-out">
             {% include "components/_top_navbar.html" %}
 
             <main class="flex-1 p-4 md:p-6 mt-16">
@@ -103,52 +104,143 @@
             if (isCurrentlyDark) {
                 html.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
-                // Theme toggle logic
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark')
-                } else {
-                    document.documentElement.classList.remove('dark')
-                }
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
 
-                window.toggleTheme = function () {
-                    if (document.documentElement.classList.contains('dark')) {
-                        document.documentElement.classList.remove('dark')
-                        localStorage.theme = 'light'
+            // Update icons
+            document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+                const sunIcon = btn.querySelector('[data-theme-sun]');
+                const moonIcon = btn.querySelector('[data-theme-moon]');
+                if (sunIcon && moonIcon) {
+                    if (isCurrentlyDark) {
+                        moonIcon.classList.remove('hidden');
+                        sunIcon.classList.add('hidden');
                     } else {
-                        document.documentElement.classList.add('dark')
-                        localStorage.theme = 'dark'
+                        sunIcon.classList.remove('hidden');
+                        moonIcon.classList.add('hidden');
                     }
                 }
+            });
+        };
 
-                // Toast notification logic
-                window.showToast = function (message, type = 'info') {
-                    const container = document.getElementById('toast-container');
-                    const toast = document.createElement('div');
 
-                    // Icon based on type
-                    let icon = '';
-                    let bgClass = '';
+        // Alpine.js resizable sidebar component
+        function resizableSidebar({ key, defaultWidth, minWidth, maxWidth }) {
+            return {
+                sidebarWidth: defaultWidth,
+                collapsed: false,
+                dragging: false,
+                storageKey: key,
 
-                    switch (type) {
-                        case 'success':
-                            bgClass = 'bg-green-500';
-                            icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-                            break;
-                        case 'error':
-                            bgClass = 'bg-red-500';
-                            icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
-                            break;
-                        case 'warning':
-                            bgClass = 'bg-yellow-500';
-                            icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
-                            break;
-                        default:
-                            bgClass = 'bg-blue-500';
-                            icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                init() {
+                    const saved = localStorage.getItem(this.storageKey);
+                    if (saved) {
+                        const px = this.clamp(parseInt(saved, 10));
+                        this.sidebarWidth = px;
+                        document.documentElement.style.setProperty('--sidebar-width', px + 'px');
+                    } else {
+                        document.documentElement.style.setProperty('--sidebar-width', defaultWidth + 'px');
+                    }
+                },
+
+                clamp(w) {
+                    return Math.min(maxWidth, Math.max(minWidth, Math.round(w)));
+                },
+
+                startDrag(e) {
+                    this.dragging = true;
+                    this.startX = e.clientX;
+                    this.startWidth = this.sidebarWidth;
+
+                    const moveHandler = this.onMove.bind(this);
+                    const upHandler = this.stopDrag.bind(this);
+
+                    window.addEventListener('pointermove', moveHandler);
+                    window.addEventListener('pointerup', upHandler);
+                    window.addEventListener('pointercancel', upHandler);
+
+                    this._moveHandler = moveHandler;
+                    this._upHandler = upHandler;
+                },
+
+                onMove(e) {
+                    if (!this.dragging) return;
+
+                    const dx = e.clientX - this.startX;
+                    const newWidth = this.clamp(this.startWidth + dx);
+
+                    this.sidebarWidth = newWidth;
+                    document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+
+                    localStorage.setItem(this.storageKey, newWidth);
+                },
+
+                stopDrag() {
+                    if (!this.dragging) return;
+                    this.dragging = false;
+
+                    window.removeEventListener('pointermove', this._moveHandler);
+                    window.removeEventListener('pointerup', this._upHandler);
+                    window.removeEventListener('pointercancel', this._upHandler);
+                },
+
+                toggleCollapse() {
+                    this.collapsed = !this.collapsed;
+                    if (this.collapsed) {
+                        this._saved = this.sidebarWidth;
+                        this.sidebarWidth = 56;
+                    } else {
+                        this.sidebarWidth = this.clamp(this._saved ?? this.sidebarWidth);
                     }
 
-                    toast.className = `flex items-center w-full max-w-xs p-4 text-white rounded-lg shadow dark:text-gray-100 ${bgClass} transform transition-all duration-300 translate-y-full opacity-0`;
-                    toast.innerHTML = `
+                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
+                    localStorage.setItem(this.storageKey, this.sidebarWidth);
+                },
+
+                handleKeydown(e) {
+                    const step = 8;
+                    if (e.key === 'ArrowLeft') this.sidebarWidth = this.clamp(this.sidebarWidth - step);
+                    if (e.key === 'ArrowRight') this.sidebarWidth = this.clamp(this.sidebarWidth + step);
+                    if (e.key === 'Home') this.sidebarWidth = minWidth;
+                    if (e.key === 'End') this.sidebarWidth = maxWidth;
+
+                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
+                    localStorage.setItem(this.storageKey, this.sidebarWidth);
+                }
+            };
+        }
+
+        // Toast notification logic
+        window.showToast = function (message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            // Icon based on type
+            let icon = '';
+            let bgClass = '';
+
+            switch (type) {
+                case 'success':
+                    bgClass = 'bg-green-500';
+                    icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                    break;
+                case 'error':
+                    bgClass = 'bg-red-500';
+                    icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                    break;
+                case 'warning':
+                    bgClass = 'bg-yellow-500';
+                    icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+                    break;
+                default:
+                    bgClass = 'bg-blue-500';
+                    icon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            }
+
+            toast.className = `flex items-center w-full max-w-xs p-4 text-white rounded-lg shadow dark:text-gray-100 ${bgClass} transform transition-all duration-300 translate-y-full opacity-0`;
+            toast.innerHTML = `
                 <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-white/20">
                     ${icon}
                 </div>
@@ -161,21 +253,21 @@
                 </button>
             `;
 
-                    container.appendChild(toast);
+            container.appendChild(toast);
 
-                    // Animate in
-                    requestAnimationFrame(() => {
-                        toast.classList.remove('translate-y-full', 'opacity-0');
-                    });
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-full', 'opacity-0');
+            });
 
-                    // Remove after 3 seconds
-                    setTimeout(() => {
-                        toast.classList.add('opacity-0', 'translate-y-full');
-                        setTimeout(() => {
-                            toast.remove();
-                        }, 300);
-                    }, 3000);
-                }
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-full');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
     </script>
 
     {% block extra_scripts %}{% endblock %}
