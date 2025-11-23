@@ -11,24 +11,24 @@
         v4') }}</p>
       </p>
     </div>
-    <div class="flex items-center gap-3">
-      {% include "components/_language_selector.html" %}
-      {% include "components/_theme_toggle.html" %}
-    </div>
-  </header>
+    {% include "components/_language_selector.html" %}
+    {% include "components/_theme_toggle.html" %}
+    {% include "components/_logout_button.html" %}
+</div>
+</header>
 
-  <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Contact Form Section -->
-    <section
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 lg:col-span-2">
-      <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">{{ _('Contact us') }}</h2>
-      {% include "components/_form_alpine.html" %}
-    </section>
+<main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- Contact Form Section -->
+  <section
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 lg:col-span-2">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">{{ _('Contact us') }}</h2>
+    {% include "components/_form_alpine.html" %}
+  </section>
 
-    <!-- Recent Contacts Section -->
-    <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-      {% include "components/_recent_contacts.html" %}
-    </aside>
-  </main>
+  <!-- Recent Contacts Section -->
+  <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+    {% include "components/_recent_contacts.html" %}
+  </aside>
+</main>
 </div>
 {% endblock %}

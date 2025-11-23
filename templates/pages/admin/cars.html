@@ -4,8 +4,9 @@
 
 {% block content %}
 <div class="fixed top-4 right-4 z-50 flex items-center gap-3">
-    {% include "components/_theme_toggle.html" %}
     {% include "components/_language_selector.html" %}
+    {% include "components/_theme_toggle.html" %}
+    {% include "components/_logout_button.html" %}
 </div>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -36,13 +37,13 @@
         return {
             apiUrl: '/api/admin/cars',
             columns: [
-                {key: 'id', label: 'ID', width: 70, sortable: true},
-                {key: 'make', label: "{{ _('Make') }}", width: 150, sortable: true, filterable: true},
-                {key: 'model', label: "{{ _('Model') }}", width: 150, sortable: true, filterable: true},
-                {key: 'version', label: "{{ _('Version') }}", width: 150, sortable: true, filterable: true},
-                {key: 'year', label: "{{ _('Year') }}", width: 100, sortable: true, filterable: true},
-                {key: 'price', label: "{{ _('Price') }}", width: 120, sortable: true, filterable: true},
-                {key: 'actions', label: "{{ _('Actions') }}", width: 100, sortable: false}
+                { key: 'id', label: 'ID', width: 70, sortable: true },
+                { key: 'make', label: "{{ _('Make') }}", width: 150, sortable: true, filterable: true },
+                { key: 'model', label: "{{ _('Model') }}", width: 150, sortable: true, filterable: true },
+                { key: 'version', label: "{{ _('Version') }}", width: 150, sortable: true, filterable: true },
+                { key: 'year', label: "{{ _('Year') }}", width: 100, sortable: true, filterable: true },
+                { key: 'price', label: "{{ _('Price') }}", width: 120, sortable: true, filterable: true },
+                { key: 'actions', label: "{{ _('Actions') }}", width: 100, sortable: false }
             ],
             i18n: {
                 valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
