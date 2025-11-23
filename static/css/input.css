@@ -4,6 +4,20 @@
 
 @theme {
   --font-sans: 'Fira Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Modern Penguin UI colors */
+  --color-surface: var(--color-surface, #ffffff);
+  --color-surfaceDark: var(--color-surfaceDark, #0f172a);
+  --color-onSurface: var(--color-onSurface, #64748b);
+  --color-onSurfaceDark: var(--color-onSurfaceDark, #94a3b8);
+  --color-onSurfaceStrong: var(--color-onSurfaceStrong, #0f172a);
+  --color-onSurfaceDarkStrong: var(--color-onSurfaceDarkStrong, #f1f5f9);
+  --color-border-light: var(--color-border-light, #e2e8f0);
+  --color-borderDark: var(--color-borderDark, #1e293b);
+  --color-primary: var(--color-primary, #6366f1);
+  --color-primaryDark: var(--color-primaryDark, #818cf8);
+  --color-onPrimary: var(--color-onPrimary, #ffffff);
+  --color-onPrimaryDark: var(--color-onPrimaryDark, #ffffff);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -14,12 +28,29 @@
     --bg-primary: #ffffff;
     --text-primary: #111827;
     --border-color: #e5e7eb;
+
+    /* Modern Penguin UI theme variables */
+    --color-surface: #ffffff;
+    --color-onSurface: #64748b;
+    --color-onSurfaceStrong: #0f172a;
+    --color-border-light: #e2e8f0;
+    --color-primary: #6366f1;
+    --color-onPrimary: #ffffff;
   }
 
-  body.dark {
+  body.dark,
+  .dark {
     --bg-primary: #111827;
     --text-primary: #f9fafb;
     --border-color: #374151;
+
+    /* Modern Penguin UI dark theme variables */
+    --color-surfaceDark: #0f172a;
+    --color-onSurfaceDark: #94a3b8;
+    --color-onSurfaceDarkStrong: #f1f5f9;
+    --color-borderDark: #1e293b;
+    --color-primaryDark: #818cf8;
+    --color-onPrimaryDark: #ffffff;
   }
 }
 
