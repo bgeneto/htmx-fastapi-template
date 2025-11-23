@@ -45,6 +45,7 @@ class ContactRead(BaseModel):
 
 class UserRead(schemas.BaseUser[int]):
     """Schema for reading user data"""
+
     full_name: str
     role: UserRole
     email_verified: bool
@@ -54,6 +55,7 @@ class UserRead(schemas.BaseUser[int]):
 
 class UserCreate(schemas.BaseUserCreate):
     """Schema for creating users"""
+
     full_name: str = Field(..., description="Full name", min_length=2, max_length=200)
 
     @field_validator("full_name")
@@ -66,6 +68,7 @@ class UserCreate(schemas.BaseUserCreate):
 
 class UserUpdate(schemas.BaseUserUpdate):
     """Schema for updating users"""
+
     full_name: Optional[str] = Field(None, min_length=2, max_length=200)
     role: Optional[UserRole] = None
 
@@ -129,3 +132,38 @@ class UserResponse(BaseModel):
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+# ============= Profile Management Schemas =============
+
+
+class ProfileUpdate(BaseModel):
+    """Schema for updating user profile information"""
+
+    full_name: Optional[str] = Field(None, min_length=2, max_length=200)
+    email: Optional[EmailStr] = None
+    profile_picture: Optional[str] = None  # Data URL for profile picture
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None:
+            v = v.strip()
+            if len(v) < 2:
+                raise ValueError(_("Name must be at least 2 characters"))
+        return v
+
+
+class PasswordChange(BaseModel):
+    """Schema for changing user password"""
+
+    current_password: str = Field(..., description="Current password", min_length=1)
+    new_password: str = Field(..., description="New password", min_length=8)
+    confirm_password: str = Field(..., description="Confirm new password", min_length=8)
+
+    @field_validator("confirm_password")
+    @classmethod
+    def passwords_match(cls, v: str, info) -> str:
+        if "new_password" in info.data and v != info.data["new_password"]:
+            raise ValueError(_("Passwords do not match"))
+        return v

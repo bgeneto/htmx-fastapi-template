@@ -17,25 +17,29 @@ class UserRole(str, Enum):
 
 class User(SQLModel, table=True):
     """User model for authentication and authorization
-    
+
     Compatible with fastapi-users while maintaining custom role-based access control.
     """
 
     id: Optional[int] = Field(default=None, primary_key=True)
     email: str = Field(index=True, unique=True, max_length=320)
     full_name: str = Field(max_length=200)
+    phone: Optional[str] = Field(default=None, max_length=20)
+
+    # Profile picture stored as data URL (base64)
+    profile_picture: Optional[str] = Field(default=None, sa_type=Text)
 
     # Required by fastapi-users - empty string for magic link users
     hashed_password: str = Field(default="", max_length=255)
 
     # Custom role-based access control
     role: UserRole = Field(default=UserRole.PENDING)
-    
+
     # fastapi-users standard fields
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)  # Maps to ADMIN role
     is_verified: bool = Field(default=False)  # Maps to email_verified
-    
+
     # Deprecated field kept for backward compatibility
     email_verified: bool = Field(default=False)
 

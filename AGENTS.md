@@ -33,6 +33,50 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
 - **Error translation**: Pydantic validators use `_()` for i18n-friendly error messages
 - When handling `ValidationError`, manually translate field errors for the user's locale (see `app/main.py` contact endpoint)
 
+#### Form Validation Contract (CRITICAL)
+- **MANDATORY**: All HTML forms MUST use `novalidate` attribute to disable native browser validation
+- **Custom Validation**: Implement Alpine.js validation functions for all form fields
+- **Validation Pattern**: Follow the pattern in `templates/components/_contact_form.html`:
+  ```html
+  <form @submit.prevent="submitForm" novalidate class="...">
+    <input x-model="form.fieldName" 
+           @blur="validate('fieldName')" 
+           @input="validate('fieldName')" 
+           required />
+    <div x-show="errors.fieldName" x-transition class="mt-2 flex items-center text-sm text-red-600">
+      <svg class="h-4 w-4 mr-1">...</svg>
+      <span x-text="errors.fieldName"></span>
+    </div>
+  </form>
+  ```
+- **Alpine Validation Function**: Implement `validate(field)` method with i18n support:
+  ```javascript
+  validate(field) {
+    const value = this.form[field]?.trim() || '';
+    if (!value) {
+      this.errors[field] = this.i18n.fieldRequired;
+    } else {
+      this.errors[field] = '';
+    }
+  }
+  ```
+- **Why NO native validation**:
+  - Native browser tooltips are inconsistent across browsers
+  - Cannot be styled to match design system
+  - Don't support dark mode properly
+  - Don't support i18n translations
+  - Create poor UX with floating tooltips
+- **Benefits of custom validation**:
+  - Consistent inline error messages below fields
+  - Full Tailwind CSS styling support
+  - Dark mode compatible
+  - i18n translation support via `{{ _('...') }}`
+  - Better visual integration with icons and transitions
+- **Reference Examples**: 
+  - `templates/components/_contact_form.html` (contact form)
+  - `templates/pages/profile.html` (profile and password forms)
+  - `templates/pages/auth/register.html` (registration form)
+
 ### 4. API Validation Contract (CRITICAL)
 - **MANDATORY**: All FastAPI endpoints accepting user data MUST use proper Pydantic validation schemas, NEVER raw `dict`
 - **CREATE endpoints**: Use `{Model}Base` schema (e.g., `car_data: CarBase`, `book_data: BookBase`)

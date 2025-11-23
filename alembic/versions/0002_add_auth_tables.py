@@ -81,10 +81,11 @@ def upgrade() -> None:
     # Seed bootstrap admin user
     now = datetime.utcnow()
     password_to_hash = settings.BOOTSTRAP_ADMIN_PASSWORD.get_secret_value()
-    
+
     # Use fastapi-users' PasswordHelper for hashing (pwdlib with Argon2/Bcrypt)
     try:
         from fastapi_users.password import PasswordHelper
+
         password_helper = PasswordHelper()
         hashed_password = password_helper.hash(password_to_hash)
     except Exception as e:
@@ -101,7 +102,7 @@ def upgrade() -> None:
             """
         ).bindparams(
             email=settings.BOOTSTRAP_ADMIN_EMAIL.lower(),
-            full_name="Bootstrap Admin",
+            full_name="Admin Istrator",
             hashed_password=hashed_password,
             role="ADMIN",
             is_active=True,

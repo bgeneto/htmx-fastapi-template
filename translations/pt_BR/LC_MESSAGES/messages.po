@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 10:52-0300\n"
+"POT-Creation-Date: 2025-11-23 11:51-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,96 +37,152 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:508 app/main.py:1017 templates/pages/admin/index.html:15
+#: app/main.py:528 app/main.py:1224 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:511 templates/components/_contact_form.html:36
+#: app/main.py:531 templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:518 templates/components/_contact_form.html:75
+#: app/main.py:538 templates/components/_contact_form.html:75
 #: templates/pages/admin/index.html:17 templates/pages/auth/login.html:31
 #: templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:525 templates/components/_contact_form.html:113
+#: app/main.py:545 templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:531
+#: app/main.py:551
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:536
+#: app/main.py:556
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:611
+#: app/main.py:631
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:619
+#: app/main.py:639
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:639 templates/pages/auth/register.html:151
+#: app/main.py:659 templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:672
+#: app/main.py:692
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:708
+#: app/main.py:728
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:847 templates/pages/admin/login.html:40
+#: app/main.py:824 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
+#: app/schemas.py:118 app/schemas.py:153 app/strategies.py:15
+#: templates/components/_contact_form.html:198
+#: templates/pages/auth/register.html:149 templates/pages/profile.html:437
+msgid "Name must be at least 2 characters"
+msgstr "O nome deve ter pelo menos 2 caracteres"
+
+#: app/main.py:832
+msgid "Invalid email address"
+msgstr "E-mail inválido"
+
+#: app/main.py:838
+msgid "Email already in use by another account"
+msgstr "Já existe uma conta com este e-mail"
+
+#: app/main.py:848
+msgid "Phone number too long (max 20 characters)"
+msgstr "O número de telefone deve ter pelo menos 2 caracteres"
+
+#: app/main.py:858 templates/pages/profile.html:503
+msgid "Invalid file type. Please upload PNG, JPG, or WebP image."
+msgstr "Tipo de arquivo inválido. Por favor, envie uma imagem PNG, JPG ou WebP."
+
+#: app/main.py:865 templates/pages/profile.html:509
+msgid "File too large. Maximum size is 5MB."
+msgstr "Arquivo muito grande. Tamanho máximo de 5MB."
+
+#: app/main.py:898 templates/pages/profile.html:575
+msgid "Profile updated successfully"
+msgstr "Perfil atualizado com sucesso"
+
+#: app/main.py:928 app/main.py:944 templates/pages/profile.html:631
+msgid "Password change failed"
+msgstr "Falha na alteração de senha"
+
+#: app/main.py:935
+msgid "No password set for this account. Use magic link login."
+msgstr "Senha não definida para esta conta. Use login por link mágico."
+
+#: app/main.py:945
+msgid "Current password is incorrect"
+msgstr "Senha atual incorreta"
+
+#: app/main.py:955 templates/pages/profile.html:619
+msgid "Password changed successfully"
+msgstr "Senha alterada com sucesso"
+
+#: app/main.py:1039 templates/pages/admin/login.html:40
 #: templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1020 templates/pages/books.html:37
+#: app/main.py:1227 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1027 templates/pages/books.html:38
+#: app/main.py:1234 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1034 templates/pages/admin/cars.html:38
+#: app/main.py:1241
+msgid "ISBN"
+msgstr "ISBN"
+
+#: app/main.py:1248 templates/pages/admin/cars.html:38
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1039 templates/pages/books.html:40
+#: app/main.py:1254 templates/pages/admin/cars.html:39
+#: templates/pages/admin/cars_form.html:87
+msgid "Price"
+msgstr "Preço"
+
+#: app/main.py:1258 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1042 templates/pages/books.html:41
+#: app/main.py:1261 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1169
+#: app/main.py:1388
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1208
+#: app/main.py:1427
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1244
+#: app/main.py:1463
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -146,19 +202,18 @@ msgstr "Recurso não encontrado"
 msgid "Internal server error"
 msgstr "Erro interno do servidor"
 
-#: app/schemas.py:22 app/schemas.py:63 app/schemas.py:86 app/schemas.py:115
-#: app/strategies.py:15 templates/components/_contact_form.html:198
-#: templates/pages/auth/register.html:149
-msgid "Name must be at least 2 characters"
-msgstr "O nome deve ter pelo menos 2 caracteres"
-
 #: app/schemas.py:29 app/strategies.py:20
 #: templates/components/_contact_form.html:202
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
+#: app/schemas.py:168 templates/pages/profile.html:441
+msgid "Passwords do not match"
+msgstr "As senhas não coincidem"
+
 #: app/strategies.py:25 templates/components/_contact_form.html:200
 #: templates/pages/auth/login.html:110 templates/pages/auth/register.html:147
+#: templates/pages/profile.html:439
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
@@ -169,7 +224,7 @@ msgstr "Este campo é obrigatório"
 
 #: templates/_base.html:78
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: templates/components/_contact_form.html:13
 msgid "Message Sent!"
@@ -192,12 +247,13 @@ msgid "Reset"
 msgstr "Limpar"
 
 #: templates/components/_contact_form.html:197
-#: templates/pages/auth/register.html:148
+#: templates/pages/auth/register.html:148 templates/pages/profile.html:436
 msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_contact_form.html:199
 #: templates/pages/auth/login.html:109 templates/pages/auth/register.html:146
+#: templates/pages/profile.html:438
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
 
@@ -357,6 +413,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: templates/components/_datagrid_grid.html:389
+#: templates/pages/profile.html:207
 msgid "Save Changes"
 msgstr "Salvar Alterações"
 
@@ -369,13 +426,13 @@ msgid "Logout"
 msgstr "Sair"
 
 #: templates/components/_sidebar.html:62
-#: templates/components/_top_navbar.html:19
+#: templates/components/_top_navbar.html:22
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: templates/components/_sidebar.html:68
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: templates/components/_sidebar.html:82 templates/errors/404.html:53
 msgid "Contacts"
@@ -384,15 +441,15 @@ msgstr "Contatos"
 #: templates/components/_sidebar.html:95 templates/pages/admin/cars.html:3
 #: templates/pages/admin/cars.html:9
 msgid "Cars Inventory"
-msgstr "Diretório de Contatos"
+msgstr "Diretório de Carros"
 
 #: templates/components/_sidebar.html:108
 msgid "Users"
-msgstr ""
+msgstr "Usuários"
 
 #: templates/components/_sidebar.html:114
 msgid "Demo"
-msgstr ""
+msgstr "Demo"
 
 #: templates/components/_sidebar.html:128 templates/errors/404.html:55
 msgid "Books"
@@ -402,29 +459,29 @@ msgstr "Livros"
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
-#: templates/components/_top_navbar.html:39
+#: templates/components/_top_navbar.html:63
 msgid "User"
-msgstr ""
+msgstr "Usuário"
 
-#: templates/components/_top_navbar.html:41
+#: templates/components/_top_navbar.html:65
 msgid "Guest"
 msgstr "Convidado"
 
-#: templates/components/_top_navbar.html:71
+#: templates/components/_top_navbar.html:103 templates/pages/profile.html:2
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:85
+#: templates/components/_top_navbar.html:118
 msgid "Settings"
-msgstr ""
+msgstr "Configurações"
 
-#: templates/components/_top_navbar.html:96
+#: templates/components/_top_navbar.html:130
 msgid "Payments"
 msgstr "Pagamentos"
 
-#: templates/components/_top_navbar.html:115
+#: templates/components/_top_navbar.html:147
 msgid "Sign out"
-msgstr ""
+msgstr "Sair"
 
 #: templates/errors/404.html:2 templates/errors/404.html:20
 msgid "Page Not Found"
@@ -432,7 +489,7 @@ msgstr "Página não encontrada"
 
 #: templates/errors/404.html:22
 msgid "Sorry, the page you are looking for does not exist or has been moved."
-msgstr ""
+msgstr "Desculpe, a página que você está procurando não existe ou foi movida."
 
 #: templates/errors/404.html:35 templates/errors/5xx.html:37
 msgid "Go Home"
@@ -586,6 +643,142 @@ msgstr "Full-Stack Starter Moderno"
 msgid "Contact us"
 msgstr "Entre em contato"
 
+#: templates/pages/profile.html:8
+msgid "My Profile"
+msgstr "Meu Perfil"
+
+#: templates/pages/profile.html:9
+msgid "Manage your personal information and settings"
+msgstr "Gerencie suas informações pessoais e configurações"
+
+#: templates/pages/profile.html:22
+msgid "Profile Picture"
+msgstr "Foto do Perfil"
+
+#: templates/pages/profile.html:54
+msgid "Verified"
+msgstr "Verificado"
+
+#: templates/pages/profile.html:78
+msgid "Personal Information"
+msgstr "Informações Pessoais"
+
+#: templates/pages/profile.html:87
+msgid "Security"
+msgstr "Segurança"
+
+#: templates/pages/auth/register.html:65 templates/pages/profile.html:100
+msgid "Full Name"
+msgstr "Nome Completo"
+
+#: templates/pages/profile.html:137
+msgid "Email Address"
+msgstr "Endereço de Email"
+
+#: templates/pages/profile.html:173
+msgid "Phone Number"
+msgstr "Número de Telefone"
+
+#: templates/pages/profile.html:192
+msgid "For WhatsApp and other messaging"
+msgstr "Para WhatsApp e outras mensagens"
+
+#: templates/pages/profile.html:207
+msgid "Saving..."
+msgstr "Salvando..."
+
+#: templates/pages/profile.html:219
+msgid "Current Password"
+msgstr "Senha Atual"
+
+#: templates/pages/profile.html:254
+msgid "New Password"
+msgstr "Nova Senha"
+
+#: templates/pages/profile.html:291
+msgid "Confirm New Password"
+msgstr "Confirmar Nova Senha"
+
+#: templates/pages/profile.html:337
+msgid "Changing..."
+msgstr "Alterando..."
+
+#: templates/pages/profile.html:337
+msgid "Change Password"
+msgstr "Alterar Senha"
+
+#: templates/pages/profile.html:351
+msgid "This account uses magic link login. No password is set."
+msgstr "Esta conta usa login por link mágico. Nenhuma senha é definida."
+
+#: templates/pages/profile.html:371
+msgid "Account Info"
+msgstr "Informações da Conta"
+
+#: templates/pages/profile.html:375
+msgid "Member Since"
+msgstr "Membro Desde"
+
+#: templates/pages/profile.html:379
+msgid "Account Status"
+msgstr "Status da Conta"
+
+#: templates/pages/profile.html:382
+msgid "Active"
+msgstr "Ativo"
+
+#: templates/pages/profile.html:384
+msgid "Inactive"
+msgstr "Inativo"
+
+#: templates/pages/profile.html:389
+msgid "Email Verified"
+msgstr "E-mail Verificado"
+
+#: templates/pages/profile.html:392
+msgid "Yes"
+msgstr "Sim"
+
+#: templates/pages/profile.html:394
+msgid "No"
+msgstr "Não"
+
+#: templates/pages/profile.html:399
+msgid "Last Updated"
+msgstr "Última Atualização"
+
+#: templates/pages/profile.html:440
+msgid "Password must be at least 8 characters"
+msgstr "A senha deve ter pelo menos 8 caracteres"
+
+#: templates/pages/profile.html:442
+msgid "Please fix the errors before submitting"
+msgstr "Por favor, corrija os erros antes de enviar."
+
+#: templates/pages/profile.html:443
+msgid "Image must be less than 2MB"
+msgstr "A imagem deve ter menos de 2MB"
+
+#: templates/pages/profile.html:444
+msgid "Please select a valid image file (JPG, PNG, GIF)"
+msgstr "Por favor, selecione um arquivo de imagem válido (JPG, PNG, GIF)"
+
+#: templates/pages/profile.html:537
+msgid "Profile picture updated"
+msgstr "Perfil atualizado"
+
+#: templates/pages/profile.html:546
+msgid "Failed to upload picture"
+msgstr "Falha ao atualizar o perfil"
+
+#: templates/pages/profile.html:581
+msgid "Update failed"
+msgstr "Atualização falhou"
+
+#: templates/pages/profile.html:588 templates/pages/profile.html:638
+msgid "An error occurred"
+msgstr "Um erro ocorreu"
+
 #: templates/pages/admin/cars.html:10
 msgid "Browse and manage vehicle inventory"
 msgstr "Navegue e gerencie todos os envios de contato"
@@ -609,10 +802,6 @@ msgstr "Modelo"
 #: templates/pages/admin/cars.html:37 templates/pages/admin/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
-
-#: templates/pages/admin/cars.html:39 templates/pages/admin/cars_form.html:87
-msgid "Price"
-msgstr "Preço"
 
 #: templates/pages/admin/cars_form.html:16
 msgid "e.g., Toyota"
@@ -713,10 +902,6 @@ msgstr "Cadastre-se para uma conta"
 #: templates/pages/auth/register.html:24
 msgid "Registration Successful!"
 msgstr "Cadastro Realizado com Sucesso!"
-
-#: templates/pages/auth/register.html:65
-msgid "Full Name"
-msgstr "Nome Completo"
 
 #: templates/pages/auth/register.html:97
 msgid ""

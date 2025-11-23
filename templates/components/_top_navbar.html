@@ -1,16 +1,19 @@
 <nav class="fixed top-0 left-0 right-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 md:left-[var(--sidebar-width)] transition-[left] duration-200 ease-in-out"
-    aria-label="top navigation bar">
+     aria-label="top navigation bar">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                 <!-- Sidebar toggle button for small screens -->
-                <button @click="sidebarIsOpen = !sidebarIsOpen" type="button"
-                    class="inline-flex items-center p-2 text-sm rounded-lg md:hidden text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button @click="sidebarIsOpen = !sidebarIsOpen"
+                        type="button"
+                        class="inline-flex items-center p-2 text-sm rounded-lg md:hidden text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <span class="sr-only">Open sidebar</span>
-                    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                    <svg class="w-6 h-6"
+                         aria-hidden="true"
+                         fill="currentColor"
+                         viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
                         </path>
                     </svg>
                 </button>
@@ -25,48 +28,77 @@
                 <!-- Language Selector -->
                 {% include "components/_language_selector.html" %}
                 <!-- Profile Menu -->
-                <div x-data="{ userDropdownIsOpen: false }" class="relative"
-                    x-on:keydown.esc.window="userDropdownIsOpen = false">
+                <div x-data="{ userDropdownIsOpen: false }"
+                     class="relative"
+                     x-on:keydown.esc.window="userDropdownIsOpen = false">
                     <button type="button"
-                        class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''" aria-haspopup="true"
-                        x-on:click="userDropdownIsOpen = !userDropdownIsOpen" x-bind:aria-expanded="userDropdownIsOpen">
-                        <img src="https://ui-avatars.com/api/?name={% if request.cookies.get('session') %}User{% else %}Guest{% endif %}&background=6366f1&color=fff&size=32"
-                            class="w-8 h-8 rounded-full" alt="avatar" aria-hidden="true" />
+                            class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''"
+                            aria-haspopup="true"
+                            x-on:click="userDropdownIsOpen = !userDropdownIsOpen"
+                            x-bind:aria-expanded="userDropdownIsOpen">
+                        {% if user is defined and user %}
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture }}"
+                                     class="w-8 h-8 rounded-full object-cover"
+                                     alt="{{ user.full_name }}"
+                                     aria-hidden="true" />
+                            {% else %}
+                                <img src="https://ui-avatars.com/api/?name={{ user.full_name|urlencode }}&background=6366f1&color=fff&size=32"
+                                     class="w-8 h-8 rounded-full"
+                                     alt="{{ user.full_name }}"
+                                     aria-hidden="true" />
+                            {% endif %}
+                        {% else %}
+                            <img src="https://ui-avatars.com/api/?name=Guest&background=6366f1&color=fff&size=32"
+                                 class="w-8 h-8 rounded-full"
+                                 alt="Guest"
+                                 aria-hidden="true" />
+                        {% endif %}
                         <div class="hidden sm:block text-left">
                             <span class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {% if request.cookies.get("session") %}
-                                {{ _("User") }}
+                                {% if user is defined and user %}
+                                    {{ user.full_name }}
+                                {% elif request.cookies.get("session") %}
+                                    {{ _("User") }}
                                 {% else %}
-                                {{ _("Guest") }}
+                                    {{ _("Guest") }}
                                 {% endif %}
                             </span>
-                            <span class="block text-xs text-gray-600 dark:text-gray-400" aria-hidden="true">
-                                @
-                                {% if request.cookies.get("session") %}
-                                user
+                            <span class="block text-xs text-gray-600 dark:text-gray-400"
+                                  aria-hidden="true">
+                                {% if user is defined and user %}
+                                    {{ user.email }}
+                                {% elif request.cookies.get("session") %}
+                                    @user
                                 {% else %}
-                                guest
+                                    @guest
                                 {% endif %}
                             </span>
                             <span class="sr-only">profile settings</span>
                         </div>
                     </button>
                     <!-- menu -->
-                    <div x-cloak x-show="userDropdownIsOpen"
-                        class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
-                        role="menu" x-on:click.outside="userDropdownIsOpen = false"
-                        x-on:keydown.down.prevent="$focus.wrap().next()"
-                        x-on:keydown.up.prevent="$focus.wrap().previous()" x-transition="" x-trap="userDropdownIsOpen">
+                    <div x-cloak
+                         x-show="userDropdownIsOpen"
+                         class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
+                         role="menu"
+                         x-on:click.outside="userDropdownIsOpen = false"
+                         x-on:keydown.down.prevent="$focus.wrap().next()"
+                         x-on:keydown.up.prevent="$focus.wrap().previous()"
+                         x-transition=""
+                         x-trap="userDropdownIsOpen">
                         <!-- Profile Section -->
                         <div class="py-1">
-                            <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path
-                                        d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                            <a href="/profile"
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
                                 </svg>
                                 <span>{{ _("Profile") }}</span>
                             </a>
@@ -74,47 +106,47 @@
                         <!-- Settings & Payments Section -->
                         <div class="py-1 border-t border-gray-200 dark:border-gray-700">
                             <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                        clip-rule="evenodd" />
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
                                 </svg>
                                 <span>{{ _("Settings") }}</span>
                             </a>
                             <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z"
-                                        clip-rule="evenodd" />
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd" />
                                 </svg>
                                 <span>{{ _("Payments") }}</span>
                             </a>
                         </div>
-
                         <!-- Sign Out Section -->
                         {% if request.cookies.get("session") %}
-                        <div class="py-1 border-t border-gray-200 dark:border-gray-700">
-                            <a href="/auth/logout"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
-                                        clip-rule="evenodd" />
-                                    <path fill-rule="evenodd"
-                                        d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>{{ _("Sign out") }}</span>
-                            </a>
-                        </div>
+                            <div class="py-1 border-t border-gray-200 dark:border-gray-700">
+                                <a href="/auth/logout"
+                                   class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                   role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ _("Sign out") }}</span>
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
