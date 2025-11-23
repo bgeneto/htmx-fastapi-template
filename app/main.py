@@ -16,15 +16,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-# Import fastapi-users components
-from .users import (
-    fastapi_users,
-    auth_backend,
-    require_admin,
-    require_user,
-    require_moderator,
+# Keep legacy auth for magic links
+from .auth import (
+    COOKIE_NAME,
+    create_session_cookie,
 )
-
 from .config import settings
 from .db import init_db
 from .email import (
@@ -51,17 +47,17 @@ from .response_helpers import ResponseHelper
 from .schemas import (
     ContactCreate,
     LoginRequest,
-    UserRegister,
-    UserRead,
     UserCreate,
+    UserRead,
+    UserRegister,
     UserUpdate,
 )
 
-# Keep legacy auth for magic links
-from .auth import (
-    COOKIE_NAME,
-    create_session_cookie,
-    get_current_user,
+# Import fastapi-users components
+from .users import (
+    auth_backend,
+    fastapi_users,
+    require_admin,
 )
 
 logger = get_logger("main")
@@ -70,16 +66,16 @@ logger = get_logger("main")
 def get_allowed_hosts() -> list[str]:
     """
     Extract allowed hosts from APP_BASE_URL for TrustedHostMiddleware.
-    
+
     Returns a list containing the domain and common variations.
     """
     parsed = urlparse(settings.APP_BASE_URL)
     hosts = []
-    
+
     # Add the main hostname
     if parsed.hostname:
         hosts.append(parsed.hostname)
-        
+
         # Add wildcard subdomain variant only for real domains (not localhost or IPs)
         is_ip = False
         try:
@@ -89,34 +85,34 @@ def get_allowed_hosts() -> list[str]:
         except ValueError:
             # Not an IP address
             pass
-        
+
         if not (parsed.hostname.startswith("localhost") or is_ip):
             hosts.append(f"*.{parsed.hostname}")
-    
+
     # Always allow localhost for development (use set to avoid duplicates)
     localhost_hosts = {"localhost", "127.0.0.1"}
     for host in localhost_hosts:
         if host not in hosts:
             hosts.append(host)
-    
+
     return hosts
 
 
 def get_cors_origins() -> list[str]:
     """
     Get allowed CORS origins from APP_BASE_URL.
-    
+
     Returns a list containing the full URL.
     """
     origins = [settings.APP_BASE_URL]
-    
+
     # Allow localhost for development
     if not settings.APP_BASE_URL.startswith("http://localhost"):
         origins.extend([
             "http://localhost:8000",
             "http://127.0.0.1:8000",
         ])
-    
+
     return origins
 
 
@@ -176,12 +172,12 @@ app.add_middleware(
 )
 
 # NOTE: GZipMiddleware is explicitly disabled because we're using a reverse proxy
-# (like Nginx or Caddy) that handles compression more efficiently. 
+# (like Nginx or Caddy) that handles compression more efficiently.
 # If you're not using a reverse proxy, you can uncomment the line below:
 # app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Include fastapi-users routers for auth
-# Note: We keep our custom magic link authentication alongside fastapi-users
+# NOTE: We keep our custom magic link authentication alongside fastapi-users
 # fastapi-users provides: /auth/login (JWT), /auth/logout, /auth/register
 # We also keep our custom routes for magic link and admin login
 app.include_router(
@@ -352,7 +348,7 @@ async def not_found_handler(request: Request, exc):
 async def internal_error_handler(request: Request, exc):
     """Handle 500 errors with custom template for HTML requests."""
     logger.error(f"Internal server error: {exc}")
-    
+
     # Check if it's an API request
     if request.url.path.startswith("/api/"):
         return JSONResponse(
@@ -371,7 +367,7 @@ async def internal_error_handler(request: Request, exc):
 async def general_exception_handler(request: Request, exc: Exception):
     """Catch-all exception handler for unhandled errors."""
     logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    
+
     # Check if it's an API request
     if request.url.path.startswith("/api/"):
         return JSONResponse(

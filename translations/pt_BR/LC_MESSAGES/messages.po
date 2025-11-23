@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-22 20:56-0300\n"
+"POT-Creation-Date: 2025-11-22 21:02-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,95 +37,95 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:485 app/main.py:982 templates/pages/admin/index.html:21
+#: app/main.py:481 app/main.py:978 templates/pages/admin/index.html:21
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:488 templates/components/_form_alpine.html:28
+#: app/main.py:484 templates/components/_form_alpine.html:28
 #: templates/pages/admin/index.html:22
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:495 templates/components/_form_alpine.html:53
+#: app/main.py:491 templates/components/_form_alpine.html:53
 #: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:502 templates/components/_form_alpine.html:79
+#: app/main.py:498 templates/components/_form_alpine.html:79
 #: templates/pages/admin/index.html:24
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:508
+#: app/main.py:504
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:513
+#: app/main.py:509
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:588
+#: app/main.py:584
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:596
+#: app/main.py:592
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:615 templates/pages/auth/register.html:162
+#: app/main.py:611 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:649
+#: app/main.py:645
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:685
+#: app/main.py:681
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:812
+#: app/main.py:808
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:985 templates/pages/books.html:42
+#: app/main.py:981 templates/pages/books.html:42
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:992 templates/pages/books.html:43
+#: app/main.py:988 templates/pages/books.html:43
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:999 templates/pages/admin/cars.html:43
+#: app/main.py:995 templates/pages/admin/cars.html:43
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1004 templates/pages/books.html:45
+#: app/main.py:1000 templates/pages/books.html:45
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1007 templates/pages/books.html:46
+#: app/main.py:1003 templates/pages/books.html:46
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1134
+#: app/main.py:1130
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1173
+#: app/main.py:1169
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1209
+#: app/main.py:1205
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
