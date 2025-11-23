@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 16:25-0300\n"
+"POT-Creation-Date: 2025-11-23 17:08-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -33,176 +33,280 @@ msgstr "Já existe um usuário com este e-mail"
 msgid "You cannot deactivate your own account"
 msgstr "Você não pode desativar sua própria conta"
 
-#: app/auth_strategies.py:42 app/main.py:843 app/main.py:853
+#: app/auth_strategies.py:42 app/main.py:913 app/main.py:923
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
-#: app/auth_strategies.py:66 app/auth_strategies.py:103
+#: app/auth_strategies.py:66
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:541 app/main.py:1411 templates/pages/admin/index.html:15
+#: app/email.py:300
+#, fuzzy
+msgid "Your verification code"
+msgstr "Código de Verificação"
+
+#: app/email.py:307
+#, fuzzy
+msgid "Verification Required"
+msgstr "Código de verificação necessário"
+
+#: app/email.py:309 app/email.py:370
+msgid "Hi"
+msgstr ""
+
+#: app/email.py:329 templates/pages/auth/verify_otp.html:74
+msgid "Important:"
+msgstr "Importante:"
+
+#: app/email.py:339 templates/pages/auth/verify_otp.html:78
+msgid "Never share this code with anyone"
+msgstr "Nunca compartilhe este código com ninguém"
+
+#: app/email.py:344
+#, fuzzy
+msgid "Enter the code exactly as shown"
+msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
+
+#: app/email.py:353
+#, fuzzy
+msgid "Security tip:"
+msgstr "Segurança"
+
+#: app/email.py:353
+msgid ""
+"If you didn't request this verification code, you can safely ignore this "
+"email. Your account remains secure."
+msgstr ""
+
+#: app/email.py:364
+#, fuzzy
+msgid "your verification code is:"
+msgstr "Código de Verificação"
+
+#: app/email.py:366
+#, fuzzy
+msgid "Never share this code."
+msgstr "Nunca compartilhe este código com ninguém"
+
+#: app/email.py:367
+#, fuzzy
+msgid "Verification code:"
+msgstr "Código de Verificação"
+
+#: app/email.py:423
+#, fuzzy
+msgid "Your account has been approved"
+msgstr "Sua conta está aguardando aprovação do administrador."
+
+#: app/email.py:429
+msgid "Account Approved! 🎉"
+msgstr ""
+
+#: app/email.py:431
+#, fuzzy
+msgid "Congratulations"
+msgstr "Contatos"
+
+#: app/email.py:439
+msgid "Get Started Now"
+msgstr ""
+
+#: app/email.py:446
+msgid "You can now access all features by entering your email address at:"
+msgstr ""
+
+#: app/email.py:452 templates/pages/auth/pending_approval.html:61
+msgid "What happens next?"
+msgstr ""
+
+#: app/email.py:453
+msgid ""
+"You can now request magic links for passwordless login, upload files, and"
+" access your account securely. We use passwordless authentication for "
+"your security - no passwords needed!"
+msgstr ""
+
+#: app/email.py:463
+msgid "Great news"
+msgstr ""
+
+#: app/email.py:465
+msgid "Get started"
+msgstr ""
+
+#: app/email.py:466
+msgid "Login to your account"
+msgstr ""
+
+#: app/main.py:557 app/main.py:1481 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:544 templates/components/_contact_form.html:36
+#: app/main.py:560 templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:551 templates/components/_contact_form.html:75
-#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:39
-#: templates/pages/auth/login.html:135 templates/pages/auth/register.html:38
+#: app/main.py:567 templates/components/_contact_form.html:75
+#: templates/pages/admin/index.html:17 templates/pages/admin/users.html:78
+#: templates/pages/auth/login.html:39 templates/pages/auth/login.html:135
+#: templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:558 templates/components/_contact_form.html:113
+#: app/main.py:574 templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:564
+#: app/main.py:580
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:569
+#: app/main.py:585
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:644
+#: app/main.py:660
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:652
+#: app/main.py:668
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:672 templates/pages/auth/register.html:151
+#: app/main.py:688 templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:711
+#: app/main.py:727
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:786
+#: app/main.py:767
+#, fuzzy
+msgid "Check your email for the login link"
+msgstr "Insira seu e-mail e senha para entrar"
+
+#: app/main.py:814
 msgid "Invalid or expired verification code. Please try again."
 msgstr "Código de verificação inválido ou expirado. Por favor, tente novamente. "
 
-#: app/main.py:799
+#: app/main.py:827
 msgid "User not found or inactive. Please contact support."
 msgstr "Usuário não encontrado ou inativo. Por favor, contate o suporte."
 
-#: app/main.py:876 templates/pages/admin/login.html:208
+#: app/main.py:946 templates/pages/admin/login.html:208
 msgid "Invalid email or password"
 msgstr "E-mail ou senha inválidos"
 
-#: app/main.py:907
+#: app/main.py:977
 msgid "Login failed. Please check your credentials and try again."
 msgstr "Login falhou. Por favor, verifique suas credenciais e tente novamente."
 
-#: app/main.py:925
+#: app/main.py:995
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:1021 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
-#: app/schemas.py:118 app/schemas.py:153 app/strategies.py:15
-#: templates/components/_contact_form.html:198
+#: app/main.py:1091 app/schemas.py:22 app/schemas.py:65 app/schemas.py:88
+#: app/schemas.py:105 app/schemas.py:134 app/schemas.py:169
+#: app/strategies.py:15 templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149 templates/pages/profile.html:437
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1029
+#: app/main.py:1099
 msgid "Invalid email address"
 msgstr "E-mail inválido"
 
-#: app/main.py:1035
+#: app/main.py:1105
 msgid "Email already in use by another account"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:1045
+#: app/main.py:1115
 msgid "Phone number too long (max 20 characters)"
 msgstr "O número de telefone deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1055 templates/pages/profile.html:503
+#: app/main.py:1125 templates/pages/profile.html:503
 msgid "Invalid file type. Please upload PNG, JPG, or WebP image."
 msgstr "Tipo de arquivo inválido. Por favor, envie uma imagem PNG, JPG ou WebP."
 
-#: app/main.py:1062 templates/pages/profile.html:509
+#: app/main.py:1132 templates/pages/profile.html:509
 msgid "File too large. Maximum size is 5MB."
 msgstr "Arquivo muito grande. Tamanho máximo de 5MB."
 
-#: app/main.py:1095 templates/pages/profile.html:575
+#: app/main.py:1165 templates/pages/profile.html:575
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: app/main.py:1125 app/main.py:1141 templates/pages/profile.html:631
+#: app/main.py:1195 app/main.py:1211 templates/pages/profile.html:631
 msgid "Password change failed"
 msgstr "Falha na alteração de senha"
 
-#: app/main.py:1132
+#: app/main.py:1202
 msgid "No password set for this account. Use magic link login."
 msgstr "Senha não definida para esta conta. Use login por link mágico."
 
-#: app/main.py:1142
+#: app/main.py:1212
 msgid "Current password is incorrect"
 msgstr "Senha atual incorreta"
 
-#: app/main.py:1152 templates/pages/profile.html:619
+#: app/main.py:1222 templates/pages/profile.html:619
 msgid "Password changed successfully"
 msgstr "Senha alterada com sucesso"
 
-#: app/main.py:1236 templates/pages/admin/login.html:40
+#: app/main.py:1306 templates/pages/admin/login.html:40
 #: templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1414 templates/pages/books.html:37
+#: app/main.py:1484 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1421 templates/pages/books.html:38
+#: app/main.py:1491 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1428
+#: app/main.py:1498
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/main.py:1435 templates/pages/admin/cars.html:38
+#: app/main.py:1505 templates/pages/admin/cars.html:38
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1441 templates/pages/admin/cars.html:39
+#: app/main.py:1511 templates/pages/admin/cars.html:39
 #: templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
 
-#: app/main.py:1445 templates/pages/books.html:40
+#: app/main.py:1515 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1448 templates/pages/books.html:41
+#: app/main.py:1518 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1575
+#: app/main.py:1645
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1614
+#: app/main.py:1684
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1650
+#: app/main.py:1720
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -227,7 +331,7 @@ msgstr "Erro interno do servidor"
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
-#: app/schemas.py:168 templates/pages/profile.html:441
+#: app/schemas.py:184 templates/pages/profile.html:441
 msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
@@ -361,6 +465,7 @@ msgstr "Adicionar"
 
 #: templates/components/_datagrid_grid.html:104
 #: templates/components/_datagrid_grid.html:274
+#: templates/pages/admin/users.html:189
 msgid "Edit"
 msgstr "Editar"
 
@@ -431,6 +536,7 @@ msgstr ""
 "permanentemente."
 
 #: templates/components/_datagrid_grid.html:368
+#: templates/pages/admin/users.html:117 templates/pages/admin/users.html:237
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -452,7 +558,8 @@ msgstr "Sair"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/components/_sidebar.html:68
+#: templates/components/_sidebar.html:68 templates/pages/admin/users.html:97
+#: templates/pages/admin/users.html:216
 msgid "Admin"
 msgstr "Admin"
 
@@ -481,25 +588,25 @@ msgstr "Livros"
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
-#: templates/components/_top_navbar.html:64
-msgid "Guest"
-msgstr "Convidado"
-
-#: templates/components/_top_navbar.html:100 templates/pages/profile.html:2
+#: templates/components/_top_navbar.html:88 templates/pages/profile.html:2
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:115
+#: templates/components/_top_navbar.html:103
 msgid "Settings"
 msgstr "Configurações"
 
-#: templates/components/_top_navbar.html:127
+#: templates/components/_top_navbar.html:115
 msgid "Payments"
 msgstr "Pagamentos"
 
-#: templates/components/_top_navbar.html:144
+#: templates/components/_top_navbar.html:131
 msgid "Sign out"
 msgstr "Sair"
+
+#: templates/components/_top_navbar.html:140 templates/errors/404.html:57
+msgid "Login"
+msgstr "Entrar"
 
 #: templates/errors/404.html:2 templates/errors/404.html:20
 msgid "Page Not Found"
@@ -520,10 +627,6 @@ msgstr "Voltar"
 #: templates/errors/404.html:50
 msgid "Here are some helpful links instead:"
 msgstr "Aqui estão alguns links úteis:"
-
-#: templates/errors/404.html:57
-msgid "Login"
-msgstr "Entrar"
 
 #: templates/errors/5xx.html:2 templates/errors/5xx.html:22
 msgid "Unexpected Error"
@@ -555,7 +658,8 @@ msgstr "Voltar ao Início"
 msgid "Book"
 msgstr "Livro"
 
-#: templates/pages/admin/cars.html:40 templates/pages/books.html:42
+#: templates/pages/admin/cars.html:40 templates/pages/admin/users.html:144
+#: templates/pages/books.html:42
 msgid "Actions"
 msgstr "Ação"
 
@@ -685,7 +789,8 @@ msgstr "Informações Pessoais"
 msgid "Security"
 msgstr "Segurança"
 
-#: templates/pages/auth/register.html:65 templates/pages/profile.html:100
+#: templates/pages/admin/users.html:85 templates/pages/auth/register.html:65
+#: templates/pages/profile.html:100
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -741,11 +846,11 @@ msgstr "Membro Desde"
 msgid "Account Status"
 msgstr "Status da Conta"
 
-#: templates/pages/profile.html:382
+#: templates/pages/admin/users.html:170 templates/pages/profile.html:382
 msgid "Active"
 msgstr "Ativo"
 
-#: templates/pages/profile.html:384
+#: templates/pages/admin/users.html:170 templates/pages/profile.html:384
 msgid "Inactive"
 msgstr "Inativo"
 
@@ -837,7 +942,7 @@ msgstr "ex: XLE"
 msgid "Admin - Contacts"
 msgstr "Admin - Contatos"
 
-#: templates/pages/admin/index.html:19
+#: templates/pages/admin/index.html:19 templates/pages/admin/users.html:141
 msgid "Created"
 msgstr "Criado"
 
@@ -867,6 +972,99 @@ msgstr "Senha"
 #: templates/pages/auth/verify_otp.html:265
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
+
+#: templates/pages/admin/users.html:3 templates/pages/admin/users.html:12
+msgid "User Management"
+msgstr ""
+
+#: templates/pages/admin/users.html:13
+msgid "Manage user accounts and permissions"
+msgstr ""
+
+#: templates/pages/admin/users.html:22
+#, fuzzy
+msgid "Back to Contacts"
+msgstr "Voltar ao Início"
+
+#: templates/pages/admin/users.html:42
+#, fuzzy
+msgid "user(s) pending approval"
+msgstr "O usuário não está aguardando aprovação"
+
+#: templates/pages/admin/users.html:45
+msgid "Review and approve new registrations below."
+msgstr ""
+
+#: templates/pages/admin/users.html:59 templates/pages/admin/users.html:72
+msgid "Create New User"
+msgstr ""
+
+#: templates/pages/admin/users.html:92 templates/pages/admin/users.html:135
+#: templates/pages/admin/users.html:211
+#, fuzzy
+msgid "Role"
+msgstr "Perfil"
+
+#: templates/pages/admin/users.html:95 templates/pages/admin/users.html:132
+#: templates/pages/admin/users.html:214
+#, fuzzy
+msgid "User"
+msgstr "Usuários"
+
+#: templates/pages/admin/users.html:96 templates/pages/admin/users.html:215
+msgid "Moderator"
+msgstr ""
+
+#: templates/pages/admin/users.html:103
+msgid "Password (optional)"
+msgstr ""
+
+#: templates/pages/admin/users.html:105
+msgid "Leave empty for magic link only"
+msgstr ""
+
+#: templates/pages/admin/users.html:113
+#, fuzzy
+msgid "Creating..."
+msgstr "Alterando..."
+
+#: templates/pages/admin/users.html:113
+#, fuzzy
+msgid "Create User"
+msgstr "Criado"
+
+#: templates/pages/admin/users.html:138
+#, fuzzy
+msgid "Status"
+msgstr "Entre em contato"
+
+#: templates/pages/admin/users.html:181
+msgid "Approve"
+msgstr ""
+
+#: templates/pages/admin/users.html:206
+#, fuzzy
+msgid "Edit User"
+msgstr "Editar"
+
+#: templates/pages/admin/users.html:225
+#, fuzzy
+msgid "Active Account"
+msgstr "Criar Conta"
+
+#: templates/pages/admin/users.html:233
+#, fuzzy
+msgid "Updating..."
+msgstr "Salvando..."
+
+#: templates/pages/admin/users.html:233
+#, fuzzy
+msgid "Update User"
+msgstr "Atualização falhou"
+
+#: templates/pages/admin/users.html:276
+msgid "Approve this user ? "
+msgstr ""
 
 #: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
 msgid "Log In"
@@ -934,6 +1132,63 @@ msgstr "Não tem uma conta? Cadastre-se"
 msgid "Password is required"
 msgstr "A Senha é obrigatória"
 
+#: templates/pages/auth/pending_approval.html:2
+#, fuzzy
+msgid "Account Pending Approval"
+msgstr "O usuário não está aguardando aprovação"
+
+#: templates/pages/auth/pending_approval.html:22
+#, fuzzy
+msgid "Email Verified Successfully!"
+msgstr "E-mail Verificado"
+
+#: templates/pages/auth/pending_approval.html:38
+#, fuzzy
+msgid "Account Pending Admin Approval"
+msgstr "Sua conta está aguardando aprovação do administrador."
+
+#: templates/pages/auth/pending_approval.html:41
+#, fuzzy
+msgid "Your account for"
+msgstr "Informações da Conta"
+
+#: templates/pages/auth/pending_approval.html:41
+msgid "has been created and your email has been verified."
+msgstr ""
+
+#: templates/pages/auth/pending_approval.html:44
+msgid ""
+"However, an administrator needs to approve your account before you can "
+"log in. You will receive an email notification once your account has been"
+" approved."
+msgstr ""
+
+#: templates/pages/auth/pending_approval.html:68
+msgid "An administrator will review your account request"
+msgstr ""
+
+#: templates/pages/auth/pending_approval.html:74
+msgid "You will receive an email notification when your account is approved"
+msgstr ""
+
+#: templates/pages/auth/pending_approval.html:80
+msgid "Once approved, you can log in using the same email address"
+msgstr ""
+
+#: templates/pages/auth/pending_approval.html:97
+#, fuzzy
+msgid "Return to Home"
+msgstr "Voltar ao Início"
+
+#: templates/pages/auth/pending_approval.html:101
+#: templates/pages/auth/verify_otp.html:111
+msgid "Back to Login"
+msgstr "Voltar ao Início"
+
+#: templates/pages/auth/pending_approval.html:107
+msgid "Questions? Contact support at"
+msgstr ""
+
 #: templates/pages/auth/register.html:3 templates/pages/auth/register.html:115
 msgid "Register"
 msgstr "Cadastrar"
@@ -984,10 +1239,6 @@ msgstr "Enviamos um código de 6 dígitos para"
 msgid "Verification Code"
 msgstr "Código de Verificação"
 
-#: templates/pages/auth/verify_otp.html:74
-msgid "Important:"
-msgstr "Importante:"
-
 #: templates/pages/auth/verify_otp.html:76
 msgid "Enter the 6-digit code exactly as shown"
 msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
@@ -999,10 +1250,6 @@ msgstr "O código expirará em"
 #: templates/pages/auth/verify_otp.html:77
 msgid "minutes"
 msgstr "minutos"
-
-#: templates/pages/auth/verify_otp.html:78
-msgid "Never share this code with anyone"
-msgstr "Nunca compartilhe este código com ninguém"
 
 #: templates/pages/auth/verify_otp.html:97
 msgid "Verifying..."
@@ -1019,10 +1266,6 @@ msgstr "Não recebeu o código?"
 #: templates/pages/auth/verify_otp.html:106
 msgid "Resend Code"
 msgstr "Reenviar Código"
-
-#: templates/pages/auth/verify_otp.html:111
-msgid "Back to Login"
-msgstr "Voltar ao Início"
 
 #: templates/pages/auth/verify_otp.html:135
 msgid "Verification code is required"
@@ -1270,4 +1513,7 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
 #~ msgid "Enter Verification Code"
 #~ msgstr "Digite o Código de Verificação"
+
+#~ msgid "Guest"
+#~ msgstr "Convidado"
 

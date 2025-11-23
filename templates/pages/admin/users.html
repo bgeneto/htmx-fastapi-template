@@ -252,7 +252,7 @@
             showEditForm: false,
             creatingUser: false,
             updatingUser: false,
-            pendingCount: {{ users | selectattr('role.value', 'equalto', 'pending') | list | length }
+            pendingCount: {{ users | selectattr('role.value', 'equalto', 'pending') | list | length }}
     },
 
     newUser: {
