@@ -156,11 +156,35 @@ async def lifespan(app: FastAPI):
             from .repository import seed_books
 
             await seed_books(session, count=100)
+
+        # Start background email worker
+        from .email_worker import email_worker
+        import asyncio
+
+        # Start email worker in background
+        asyncio.create_task(email_worker.start())
+        logger.info("Email worker started")
+
     except Exception as exc:
         logger.error("Startup failed: {}", exc)
         raise
+
     yield
-    # Shutdown (if needed in the future)
+
+    # Shutdown
+    try:
+        # Stop email worker
+        from .email_worker import email_worker
+        await email_worker.stop()
+        logger.info("Email worker stopped")
+
+        # Close Redis connections
+        from .redis_utils import close_redis
+        await close_redis()
+        logger.info("Redis connections closed")
+
+    except Exception as exc:
+        logger.error("Shutdown error: {}", exc)
 
 
 class DateTimeJSONEncoder(JSONEncoder):
@@ -255,7 +279,105 @@ app.include_router(
     tags=["auth"],
 )
 
-# Include OTP authentication router
+# Custom OTP endpoints that use our Resend integration
+from .otp_config import request_otp_with_resend, verify_otp_with_resend
+
+@app.post("/auth/otp/request")
+async def custom_otp_request(request: Request):
+    """Custom OTP request endpoint that uses Resend instead of SMTP"""
+    form = await request.form()
+    email = form.get("email", "").strip().lower()
+
+    if not email:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": "Email is required"}
+        )
+
+    # Apply rate limiting
+    from .redis_utils import auth_rate_limiter
+    rate_result = await auth_rate_limiter.is_allowed(
+        identifier=f"otp_request:{request.client.host}",
+        limit=5,  # 5 requests per window
+        window=300  # 5 minute window
+    )
+
+    if not rate_result["allowed"]:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Too many OTP requests. Please try again later."}
+        )
+
+    result = await request_otp_with_resend(email)
+
+    if result["status"] == "success":
+        return JSONResponse(
+            status_code=200,
+            content={"detail": "OTP code sent successfully"}
+        )
+    else:
+        return JSONResponse(
+            status_code=500,
+            content={"detail": result["message"]}
+        )
+
+@app.post("/auth/otp/verify")
+async def custom_otp_verify(request: Request):
+    """Custom OTP verification endpoint that works with Resend-sent codes"""
+    form = await request.form()
+    email = form.get("email", "").strip().lower()
+    otp_code = form.get("otp_code", "").strip()
+
+    if not email or not otp_code:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": "Email and OTP code are required"}
+        )
+
+    # Apply rate limiting
+    from .redis_utils import auth_rate_limiter
+    rate_result = await auth_rate_limiter.is_allowed(
+        identifier=f"otp_verify:{request.client.host}",
+        limit=10,  # 10 attempts per window
+        window=300  # 5 minute window
+    )
+
+    if not rate_result["allowed"]:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Too many verification attempts. Please try again later."}
+        )
+
+    result = await verify_otp_with_resend(email, otp_code)
+
+    if result["status"] == "success":
+        # Set JWT token in cookie compatible with fastapi-users
+        response = JSONResponse(
+            status_code=200,
+            content={
+                "detail": "Login successful",
+                "access_token": result["access_token"],
+                "token_type": result["token_type"]
+            }
+        )
+
+        from .config import settings
+        response.set_cookie(
+            key="fastapiusersauth",
+            value=f"{result['token_type']} {result['access_token']}",
+            max_age=settings.SESSION_EXPIRY_DAYS * 24 * 60 * 60,
+            secure=settings.COOKIE_SECURE,
+            httponly=True,
+            samesite="lax"
+        )
+        return response
+    else:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": result["message"]}
+        )
+
+# Include OTP authentication router (for refresh tokens and other functionality)
 from .otp_config import otp_router
 
 app.include_router(
@@ -294,15 +416,18 @@ templates.env.install_gettext_callables(  # type: ignore[attr-defined]
 
 # Global template context for all templates
 def get_template_context():
-    """Get global context for all templates."""
-    return {
-        "enable_i18n": settings.ENABLE_I18N,
-        "settings": {
-            "LOGIN_METHOD": settings.LOGIN_METHOD,
-            "OTP_EXPIRY_MINUTES": settings.OTP_EXPIRY_MINUTES,
-            "MAGIC_LINK_EXPIRY_MINUTES": settings.MAGIC_LINK_EXPIRY_MINUTES,
+    """Get global context for all templates with caching."""
+    # This data changes rarely, so we can use module-level caching
+    if not hasattr(get_template_context, '_cached_context'):
+        get_template_context._cached_context = {
+            "enable_i18n": settings.ENABLE_I18N,
+            "settings": {
+                "LOGIN_METHOD": settings.LOGIN_METHOD,
+                "OTP_EXPIRY_MINUTES": settings.OTP_EXPIRY_MINUTES,
+                "MAGIC_LINK_EXPIRY_MINUTES": settings.MAGIC_LINK_EXPIRY_MINUTES,
+            }
         }
-    }
+    return get_template_context._cached_context
 
 
 # Add global context function to templates
@@ -606,8 +731,31 @@ async def get_contacts_grid(
     session: AsyncSession = Depends(get_session),
 ):
     """API endpoint for contacts data grid with server-side pagination, filtering, and sorting"""
+    # Create cache key from request parameters
+    from .redis_utils import api_cache
+    import hashlib
+    import json
+
+    # Generate cache key from query parameters
+    query_params = dict(request.query_params)
+    cache_key_data = {
+        "endpoint": "contacts",
+        "params": query_params,
+        "page": page,
+        "limit": limit,
+        "sort": sort,
+        "dir": dir
+    }
+    cache_key = f"contacts_grid:{hashlib.md5(json.dumps(cache_key_data, sort_keys=True).encode()).hexdigest()}"
+
+    # Try to get from cache first
+    cached_result = await api_cache.get(cache_key)
+    if cached_result:
+        return cached_result
+
+    # If not in cache, execute the query
     grid = GridEngine(session, Contact)
-    return await grid.get_page(
+    result = await grid.get_page(
         request=request,
         page=page,
         limit=limit,
@@ -615,6 +763,11 @@ async def get_contacts_grid(
         sort_dir=dir,
         search_fields=["name", "email"],
     )
+
+    # Cache the result for 5 minutes (300 seconds)
+    await api_cache.set(cache_key, result, ttl=300)
+
+    return result
 
 
 @app.get("/api/admin/users", response_model=PaginatedResponse[User])
@@ -628,8 +781,31 @@ async def get_users_grid(
     session: AsyncSession = Depends(get_session),
 ):
     """API endpoint for users data grid (admin only)"""
+    # Create cache key from request parameters
+    from .redis_utils import api_cache
+    import hashlib
+    import json
+
+    # Generate cache key from query parameters
+    query_params = dict(request.query_params)
+    cache_key_data = {
+        "endpoint": "admin_users",
+        "params": query_params,
+        "page": page,
+        "limit": limit,
+        "sort": sort,
+        "dir": dir
+    }
+    cache_key = f"admin_users_grid:{hashlib.md5(json.dumps(cache_key_data, sort_keys=True).encode()).hexdigest()}"
+
+    # Try to get from cache first
+    cached_result = await api_cache.get(cache_key)
+    if cached_result:
+        return cached_result
+
+    # If not in cache, execute the query
     grid = GridEngine(session, User)
-    return await grid.get_page(
+    result = await grid.get_page(
         request=request,
         page=page,
         limit=limit,
@@ -637,6 +813,11 @@ async def get_users_grid(
         sort_dir=dir,
         search_fields=["email", "full_name"],
     )
+
+    # Cache the result for 3 minutes (180 seconds) - user data changes more frequently
+    await api_cache.set(cache_key, result, ttl=180)
+
+    return result
 
 
 # ============= Authentication Routes =============
@@ -659,6 +840,21 @@ async def register(
 ):
     """Handle user self-registration (creates pending user)"""
     from .response_helpers import FormResponseHelper
+
+    # Apply rate limiting
+    from .redis_utils import auth_rate_limiter
+    rate_result = await auth_rate_limiter.is_allowed(
+        identifier=f"register:{request.client.host}",
+        limit=3,  # 3 registrations per hour
+        window=3600  # 1 hour window
+    )
+
+    if not rate_result["allowed"]:
+        return FormResponseHelper.error_response(
+            request=request,
+            error_message=_("Too many registration attempts. Please try again later."),
+            form_data={"email": email, "full_name": full_name}
+        )
 
     form_data = {"email": email, "full_name": full_name}
 
@@ -719,6 +915,21 @@ async def login(
 ):
     """Request magic link for passwordless login"""
     from .response_helpers import FormResponseHelper
+
+    # Apply rate limiting
+    from .redis_utils import auth_rate_limiter
+    rate_result = await auth_rate_limiter.is_allowed(
+        identifier=f"login:{request.client.host}",
+        limit=10,  # 10 login attempts per 5 minutes
+        window=300  # 5 minute window
+    )
+
+    if not rate_result["allowed"]:
+        return FormResponseHelper.error_response(
+            request=request,
+            error_message=_("Too many login attempts. Please try again later."),
+            form_data={"email": email}
+        )
 
     form_data = {"email": email}
 
@@ -1145,8 +1356,31 @@ async def get_admin_cars(
     session: AsyncSession = Depends(get_session),
 ):
     """API endpoint for cars grid"""
+    # Create cache key from request parameters
+    from .redis_utils import api_cache
+    import hashlib
+    import json
+
+    # Generate cache key from query parameters
+    query_params = dict(request.query_params)
+    cache_key_data = {
+        "endpoint": "admin_cars",
+        "params": query_params,
+        "page": page,
+        "limit": limit,
+        "sort": sort,
+        "dir": dir
+    }
+    cache_key = f"admin_cars_grid:{hashlib.md5(json.dumps(cache_key_data, sort_keys=True).encode()).hexdigest()}"
+
+    # Try to get from cache first
+    cached_result = await api_cache.get(cache_key)
+    if cached_result:
+        return cached_result
+
+    # If not in cache, execute the query
     grid = GridEngine(session, Car)
-    return await grid.get_page(
+    result = await grid.get_page(
         request=request,
         page=page,
         limit=limit,
@@ -1154,6 +1388,11 @@ async def get_admin_cars(
         sort_dir=dir,
         search_fields=["make", "model", "version", "year", "price"],
     )
+
+    # Cache the result for 5 minutes (300 seconds)
+    await api_cache.set(cache_key, result, ttl=300)
+
+    return result
 
 
 @app.post("/api/admin/cars", response_model=Car)
@@ -1315,15 +1554,43 @@ async def get_books_grid(
     session: AsyncSession = Depends(get_session),
 ):
     """API endpoint for books grid - demonstrating auto-detection of search fields"""
+    # Create cache key from request parameters
+    from .redis_utils import api_cache
+    import hashlib
+    import json
+
+    # Generate cache key from query parameters
+    query_params = dict(request.query_params)
+    cache_key_data = {
+        "endpoint": "books",
+        "params": query_params,
+        "page": page,
+        "limit": limit,
+        "sort": sort,
+        "dir": dir
+    }
+    cache_key = f"books_grid:{hashlib.md5(json.dumps(cache_key_data, sort_keys=True).encode()).hexdigest()}"
+
+    # Try to get from cache first
+    cached_result = await api_cache.get(cache_key)
+    if cached_result:
+        return cached_result
+
+    # If not in cache, execute the query
     grid = GridEngine(session, Book)
     # Note: We do NOT pass search_fields here to test auto-detection!
-    return await grid.get_page(
+    result = await grid.get_page(
         request=request,
         page=page,
         limit=limit,
         sort_col=sort,
         sort_dir=dir,
     )
+
+    # Cache the result for 5 minutes (300 seconds)
+    await api_cache.set(cache_key, result, ttl=300)
+
+    return result
 
 
 @app.post("/api/books", response_model=Book)

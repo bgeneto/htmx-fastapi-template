@@ -33,7 +33,6 @@ class MagicLinkHandler:
         self, request: AuthenticationRequest
     ) -> Optional[AuthenticationResponse]:
         from .config import settings
-        from .email import send_magic_link
         from .repository import (
             create_login_token,
             get_user_by_email,
@@ -56,8 +55,9 @@ class MagicLinkHandler:
                 from urllib.parse import quote
                 magic_link += f"?next={quote(request.next_url)}"
 
-            # Send magic link email
-            await send_magic_link(user.email, user.full_name, magic_link)
+            # Queue magic link email for background processing
+            from .email_worker import queue_magic_link
+            await queue_magic_link(user.email, user.full_name, magic_link)
         else:
             # Log warning for non-existent/inactive user (for monitoring)
             pass

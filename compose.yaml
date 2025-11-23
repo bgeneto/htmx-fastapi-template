@@ -5,8 +5,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./db_data/:/app/db_data/:rw,cached
-    #ports:
-    #  - "8001:8000"
+    ports:
+      - "8001:8000"
     env_file:
       - .env
     healthcheck:

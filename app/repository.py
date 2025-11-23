@@ -95,9 +95,37 @@ async def create_user(
 
 
 async def get_user_by_email(session: AsyncSession, email: str) -> Optional[User]:
-    """Get user by email address"""
+    """Get user by email address with Redis caching."""
+    from .redis_utils import user_cache
+
+    # Try cache first
+    cache_key = f"user_by_email:{email.lower()}"
+    cached_user = await user_cache.get(cache_key)
+    if cached_user:
+        # Convert cached dict back to User object
+        user = User(**cached_user)
+        return user
+
+    # Cache miss - query database
     result = await session.exec(select(User).where(User.email == email.lower()))
-    return result.one_or_none()
+    user = result.one_or_none()
+
+    # Cache the result (if found)
+    if user:
+        user_dict = {
+            "id": user.id,
+            "email": user.email,
+            "full_name": user.full_name,
+            "is_active": user.is_active,
+            "is_superuser": user.is_superuser,
+            "role": user.role,
+            "hashed_password": user.hashed_password,
+            "created_at": user.created_at,
+            "updated_at": user.updated_at,
+        }
+        await user_cache.set(cache_key, user_dict)
+
+    return user
 
 
 async def get_user_by_id(session: AsyncSession, user_id: int) -> Optional[User]:
@@ -120,7 +148,9 @@ async def list_users(
 
 
 async def update_user(session: AsyncSession, user: User, payload: UserUpdate) -> User:
-    """Update user details"""
+    """Update user details with cache invalidation."""
+    from .redis_utils import user_cache
+
     if payload.full_name is not None:
         user.full_name = payload.full_name
     if payload.role is not None:
@@ -134,6 +164,11 @@ async def update_user(session: AsyncSession, user: User, payload: UserUpdate) ->
 
     await session.commit()
     await session.refresh(user)
+
+    # Invalidate user cache
+    cache_key = f"user_by_email:{user.email.lower()}"
+    await user_cache.delete(cache_key)
+
     logger.info(f"Updated user {user.email}")
     return user
 
