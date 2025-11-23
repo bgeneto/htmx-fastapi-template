@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 def kill_existing_processes():
-    """Kill any existing uvicorn processes that might be using port 8000"""
+    """Kill any existing processes that might be using port 8000"""
     import signal
 
     try:
@@ -21,12 +21,12 @@ def kill_existing_processes():
             timeout=5,
         )
         if result.returncode == 0 and result.stdout.strip():
-            # Found processes, extract PIDs and kill them
+            # Found processes, extract PIDs and kill them forcibly
             lines = result.stdout.strip().split("\n")[1:]  # Skip header
             pids = []
             for line in lines:
                 parts = line.split()
-                if len(parts) > 1 and parts[0] in ["COMMAND", "python", "uvicorn"]:
+                if len(parts) > 1:
                     try:
                         pid = int(parts[1])
                         pids.append(pid)
@@ -34,12 +34,10 @@ def kill_existing_processes():
                         continue
 
             if pids:
-                print(f"🔪 Killing existing processes on port 8000: {pids}")
+                print(f"🔪 Force killing existing processes on port 8000: {pids}")
                 for pid in pids:
                     try:
-                        os.kill(pid, signal.SIGTERM)
-                        # Give it a moment to terminate gracefully
-                        subprocess.run(["sleep", "1"], capture_output=True)
+                        os.kill(pid, signal.SIGKILL)  # Use SIGKILL for forceful termination
                     except ProcessLookupError:
                         pass  # Process already gone
                     except OSError as e:
@@ -48,27 +46,26 @@ def kill_existing_processes():
         # lsof not available or timeout, try alternative methods
         try:
             # Try pkill as fallback
-            subprocess.run(["pkill", "-f", "uvicorn.*app.main"], capture_output=True)
+            subprocess.run(["pkill", "-9", "-f", "uvicorn.*app.main"], capture_output=True)
             subprocess.run(
-                ["pkill", "-f", "python.*uvicorn.*app.main"], capture_output=True
+                ["pkill", "-9", "-f", "python.*uvicorn.*app.main"], capture_output=True
             )
-            print("🔪 Attempted to kill existing uvicorn processes with pkill")
+            print("🔪 Attempted to force kill existing uvicorn processes with pkill")
         except FileNotFoundError:
             try:
                 # Last resort: killall if available
-                subprocess.run(["killall", "python"], capture_output=True)
-                subprocess.run(["killall", "uvicorn"], capture_output=True)
-                print("🔪 Attempted to kill with killall")
+                subprocess.run(["killall", "-9", "python"], capture_output=True)
+                subprocess.run(["killall", "-9", "uvicorn"], capture_output=True)
+                print("🔪 Attempted to force kill with killall")
             except FileNotFoundError:
                 print("⚠️  No process killing tools available, continuing anyway")
 
     # Give processes a moment to fully terminate
     try:
-        subprocess.run(["sleep", "2"], capture_output=True)
+        subprocess.run(["sleep", "3"], capture_output=True)
     except FileNotFoundError:
         import time
-
-        time.sleep(2)
+        time.sleep(3)
 
 
 def run_migrations():

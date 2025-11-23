@@ -70,6 +70,32 @@
             }
         })();
 
+        // Global i18n object for datagrid components (DRY pattern)
+        // MUST be initialized BEFORE Alpine.js loads to be available during component initialization
+        window.datagridI18n = {
+            valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
+            valueGreater: "{{ _('Value must be greater than {0}') }}",
+            valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}",
+            valueLess: "{{ _('Value must be less than {0}') }}",
+            fieldRequired: "{{ _('This field is required') }}",
+            validNumber: "{{ _('Must be a valid number') }}",
+            validInteger: "{{ _('Must be a valid integer') }}",
+            minLength: "{{ _('Must be at least {0} character(s)') }}",
+            maxLength: "{{ _('Must be at most {0} character(s)') }}",
+            validText: "{{ _('Must be a valid text') }}",
+            invalidValue: "{{ _('Invalid value') }}",
+            fixErrors: "{{ _('Please fix the validation errors below.') }}",
+            recordAddSuccess: "{{ _('Record added successfully') }}",
+            recordUpdateSuccess: "{{ _('Record updated successfully') }}",
+            recordDeleteSuccess: "{{ _('Record deleted successfully') }}",
+            recordAddFailed: "{{ _('Failed to add record') }}",
+            recordUpdateFailed: "{{ _('Failed to update record') }}",
+            recordDeleteFailed: "{{ _('Failed to delete record') }}",
+            networkError: "{{ _('Network error - no response from server') }}",
+            unknownError: "{{ _('Unknown error occurred') }}",
+            validationError: "{{ _('Validation error') }}"
+        };
+
         document.addEventListener('DOMContentLoaded', function () {
             // Initialize Toast with server-side translations
             if (window.Toast) {
@@ -79,31 +105,6 @@
                     }
                 });
             }
-
-            // Global i18n object for datagrid components (DRY pattern)
-            window.datagridI18n = {
-                valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
-                valueGreater: "{{ _('Value must be greater than {0}') }}",
-                valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}",
-                valueLess: "{{ _('Value must be less than {0}') }}",
-                fieldRequired: "{{ _('This field is required') }}",
-                validNumber: "{{ _('Must be a valid number') }}",
-                validInteger: "{{ _('Must be a valid integer') }}",
-                minLength: "{{ _('Must be at least {0} character(s)') }}",
-                maxLength: "{{ _('Must be at most {0} character(s)') }}",
-                validText: "{{ _('Must be a valid text') }}",
-                invalidValue: "{{ _('Invalid value') }}",
-                fixErrors: "{{ _('Please fix the validation errors below.') }}",
-                recordAddSuccess: "{{ _('Record added successfully') }}",
-                recordUpdateSuccess: "{{ _('Record updated successfully') }}",
-                recordDeleteSuccess: "{{ _('Record deleted successfully') }}",
-                recordAddFailed: "{{ _('Failed to add record') }}",
-                recordUpdateFailed: "{{ _('Failed to update record') }}",
-                recordDeleteFailed: "{{ _('Failed to delete record') }}",
-                networkError: "{{ _('Network error - no response from server') }}",
-                unknownError: "{{ _('Unknown error occurred') }}",
-                validationError: "{{ _('Validation error') }}"
-            };
 
             // Update icons to match the initial theme state
             const isDark = document.documentElement.classList.contains('dark');

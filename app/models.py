@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import EmailStr
+from pydantic import field_validator
 from sqlalchemy.types import Text
 from sqlmodel import Field, SQLModel
 
@@ -92,8 +92,24 @@ class CarBase(SQLModel):
     make: str = Field(index=True, max_length=100, min_length=1)
     model: str = Field(index=True, max_length=100, min_length=1)
     version: str = Field(max_length=100, min_length=1)
-    year: int = Field(index=True, gt=1886, description="Year must be after 1886")
-    price: float = Field(gt=0, description="Price must be greater than 0")
+    year: int = Field(index=True)
+    price: float
+
+    @field_validator("year")
+    @classmethod
+    def validate_year(cls, v: int) -> int:
+        if v <= 1886:
+            from .i18n import gettext as _
+            raise ValueError(_("Year must be after 1886"))
+        return v
+
+    @field_validator("price")
+    @classmethod
+    def validate_price(cls, v: float) -> float:
+        if v <= 0:
+            from .i18n import gettext as _
+            raise ValueError(_("Price must be greater than 0"))
+        return v
 
 
 class Car(CarBase, table=True):
@@ -109,9 +125,25 @@ class BookBase(SQLModel):
 
     title: str = Field(index=True, max_length=200, min_length=1)
     author: str = Field(index=True, max_length=200, min_length=1)
-    year: int = Field(index=True, ge=1, description="Year must be at least 1")
-    pages: int = Field(ge=1, description="Pages must be at least 1")
+    year: int = Field(index=True)
+    pages: int
     summary: str = Field(sa_type=Text, min_length=1)
+
+    @field_validator("year")
+    @classmethod
+    def validate_year(cls, v: int) -> int:
+        if v <= 1450:
+            from .i18n import gettext as _
+            raise ValueError(_("Year must be after 1450"))
+        return v
+
+    @field_validator("pages")
+    @classmethod
+    def validate_pages(cls, v: int) -> int:
+        if v < 1:
+            from .i18n import gettext as _
+            raise ValueError(_("Pages must be at least 1"))
+        return v
 
 
 class Book(BookBase, table=True):
@@ -124,7 +156,25 @@ class Book(BookBase, table=True):
 class UserBase(SQLModel):
     """Base User model class is required for proper validation (table=False, validates like Pydantic)"""
 
-    email: EmailStr = Field(description="Email address")
-    full_name: str = Field(max_length=200, min_length=2)
+    email: str = Field(description="Email address", max_length=320)
+    full_name: str = Field(max_length=200)
     role: UserRole = Field(default=UserRole.USER)
     is_active: bool = Field(default=True)
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        """Custom full_name validation with translated error message"""
+        if not v or len(v.strip()) < 2:
+            from .i18n import gettext as _
+            raise ValueError(_("Name must be at least 2 characters"))
+        return v.strip()
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format(cls, v: str) -> str:
+        """Custom email validation with translated error message"""
+        if not v or "@" not in v or "." not in v.split("@")[-1]:
+            from .i18n import gettext as _
+            raise ValueError(_("Please enter a valid email address"))
+        return v.strip().lower()

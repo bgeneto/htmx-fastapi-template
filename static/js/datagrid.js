@@ -57,6 +57,13 @@ document.addEventListener("alpine:init", () => {
      * Translate validation error based on type and context
      */
     translateError(errorType, context = {}, originalMsg = '') {
+      // For value_error from field validators, use the custom message directly
+      // These come from @field_validator decorators with translated messages
+      if (errorType === 'value_error' && originalMsg) {
+        // Remove "Value error, " prefix if present (Pydantic adds this)
+        return originalMsg.replace(/^Value error,\s*/i, '');
+      }
+
       const templates = {
         'greater_than_equal': this.i18n.valueGreaterEqual || 'Value must be greater than or equal to {0}',
         'greater_than': this.i18n.valueGreater || 'Value must be greater than {0}',
@@ -69,7 +76,6 @@ document.addEventListener("alpine:init", () => {
         'string_too_short': this.i18n.minLength || 'Must be at least {0} character(s)',
         'string_too_long': this.i18n.maxLength || 'Must be at most {0} character(s)',
         'string_type': this.i18n.validText || 'Must be a valid text',
-        'value_error': this.i18n.invalidValue || 'Invalid value',
       };
 
       const template = templates[errorType];

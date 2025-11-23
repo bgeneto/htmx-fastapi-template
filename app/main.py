@@ -465,14 +465,14 @@ async def healthcheck(session: AsyncSession = Depends(get_session)):
         )
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/contact", response_class=HTMLResponse)
 async def index(
     request: Request,
     user: Optional[User] = Depends(current_user_optional),
     session: AsyncSession = Depends(get_session),
 ):
     response = templates.TemplateResponse(
-        "pages/index.html",
+        "pages/contact.html",
         {
             "request": request,
             "user": user,
@@ -1337,33 +1337,70 @@ async def admin_delete_contact(
 # ============= Admin Cars Routes =============
 
 
-@app.get("/admin/cars", response_class=HTMLResponse)
-async def admin_cars(
+@app.get("/cars", response_class=HTMLResponse)
+async def cars_page(
     request: Request,
-    current_user: User = Depends(require_admin),
+    user: Optional[User] = Depends(current_user_optional),
     session: AsyncSession = Depends(get_session),
 ):
-    """Admin page for cars inventory - publicly accessible"""
+    """Display cars page with universal data grid - publicly accessible"""
     return templates.TemplateResponse(
-        "pages/admin/cars.html",
+        "pages/cars.html",
         {
             "request": request,
-            "user": current_user,
+            "user": user,
+            "api_url": "/api/cars",
+            "columns": [
+                {"key": "id", "label": _("ID"), "width": 70, "sortable": True},
+                {
+                    "key": "make",
+                    "label": _("Make"),
+                    "width": 120,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "model",
+                    "label": _("Model"),
+                    "width": 150,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {
+                    "key": "version",
+                    "label": _("Version"),
+                    "width": 150,
+                    "sortable": True,
+                    "filterable": True,
+                },
+                {"key": "year", "label": _("Year"), "width": 80, "sortable": True},
+                {
+                    "key": "price",
+                    "label": _("Price"),
+                    "width": 100,
+                    "sortable": True,
+                },
+                {
+                    "key": "created_at",
+                    "label": _("Created"),
+                    "width": 180,
+                    "sortable": True,
+                },
+            ],
         },
     )
 
 
-@app.get("/api/admin/cars", response_model=PaginatedResponse[Car])
-async def get_admin_cars(
+@app.get("/api/cars", response_model=PaginatedResponse[Car])
+async def get_cars_grid(
     request: Request,
     page: int = 1,
     limit: int = 10,
     sort: str = "id",
     dir: str = "asc",
-    current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
-    """API endpoint for cars grid"""
+    """API endpoint for cars grid - publicly accessible"""
     grid = GridEngine(session, Car)
     return await grid.get_page(
         request=request,
@@ -1375,13 +1412,12 @@ async def get_admin_cars(
     )
 
 
-@app.post("/api/admin/cars", response_model=Car)
+@app.post("/api/cars", response_model=Car)
 async def create_car(
     car_data: CarBase,
-    current_user: User = Depends(require_admin),
     session: AsyncSession = Depends(get_session),
 ):
-    """Create a new car"""
+    """Create a new car - publicly accessible"""
     from app.logger import logger
 
     logger.info(f"Creating car with data: {car_data}")
@@ -1394,13 +1430,13 @@ async def create_car(
     return car
 
 
-@app.put("/api/admin/cars/{car_id}", response_model=Car)
+@app.put("/api/cars/{car_id}", response_model=Car)
 async def update_car(
     car_id: int,
     car_data: CarBase,
     session: AsyncSession = Depends(get_session),
 ):
-    """Update an existing car"""
+    """Update an existing car - publicly accessible"""
     result = await session.execute(select(Car).where(Car.id == car_id))
     car = result.scalar_one_or_none()
 
@@ -1420,7 +1456,7 @@ async def update_car(
     return car
 
 
-@app.delete("/api/admin/cars/{car_id}")
+@app.delete("/api/cars/{car_id}")
 async def delete_car(
     car_id: int,
     session: AsyncSession = Depends(get_session),

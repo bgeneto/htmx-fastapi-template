@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 17:30-0300\n"
+"POT-Creation-Date: 2025-11-23 18:27-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -42,18 +42,16 @@ msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
 #: app/email.py:300
-#, fuzzy
 msgid "Your verification code"
-msgstr "Código de Verificação"
+msgstr "Seu código de verificação"
 
 #: app/email.py:307
-#, fuzzy
 msgid "Verification Required"
-msgstr "Código de verificação necessário"
+msgstr "Verificação Necessária"
 
 #: app/email.py:309 app/email.py:370
 msgid "Hi"
-msgstr ""
+msgstr "Olá"
 
 #: app/email.py:329 templates/pages/auth/verify_otp.html:74
 msgid "Important:"
@@ -64,61 +62,58 @@ msgid "Never share this code with anyone"
 msgstr "Nunca compartilhe este código com ninguém"
 
 #: app/email.py:344
-#, fuzzy
 msgid "Enter the code exactly as shown"
-msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
+msgstr "Entrar o código exatamente como mostrado"
 
 #: app/email.py:353
-#, fuzzy
 msgid "Security tip:"
-msgstr "Segurança"
+msgstr "Dica de Segurança"
 
 #: app/email.py:353
 msgid ""
 "If you didn't request this verification code, you can safely ignore this "
 "email. Your account remains secure."
 msgstr ""
+"Se você não solicitou este código de verificação, você pode ignorar "
+"seguramente este e-mail. Sua conta permanece segura."
 
 #: app/email.py:364
-#, fuzzy
 msgid "your verification code is:"
-msgstr "Código de Verificação"
+msgstr "Seu código de verificação é:"
 
 #: app/email.py:366
-#, fuzzy
 msgid "Never share this code."
 msgstr "Nunca compartilhe este código com ninguém"
 
 #: app/email.py:367
-#, fuzzy
 msgid "Verification code:"
 msgstr "Código de Verificação"
 
 #: app/email.py:423
-#, fuzzy
 msgid "Your account has been approved"
-msgstr "Sua conta está aguardando aprovação do administrador."
+msgstr "Sua conta foi aprovada"
 
 #: app/email.py:429
 msgid "Account Approved! 🎉"
-msgstr ""
+msgstr "Conta Aprovada! 🎉"
 
 #: app/email.py:431
-#, fuzzy
 msgid "Congratulations"
-msgstr "Contatos"
+msgstr "Parabéns"
 
 #: app/email.py:439
 msgid "Get Started Now"
-msgstr ""
+msgstr "Comece Agora"
 
 #: app/email.py:446
 msgid "You can now access all features by entering your email address at:"
 msgstr ""
+"Agora você pode acessar todas as funcionalidades entrando no seu endereço"
+" de e-mail em: "
 
 #: app/email.py:452 templates/pages/auth/pending_approval.html:61
 msgid "What happens next?"
-msgstr ""
+msgstr "O que acontece agora?"
 
 #: app/email.py:453
 msgid ""
@@ -126,20 +121,24 @@ msgid ""
 " access your account securely. We use passwordless authentication for "
 "your security - no passwords needed!"
 msgstr ""
+"Agora você pode solicitar links mágicos para login sem senha, enviar "
+"arquivos e acessar sua conta com segurança. Usamos autenticação sem senha"
+" para sua segurança - sem senhas necessárias!"
 
 #: app/email.py:463
 msgid "Great news"
-msgstr ""
+msgstr "Boa notícia"
 
 #: app/email.py:465
 msgid "Get started"
-msgstr ""
+msgstr "Comece agora"
 
 #: app/email.py:466
 msgid "Login to your account"
-msgstr ""
+msgstr "Faça login na sua conta"
 
-#: app/main.py:557 app/main.py:1481 templates/pages/admin/index.html:15
+#: app/main.py:557 app/main.py:1354 app/main.py:1517
+#: templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
@@ -187,9 +186,8 @@ msgid "Login failed"
 msgstr "Falha no login"
 
 #: app/main.py:767
-#, fuzzy
 msgid "Check your email for the login link"
-msgstr "Insira seu e-mail e senha para entrar"
+msgstr "Verifique seu e-mail para o link de login"
 
 #: app/main.py:814
 msgid "Invalid or expired verification code. Please try again."
@@ -211,8 +209,8 @@ msgstr "Login falhou. Por favor, verifique suas credenciais e tente novamente."
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:1091 app/schemas.py:22 app/schemas.py:65 app/schemas.py:88
-#: app/schemas.py:105 app/schemas.py:134 app/schemas.py:169
+#: app/main.py:1091 app/models.py:170 app/schemas.py:22 app/schemas.py:65
+#: app/schemas.py:88 app/schemas.py:105 app/schemas.py:134 app/schemas.py:169
 #: app/strategies.py:15 templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149 templates/pages/profile.html:437
 msgid "Name must be at least 2 characters"
@@ -263,52 +261,95 @@ msgstr "Senha alterada com sucesso"
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1484 templates/pages/books.html:37
+#: app/main.py:1357 templates/pages/cars.html:35
+#: templates/pages/cars_form.html:10
+msgid "Make"
+msgstr "Marca"
+
+#: app/main.py:1364 templates/pages/cars.html:36
+#: templates/pages/cars_form.html:29
+msgid "Model"
+msgstr "Modelo"
+
+#: app/main.py:1371 templates/pages/cars.html:37
+#: templates/pages/cars_form.html:48
+msgid "Version"
+msgstr "Versão"
+
+#: app/main.py:1376 app/main.py:1541 templates/pages/books.html:39
+#: templates/pages/books_form.html:20 templates/pages/cars.html:38
+#: templates/pages/cars_form.html:69
+msgid "Year"
+msgstr "Ano"
+
+#: app/main.py:1379 app/main.py:1547 templates/pages/cars.html:39
+#: templates/pages/cars_form.html:87
+msgid "Price"
+msgstr "Preço"
+
+#: app/main.py:1385 templates/pages/admin/index.html:19
+#: templates/pages/admin/users.html:39
+msgid "Created"
+msgstr "Criado"
+
+#: app/main.py:1520 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1491 templates/pages/books.html:38
+#: app/main.py:1527 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1498
+#: app/main.py:1534
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/main.py:1505 templates/pages/admin/cars.html:38
-#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
-#: templates/pages/books_form.html:20
-msgid "Year"
-msgstr "Ano"
-
-#: app/main.py:1511 templates/pages/admin/cars.html:39
-#: templates/pages/admin/cars_form.html:87
-msgid "Price"
-msgstr "Preço"
-
-#: app/main.py:1515 templates/pages/books.html:40
+#: app/main.py:1551 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1518 templates/pages/books.html:41
+#: app/main.py:1554 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1645
+#: app/main.py:1681
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1684
+#: app/main.py:1720
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1720
+#: app/main.py:1756
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
+
+#: app/models.py:103
+msgid "Year must be after 1886"
+msgstr ""
+
+#: app/models.py:111
+msgid "Price must be greater than 0"
+msgstr "O preço deve ser maior que 0"
+
+#: app/models.py:137
+msgid "Year must be after 1450"
+msgstr "O ano deve ser maior que 1450"
+
+#: app/models.py:145
+msgid "Pages must be at least 1"
+msgstr "As páginas devem ser pelo menos 1"
+
+#: app/models.py:179 app/strategies.py:25
+#: templates/components/_contact_form.html:200
+#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
+#: templates/pages/profile.html:439
+msgid "Please enter a valid email address"
+msgstr "Por favor, insira um endereço de e-mail válido"
 
 #: app/response_helpers.py:117
 msgid "Authentication required"
@@ -335,105 +376,99 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
-#: app/strategies.py:25 templates/components/_contact_form.html:200
-#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
-#: templates/pages/profile.html:439
-msgid "Please enter a valid email address"
-msgstr "Por favor, insira um endereço de e-mail válido"
-
-#: app/strategies.py:30 templates/_base.html:89
+#: app/strategies.py:30 templates/_base.html:80
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
-#: templates/_base.html:78
-msgid "Close"
-msgstr "Fechar"
-
-#: templates/_base.html:85
+#: templates/_base.html:76
 #, python-brace-format
 msgid "Value must be greater than or equal to {0}"
 msgstr "O valor deve ser maior ou igual a {0}"
 
-#: templates/_base.html:86
+#: templates/_base.html:77
 #, python-brace-format
 msgid "Value must be greater than {0}"
 msgstr "O valor deve ser maior que {0}"
 
-#: templates/_base.html:87
+#: templates/_base.html:78
 #, python-brace-format
 msgid "Value must be less than or equal to {0}"
 msgstr "O valor deve ser menor ou igual a {0}"
 
-#: templates/_base.html:88
+#: templates/_base.html:79
 #, python-brace-format
 msgid "Value must be less than {0}"
 msgstr "O valor deve ser menor que {0}"
 
-#: templates/_base.html:90
+#: templates/_base.html:81
 msgid "Must be a valid number"
 msgstr "Deve ser um número válido"
 
-#: templates/_base.html:91
+#: templates/_base.html:82
 msgid "Must be a valid integer"
 msgstr "Deve ser um número inteiro válido"
 
-#: templates/_base.html:92
+#: templates/_base.html:83
 #, python-brace-format
 msgid "Must be at least {0} character(s)"
 msgstr "Deve ter pelo menos {0} caractere(s)"
 
-#: templates/_base.html:93
+#: templates/_base.html:84
 #, python-brace-format
 msgid "Must be at most {0} character(s)"
 msgstr "Deve ter no máximo {0} caractere(s)"
 
-#: templates/_base.html:94
+#: templates/_base.html:85
 msgid "Must be a valid text"
 msgstr "Deve ser um texto válido"
 
-#: templates/_base.html:95
+#: templates/_base.html:86
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: templates/_base.html:96
+#: templates/_base.html:87
 msgid "Please fix the validation errors below."
 msgstr "Por favor, corrija os erros antes de enviar."
 
-#: templates/_base.html:97
+#: templates/_base.html:88
 msgid "Record added successfully"
 msgstr "Registro adicionado com sucesso"
 
-#: templates/_base.html:98
+#: templates/_base.html:89
 msgid "Record updated successfully"
 msgstr "Registro atualizado com sucesso"
 
-#: templates/_base.html:99
+#: templates/_base.html:90
 msgid "Record deleted successfully"
 msgstr "Registro excluído com sucesso"
 
-#: templates/_base.html:100
+#: templates/_base.html:91
 msgid "Failed to add record"
 msgstr "Falha ao adicionar o registro"
 
-#: templates/_base.html:101
+#: templates/_base.html:92
 msgid "Failed to update record"
 msgstr "Falha ao atualizar o registro"
 
-#: templates/_base.html:102
+#: templates/_base.html:93
 msgid "Failed to delete record"
 msgstr "Falha ao excluir o registro"
 
-#: templates/_base.html:103
+#: templates/_base.html:94
 msgid "Network error - no response from server"
 msgstr "Erro de rede - sem resposta do servidor"
 
-#: templates/_base.html:104
+#: templates/_base.html:95
 msgid "Unknown error occurred"
 msgstr "Um erro desconhecido ocorreu"
 
-#: templates/_base.html:105
+#: templates/_base.html:96
 msgid "Validation error"
 msgstr "Erro de validação"
+
+#: templates/_base.html:104
+msgid "Close"
+msgstr "Fechar"
 
 #: templates/components/_contact_form.html:13
 msgid "Message Sent!"
@@ -646,48 +681,43 @@ msgstr "Dashboard"
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/components/_sidebar.html:82 templates/errors/404.html:53
-msgid "Contacts"
-msgstr "Contatos"
-
-#: templates/components/_sidebar.html:95 templates/pages/admin/cars.html:3
-#: templates/pages/admin/cars.html:9
-msgid "Cars Inventory"
-msgstr "Diretório de Carros"
-
-#: templates/components/_sidebar.html:108
+#: templates/components/_sidebar.html:82
 msgid "Users"
 msgstr "Usuários"
 
-#: templates/components/_sidebar.html:114
+#: templates/components/_sidebar.html:88
 msgid "Demo"
 msgstr "Demo"
 
-#: templates/components/_sidebar.html:128 templates/errors/404.html:55
+#: templates/components/_sidebar.html:102 templates/errors/404.html:55
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_sidebar.html:136
+#: templates/components/_sidebar.html:115
+msgid "Cars"
+msgstr "Carros"
+
+#: templates/components/_sidebar.html:123
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
-#: templates/components/_top_navbar.html:88 templates/pages/profile.html:2
+#: templates/components/_top_navbar.html:82 templates/pages/profile.html:2
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:103
+#: templates/components/_top_navbar.html:97
 msgid "Settings"
 msgstr "Configurações"
 
-#: templates/components/_top_navbar.html:115
-msgid "Payments"
-msgstr "Pagamentos"
+#: templates/components/_top_navbar.html:110
+msgid "Contact"
+msgstr "Contato"
 
-#: templates/components/_top_navbar.html:131
+#: templates/components/_top_navbar.html:126
 msgid "Sign out"
 msgstr "Sair"
 
-#: templates/components/_top_navbar.html:140 templates/errors/404.html:57
+#: templates/components/_top_navbar.html:135 templates/errors/404.html:57
 msgid "Login"
 msgstr "Entrar"
 
@@ -711,6 +741,10 @@ msgstr "Voltar"
 msgid "Here are some helpful links instead:"
 msgstr "Aqui estão alguns links úteis:"
 
+#: templates/errors/404.html:53
+msgid "Contacts"
+msgstr "Contatos"
+
 #: templates/errors/5xx.html:2 templates/errors/5xx.html:22
 msgid "Unexpected Error"
 msgstr "Erro Inesperado"
@@ -726,12 +760,12 @@ msgid "Error Code"
 msgstr "Código de Erro"
 
 #: templates/pages/books.html:3 templates/pages/books.html:9
-msgid "Books Library"
-msgstr "Biblioteca de Livros"
+msgid "Books Management"
+msgstr "Gerenciamento de Livros"
 
 #: templates/pages/books.html:10
-msgid "Universal Grid Engine Demo"
-msgstr "Demonstração do Motor de Grade Universal"
+msgid "Browse and manage books inventory "
+msgstr "Navegue e gerencie todos os livros"
 
 #: templates/pages/auth/register.html:29 templates/pages/books.html:16
 msgid "Back to Home"
@@ -741,24 +775,44 @@ msgstr "Voltar ao Início"
 msgid "Book"
 msgstr "Livro"
 
-#: templates/pages/admin/cars.html:40 templates/pages/admin/users.html:40
-#: templates/pages/books.html:42
+#: templates/pages/admin/users.html:40 templates/pages/books.html:42
+#: templates/pages/cars.html:40
 msgid "Actions"
 msgstr "Ação"
 
-#: templates/pages/contacts.html:3 templates/pages/contacts.html:8
-msgid "Contacts Directory"
-msgstr "Diretório de Contatos"
+#: templates/pages/cars.html:3 templates/pages/cars.html:9
+msgid "Cars Management"
+msgstr "Gerenciamento de Carros"
 
-#: templates/pages/contacts.html:9
-msgid "Browse and manage all contact submissions"
-msgstr "Navegue e gerencie todos os envios de contato"
+#: templates/pages/cars.html:10
+msgid "Browse and manage cars inventory"
+msgstr "Navegue e gerencie todos os carros"
 
-#: templates/pages/index.html:10
+#: templates/pages/admin/users.html:16 templates/pages/cars.html:16
+msgid "Back to Admin"
+msgstr "Voltar ao Início"
+
+#: templates/pages/cars.html:23
+msgid "Car"
+msgstr "Carro"
+
+#: templates/pages/cars_form.html:16
+msgid "e.g., Toyota"
+msgstr "ex: Toyota"
+
+#: templates/pages/cars_form.html:35
+msgid "e.g., Camry"
+msgstr "ex: Camry"
+
+#: templates/pages/cars_form.html:54
+msgid "e.g., XLE"
+msgstr "ex: XLE"
+
+#: templates/pages/contact.html:10
 msgid "Modern Full-Stack Starter"
 msgstr "Full-Stack Starter Moderno"
 
-#: templates/pages/index.html:20
+#: templates/pages/contact.html:18
 msgid "Contact us"
 msgstr "Entre em contato"
 
@@ -899,49 +953,9 @@ msgstr "Atualização falhou"
 msgid "An error occurred"
 msgstr "Um erro ocorreu"
 
-#: templates/pages/admin/cars.html:10
-msgid "Browse and manage vehicle inventory"
-msgstr "Navegue e gerencie todos os envios de contato"
-
-#: templates/pages/admin/cars.html:16 templates/pages/admin/users.html:16
-msgid "Back to Admin"
-msgstr "Voltar ao Início"
-
-#: templates/pages/admin/cars.html:23
-msgid "Car"
-msgstr "Carro"
-
-#: templates/pages/admin/cars.html:35 templates/pages/admin/cars_form.html:10
-msgid "Make"
-msgstr "Marca"
-
-#: templates/pages/admin/cars.html:36 templates/pages/admin/cars_form.html:29
-msgid "Model"
-msgstr "Modelo"
-
-#: templates/pages/admin/cars.html:37 templates/pages/admin/cars_form.html:48
-msgid "Version"
-msgstr "Versão"
-
-#: templates/pages/admin/cars_form.html:16
-msgid "e.g., Toyota"
-msgstr "ex: Toyota"
-
-#: templates/pages/admin/cars_form.html:35
-msgid "e.g., Camry"
-msgstr "ex: Camry"
-
-#: templates/pages/admin/cars_form.html:54
-msgid "e.g., XLE"
-msgstr "ex: XLE"
-
 #: templates/pages/admin/index.html:3 templates/pages/admin/index.html:9
 msgid "Admin - Contacts"
 msgstr "Admin - Contatos"
-
-#: templates/pages/admin/index.html:19 templates/pages/admin/users.html:39
-msgid "Created"
-msgstr "Criado"
 
 #: templates/pages/admin/index.html:20
 msgid "Action"
@@ -972,50 +986,43 @@ msgstr "Ocorreu um erro. Por favor, tente novamente."
 
 #: templates/pages/admin/users.html:3 templates/pages/admin/users.html:9
 msgid "User Management"
-msgstr ""
+msgstr "Gerenciamento de Usuários"
 
 #: templates/pages/admin/users.html:10
 msgid "Manage user accounts and permissions"
-msgstr ""
+msgstr "Gerencie contas de usuários e permissões"
 
 #: templates/pages/admin/users.html:23 templates/pages/admin/users_form.html:50
-#, fuzzy
 msgid "User"
-msgstr "Usuários"
+msgstr "Usuário"
 
 #: templates/pages/admin/users.html:37 templates/pages/admin/users_form.html:44
-#, fuzzy
 msgid "Role"
 msgstr "Perfil"
 
 #: templates/pages/admin/users_form.html:14
-#, fuzzy
 msgid "user@example.com"
 msgstr "voce@exemplo.com"
 
 #: templates/pages/admin/users_form.html:31
-#, fuzzy
 msgid "Your Name"
 msgstr "Nome Completo"
 
 #: templates/pages/admin/users_form.html:51
 msgid "Moderator"
-msgstr ""
+msgstr "Moderador"
 
 #: templates/pages/admin/users_form.html:53
-#, fuzzy
 msgid "Pending"
-msgstr " Enviando..."
+msgstr "Pendente"
 
 #: templates/pages/admin/users_form.html:65
-#, fuzzy
 msgid "Status"
-msgstr "Entre em contato"
+msgstr "Status"
 
 #: templates/pages/admin/users_form.html:72
-#, fuzzy
 msgid "Active Account"
-msgstr "Criar Conta"
+msgstr "Conta Ativa"
 
 #: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
 msgid "Log In"
@@ -1084,28 +1091,24 @@ msgid "Password is required"
 msgstr "A Senha é obrigatória"
 
 #: templates/pages/auth/pending_approval.html:2
-#, fuzzy
 msgid "Account Pending Approval"
-msgstr "O usuário não está aguardando aprovação"
+msgstr "A conta está aguardando aprovação"
 
 #: templates/pages/auth/pending_approval.html:22
-#, fuzzy
 msgid "Email Verified Successfully!"
-msgstr "E-mail Verificado"
+msgstr "E-mail Verificado com sucesso!"
 
 #: templates/pages/auth/pending_approval.html:38
-#, fuzzy
 msgid "Account Pending Admin Approval"
 msgstr "Sua conta está aguardando aprovação do administrador."
 
 #: templates/pages/auth/pending_approval.html:41
-#, fuzzy
 msgid "Your account for"
-msgstr "Informações da Conta"
+msgstr "Sua conta para"
 
 #: templates/pages/auth/pending_approval.html:41
 msgid "has been created and your email has been verified."
-msgstr ""
+msgstr "foi criada e seu e-mail foi verificado."
 
 #: templates/pages/auth/pending_approval.html:44
 msgid ""
@@ -1113,21 +1116,23 @@ msgid ""
 "log in. You will receive an email notification once your account has been"
 " approved."
 msgstr ""
+"No entanto, um administrador precisa aprovar sua conta antes de você "
+"poder fazer login. Você receberá uma notificação de e-mail uma vez que "
+"sua conta for aprovada."
 
 #: templates/pages/auth/pending_approval.html:68
 msgid "An administrator will review your account request"
-msgstr ""
+msgstr "Um administrador irá revisar sua solicitação de conta"
 
 #: templates/pages/auth/pending_approval.html:74
 msgid "You will receive an email notification when your account is approved"
-msgstr ""
+msgstr "Você receberá uma notificação de e-mail quando sua conta for aprovada"
 
 #: templates/pages/auth/pending_approval.html:80
 msgid "Once approved, you can log in using the same email address"
-msgstr ""
+msgstr "Uma vez aprovada, você pode fazer login usando o mesmo endereço de e-mail"
 
 #: templates/pages/auth/pending_approval.html:97
-#, fuzzy
 msgid "Return to Home"
 msgstr "Voltar ao Início"
 
@@ -1138,7 +1143,7 @@ msgstr "Voltar ao Início"
 
 #: templates/pages/auth/pending_approval.html:107
 msgid "Questions? Contact support at"
-msgstr ""
+msgstr "Perguntas? Contate o suporte em"
 
 #: templates/pages/auth/register.html:3 templates/pages/auth/register.html:115
 msgid "Register"
@@ -1178,9 +1183,8 @@ msgid "Verify Code"
 msgstr "Verificar Código"
 
 #: templates/pages/auth/verify_otp.html:6
-#, fuzzy
 msgid "Verify Your Code"
-msgstr "Verificar Código"
+msgstr "Verificar seu Código"
 
 #: templates/pages/auth/verify_otp.html:7
 msgid "We sent a 6-digit code to"
@@ -1332,7 +1336,7 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 #~ msgstr "Deve ter no máximo {0} caractere(s)"
 
 #~ msgid "Cars Inventory"
-#~ msgstr "Inventário de Carros"
+#~ msgstr "Diretório de Carros"
 
 #~ msgid "Browse and manage vehicle inventory"
 #~ msgstr "Navegue e gerencie o inventário de veículos"
@@ -1475,16 +1479,16 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 #~ msgstr "O usuário não está aguardando aprovação"
 
 #~ msgid "Review and approve new registrations below."
-#~ msgstr ""
+#~ msgstr "Revisar e aprovar novas inscrições abaixo."
 
 #~ msgid "Create New User"
-#~ msgstr ""
+#~ msgstr "Criar Novo Usuário"
 
 #~ msgid "Password (optional)"
-#~ msgstr ""
+#~ msgstr "Senha (opcional) "
 
 #~ msgid "Leave empty for magic link only"
-#~ msgstr ""
+#~ msgstr "Deixe em branco para link mágico apenas"
 
 #~ msgid "Creating..."
 #~ msgstr "Alterando..."
@@ -1493,7 +1497,7 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 #~ msgstr "Criado"
 
 #~ msgid "Approve"
-#~ msgstr ""
+#~ msgstr "Aprovar"
 
 #~ msgid "Edit User"
 #~ msgstr "Editar"
@@ -1505,8 +1509,17 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 #~ msgstr "Atualização falhou"
 
 #~ msgid "Approve this user ? "
-#~ msgstr ""
+#~ msgstr "Aprovar este usuário?"
 
 #~ msgid "John Doe"
-#~ msgstr ""
+#~ msgstr "Fulano de Tal"
+
+#~ msgid "Payments"
+#~ msgstr "Pagamentos"
+
+#~ msgid "Contacts Directory"
+#~ msgstr "Diretório de Contatos"
+
+#~ msgid "Browse and manage all contact submissions"
+#~ msgstr "Navegue e gerencie todos os envios de contato"
 

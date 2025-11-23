@@ -96,6 +96,36 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
 - **Critical incident**: Cars edit/update modal bypassed validation because update endpoint used `dict` instead of `CarBase`
 - **Testing**: Always test with invalid data (empty strings, wrong types) to ensure validation triggers
 
+#### Custom Validation Error Messages (CRITICAL)
+- **Problem**: Pydantic's `description` parameter in `Field()` is **only for API documentation**, NOT for validation error messages
+- **Wrong approach**: Using built-in constraints like `Field(ge=1, description="Must be at least 1")` - the description is ignored for validation errors
+- **Correct approach**: Use `@field_validator` decorators with translated error messages
+- **Example WRONG**:
+  ```python
+  year: int = Field(ge=1, description="Year must be at least 1")  # ❌ description not used in errors
+  price: float = Field(gt=0, description="Price must be positive")  # ❌ generic English error shown
+  ```
+- **Example CORRECT**:
+  ```python
+  year: int = Field()  # No constraint here
+
+  @field_validator("year")
+  @classmethod
+  def validate_year(cls, v: int) -> int:
+      if v < 1:
+          from .i18n import gettext as _
+          raise ValueError(_("Year must be at least 1"))  # ✅ Translatable custom message
+      return v
+  ```
+- **Why this matters**:
+  - Built-in Pydantic constraints (`ge`, `gt`, `lt`, `le`) always return **generic English messages**
+  - These messages bypass translation system and show in English regardless of user locale
+  - Custom validators with `_()` enable proper i18n support for all validation errors
+- **Critical incident**: Books/Cars modals showed "Input should be greater than or equal to 1" in English instead of translated messages because validators used `Field(ge=1, description="...")` instead of `@field_validator`
+- **Additional notes**:
+  - `description` parameter is still useful for OpenAPI/Swagger documentation
+  - For datagrid modals: ensure `translateError()` in `datagrid.js` handles `value_error` type by returning the original message (custom validator errors use this type)
+
 ### 6. Strategy Patterns (app/strategies.py)
 - **Purpose**: Reduces CC in endpoints via polymorphism (ValidationErrorStrategy, AuthVerifier).
 - **Validation**: `from .strategies import handle_validation_error`; `errors = handle_validation_error(e)` - registry maps msg/field to translated str.
@@ -331,6 +361,8 @@ docs/                        # Project documentation
 4. **Session lifecycle**: Never `await session.close()` when using dependency injection
 5. **Alpine.js state**: Initialize with `x-init="init()"` to handle server-rendered errors
 6. **Form validation**: Keep client-side rules in sync with Pydantic validators
+7. **Global i18n objects**: Never initialize global objects (like `window.datagridI18n`) inside `DOMContentLoaded` - they must be available BEFORE Alpine.js loads. Alpine components with `defer` scripts may initialize before `DOMContentLoaded` fires, causing `undefined` references. Initialize globals synchronously in `<script>` tags in the `<head>`.
+8. **Pydantic validation messages**: Never use `Field(ge=1, description="...")` for custom error messages - the `description` is only for API docs. Use `@field_validator` decorators with `_("...")` for translatable validation errors. Built-in constraints (`ge`, `gt`, `le`, `lt`) return generic English messages that bypass i18n.
 
 ## Key Commands Reference
 

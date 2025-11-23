@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Seed the database with fake car data using Faker
 Run: python scripts/seeds/seed_cars.py
@@ -86,7 +87,7 @@ async def seed_database(count: int = 200):
             make = random.choice(MAKES)
             model = random.choice(MODELS.get(make, ["Unknown"]))
             version = random.choice(VERSIONS)
-            year = random.randint(2015, 2024)
+            year = random.randint(1990, 2024)
 
             # Price based on year and make
             base_price = 20000

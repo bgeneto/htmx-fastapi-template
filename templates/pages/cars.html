@@ -1,13 +1,13 @@
 {% extends "_base.html" %}
 
-{% block title %}{{ _('Cars Inventory') }} - Admin{% endblock %}
+{% block title %}{{ _('Cars Management') }} - Admin{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Cars Inventory') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400">{{ _('Browse and manage vehicle inventory') }}</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Cars Management') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ _('Browse and manage cars inventory') }}</p>
         </div>
 
         <div class="mb-6">
@@ -19,7 +19,7 @@
 
         <div x-cloak x-data="datagrid(adminCarsDatagrid())"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
-            {% set form_template = "pages/admin/cars_form.html" %}
+            {% set form_template = "pages/cars_form.html" %}
             {% set resource_name = _('Car') %}
             {% include "components/_datagrid_grid.html" %}
         </div>
@@ -29,7 +29,7 @@
 <script>
     function adminCarsDatagrid() {
         return {
-            apiUrl: '/api/admin/cars',
+            apiUrl: '/api/cars',
             columns: [
                 { key: 'id', label: 'ID', width: 70, sortable: true },
                 { key: 'make', label: "{{ _('Make') }}", width: 150, sortable: true, filterable: true },
