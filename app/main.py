@@ -14,7 +14,6 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 # Keep legacy auth for magic links
 from .auth import (
@@ -71,7 +70,12 @@ def get_allowed_hosts() -> list[str]:
     logger.debug("Getting allowed hosts from APP_BASE_URL={}", settings.APP_BASE_URL)
 
     parsed = urlparse(settings.APP_BASE_URL)
-    logger.debug("Parsed APP_BASE_URL: scheme={}, hostname={}, path={}", parsed.scheme, parsed.hostname, parsed.path)
+    logger.debug(
+        "Parsed APP_BASE_URL: scheme={}, hostname={}, path={}",
+        parsed.scheme,
+        parsed.hostname,
+        parsed.path,
+    )
 
     hosts = []
 
@@ -96,7 +100,9 @@ def get_allowed_hosts() -> list[str]:
             hosts.append(wildcard_host)
             logger.debug("Added wildcard subdomain: {}", wildcard_host)
         else:
-            logger.debug("Skipping wildcard subdomain for localhost or IP: {}", parsed.hostname)
+            logger.debug(
+                "Skipping wildcard subdomain for localhost or IP: {}", parsed.hostname
+            )
 
     # Always allow localhost for development (use set to avoid duplicates)
     localhost_hosts = {"localhost", "localhost:8000", "127.0.0.1", "127.0.0.1:8000"}
@@ -168,25 +174,32 @@ app = FastAPI(
     json_encoders={datetime: lambda v: v.isoformat()},
 )
 
+
 # Middleware for host header logging (diagnostic)
 class HostHeaderLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         host_header = request.headers.get("host", "NOT_SET")
         forwarded_host = request.headers.get("x-forwarded-host", "NOT_SET")
-        logger.debug("Incoming request Host header: '{}' | X-Forwarded-Host: '{}' | URL: {} {}", host_header, forwarded_host, request.method, request.url.path)
+        logger.debug(
+            "Incoming request Host header: '{}' | X-Forwarded-Host: '{}' | URL: {} {}",
+            host_header,
+            forwarded_host,
+            request.method,
+            request.url.path,
+        )
         return await call_next(request)
 
 
-app.add_middleware(HostHeaderLoggingMiddleware) # debug only
+# app.add_middleware(HostHeaderLoggingMiddleware) # debug only
 
 # Security Middleware Configuration
 # TrustedHostMiddleware - validates Host header to prevent host header injection attacks
-allowed_hosts = get_allowed_hosts()
-logger.info("Configuring TrustedHostMiddleware with allowed_hosts: {}", allowed_hosts)
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=allowed_hosts,
-)
+# allowed_hosts = get_allowed_hosts()
+# logger.debug("Configuring TrustedHostMiddleware with allowed_hosts: {}", allowed_hosts)
+# app.add_middleware(
+#    TrustedHostMiddleware,
+#    allowed_hosts=allowed_hosts,
+# )
 
 # CORSMiddleware - controls which origins can make cross-origin requests
 app.add_middleware(
