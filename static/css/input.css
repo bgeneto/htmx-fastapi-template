@@ -4,55 +4,178 @@
 
 @theme {
   --font-sans: 'Fira Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  /* Modern UI colors */
-  --color-surface: var(--color-surface, #ffffff);
-  --color-surfaceDark: var(--color-surfaceDark, #0f172a);
-  --color-onSurface: var(--color-onSurface, #64748b);
-  --color-onSurfaceDark: var(--color-onSurfaceDark, #94a3b8);
-  --color-onSurfaceStrong: var(--color-onSurfaceStrong, #0f172a);
-  --color-onSurfaceDarkStrong: var(--color-onSurfaceDarkStrong, #f1f5f9);
-  --color-border-light: var(--color-border-light, #e2e8f0);
-  --color-borderDark: var(--color-borderDark, #1e293b);
-  --color-primary: var(--color-primary, #6366f1);
-  --color-primaryDark: var(--color-primaryDark, #818cf8);
-  --color-onPrimary: var(--color-onPrimary, #ffffff);
-  --color-onPrimaryDark: var(--color-onPrimaryDark, #ffffff);
+
+  /* Map Tailwind colors to our dynamic variables */
+  --color-blue-50: var(--dynamic-blue-50);
+  --color-blue-100: var(--dynamic-blue-100);
+  --color-blue-200: var(--dynamic-blue-200);
+  --color-blue-300: var(--dynamic-blue-300);
+  --color-blue-400: var(--dynamic-blue-400);
+  --color-blue-500: var(--dynamic-blue-500);
+  --color-blue-600: var(--dynamic-blue-600);
+  --color-blue-700: var(--dynamic-blue-700);
+  --color-blue-800: var(--dynamic-blue-800);
+  --color-blue-900: var(--dynamic-blue-900);
+  --color-blue-950: var(--dynamic-blue-950);
+
+  /* Map Indigo to same dynamic variables */
+  --color-indigo-50: var(--dynamic-blue-50);
+  --color-indigo-100: var(--dynamic-blue-100);
+  --color-indigo-200: var(--dynamic-blue-200);
+  --color-indigo-300: var(--dynamic-blue-300);
+  --color-indigo-400: var(--dynamic-blue-400);
+  --color-indigo-500: var(--dynamic-blue-500);
+  --color-indigo-600: var(--dynamic-blue-600);
+  --color-indigo-700: var(--dynamic-blue-700);
+  --color-indigo-800: var(--dynamic-blue-800);
+  --color-indigo-900: var(--dynamic-blue-900);
+  --color-indigo-950: var(--dynamic-blue-950);
+
+  /* Map Gray to dynamic variables */
+  --color-gray-50: var(--dynamic-gray-50);
+  --color-gray-100: var(--dynamic-gray-100);
+  --color-gray-200: var(--dynamic-gray-200);
+  --color-gray-300: var(--dynamic-gray-300);
+  --color-gray-400: var(--dynamic-gray-400);
+  --color-gray-500: var(--dynamic-gray-500);
+  --color-gray-600: var(--dynamic-gray-600);
+  --color-gray-700: var(--dynamic-gray-700);
+  --color-gray-800: var(--dynamic-gray-800);
+  --color-gray-900: var(--dynamic-gray-900);
+  --color-gray-950: var(--dynamic-gray-950);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Custom base styles */
 @layer base {
   :root {
-    --bg-primary: #ffffff;
-    --text-primary: #111827;
-    --border-color: #e5e7eb;
+    /* --- LIGHT MODE: ANTHROPIC THEME --- */
 
-    /* Sidebar width variable for dynamic resizing */
-    --sidebar-width: 240px;
+    /* Dynamic Blue (Terracotta) */
+    --dynamic-blue-50: #fdf5f3;
+    --dynamic-blue-100: #fde8e4;
+    --dynamic-blue-200: #fbd5cc;
+    --dynamic-blue-300: #f8b6a4;
+    --dynamic-blue-400: #f28f75;
+    --dynamic-blue-500: #cb785c;
+    /* Anthropic Primary */
+    --dynamic-blue-600: #b8654a;
+    --dynamic-blue-700: #9a5440;
+    --dynamic-blue-800: #7d4635;
+    --dynamic-blue-900: #663a2d;
+    --dynamic-blue-950: #3d1f16;
 
-    /* Modern Penguin UI theme variables */
-    --color-surface: #ffffff;
-    --color-onSurface: #64748b;
-    --color-onSurfaceStrong: #0f172a;
-    --color-border-light: #e2e8f0;
-    --color-primary: #6366f1;
+    /* Dynamic Gray (Warm Beige/Brown) */
+    --dynamic-gray-50: #fdfdf8;
+    /* Anthropic Background */
+    --dynamic-gray-100: #f0f0ec;
+    /* Sidebar Background */
+    --dynamic-gray-200: #ecebe3;
+    /* Secondary Background */
+    --dynamic-gray-300: #d3d2ca;
+    /* Border */
+    --dynamic-gray-400: #9e9d96;
+    --dynamic-gray-500: #726f66;
+    --dynamic-gray-600: #55524a;
+    --dynamic-gray-700: #3d3a2a;
+    /* Text */
+    --dynamic-gray-800: #2f2c1f;
+    --dynamic-gray-900: #1f1d14;
+    --dynamic-gray-950: #16140d;
+
+    /* Semantic Variables */
+    --color-surface: var(--dynamic-gray-50);
+    --color-surface-alt: var(--dynamic-gray-100);
+    --color-onSurface: var(--dynamic-gray-700);
+    --color-onSurfaceStrong: var(--dynamic-gray-900);
+    --color-border-light: var(--dynamic-gray-300);
+    --color-primary: var(--dynamic-blue-500);
     --color-onPrimary: #ffffff;
+    --color-secondary: var(--dynamic-gray-200);
+    --color-onSecondary: var(--dynamic-gray-700);
+
+    /* Sidebar width */
+    --sidebar-width: 240px;
   }
 
-  body.dark,
   .dark {
-    --bg-primary: #111827;
-    --text-primary: #f9fafb;
-    --border-color: #374151;
+    /* --- DARK MODE: STANDARD TAILWIND --- */
 
-    /* Modern Penguin UI dark theme variables */
-    --color-surfaceDark: #0f172a;
-    --color-onSurfaceDark: #94a3b8;
-    --color-onSurfaceDarkStrong: #f1f5f9;
-    --color-borderDark: #1e293b;
+    /* Reset to Standard Blue */
+    --dynamic-blue-50: #eff6ff;
+    --dynamic-blue-100: #dbeafe;
+    --dynamic-blue-200: #bfdbfe;
+    --dynamic-blue-300: #93c5fd;
+    --dynamic-blue-400: #60a5fa;
+    --dynamic-blue-500: #3b82f6;
+    --dynamic-blue-600: #2563eb;
+    --dynamic-blue-700: #1d4ed8;
+    --dynamic-blue-800: #1e40af;
+    --dynamic-blue-900: #1e3a8a;
+    --dynamic-blue-950: #172554;
+
+    /* Reset to Standard Slate Gray */
+    --dynamic-gray-50: #f8fafc;
+    --dynamic-gray-100: #f1f5f9;
+    --dynamic-gray-200: #e2e8f0;
+    --dynamic-gray-300: #cbd5e1;
+    --dynamic-gray-400: #94a3b8;
+    --dynamic-gray-500: #64748b;
+    --dynamic-gray-600: #475569;
+    --dynamic-gray-700: #334155;
+    --dynamic-gray-800: #1e293b;
+    --dynamic-gray-900: #0f172a;
+    --dynamic-gray-950: #020617;
+
+    /* Semantic Variables for Dark Mode */
+    --color-surfaceDark: var(--dynamic-gray-900);
+    --color-surface-dark-alt: var(--dynamic-gray-800);
+    --color-onSurfaceDark: var(--dynamic-gray-400);
+    --color-onSurfaceDarkStrong: var(--dynamic-gray-100);
+    --color-borderDark: var(--dynamic-gray-800);
     --color-primaryDark: #818cf8;
+    /* Indigo-400 equivalent */
     --color-onPrimaryDark: #ffffff;
+  }
+}
+
+/* Utilities using semantic variables */
+@layer utilities {
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-alt {
+    background-color: var(--color-surface-alt);
+  }
+
+  .text-onSurface {
+    color: var(--color-onSurface);
+  }
+
+  .text-onSurfaceStrong {
+    color: var(--color-onSurfaceStrong);
+  }
+
+  .border-border-light {
+    border-color: var(--color-border-light);
+  }
+
+  /* Dark mode utilities */
+  .dark .bg-surfaceDark {
+    background-color: var(--color-surfaceDark);
+  }
+
+  .dark .text-onSurfaceDark {
+    color: var(--color-onSurfaceDark);
+  }
+
+  .dark .text-onSurfaceDarkStrong {
+    color: var(--color-onSurfaceDarkStrong);
+  }
+
+  .dark .border-borderDark {
+    border-color: var(--color-borderDark);
   }
 }
 
@@ -74,7 +197,7 @@
   }
 
   .resize-handle:focus {
-    outline: 2px solid rgba(99, 102, 241, 0.6);
+    outline: 2px solid rgba(203, 120, 92, 0.6);
     outline-offset: 2px;
   }
 
