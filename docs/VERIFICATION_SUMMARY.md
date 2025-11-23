@@ -19,7 +19,7 @@ A comprehensive audit of the fastapi-alpine-starter authentication system was pe
 6. ✅ Admin routes (user management, approval, creation)
 7. ✅ HTML templates (all 6 auth/admin templates)
 8. ✅ Database migrations (bootstrap admin seeding)
-9. ✅ Email service (Brevo integration)
+9. ✅ Email service (Resend integration)
 10. ✅ Security features (token hashing, expiration, single-use, RBAC)
 
 ---
@@ -78,7 +78,7 @@ A comprehensive audit of the fastapi-alpine-starter authentication system was pe
 - Passwordless login (secure token-based)
 - 15-minute expiration
 - Single-use enforcement
-- Email delivery via Brevo
+- Email delivery via Resend
 - Automatic session creation on verification
 
 ✅ **Admin Authentication**
@@ -164,7 +164,7 @@ Four comprehensive documentation files were created:
 ### What Still Needs (Production)
 - [ ] New SECRET_KEY generation
 - [ ] Real database configuration
-- [ ] Real Brevo API key
+- [ ] Real Resend API key
 - [ ] Production email templates
 - [ ] HTTPS/SSL setup
 - [ ] Rate limiting configuration
@@ -236,7 +236,7 @@ Four comprehensive documentation files were created:
 - **Database**: SQLModel + SQLAlchemy async
 - **Password Hashing**: Passlib + Bcrypt
 - **Session Signing**: itsdangerous
-- **Email**: Brevo (Sendinblue) API
+- **Email**: Resend (Sendinblue) API
 - **Templates**: Jinja2 with i18n
 - **CSS**: Tailwind CSS v4
 - **Frontend**: Alpine.js for interactivity
@@ -289,7 +289,7 @@ uvicorn app.main:app --reload
 1. Generate new SECRET_KEY
 2. Change BOOTSTRAP_ADMIN_PASSWORD
 3. Configure real database
-4. Add real Brevo API key
+4. Add real Resend API key
 5. Set production APP_BASE_URL
 6. Enable HTTPS and Secure cookies
 7. Run full test suite

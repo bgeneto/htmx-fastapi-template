@@ -15,7 +15,7 @@ The fastapi-alpine-starter authentication system is **fully implemented** with a
 - ✅ Bootstrap admin password-based login
 - ✅ Role-based access control (4-tier hierarchy)
 - ✅ Session management with expiration
-- ✅ Email notifications via Brevo
+- ✅ Email notifications via resend API
 - ✅ Database migrations with bootstrap admin seeding
 - ✅ All required templates and UI components
 - ✅ Comprehensive error handling and i18n support
@@ -38,7 +38,7 @@ The fastapi-alpine-starter authentication system is **fully implemented** with a
 - [x] `SESSION_EXPIRY_DAYS` (30 days default)
 - [x] `MAGIC_LINK_EXPIRY_MINUTES` (15 minutes default)
 - [x] `BOOTSTRAP_ADMIN_EMAIL` and password
-- [x] Brevo API configuration
+- [x] Resend API configuration
 - [x] Email sender settings
 - [x] Base URL for magic links
 - [x] All settings in .env file
@@ -103,7 +103,7 @@ The fastapi-alpine-starter authentication system is **fully implemented** with a
 - [x] `send_magic_link()` - Send passwordless login email
 - [x] `send_registration_notification()` - Notify admin of new user
 - [x] `send_account_approved()` - Notify user of approval
-- [x] Brevo API integration with error handling
+- [x] Resend API integration with error handling
 - [x] HTML email templates with styling
 - [x] Professional email formatting
 
@@ -211,7 +211,7 @@ The authentication system is now ready for:
 | `app/config.py`                            | Settings management        | ✅ Complete |
 | `app/auth.py`                              | Session & dependencies     | ✅ Complete |
 | `app/repository.py`                        | Database operations        | ✅ Complete |
-| `app/email.py`                             | Brevo email integration    | ✅ Complete |
+| `app/email.py`                             | resend email integration    | ✅ Complete |
 | `app/schemas.py`                           | Pydantic validators        | ✅ Complete |
 | `app/main.py`                              | Routes and middleware      | ✅ Fixed    |
 | `alembic/versions/0002_add_auth_tables.py` | Database migration         | ✅ Complete |
@@ -242,7 +242,7 @@ All required packages in `requirements.txt`:
 - ✅ `sqlmodel` - ORM with async support
 - ✅ `passlib[bcrypt]` - Password hashing
 - ✅ `itsdangerous` - Session signing
-- ✅ `sib-api-v3-sdk` - Brevo email API
+- ✅ `sib-api-v3-sdk` - Resend email API
 - ✅ `pydantic` - Data validation
 - ✅ `jinja2` - Template rendering
 - ✅ `babel` - i18n support
@@ -255,7 +255,7 @@ All required packages in `requirements.txt`:
 1. [ ] Generate new SECRET_KEY: `openssl rand -hex 32`
 2. [ ] Set strong BOOTSTRAP_ADMIN_PASSWORD
 3. [ ] Configure real database URL (PostgreSQL recommended)
-4. [ ] Configure real Brevo API key
+4. [ ] Configure real Resend API key
 5. [ ] Set APP_BASE_URL to production domain
 6. [ ] Enable HTTPS and set Secure cookie flag
 7. [ ] Set DEBUG=false in production
@@ -271,7 +271,7 @@ All required packages in `requirements.txt`:
 7. [ ] Test admin user management
 8. [ ] Load test with many concurrent sessions
 9. [ ] Test token expiration edge cases
-10. [ ] Verify Brevo email sending
+10. [ ] Verify Resend email sending
 
 ### Monitoring
 1. [ ] Set up logging to file (logs/app.log)

@@ -28,7 +28,7 @@
 | 20                           | Settings         | MAGIC_LINK_EXPIRY_MINUTES            | ✅           | config.py:17          | ✅ Complete   |
 | 21                           | Settings         | BOOTSTRAP_ADMIN_EMAIL                | ✅           | config.py:20          | ✅ Complete   |
 | 22                           | Settings         | BOOTSTRAP_ADMIN_PASSWORD             | ✅           | config.py:21          | ✅ Complete   |
-| 23                           | Settings         | BREVO_API_KEY                        | ✅           | config.py:24          | ✅ Complete   |
+| 23                           | Settings         | EMAIL_API_KEY                        | ✅           | config.py:24          | ✅ Complete   |
 | 24                           | Settings         | EMAIL_FROM_ADDRESS                   | ✅           | config.py:25          | ✅ Complete   |
 | 25                           | Settings         | EMAIL_FROM_NAME                      | ✅           | config.py:26          | ✅ Complete   |
 | 26                           | Settings         | APP_BASE_URL                         | ✅           | config.py:29          | ✅ Complete   |
@@ -116,7 +116,7 @@
 | 100                          | Email            | send_magic_link()                    | ✅           | email.py:17-73        | ✅ Complete   |
 | 101                          | Email            | send_registration_notification()     | ✅           | email.py:76-139       | ✅ Complete   |
 | 102                          | Email            | send_account_approved()              | ✅           | email.py:142-187      | ✅ Complete   |
-| 103                          | Email            | Brevo API integration                | ✅           | email.py:8-15         | ✅ Complete   |
+| 103                          | Email            | Resend API integration                | ✅           | email.py:8-15         | ✅ Complete   |
 | 104                          | Email            | Error handling/logging               | ✅           | All                   | ✅ Complete   |
 | **SECURITY**                 |
 | 105                          | Security         | Token generation (32-byte)           | ✅           | repository.py:143     | ✅ Complete   |

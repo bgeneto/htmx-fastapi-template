@@ -124,7 +124,7 @@ A comprehensive audit of the fastapi-alpine-starter authentication system has be
 - ✅ Session expiry settings
 - ✅ Magic link settings
 - ✅ Bootstrap admin config
-- ✅ Brevo email settings
+- ✅ Resend email settings
 - ✅ Base URL configuration
 
 ### Repository Layer: ✅ Complete
@@ -165,7 +165,7 @@ A comprehensive audit of the fastapi-alpine-starter authentication system has be
 
 ### Email Service: ✅ Complete
 - ✅ 3 email functions
-- ✅ Brevo API integration
+- ✅ Resend API integration
 - ✅ HTML email templates
 - ✅ Error handling
 - ✅ Async sending
@@ -196,7 +196,7 @@ A comprehensive audit of the fastapi-alpine-starter authentication system has be
 1. Generate new SECRET_KEY
 2. Change BOOTSTRAP_ADMIN_PASSWORD
 3. Configure production database
-4. Add real Brevo API key
+4. Add real Resend API key
 5. Set APP_BASE_URL to production domain
 6. Enable HTTPS and Secure cookies
 7. Run full test suite
@@ -305,7 +305,7 @@ The fastapi-alpine-starter authentication system now provides:
 4. **Well Documented** - 2,174 lines of documentation
 5. **Easy to Test** - 10 complete test scenarios
 6. **Full i18n** - All text translatable
-7. **Modern Stack** - FastAPI, SQLModel, Brevo, Tailwind
+7. **Modern Stack** - FastAPI, SQLModel, Resend, Tailwind
 
 ---
 

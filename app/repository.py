@@ -405,12 +405,13 @@ async def create_otp_code(session: AsyncSession, email: str) -> str:
     otp_code = ''.join(random.choices(string.digits, k=6))
 
     # Delete any existing unused OTP codes for this email
-    await session.exec(
-        select(OTPCode).where(OTPCode.email == email.lower(), OTPCode.used_at.is_(None))
+    old_otps_result = await session.exec(
+        select(OTPCode).where(
+            OTPCode.email == email.lower(),
+            OTPCode.used_at.is_(None)
+        )
     )
-    for old_otp in await session.exec(
-        select(OTPCode).where(OTPCode.email == email.lower(), OTPCode.used_at.is_(None))
-    ):
+    for old_otp in old_otps_result:
         session.delete(old_otp)
 
     # Create new OTP code

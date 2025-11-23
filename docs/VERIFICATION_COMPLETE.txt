@@ -131,7 +131,7 @@ COMMUNICATION
   ├─ Magic Link Emails                           ✅ Complete
   ├─ Registration Notifications                  ✅ Complete
   ├─ Account Approval Emails                     ✅ Complete
-  └─ Brevo API Integration                       ✅ Complete
+  └─ Resend API Integration                       ✅ Complete
 
 UI/UX
   ├─ Registration Form                           ✅ Complete
@@ -331,7 +331,7 @@ TOTAL DOCUMENTATION                   3,200        ✅
 1. Generate new SECRET_KEY
 2. Change BOOTSTRAP_ADMIN_PASSWORD
 3. Configure real database
-4. Add real Brevo API key
+4. Add real resend API key
 5. Set production APP_BASE_URL
 6. Enable HTTPS and Secure cookies
 7. Run complete test suite

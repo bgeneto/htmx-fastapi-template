@@ -9,16 +9,6 @@
     <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md mx-auto">
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-                <!-- Verification icon -->
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full mb-6">
-                    <svg class="w-10 h-10 text-green-600 dark:text-green-400"
-                         fill="none"
-                         stroke="currentColor"
-                         viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                    </svg>
-                </div>
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 text-center">{{ _("Enter Verification Code") }}</h1>
                 <p class="text-gray-600 dark:text-gray-300 text-center mb-6">
                     {{ _("We sent a 6-digit code to") }} <span class="font-semibold">{{ email }}</span>
@@ -117,9 +107,9 @@
                                     {{ _('Didn\'t receive the code?') }}
                                                                         <button type="button"
                                                                                 @click="resendCode"
-                                                                                :disabled="resendLoading"
-                                                                                class="ml-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium disabled:opacity-50">
-                                                                            <span x-text="resendLoading ? '{{ _('Sending...') }}' : '{{ _("Resend Code") }}'"></span>
+                                                                                :disabled="resendLoading || countdown > 0"
+                                                                                class="ml-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium disabled:opacity-50 cursor-pointer hover:underline disabled:cursor-not-allowed disabled:no-underline">
+                                                                            <span x-text="resendLoading ? '{{ _('Sending...') }}' : (countdown > 0 ? '{{ _('Resend Code') }} (' + countdown + 's)' : '{{ _('Resend Code') }}')"></span>
                                     </button>
                                 </div>
                                 <a href="/auth/login"
@@ -145,6 +135,8 @@
             },
             loading: false,
             resendLoading: false,
+            countdown: 0,
+            countdownInterval: null,
 
             i18n: {
                 otpRequired: "{{ _('Verification code is required') }}",
@@ -158,6 +150,13 @@
                     const firstInput = this.$refs['input-0'];
                     if (firstInput) firstInput.focus();
                 });
+            },
+
+            destroy() {
+                // Cleanup countdown interval
+                if (this.countdownInterval) {
+                    clearInterval(this.countdownInterval);
+                }
             },
 
             handleInput(index, event) {
@@ -273,6 +272,17 @@
                 }
             },
 
+            startCountdown() {
+                this.countdown = 30; // 30 second countdown
+                this.countdownInterval = setInterval(() => {
+                    this.countdown--;
+                    if (this.countdown <= 0) {
+                        clearInterval(this.countdownInterval);
+                        this.countdownInterval = null;
+                    }
+                }, 1000);
+            },
+
             async resendCode() {
                 this.resendLoading = true;
 
@@ -290,6 +300,9 @@
                     this.digits = ['', '', '', '', '', ''];
                     this.form.otp_code = '';
                     this.errors.otp_code = '';
+
+                    // Start countdown timer
+                    this.startCountdown();
 
                     // Focus on first input
                     this.$nextTick(() => {

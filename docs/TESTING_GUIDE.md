@@ -5,7 +5,7 @@
 ### Prerequisites
 - Python 3.10+
 - PostgreSQL or SQLite
-- Brevo account with API key
+- Resend account with API key
 
 ### Setup Steps
 
@@ -23,7 +23,7 @@ pip install -r requirements.txt
 # - DATABASE_URL
 # - BOOTSTRAP_ADMIN_EMAIL
 # - BOOTSTRAP_ADMIN_PASSWORD
-# - BREVO_API_KEY
+# - EMAIL_API_KEY
 # - APP_BASE_URL
 
 # 4. Initialize database
@@ -321,7 +321,7 @@ Before deploying to production:
 - [ ] Generate new SECRET_KEY: `openssl rand -hex 32`
 - [ ] Set strong BOOTSTRAP_ADMIN_PASSWORD
 - [ ] Configure production DATABASE_URL (PostgreSQL)
-- [ ] Get real Brevo API key
+- [ ] Get real Resend API key
 - [ ] Set APP_BASE_URL to production domain
 - [ ] Set `SECURE=true` in cookie settings (for HTTPS)
 - [ ] Review email templates for branding
@@ -342,7 +342,7 @@ Before deploying to production:
 - **FastAPI Docs**: https://fastapi.tiangolo.com
 - **SQLModel Docs**: https://sqlmodel.tiangolo.com
 - **Passlib Docs**: https://passlib.readthedocs.io
-- **Brevo API**: https://developers.brevo.com
+- **Resend API**: https://developers.brevo.com
 - **Pydantic Docs**: https://docs.pydantic.dev
 - **Jinja2 Docs**: https://jinja.palletsprojects.com
 

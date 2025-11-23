@@ -7,9 +7,6 @@ from .logger import get_logger
 
 logger = get_logger(__name__)
 
-# Configure Resend API key
-resend.api_key = settings.EMAIL_API_KEY.get_secret_value()
-
 
 def _create_safe_html_template(
     preheader_text: str, subject: str, content_body: str, sender_footer: bool = False
@@ -157,6 +154,11 @@ async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
     unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
 
     try:
+        logger.info(f"Attempting to send magic link email to {email} via Resend")
+        logger.debug(f"Resend API Key configured: {bool(settings.EMAIL_API_KEY)}")
+        logger.debug(f"From address: {settings.EMAIL_FROM_ADDRESS}")
+        logger.debug(f"From name: {settings.EMAIL_FROM_NAME}")
+
         api_response = resend.Emails.send(
             {
                 "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
@@ -173,10 +175,12 @@ async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
                 },
             }
         )
-        logger.info(f"Magic link email sent to {email}: {api_response}")
+        logger.info(f"Magic link email sent successfully to {email}: {api_response}")
         return True
     except Exception as e:
         logger.error(f"Failed to send magic link email to {email}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {str(e)}")
         return False
 
 
@@ -254,6 +258,7 @@ async def send_registration_notification(
     )
 
     try:
+        logger.info(f"Attempting to send registration notification to {admin_email} via Resend")
         api_response = resend.Emails.send(
             {
                 "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
@@ -268,16 +273,18 @@ async def send_registration_notification(
                 },
             }
         )
-        logger.info(f"Registration notification sent to {admin_email}: {api_response}")
+        logger.info(f"Registration notification sent successfully to {admin_email}: {api_response}")
         return True
     except Exception as e:
         logger.error(f"Failed to send registration notification to {admin_email}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {str(e)}")
         return False
 
 
 async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     """
-    Send OTP code for login verification
+    Send OTP code for login verification using Resend
 
     Args:
         email: Recipient email address
@@ -341,6 +348,12 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
 
     try:
+        logger.info(f"Attempting to send OTP email to {email} via Resend")
+        logger.debug(f"Resend API Key configured: {bool(settings.EMAIL_API_KEY)}")
+        logger.debug(f"From address: {settings.EMAIL_FROM_ADDRESS}")
+        logger.debug(f"From name: {settings.EMAIL_FROM_NAME}")
+        logger.debug(f"OTP code: {otp_code}")
+
         api_response = resend.Emails.send(
             {
                 "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
@@ -357,10 +370,12 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
                 },
             }
         )
-        logger.info(f"OTP email sent to {email}: {api_response}")
+        logger.info(f"OTP email sent successfully to {email}: {api_response}")
         return True
     except Exception as e:
         logger.error(f"Failed to send OTP email to {email}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {str(e)}")
         return False
 
 
@@ -428,6 +443,7 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
     unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
 
     try:
+        logger.info(f"Attempting to send account approved email to {email} via Resend")
         api_response = resend.Emails.send(
             {
                 "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
@@ -444,8 +460,10 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
                 },
             }
         )
-        logger.info(f"Account approved email sent to {email}: {api_response}")
+        logger.info(f"Account approved email sent successfully to {email}: {api_response}")
         return True
     except Exception as e:
         logger.error(f"Failed to send account approved email to {email}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {str(e)}")
         return False

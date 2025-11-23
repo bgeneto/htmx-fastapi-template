@@ -19,7 +19,7 @@ fastapi-alpine-starter/
 │   ├── repository.py                 # Data access layer (CRUD operations, auth logic)
 │   ├── schemas.py                    # Pydantic validation schemas
 │   ├── auth.py                       # Authentication & session management
-│   ├── email.py                      # Brevo email service integration
+│   ├── email.py                      # resend email service integration
 │   ├── i18n.py                       # Internationalization utilities
 │   │
 │   ├── api/                          # API route modules (future expansion)

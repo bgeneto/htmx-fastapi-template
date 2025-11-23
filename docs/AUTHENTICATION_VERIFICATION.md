@@ -54,7 +54,7 @@ Role hierarchy: `PENDING < USER < MODERATOR < ADMIN`
 | `MAGIC_LINK_EXPIRY_MINUTES` | 15                 | 17   | ✅      |
 | `BOOTSTRAP_ADMIN_EMAIL`     | Required env var   | 20   | ✅      |
 | `BOOTSTRAP_ADMIN_PASSWORD`  | Required SecretStr | 21   | ✅      |
-| `BREVO_API_KEY`             | Required SecretStr | 24   | ✅      |
+| `EMAIL_API_KEY`             | Required SecretStr | 24   | ✅      |
 | `EMAIL_FROM_ADDRESS`        | Required env var   | 25   | ✅      |
 | `EMAIL_FROM_NAME`           | "Alpine FastAPI"   | 26   | ✅      |
 | `APP_BASE_URL`              | Required env var   | 29   | ✅      |
@@ -65,7 +65,7 @@ Role hierarchy: `PENDING < USER < MODERATOR < ADMIN`
 - `MAGIC_LINK_EXPIRY_MINUTES=25`
 - `BOOTSTRAP_ADMIN_EMAIL=admin@sistema.pro.br`
 - `BOOTSTRAP_ADMIN_PASSWORD=12345678`
-- `BREVO_API_KEY` configured
+- `EMAIL_API_KEY` configured
 - `EMAIL_FROM_ADDRESS=admin@sistema.pro.br`
 - `APP_BASE_URL=http://localhost:8000`
 
@@ -322,7 +322,7 @@ Role hierarchy: `PENDING < USER < MODERATOR < ADMIN`
 | `send_account_approved(email, name, url)`                     | 142-187 | User      | ✅      |
 
 ### Features
-- ✅ Uses Brevo/Sendinblue API (sib_api_v3_sdk)
+- ✅ Uses Resend/Sendinblue API (sib_api_v3_sdk)
 - ✅ HTML email templates with styling
 - ✅ Expiry time in magic link email (line 40)
 - ✅ Admin approval notification with review link
@@ -360,11 +360,11 @@ Role hierarchy: `PENDING < USER < MODERATOR < ADMIN`
 | Admin-only routes   | Protected with `Depends(require_admin)` | ✅      |
 | Pending users       | Cannot login (line 338-343)             | ✅      |
 
-### Brevo Email Integration
+### Resend Email Integration
 | Feature        | Implementation                      | Status |
 | -------------- | ----------------------------------- | ------ |
 | API client     | `_get_brevo_client()` function      | ✅      |
-| Configuration  | Reads from `settings.BREVO_API_KEY` | ✅      |
+| Configuration  | Reads from `settings.EMAIL_API_KEY` | ✅      |
 | Error handling | Try/except with logging             | ✅      |
 | HTML templates | Professional templates with styling | ✅      |
 | From address   | Configured in settings              | ✅      |
@@ -489,7 +489,7 @@ from .email import (
 - [ ] Test single-use token prevention
 - [ ] Test session cookie expiration
 - [ ] Test role-based access control on all admin routes
-- [ ] Verify Brevo email sending in production
+- [ ] Verify Resend email sending in production
 - [ ] Test bootstrap admin password login
 - [ ] Verify magic link URLs are correctly formatted
 

@@ -39,9 +39,9 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
 - **Validation Pattern**: Follow the pattern in `templates/components/_contact_form.html`:
   ```html
   <form @submit.prevent="submitForm" novalidate class="...">
-    <input x-model="form.fieldName" 
-           @blur="validate('fieldName')" 
-           @input="validate('fieldName')" 
+    <input x-model="form.fieldName"
+           @blur="validate('fieldName')"
+           @input="validate('fieldName')"
            required />
     <div x-show="errors.fieldName" x-transition class="mt-2 flex items-center text-sm text-red-600">
       <svg class="h-4 w-4 mr-1">...</svg>
@@ -72,7 +72,7 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
   - Dark mode compatible
   - i18n translation support via `{{ _('...') }}`
   - Better visual integration with icons and transitions
-- **Reference Examples**: 
+- **Reference Examples**:
   - `templates/components/_contact_form.html` (contact form)
   - `templates/pages/profile.html` (profile and password forms)
   - `templates/pages/auth/register.html` (registration form)
@@ -195,14 +195,14 @@ uvicorn app.main:app --reload --proxy-headers
 The project uses a professional, enterprise-grade folder organization that supports scalability and team collaboration:
 
 ```
-app/                         # Application core (Python modules)
+app/                        # Application core (Python modules)
   ├── main.py               # FastAPI app initialization & routes
   ├── config.py             # Configuration (Pydantic BaseSettings)
   ├── models.py             # SQLModel table definitions
   ├── schemas.py            # Pydantic validation schemas
   ├── repository.py         # Data access layer (CRUD operations)
   ├── auth.py               # Session management & authentication
-  ├── email.py              # Brevo email service integration
+  ├── email.py              # resend email service integration
   ├── i18n.py               # i18n translation utilities
   ├── logger.py             # Loguru logging configuration
   ├── db.py                 # Database engine & session management
