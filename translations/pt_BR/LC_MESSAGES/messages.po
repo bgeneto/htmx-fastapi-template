@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 00:22-0300\n"
+"POT-Creation-Date: 2025-11-23 00:36-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -373,33 +373,33 @@ msgstr "Contatos recentes"
 msgid "No contacts yet. Be the first to submit!"
 msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
-#: templates/components/_sidebar.html:52
+#: templates/components/_sidebar.html:54
 #: templates/components/_top_navbar.html:20
 msgid "Dashboard"
 msgstr ""
 
-#: templates/components/_sidebar.html:60
+#: templates/components/_sidebar.html:62
 msgid "Admin"
 msgstr ""
 
-#: templates/components/_sidebar.html:71
+#: templates/components/_sidebar.html:74 templates/errors/404.html:56
 msgid "Contacts"
 msgstr "Contatos"
 
-#: templates/components/_sidebar.html:80 templates/pages/admin/cars.html:3
+#: templates/components/_sidebar.html:84 templates/pages/admin/cars.html:3
 #: templates/pages/admin/cars.html:9
 msgid "Cars Inventory"
 msgstr "Diretório de Contatos"
 
-#: templates/components/_sidebar.html:89
+#: templates/components/_sidebar.html:94
 msgid "Users"
 msgstr ""
 
-#: templates/components/_sidebar.html:97
+#: templates/components/_sidebar.html:102
 msgid "Demo"
 msgstr ""
 
-#: templates/components/_sidebar.html:108
+#: templates/components/_sidebar.html:114 templates/errors/404.html:57
 msgid "Books"
 msgstr "Livros"
 
@@ -436,6 +436,49 @@ msgstr ""
 
 #: templates/components/_top_navbar.html:221
 msgid "Sign out"
+msgstr ""
+
+#: templates/errors/404.html:3 templates/errors/404.html:25
+#, fuzzy
+msgid "Page Not Found"
+msgstr "Recurso não encontrado"
+
+#: templates/errors/404.html:28
+msgid "Sorry, the page you are looking for does not exist or has been moved."
+msgstr ""
+
+#: templates/errors/404.html:40 templates/errors/5xx.html:40
+#, fuzzy
+msgid "Go Home"
+msgstr "Voltar ao Início"
+
+#: templates/errors/404.html:48 templates/errors/5xx.html:48
+#, fuzzy
+msgid "Go Back"
+msgstr "Bem-vindo de Volta"
+
+#: templates/errors/404.html:54
+msgid "Here are some helpful links instead:"
+msgstr ""
+
+#: templates/errors/404.html:58
+#, fuzzy
+msgid "Login"
+msgstr "Entrar"
+
+#: templates/errors/5xx.html:3 templates/errors/5xx.html:25
+msgid "Unexpected Error"
+msgstr ""
+
+#: templates/errors/5xx.html:28
+#, fuzzy
+msgid ""
+"An unexpected error occurred while processing your request. Please try "
+"again later."
+msgstr "Ocorreu um erro. Por favor, tente novamente."
+
+#: templates/errors/5xx.html:54
+msgid "Error Code"
 msgstr ""
 
 #: templates/pages/books.html:3 templates/pages/books.html:9
@@ -556,7 +599,7 @@ msgstr "Navegue e gerencie todos os envios de contato"
 msgid "Modern Full-Stack Starter"
 msgstr ""
 
-#: templates/pages/index.html:26
+#: templates/pages/index.html:24
 msgid "Contact us"
 msgstr "Entre em contato"
 

@@ -12,28 +12,29 @@
     <div class="flex flex-col h-full px-4 py-4 overflow-y-auto my-2">
         <!-- Logo and Collapse Button -->
         <div class="flex items-center justify-between pl-2.5 mb-6">
-            <a href="/" class="flex items-center">
+            <a href="/" class="flex items-center" x-show="!collapsed">
                 <span
                     class="self-center text-xl font-semibold whitespace-nowrap text-onSurfaceStrong dark:text-onSurfaceDarkStrong">
-                    Alpine FastAPI
+                    ALP
                 </span>
             </a>
 
-            <!-- Collapse/Expand Button (hidden on mobile) -->
+            <!-- Collapse/Expand Button - ALWAYS VISIBLE -->
             <button type="button" @click="toggleCollapse()" :aria-expanded="!collapsed"
-                class="hidden md:flex ml-3 p-1.5 rounded-md bg-surface hover:bg-primary/5 dark:bg-surfaceDark dark:hover:bg-primaryDark/5 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-primaryDark/20 transition-colors"
-                :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
-                <!-- Collapse icon (double chevron left) -->
+                :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                class="hidden md:flex p-1.5 rounded-md bg-surface hover:bg-primary/10 dark:bg-surfaceDark dark:hover:bg-primaryDark/10 focus:outline-none transition-all"
+                :class="collapsed ? 'mx-auto' : 'ml-3'" :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+                <!-- Expand icon when collapsed - double chevron right -->
+                <svg x-show="collapsed" class="w-5 h-5 text-primary dark:text-primaryDark" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-cloak>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                </svg>
+                <!-- Collapse icon when expanded - double chevron left -->
                 <svg x-show="!collapsed" class="w-5 h-5 text-onSurface dark:text-onSurfaceDark" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                </svg>
-                <!-- Expand icon (double chevron right) -->
-                <svg x-show="collapsed" class="w-5 h-5 text-onSurface dark:text-onSurfaceDark" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-cloak>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7">
-                    </path>
                 </svg>
             </button>
         </div>
@@ -41,9 +42,10 @@
         <!-- Navigation -->
         <div class="flex-1 space-y-1">
             <a href="/"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded">
-                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 22 21">
+                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                :class="collapsed ? 'justify-center' : ''">
+                <svg class="flex-shrink-0" :class="collapsed ? 'size-6' : 'size-5'" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                     <path
                         d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                     <path
@@ -62,27 +64,30 @@
                 </div>
             </div>
             <a href="/admin"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded">
-                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 20 18">
+                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                :class="collapsed ? 'justify-center' : ''">
+                <svg class="flex-shrink-0" :class="collapsed ? 'size-6' : 'size-5'" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                     <path
                         d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                 </svg>
                 <span x-show="!collapsed">{{ _('Contacts') }}</span>
             </a>
             <a href="/admin/cars"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded">
-                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 18 20">
+                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                :class="collapsed ? 'justify-center' : ''">
+                <svg class="flex-shrink-0" :class="collapsed ? 'size-6' : 'size-5'" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                     <path
                         d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.840a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
                 </svg>
                 <span x-show="!collapsed">{{ _('Cars Inventory') }}</span>
             </a>
             <a href="/admin/users"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded">
-                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 20 20">
+                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                :class="collapsed ? 'justify-center' : ''">
+                <svg class="flex-shrink-0" :class="collapsed ? 'size-6' : 'size-5'" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path
                         d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
                 </svg>
@@ -99,9 +104,10 @@
                 </div>
             </div>
             <a href="/books"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded">
-                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 18 18">
+                class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                :class="collapsed ? 'justify-center' : ''">
+                <svg class="flex-shrink-0" :class="collapsed ? 'size-6' : 'size-5'" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                     <path
                         d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
                 </svg>
@@ -110,11 +116,22 @@
         </div>
     </div>
 
-    <!-- Resize handle (hidden on mobile) -->
-    <div class="hidden md:flex absolute right-0 top-0 h-full items-center" @pointerdown.prevent="startDrag($event)">
-        <div role="slider" aria-label="Resize sidebar" tabindex="0" class="resize-handle"
-            @pointerdown.prevent.stop="startDrag($event)" @keydown.prevent.stop="handleKeydown($event)"></div>
+    <!-- Resize handle (hidden on mobile) - visible indicator -->
+    <div x-show="!collapsed" class="hidden md:flex absolute right-0 top-0 h-full items-center group"
+        @pointerdown.prevent="startDrag($event)" title="Drag to resize sidebar">
+        <!-- Visual resize indicator -->
+        <div role="slider" aria-label="Resize sidebar - drag or use arrow keys" tabindex="0"
+            class="resize-handle relative flex items-center justify-center bg-transparent hover:bg-primary/10 dark:hover:bg-primaryDark/10 transition-colors"
+            @pointerdown.prevent.stop="startDrag($event)" @keydown.prevent.stop="handleKeydown($event)">
+            <!-- Vertical grip lines (three dots) -->
+            <div class="flex flex-col gap-1 opacity-30 group-hover:opacity-100 transition-opacity">
+                <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
+                <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
+                <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
+            </div>
+        </div>
 
+        <!-- Expanded hit area -->
         <div class="handle-hit" @pointerdown.prevent.stop="startDrag($event)"></div>
     </div>
 </aside>
