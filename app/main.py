@@ -177,7 +177,7 @@ class HostHeaderLoggingMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-# app.add_middleware(HostHeaderLoggingMiddleware) # debug only
+app.add_middleware(HostHeaderLoggingMiddleware) # debug only
 
 # Security Middleware Configuration
 # TrustedHostMiddleware - validates Host header to prevent host header injection attacks
