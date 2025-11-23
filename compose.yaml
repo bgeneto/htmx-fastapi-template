@@ -29,19 +29,26 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
+      - default
       - proxy
     depends_on:
       - redis
 
-  redis:
+  redis-fastapi:
     image: redis:7-alpine
-    container_name: fastapi-starter-redis
+    container_name: redis-fastapi
     restart: unless-stopped
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
     networks:
-      - proxy
+      - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   redis_data:
