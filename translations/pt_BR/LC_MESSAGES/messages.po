@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 10:08-0300\n"
+"POT-Creation-Date: 2025-11-23 10:36-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -166,6 +166,10 @@ msgstr "Por favor, insira um endereço de e-mail válido"
 #: templates/pages/books.html:49
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
+
+#: templates/_base.html:87
+msgid "Close"
+msgstr ""
 
 #: templates/components/_contact_form.html:11
 msgid "Message Sent!"
@@ -357,7 +361,7 @@ msgid "Save Changes"
 msgstr "Salvar Alterações"
 
 #: templates/components/_language_selector.html:81
-#: templates/components/_top_navbar.html:181
+#: templates/components/_top_navbar.html:180
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
@@ -427,7 +431,7 @@ msgstr "Mudar Tema"
 msgid "Language"
 msgstr "Idioma"
 
-#: templates/components/_top_navbar.html:223
+#: templates/components/_top_navbar.html:221
 msgid "Sign out"
 msgstr ""
 

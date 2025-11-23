@@ -207,9 +207,7 @@
 
             async submitForm() {
                 if (!this.validateAll()) {
-                    if (window.showToast) {
-                        window.showToast(this.i18n.fixErrors, 'error');
-                    }
+                    window.showToast(this.i18n.fixErrors, 'error');
                     return;
                 }
 
@@ -229,22 +227,16 @@
                     this.success = true;
                     this.successMessage = this.i18n.successTemplate.replace('{name}', this.form.name);
 
-                    if (window.showToast) {
-                        window.showToast(this.successMessage, 'success');
-                    }
+                    window.showToast(this.successMessage, 'success');
                 } catch (error) {
                     console.error('Form submission error:', error);
                     if (error.response && error.response.data) {
                         if (error.response.data.errors) {
                             this.errors = error.response.data.errors;
                         }
-                        if (window.showToast) {
-                            window.showToast(this.i18n.fixErrors, 'error');
-                        }
+                        window.showToast(this.i18n.fixErrors, 'error');
                     } else {
-                        if (window.showToast) {
-                            window.showToast('An error occurred. Please try again.', 'error');
-                        }
+                        window.showToast('An error occurred. Please try again.', 'error');
                     }
                 } finally {
                     this.loading = false;

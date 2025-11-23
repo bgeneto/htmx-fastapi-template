@@ -193,9 +193,7 @@
 
             async submitForm() {
                 if (!this.validateAll()) {
-                    if (window.showToast) {
-                        window.showToast(this.i18n.fixErrors, 'error');
-                    }
+                    window.showToast(this.i18n.fixErrors, 'error');
                     return;
                 }
 
@@ -215,14 +213,10 @@
                     this.success = true;
                     this.successMessage = data.message || this.i18n.successMessage;
 
-                    if (window.showToast) {
-                        window.showToast(this.successMessage, 'success');
-                    }
+                    window.showToast(this.successMessage, 'success');
                 } catch (error) {
                     console.error('Registration error:', error);
-                    if (window.showToast) {
-                        window.showToast('An error occurred. Please try again.', 'error');
-                    }
+                    window.showToast('An error occurred. Please try again.', 'error');
                 } finally {
                     this.loading = false;
                 }

@@ -398,57 +398,18 @@ document.addEventListener("alpine:init", () => {
     /**
      * Show a toast notification
      */
+    /**
+     * Show a toast notification
+     */
     showToast(message, type = 'info') {
       console.log(`[TOAST ${type.toUpperCase()}]: ${message}`); // Always log for debugging
 
-      // Try to use the toast system from _base.html if available
+      // Use the global toast system
       if (typeof window.showToast === 'function') {
-        console.log('Using window.showToast');
         window.showToast(message, type);
       } else {
-        console.log('Using fallback toast notification');
-
-        // Create a more visible fallback notification
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-          color: white;
-          padding: 12px 16px;
-          border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          font-size: 14px;
-          font-weight: 500;
-          z-index: 10000;
-          max-width: 300px;
-          word-wrap: break-word;
-        `;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        // Ensure the notification is visible by scrolling it into view if needed
-        setTimeout(() => notification.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-
-        // Remove after 5 seconds with fade out
-        setTimeout(() => {
-          notification.style.transition = 'opacity 0.3s ease-out';
-          notification.style.opacity = '0';
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.parentNode.removeChild(notification);
-            }
-          }, 300);
-        }, 5000);
-
-        // Add click to dismiss
-        notification.addEventListener('click', () => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        });
+        console.warn('Toast system not initialized. Message:', message);
+        alert(`${type.toUpperCase()}: ${message}`); // Last resort fallback
       }
     },
   }));

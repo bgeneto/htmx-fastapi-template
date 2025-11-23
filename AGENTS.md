@@ -73,6 +73,31 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
 - **V4 syntax**: Use `@import "tailwindcss";` instead of old `@tailwind base/components/utilities`
 - **Never** edit `output.css` directly - modify `input.css` or use Tailwind classes in templates
 
+### 5. Toast Notification System
+- **Library**: Custom implementation in `static/js/toast.js` (dependency-free, vanilla JS)
+- **Styling**: Tailwind CSS v4 with premium aesthetics (white/dark surface, accent borders, deep shadows)
+- **Global Access**: Available on every page via `window.showToast(message, type)`
+- **Usage**:
+  ```javascript
+  // Types: 'success', 'error', 'warning', 'info'
+  window.showToast('Operation successful', 'success');
+  window.showToast('{{ _("Translated error message") }}', 'error');
+  ```
+- **Initialization**: Configured in `_base.html` with i18n support:
+  ```javascript
+  window.Toast.init({
+      translations: {
+          close: "{{ _('Close') }}"
+      }
+  });
+  ```
+- **Features**:
+  - Auto-dismiss with visual progress bar (3 seconds default)
+  - Fixed width (`w-80` mobile, `w-96` desktop) to prevent squashing
+  - Absolute positioning for close button to avoid text overlap
+  - Dark mode support
+- **Best Practice**: Always use server-side translation (`{{ _('...') }}`) for toast messages passed from templates.
+
 ## Critical Workflows
 
 ### Development Setup

@@ -292,13 +292,9 @@
         } catch (error) {
             console.error('Error approving user:', error);
             if (error.response && error.response.data) {
-                if (window.showToast) {
-                    window.showToast(error.response.data.error || 'Failed to approve user', 'error');
-                }
+                window.showToast(error.response.data.error || 'Failed to approve user', 'error');
             } else {
-                if (window.showToast) {
-                    window.showToast('An error occurred', 'error');
-                }
+                window.showToast('An error occurred', 'error');
             }
         }
     },
@@ -321,17 +317,13 @@
 
             const data = response.data;
 
-            if (window.showToast) {
-                window.showToast(data.message, 'success');
-            }
+            window.showToast(data.message, 'success');
             this.showCreateForm = false;
             this.newUser = { email: '', full_name: '', role: 'user', password: '' };
             window.location.reload();
         } catch (error) {
             console.error('Error creating user:', error);
-            if (window.showToast) {
-                window.showToast('An error occurred', 'error');
-            }
+            window.showToast('An error occurred', 'error');
         } finally {
             this.creatingUser = false;
         }
@@ -360,16 +352,12 @@
 
             const data = response.data;
 
-            if (window.showToast) {
-                window.showToast(data.message, 'success');
-            }
+            window.showToast(data.message, 'success');
             this.showEditForm = false;
             window.location.reload();
         } catch (error) {
             console.error('Error updating user:', error);
-            if (window.showToast) {
-                window.showToast('An error occurred', 'error');
-            }
+            window.showToast('An error occurred', 'error');
         } finally {
             this.updatingUser = false;
         }

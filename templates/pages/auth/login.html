@@ -133,9 +133,7 @@
 
             async submitForm() {
                 if (!this.validateAll()) {
-                    if (window.showToast) {
-                        window.showToast(this.i18n.fixErrors, 'error');
-                    }
+                    window.showToast(this.i18n.fixErrors, 'error');
                     return;
                 }
 
@@ -163,15 +161,13 @@
                     } else {
                         // For JSON responses
                         const data = response.data;
-                        if (window.showToast && data.message) {
+                        if (data.message) {
                             window.showToast(data.message, 'info');
                         }
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    if (window.showToast) {
-                        window.showToast('An error occurred. Please try again.', 'error');
-                    }
+                    window.showToast('An error occurred. Please try again.', 'error');
                 } finally {
                     this.loading = false;
                 }
