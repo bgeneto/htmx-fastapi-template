@@ -1,76 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{{ request.app.title }}{% endblock %}</title>
-
-    <!-- Preconnect to CDNs for faster resource loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Favicon and Icons -->
-    <link rel="icon" href="/static/icons/favicon.ico" sizes="any">
-    <link rel="icon" href="/static/icons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="/static/icons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" sizes="180x180">
-    <link rel="manifest" href="/static/icons/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
-
-    <!-- Google Fonts -->
-    <!--<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">-->
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-
-    <!-- Self-hosted Tailwind CSS (compiled) -->
-    <link rel="stylesheet" href="/static/css/output.css">
-
-    <!-- Axios for AJAX calls -->
-    <script defer src="/static/js/axios.min.js"></script>
-
-    <!-- Data Grid Component (load before Alpine) -->
-    <script defer src="/static/js/datagrid.js"></script>
-
-    <!-- Toast Component (load before Alpine) -->
-    <script defer src="/static/js/toast.js"></script>
-
-    <!-- Alpine Plugins -->
-    <script defer src="/static/js/alpine-mask.js"></script>
-    <script defer src="/static/js/alpine-collapse.js"></script>
-    <script defer src="/static/js/alpine-focus.js"></script>
-
-    <!-- Alpine.js Core for reactive components (load last) -->
-    <script defer src="/static/js/alpine-min.js"></script>
-
-    <link rel="stylesheet" href="/static/style.css" />
-    {% block extra_head %}{% endblock %}
-</head>
-
-<body
-    class="font-sans font-normal bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
-
-    <div x-data="{ sidebarIsOpen: false }" class="relative flex w-full min-h-screen">
-        {% include "components/_sidebar.html" %}
-
-        <div
-            class="flex-1 flex flex-col min-h-screen md:pl-[var(--sidebar-width)] transition-[padding-left] duration-200 ease-in-out">
-            {% include "components/_top_navbar.html" %}
-
-            <main class="flex-1 p-4 md:p-6 mt-16">
-                {% block content %}{% endblock %}
-            </main>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            {% block title %}{{ request.app.title }}{% endblock %}
+        </title>
+        <!-- Preconnect to CDNs for faster resource loading -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- Favicon and Icons -->
+        <link rel="icon" href="/static/icons/favicon.ico" sizes="any">
+        <link rel="icon"
+              href="/static/icons/favicon-16x16.png"
+              sizes="16x16"
+              type="image/png">
+        <link rel="icon"
+              href="/static/icons/favicon-32x32.png"
+              sizes="32x32"
+              type="image/png">
+        <link rel="apple-touch-icon"
+              href="/static/icons/apple-touch-icon.png"
+              sizes="180x180">
+        <link rel="manifest" href="/static/icons/site.webmanifest">
+        <meta name="theme-color" content="#ffffff">
+        <!-- Google Fonts -->
+        <!--<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet">-->
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+              rel="stylesheet">
+        <!-- Self-hosted Tailwind CSS (compiled) -->
+        <link rel="stylesheet" href="/static/css/output.css">
+        <!-- Axios for AJAX calls -->
+        <script defer src="/static/js/axios.min.js"></script>
+        <!-- Data Grid Component (load before Alpine) -->
+        <script defer src="/static/js/datagrid.js"></script>
+        <!-- Toast Component (load before Alpine) -->
+        <script defer src="/static/js/toast.js"></script>
+        <!-- Alpine Plugins -->
+        <script defer src="/static/js/alpine-mask.js"></script>
+        <script defer src="/static/js/alpine-collapse.js"></script>
+        <script defer src="/static/js/alpine-focus.js"></script>
+        <!-- Alpine.js Core for reactive components (load last) -->
+        <script defer src="/static/js/alpine-min.js"></script>
+        <link rel="stylesheet" href="/static/style.css" />
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body class="font-sans font-normal bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+        <div x-data="{ sidebarIsOpen: false }"
+             class="relative flex w-full min-h-screen">
+            {% include "components/_sidebar.html" %}
+            <div class="flex-1 flex flex-col min-h-screen md:pl-[var(--sidebar-width)] transition-[padding-left] duration-200 ease-in-out">
+                {% include "components/_top_navbar.html" %}
+                <main class="flex-1 p-4 md:p-6 mt-16">
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
         </div>
-    </div>
-
-    <!-- Toast container (handled by toast.js if missing, but good to have placeholder) -->
-    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
-
-    <!-- Common scripts -->
-    <script>
+        <!-- Toast container (handled by toast.js if missing, but good to have placeholder) -->
+        <div id="toast-container"
+             class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
+        <!-- Common scripts -->
+        <script>
         // Initialize theme IMMEDIATELY before DOMContentLoaded to prevent flash
         (function () {
             const savedTheme = localStorage.getItem('theme') || 'light';
@@ -223,9 +214,7 @@
                 }
             };
         }
-    </script>
-
-    {% block extra_scripts %}{% endblock %}
-</body>
-
+        </script>
+        {% block extra_scripts %}{% endblock %}
+    </body>
 </html>

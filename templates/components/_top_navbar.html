@@ -1,178 +1,212 @@
 <nav class="fixed top-0 left-0 right-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 md:left-[var(--sidebar-width)] transition-[left] duration-200 ease-in-out"
-    aria-label="top navigation bar">
+     aria-label="top navigation bar">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                 <!-- Sidebar toggle button for small screens -->
-                <button @click="sidebarIsOpen = !sidebarIsOpen" type="button"
-                    class="inline-flex items-center p-2 text-sm rounded-lg md:hidden text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button @click="sidebarIsOpen = !sidebarIsOpen"
+                        type="button"
+                        class="inline-flex items-center p-2 text-sm rounded-lg md:hidden text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <span class="sr-only">Open sidebar</span>
-                    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                    <svg class="w-6 h-6"
+                         aria-hidden="true"
+                         fill="currentColor"
+                         viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
                         </path>
                     </svg>
                 </button>
                 <!-- Page Title / Breadcrumb -->
                 <h1 class="hidden ml-4 text-xl font-semibold text-gray-900 dark:text-gray-100 sm:block">
-                    {% block page_title %}{{ _('Dashboard') }}{% endblock %}
+                    {% block page_title %}{{ _("Dashboard") }}{% endblock %}
                 </h1>
             </div>
-
             <div class="flex items-center gap-2">
                 <!-- Theme Toggle -->
                 {% include "components/_theme_toggle.html" %}
-
                 <!-- Language Selector -->
                 {% include "components/_language_selector.html" %}
-
                 <!-- Profile Menu -->
-                <div x-data="{ userDropdownIsOpen: false }" class="relative"
-                    x-on:keydown.esc.window="userDropdownIsOpen = false">
+                <div x-data="{ userDropdownIsOpen: false }"
+                     class="relative"
+                     x-on:keydown.esc.window="userDropdownIsOpen = false">
                     <button type="button"
-                        class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''" aria-haspopup="true"
-                        x-on:click="userDropdownIsOpen = !userDropdownIsOpen" x-bind:aria-expanded="userDropdownIsOpen">
+                            class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''"
+                            aria-haspopup="true"
+                            x-on:click="userDropdownIsOpen = !userDropdownIsOpen"
+                            x-bind:aria-expanded="userDropdownIsOpen">
                         <img src="https://ui-avatars.com/api/?name={% if request.cookies.get('session') %}User{% else %}Guest{% endif %}&background=6366f1&color=fff&size=32"
-                            class="w-8 h-8 rounded-full" alt="avatar" aria-hidden="true" />
+                             class="w-8 h-8 rounded-full"
+                             alt="avatar"
+                             aria-hidden="true" />
                         <div class="hidden sm:block text-left">
                             <span class="block text-sm font-medium text-gray-900 dark:text-gray-100">
                                 {% if request.cookies.get("session") %}
-                                {{ _('User') }}
+                                    {{ _("User") }}
                                 {% else %}
-                                {{ _('Guest') }}
+                                    {{ _("Guest") }}
                                 {% endif %}
                             </span>
-                            <span class="block text-xs text-gray-600 dark:text-gray-400" aria-hidden="true">
-                                @{% if request.cookies.get("session") %}user{% else %}guest{% endif %}
+                            <span class="block text-xs text-gray-600 dark:text-gray-400"
+                                  aria-hidden="true">
+                                @
+                                {% if request.cookies.get("session") %}
+                                    user
+                                {% else %}
+                                    guest
+                                {% endif %}
                             </span>
                             <span class="sr-only">profile settings</span>
                         </div>
                     </button>
-
                     <!-- menu -->
-                    <div x-cloak x-show="userDropdownIsOpen"
-                        class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
-                        role="menu" x-on:click.outside="userDropdownIsOpen = false"
-                        x-on:keydown.down.prevent="$focus.wrap().next()"
-                        x-on:keydown.up.prevent="$focus.wrap().previous()" x-transition="" x-trap="userDropdownIsOpen">
-
+                    <div x-cloak
+                         x-show="userDropdownIsOpen"
+                         class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
+                         role="menu"
+                         x-on:click.outside="userDropdownIsOpen = false"
+                         x-on:keydown.down.prevent="$focus.wrap().next()"
+                         x-on:keydown.up.prevent="$focus.wrap().previous()"
+                         x-transition=""
+                         x-trap="userDropdownIsOpen">
                         <!-- Profile Section -->
                         <div class="py-1">
                             <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path
-                                        d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
                                 </svg>
-                                <span>{{ _('Profile') }}</span>
+                                <span>{{ _("Profile") }}</span>
                             </a>
                         </div>
-
                         <!-- Settings & Payments Section -->
                         <div class="py-1 border-t border-gray-200 dark:border-gray-700">
                             <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                        clip-rule="evenodd" />
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
                                 </svg>
-                                <span>{{ _('Settings') }}</span>
+                                <span>{{ _("Settings") }}</span>
                             </a>
                             <a href="#"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z"
-                                        clip-rule="evenodd" />
+                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                               role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20"
+                                     fill="currentColor"
+                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd" />
                                 </svg>
-                                <span>{{ _('Payments') }}</span>
+                                <span>{{ _("Payments") }}</span>
                             </a>
-                        </div> <!-- Theme Toggle Section -->
+                        </div>
+                        <!-- Theme Toggle Section -->
                         <div class="py-1 border-t border-gray-200 dark:border-gray-700">
-                            <button onclick="window.toggleTheme()" data-theme-toggle
-                                class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
+                            <button onclick="window.toggleTheme()"
+                                    data-theme-toggle
+                                    class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    role="menuitem">
                                 <!-- Sun icon for dark mode -->
-                                <svg data-theme-sun class="w-5 h-5 text-yellow-500 hidden" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                                <svg data-theme-sun
+                                     class="w-5 h-5 text-yellow-500 hidden"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
                                     </path>
                                 </svg>
                                 <!-- Moon icon for light mode -->
-                                <svg data-theme-moon class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                                <svg data-theme-moon
+                                     class="w-5 h-5 text-gray-400"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
                                     </path>
                                 </svg>
-                                <span>{{ _('Toggle Theme') }}</span>
+                                <span>{{ _("Toggle Theme") }}</span>
                             </button>
-
                             <!-- Language Selector -->
                             {% if enable_i18n %}
-                            <div x-data="{ langOpen: false }" class="relative">
-                                <button @click="langOpen = !langOpen" type="button"
-                                    class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    role="menuitem">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
-                                            </path>
+                                <div x-data="{ langOpen: false }" class="relative">
+                                    <button @click="langOpen = !langOpen"
+                                            type="button"
+                                            class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            role="menuitem">
+                                        <div class="flex items-center gap-3">
+                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 viewBox="0 0 24 24"
+                                                 aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
+                                                </path>
+                                            </svg>
+                                            <span>{{ _("Language") }}</span>
+                                        </div>
+                                        <svg class="w-4 h-4 transition-transform"
+                                             :class="langOpen ? 'rotate-180' : ''"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
-                                        <span>{{ _('Language') }}</span>
+                                    </button>
+                                    <!-- Language submenu -->
+                                    <div x-show="langOpen"
+                                         x-collapse
+                                         class="bg-primary/5 dark:bg-primaryDark/5">
+                                        <button onclick="window.setLocale('en')"
+                                                data-locale-option="en"
+                                                class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
+                                            <span class="flex items-center gap-2">
+                                                <span class="text-xl" aria-hidden="true">🇺🇸</span>
+                                                <span>English</span>
+                                            </span>
+                                            <svg class="w-4 h-4 text-blue-600 hidden"
+                                                 data-locale-check="en"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 20 20"
+                                                 aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="window.setLocale('pt_BR')"
+                                                data-locale-option="pt_BR"
+                                                class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
+                                            <span class="flex items-center gap-2">
+                                                <span class="text-xl" aria-hidden="true">🇧🇷</span>
+                                                <span>Português (Brasil)</span>
+                                            </span>
+                                            <svg class="w-4 h-4 text-blue-600 hidden"
+                                                 data-locale-check="pt_BR"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 20 20"
+                                                 aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd">
+                                                </path>
+                                            </svg>
+                                        </button>
                                     </div>
-                                    <svg class="w-4 h-4 transition-transform" :class="langOpen ? 'rotate-180' : ''"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-
-                                <!-- Language submenu -->
-                                <div x-show="langOpen" x-collapse class="bg-primary/5 dark:bg-primaryDark/5">
-                                    <button onclick="window.setLocale('en')" data-locale-option="en"
-                                        class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
-                                        <span class="flex items-center gap-2">
-                                            <span class="text-xl" aria-hidden="true">🇺🇸</span>
-                                            <span>English</span>
-                                        </span>
-                                        <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="en"
-                                            fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                    <button onclick="window.setLocale('pt_BR')" data-locale-option="pt_BR"
-                                        class="w-full text-left px-4 py-2 pl-12 text-sm text-onSurface hover:bg-primary/10 dark:text-onSurfaceDark dark:hover:bg-primaryDark/10 flex items-center justify-between">
-                                        <span class="flex items-center gap-2">
-                                            <span class="text-xl" aria-hidden="true">🇧🇷</span>
-                                            <span>Português (Brasil)</span>
-                                        </span>
-                                        <svg class="w-4 h-4 text-blue-600 hidden" data-locale-check="pt_BR"
-                                            fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
                                 </div>
-                            </div>
-
-                            <!-- Language switching script -->
-                            <script>
+                                <!-- Language switching script -->
+                                <script>
                                 // Language switching functionality
                                 if (typeof window.setLocale === 'undefined') {
                                     window.setLocale = function (locale) {
@@ -199,28 +233,26 @@
                                         currentCheck.classList.remove('hidden');
                                     }
                                 });
-                            </script>
+                                </script>
                             {% endif %}
                         </div>
-
                         <!-- Sign Out Section -->
                         {% if request.cookies.get("session") %}
-                        <div class="py-1 border-t border-gray-200 dark:border-gray-700">
-                            <a href="/auth/logout"
-                                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
-                                        clip-rule="evenodd" />
-                                    <path fill-rule="evenodd"
-                                        d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>{{ _('Sign out') }}</span>
-                            </a>
-                        </div>
+                            <div class="py-1 border-t border-gray-200 dark:border-gray-700">
+                                <a href="/auth/logout"
+                                   class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                   role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ _("Sign out") }}</span>
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
