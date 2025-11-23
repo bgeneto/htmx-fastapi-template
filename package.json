@@ -3,19 +3,24 @@
     "version": "1.0.0",
     "description": "FastAPI + Alpine Contact Form with Tailwind CSS",
     "scripts": {
-        "build:css": "postcss ./static/css/input.css -o ./static/css/output.css --minify",
+        "copy-assets": "mkdir -p static/js && cp node_modules/alpinejs/dist/cdn.min.js static/js/alpine-min.js && cp node_modules/@alpinejs/mask/dist/cdn.js static/js/alpine-mask.js && cp node_modules/@alpinejs/focus/dist/cdn.js static/js/alpine-focus.js && cp node_modules/@alpinejs/collapse/dist/cdn.js static/js/alpine-collapse.js && cp node_modules/axios/dist/axios.min.js static/js/",
+        "build:css": "npm run copy-assets && postcss ./static/css/input.css -o ./static/css/output.css --minify",
         "watch:css": "postcss ./static/css/input.css -o ./static/css/output.css --watch",
-        "dev": "npm run watch:css"
+        "dev": "npm run copy-assets && npm run watch:css"
     },
     "dependencies": {
+        "@alpinejs/collapse": "^3.15.2",
+        "@alpinejs/focus": "^3.15.2",
+        "@alpinejs/mask": "^3.15.2",
+        "alpinejs": "^3.15.2",
         "axios": "^1.13.2"
     },
     "devDependencies": {
-        "@tailwindcss/postcss": "4.1.0",
-        "autoprefixer": "10.4.16",
-        "cssnano": "7.0.6",
-        "postcss": "8.4.32",
-        "postcss-cli": "11.0.0",
+        "@tailwindcss/postcss": "4.1.17",
+        "autoprefixer": "10.4.22",
+        "cssnano": "7.1.2",
+        "postcss": "8.5.6",
+        "postcss-cli": "11.0.1",
         "postcss-nesting": "13.0.2"
     }
 }

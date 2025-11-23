@@ -9,7 +9,6 @@
     <!-- Preconnect to CDNs for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://unpkg.com">
 
     <!-- Google Fonts -->
     <!--<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
@@ -23,18 +22,18 @@
     <link rel="stylesheet" href="/static/css/output.css">
 
     <!-- Axios for AJAX calls -->
-    <script defer src="https://cdn.jsdelivr.net/npm/axios@1/dist/axios.min.js"></script>
+    <script defer src="/static/js/axios.min.js"></script>
 
     <!-- Data Grid Component (load before Alpine) -->
     <script defer src="/static/js/datagrid.js"></script>
 
     <!-- Alpine Plugins -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="/static/js/alpine-mask.js"></script>
+    <script defer src="/static/js/alpine-collapse.js"></script>
+    <!--<script defer src="/static/js/alpine-focus.js"></script>-->
 
     <!-- Alpine.js Core for reactive components (load last) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="/static/js/alpine-min.js"></script>
 
     <link rel="stylesheet" href="/static/style.css" />
     {% block extra_head %}{% endblock %}
