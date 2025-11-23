@@ -7,6 +7,13 @@ from .logger import get_logger
 
 logger = get_logger(__name__)
 
+# Initialize Resend API key
+if settings.EMAIL_API_KEY:
+    resend.api_key = settings.EMAIL_API_KEY.get_secret_value()
+    logger.debug("Resend API key initialized")
+else:
+    logger.warning("Resend API key not configured - email sending will fail")
+
 
 def _create_safe_html_template(
     preheader_text: str, subject: str, content_body: str, sender_footer: bool = False

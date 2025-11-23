@@ -1,18 +1,12 @@
 {% extends "_base.html" %}
 {% block title %}{{ _("Verify Code") }} - {{ super() }}{% endblock %}
 {% block content %}
-    <!-- Header with theme and language toggles -->
-    <div class="fixed top-4 right-4 z-50 flex items-center gap-3">
-        {% include "components/_theme_toggle.html" %}
-        {% include "components/_language_selector.html" %}
-    </div>
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md mx-auto">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 text-center">{{ _("Enter Verification Code") }}</h1>
-                <p class="text-gray-600 dark:text-gray-300 text-center mb-6">
-                    {{ _("We sent a 6-digit code to") }} <span class="font-semibold">{{ email }}</span>
-                </p>
+    <div class="max-w-md mx-auto p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ _("Verify Your Code") }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ _("We sent a 6-digit code to") }} <span class="font-semibold">{{ email }}</span></p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
                 {% if error %}
                     <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                         <div class="flex">
@@ -28,13 +22,13 @@
                     </div>
                 {% endif %}
                 <div x-data="otpVerificationForm()">
-                    <form @submit.prevent="submitForm" novalidate class="space-y-6">
-                        <!-- OTP Code Input -->
-                        <div>
-                            <label for="otp_code"
-                                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                {{ _("Verification Code") }}
-                            </label>
+            <form @submit.prevent="submitForm" novalidate class="space-y-6">
+                <!-- OTP Code Input -->
+                <div>
+                    <label for="otp_code"
+                           class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                        {{ _("Verification Code") }}
+                    </label>
                             <div class="flex justify-center gap-2 mb-4">
                                 <template x-for="(digit, index) in digits" :key="index">
                                     <input type="text"
@@ -45,6 +39,7 @@
                                            @input="handleInput(index, $event)"
                                            @keydown="handleKeydown(index, $event)"
                                            @paste="handlePaste($event)"
+                                           x-focus="index === 0"
                                            class="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                            autocomplete="one-time-code">
                                 </template>
@@ -118,8 +113,7 @@
                                 </a>
                             </div>
                         </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -145,11 +139,9 @@
             },
 
             init() {
-                // Focus on first input
-                this.$nextTick(() => {
-                    const firstInput = this.$refs['input-0'];
-                    if (firstInput) firstInput.focus();
-                });
+                // Alpine focus plugin handles auto-focus via x-focus directive
+                // Start countdown on page load (user just got sent an OTP)
+                this.startCountdown();
             },
 
             destroy() {
@@ -301,14 +293,11 @@
                     this.form.otp_code = '';
                     this.errors.otp_code = '';
 
-                    // Start countdown timer
+                    // Start countdown timer (prevents rapid resend attempts)
                     this.startCountdown();
 
-                    // Focus on first input
-                    this.$nextTick(() => {
-                        const firstInput = this.$refs['input-0'];
-                        if (firstInput) firstInput.focus();
-                    });
+                    // Alpine focus plugin will handle focus via x-focus directive
+                    // No need for manual focus handling
                 } catch (error) {
                     console.error('Resend OTP error:', error);
                     window.showToast('{{ _("Failed to send verification code. Please try again.") }}', 'error');
