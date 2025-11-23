@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 00:36-0300\n"
+"POT-Creation-Date: 2025-11-23 01:01-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -47,7 +47,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: app/main.py:536 templates/components/_form_alpine.html:53
-#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:33
+#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:31
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
@@ -158,7 +158,7 @@ msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
 #: app/strategies.py:25 templates/components/_form_alpine.html:150
-#: templates/pages/auth/login.html:115 templates/pages/auth/register.html:158
+#: templates/pages/auth/login.html:110 templates/pages/auth/register.html:158
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
@@ -335,7 +335,7 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_form_alpine.html:149
-#: templates/pages/auth/login.html:114 templates/pages/auth/register.html:157
+#: templates/pages/auth/login.html:109 templates/pages/auth/register.html:157
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
 
@@ -344,7 +344,7 @@ msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
 #: templates/components/_form_alpine.html:153
-#: templates/pages/auth/login.html:116 templates/pages/auth/register.html:161
+#: templates/pages/auth/login.html:111 templates/pages/auth/register.html:161
 msgid "Please fix the errors before submitting."
 msgstr "Por favor, corrija os erros antes de enviar."
 
@@ -357,7 +357,7 @@ msgid "your message has been received!"
 msgstr "sua mensagem foi recebida!"
 
 #: templates/components/_language_selector.html:81
-#: templates/components/_top_navbar.html:179
+#: templates/components/_top_navbar.html:177
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
@@ -374,7 +374,7 @@ msgid "No contacts yet. Be the first to submit!"
 msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
 #: templates/components/_sidebar.html:54
-#: templates/components/_top_navbar.html:20
+#: templates/components/_top_navbar.html:19
 msgid "Dashboard"
 msgstr ""
 
@@ -403,38 +403,38 @@ msgstr ""
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_top_navbar.html:38
+#: templates/components/_top_navbar.html:36
 msgid "User"
 msgstr ""
 
-#: templates/components/_top_navbar.html:40
+#: templates/components/_top_navbar.html:38
 #, fuzzy
 msgid "Guest"
 msgstr "Limpar"
 
-#: templates/components/_top_navbar.html:67
+#: templates/components/_top_navbar.html:65
 #, fuzzy
 msgid "Profile"
 msgstr "Preço"
 
-#: templates/components/_top_navbar.html:82
+#: templates/components/_top_navbar.html:80
 msgid "Settings"
 msgstr ""
 
-#: templates/components/_top_navbar.html:93
+#: templates/components/_top_navbar.html:91
 #, fuzzy
 msgid "Payments"
 msgstr "Páginas"
 
-#: templates/components/_top_navbar.html:116
+#: templates/components/_top_navbar.html:114
 msgid "Toggle Theme"
 msgstr ""
 
-#: templates/components/_top_navbar.html:132
+#: templates/components/_top_navbar.html:130
 msgid "Language"
 msgstr ""
 
-#: templates/components/_top_navbar.html:221
+#: templates/components/_top_navbar.html:219
 msgid "Sign out"
 msgstr ""
 
@@ -685,33 +685,33 @@ msgstr "Ocorreu um erro. Por favor, tente novamente."
 msgid "Log In"
 msgstr "Entrar"
 
-#: templates/pages/auth/login.html:10
+#: templates/pages/auth/login.html:8
 msgid "Welcome Back"
 msgstr "Bem-vindo de Volta"
 
-#: templates/pages/auth/login.html:11
+#: templates/pages/auth/login.html:9
 msgid "Enter your email to receive a magic link"
 msgstr "Digite seu e-mail para receber um link mágico"
 
-#: templates/pages/auth/login.html:46
+#: templates/pages/auth/login.html:43
 msgid "you@example.com"
 msgstr "voce@exemplo.com"
 
-#: templates/pages/auth/login.html:69
+#: templates/pages/auth/login.html:65
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
 "Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
 "senha!"
 
-#: templates/pages/auth/login.html:86
+#: templates/pages/auth/login.html:82
 msgid " Sending..."
 msgstr " Enviando..."
 
-#: templates/pages/auth/login.html:86
+#: templates/pages/auth/login.html:82
 msgid "Continue with e-mail"
 msgstr "Continuar com e-mail"
 
-#: templates/pages/auth/login.html:92
+#: templates/pages/auth/login.html:88
 msgid "Don't have an account? Register"
 msgstr "Não tem uma conta? Cadastre-se"
 

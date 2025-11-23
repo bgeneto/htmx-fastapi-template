@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Navbar Debug Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+    <nav class="fixed top-0 z-30 w-full bg-white border-b border-gray-200">
+        <div class="px-3 py-3">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-semibold">Dashboard</h1>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Profile Menu -->
+                    <div x-data="{ userDropdownIsOpen: false }" class="relative">
+                        <button type="button"
+                            class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg border border-blue-500"
+                            @click="userDropdownIsOpen = !userDropdownIsOpen">
+                            <img src="https://ui-avatars.com/api/?name=Guest&background=6366f1&color=fff&size=32"
+                                class="w-8 h-8 rounded-full" />
+                            <span>Guest</span>
+                        </button>
+
+                        <!-- menu -->
+                        <div x-show="userDropdownIsOpen"
+                            class="absolute right-0 z-50 w-56 mt-2 bg-white rounded-lg shadow-lg border border-gray-200"
+                            @click.outside="userDropdownIsOpen = false">
+                            <div class="py-1">
+                                <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100">
+                                    Profile
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100">
+                                    Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 80px; padding: 20px;">
+        <h2>Main Content</h2>
+        <p>If you can see the profile button with Guest and avatar in the top right, Alpine.js is working.</p>
+    </div>
+</body>
+
+</html>

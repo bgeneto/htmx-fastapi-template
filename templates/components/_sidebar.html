@@ -3,7 +3,7 @@
         key: 'sidebarWidthCSSVar',
         defaultWidth: 240,
         minWidth: 160,
-        maxWidth: 640
+        maxWidth: 300
     })" x-init="init()" id="sidebar"
     class="fixed inset-y-0 left-0 z-40 transition-transform bg-surface border-r border-border-light dark:bg-surfaceDark dark:border-borderDark md:translate-x-0 w-[var(--sidebar-width)] transition-[width] duration-200 ease-in-out"
     :class="sidebarIsOpen ? 'translate-x-0' : '-translate-x-full'" @click.away="sidebarIsOpen = false"
