@@ -836,13 +836,21 @@ async def verify_otp(
             user.email_verified = True
             await session.commit()
 
+        # Check if request wants JSON (from JavaScript)
+        accept_header = request.headers.get("accept", "")
+        if "application/json" in accept_header:
+            # Return JSON redirect for AJAX requests
+            return JSONResponse(content={
+                "success": True,
+                "redirect": f"/auth/pending-approval?email={email}"
+            })
+
+        # Return HTML template for direct access
         return templates.TemplateResponse(
-            "pages/auth/verify_otp.html",
+            "pages/auth/pending_approval.html",
             {
                 "request": request,
                 "email": email,
-                "error": _("Your account is pending admin approval. You will be notified once approved."),
-                "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
             },
         )
 
@@ -873,6 +881,18 @@ async def verify_otp(
     )
 
     return response
+
+
+@app.get("/auth/pending-approval", response_class=HTMLResponse)
+async def pending_approval_page(request: Request, email: str):
+    """Display pending approval page for users awaiting admin approval"""
+    return templates.TemplateResponse(
+        "pages/auth/pending_approval.html",
+        {
+            "request": request,
+            "email": email,
+        },
+    )
 
 
 @app.post("/auth/resend-otp")
