@@ -68,12 +68,17 @@ def get_allowed_hosts() -> list[str]:
 
     Returns a list containing the domain and common variations.
     """
+    logger.debug("Getting allowed hosts from APP_BASE_URL={}", settings.APP_BASE_URL)
+
     parsed = urlparse(settings.APP_BASE_URL)
+    logger.debug("Parsed APP_BASE_URL: scheme={}, hostname={}, path={}", parsed.scheme, parsed.hostname, parsed.path)
+
     hosts = []
 
     # Add the main hostname
     if parsed.hostname:
         hosts.append(parsed.hostname)
+        logger.debug("Added main hostname: {}", parsed.hostname)
 
         # Add wildcard subdomain variant only for real domains (not localhost or IPs)
         is_ip = False
@@ -81,19 +86,26 @@ def get_allowed_hosts() -> list[str]:
             # Try to parse as IP address
             ip_address(parsed.hostname)
             is_ip = True
+            logger.debug("Hostname {} is detected as IP address", parsed.hostname)
         except ValueError:
             # Not an IP address
-            pass
+            logger.debug("Hostname {} is detected as domain name", parsed.hostname)
 
         if not (parsed.hostname.startswith("localhost") or is_ip):
-            hosts.append(f"*.{parsed.hostname}")
+            wildcard_host = f"*.{parsed.hostname}"
+            hosts.append(wildcard_host)
+            logger.debug("Added wildcard subdomain: {}", wildcard_host)
+        else:
+            logger.debug("Skipping wildcard subdomain for localhost or IP: {}", parsed.hostname)
 
     # Always allow localhost for development (use set to avoid duplicates)
     localhost_hosts = {"localhost", "127.0.0.1"}
     for host in localhost_hosts:
         if host not in hosts:
             hosts.append(host)
+            logger.debug("Added localhost host: {}", host)
 
+    logger.info("Final allowed hosts for TrustedHostMiddleware: {}", hosts)
     return hosts
 
 
@@ -158,9 +170,11 @@ app = FastAPI(
 
 # Security Middleware Configuration
 # TrustedHostMiddleware - validates Host header to prevent host header injection attacks
+allowed_hosts = get_allowed_hosts()
+logger.info("Configuring TrustedHostMiddleware with allowed_hosts: {}", allowed_hosts)
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=get_allowed_hosts(),
+    allowed_hosts=allowed_hosts,
 )
 
 # CORSMiddleware - controls which origins can make cross-origin requests
