@@ -5,363 +5,41 @@
 {% block content %}
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
         <div class="mb-8">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ _('User Management') }}</h1>
-                    <p class="mt-2 text-gray-600 dark:text-gray-400">{{ _('Manage user accounts and permissions') }}</p>
-                </div>
-                <div class="flex gap-3">
-                    <a href="/admin"
-                        class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
-                        </svg>
-                        {{ _('Back to Contacts') }}
-                    </a>
-                </div>
-            </div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('User Management') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ _('Manage user accounts and permissions') }}</p>
         </div>
 
-        <!-- User Management Component -->
-        <div x-data="userManagement()" x-init="init()">
-            <!-- Pending Users Alert -->
-            <div x-show="pendingCount > 0"
-                class="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                <div class="flex">
-                    <svg class="h-6 w-6 text-yellow-600 dark:text-yellow-400 mr-3" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                        </path>
-                    </svg>
-                    <div>
-                        <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                            <span x-text="pendingCount"></span> {{ _('user(s) pending approval') }}
-                        </h3>
-                        <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                            {{ _('Review and approve new registrations below.') }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-6">
+            <a href="/admin"
+                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors">
+                ← {{ _('Back to Admin') }}
+            </a>
+        </div>
 
-            <!-- Create User Button -->
-            <div class="mb-6">
-                <button @click="showCreateForm = true"
-                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    {{ _('Create New User') }}
-                </button>
-            </div>
-
-            <!-- Create User Modal -->
-            <div x-show="showCreateForm" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
-                <div class="flex items-center justify-center min-h-screen px-4">
-                    <div class="fixed inset-0 bg-black opacity-50" @click="showCreateForm = false"></div>
-
-                    <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-xl">
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">{{ _('Create New User') }}
-                        </h3>
-
-                        <form @submit.prevent="createUser" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
-                                    _('Email') }}</label>
-                                <input type="email" x-model="newUser.email" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
-                                    _('Full Name') }}</label>
-                                <input type="text" x-model="newUser.full_name" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
-                                    _('Role') }}</label>
-                                <select x-model="newUser.role"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                                    <option value="user">{{ _('User') }}</option>
-                                    <option value="moderator">{{ _('Moderator') }}</option>
-                                    <option value="admin">{{ _('Admin') }}</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
-                                    _('Password (optional)') }}</label>
-                                <input type="password" x-model="newUser.password"
-                                    placeholder="{{ _('Leave empty for magic link only') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                            </div>
-
-                            <div class="flex gap-3 pt-4">
-                                <button type="submit" :disabled="creatingUser"
-                                    class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg disabled:opacity-50">
-                                    <span
-                                        x-text="creatingUser ? '{{ _('Creating...') }}' : '{{ _('Create User') }}'"></span>
-                                </button>
-                                <button type="button" @click="showCreateForm = false"
-                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg">
-                                    {{ _('Cancel') }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Users Table -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-900">
-                        <tr>
-                            <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                {{ _('User') }}</th>
-                            <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                {{ _('Role') }}</th>
-                            <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                {{ _('Status') }}</th>
-                            <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                {{ _('Created') }}</th>
-                            <th
-                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                {{ _('Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {% for user in users %}
-                        <tr class="{{ 'bg-yellow-50 dark:bg-yellow-900/10' if user.role.value == 'pending' else '' }}">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ user.full_name }}
-                                    </div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' if user.role.value == 'admin' else
-                                       'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' if user.role.value == 'moderator' else
-                                       'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' if user.role.value == 'pending' else
-                                       'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' }}">
-                                    {{ user.role.value.title() }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' if user.is_active else
-                                       'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400' }}">
-                                    {{ _('Active') if user.is_active else _('Inactive') }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                {{ user.created_at.strftime('%Y-%m-%d') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div class="flex justify-end gap-2">
-                                    {% if user.role.value == 'pending' %}
-                                    <button @click="approveUser({{ user.id }})"
-                                        class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                                        {{ _('Approve') }}
-                                    </button>
-                                    {% endif %}
-
-                                    {% if user.id != current_user.id %}
-                                    <button
-                                        @click="editUser({{ user.id }}, '{{ user.role.value }}', {{ 'true' if user.is_active else 'false' }})"
-                                        class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                                        {{ _('Edit') }}
-                                    </button>
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Edit User Modal -->
-            <div x-show="showEditForm" x-transition class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
-                <div class="flex items-center justify-center min-h-screen px-4">
-                    <div class="fixed inset-0 bg-black opacity-50" @click="showEditForm = false"></div>
-
-                    <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-xl">
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">{{ _('Edit User') }}</h3>
-
-                        <form @submit.prevent="updateUser" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{
-                                    _('Role') }}</label>
-                                <select x-model="editingUser.role"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-                                    <option value="user">{{ _('User') }}</option>
-                                    <option value="moderator">{{ _('Moderator') }}</option>
-                                    <option value="admin">{{ _('Admin') }}</option>
-                                </select>
-                            </div>
-
-                            <div class="flex items-center">
-                                <input type="checkbox" x-model="editingUser.is_active" id="is_active"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <label for="is_active"
-                                    class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {{ _('Active Account') }}
-                                </label>
-                            </div>
-
-                            <div class="flex gap-3 pt-4">
-                                <button type="submit" :disabled="updatingUser"
-                                    class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg disabled:opacity-50">
-                                    <span
-                                        x-text="updatingUser ? '{{ _('Updating...') }}' : '{{ _('Update User') }}'"></span>
-                                </button>
-                                <button type="button" @click="showEditForm = false"
-                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg">
-                                    {{ _('Cancel') }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div x-cloak x-data="datagrid(adminUsersDatagrid())"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+            {% set form_template = "pages/admin/users_form.html" %}
+            {% set resource_name = _('User') %}
+            {% include "components/_datagrid_grid.html" %}
         </div>
     </div>
 </div>
 
 <script>
-    function userManagement() {
+    function adminUsersDatagrid() {
         return {
-            showCreateForm: false,
-            showEditForm: false,
-            creatingUser: false,
-            updatingUser: false,
-            pendingCount: {{ users | selectattr('role.value', 'equalto', 'pending') | list | length }}
-    },
-
-    newUser: {
-        email: '',
-            full_name: '',
-                role: 'user',
-                    password: ''
-    },
-
-    editingUser: {
-        id: null,
-            role: '',
-                is_active: true
-    },
-
-    init() {
-        // Component initialized
-    },
-
-            async approveUser(userId) {
-        if (!confirm('{{ _('Approve this user ? ') }}')) return;
-
-        try {
-            const formData = new FormData();
-            formData.append('role', 'user');
-
-            const response = await axios.post(`/admin/users/${userId}/approve`, formData, {
-                headers: { 'Accept': 'application/json' }
-            });
-
-            const data = response.data;
-
-            if (window.showToast) {
-                window.showToast(data.message, 'success');
-            }
-            window.location.reload();
-        } catch (error) {
-            console.error('Error approving user:', error);
-            if (error.response && error.response.data) {
-                window.showToast(error.response.data.error || 'Failed to approve user', 'error');
-            } else {
-                window.showToast('An error occurred', 'error');
-            }
-        }
-    },
-
-            async createUser() {
-        this.creatingUser = true;
-
-        try {
-            const formData = new FormData();
-            formData.append('email', this.newUser.email);
-            formData.append('full_name', this.newUser.full_name);
-            formData.append('role', this.newUser.role);
-            if (this.newUser.password) {
-                formData.append('password', this.newUser.password);
-            }
-
-            const response = await axios.post('/admin/users/create', formData, {
-                headers: { 'Accept': 'application/json' }
-            });
-
-            const data = response.data;
-
-            window.showToast(data.message, 'success');
-            this.showCreateForm = false;
-            this.newUser = { email: '', full_name: '', role: 'user', password: '' };
-            window.location.reload();
-        } catch (error) {
-            console.error('Error creating user:', error);
-            window.showToast('An error occurred', 'error');
-        } finally {
-            this.creatingUser = false;
-        }
-    },
-
-    editUser(userId, role, isActive) {
-        this.editingUser = {
-            id: userId,
-            role: role,
-            is_active: isActive
-        };
-        this.showEditForm = true;
-    },
-
-            async updateUser() {
-        this.updatingUser = true;
-
-        try {
-            const formData = new FormData();
-            formData.append('role', this.editingUser.role);
-            formData.append('is_active', this.editingUser.is_active);
-
-            const response = await axios.post(`/admin/users/${this.editingUser.id}/update-role`, formData, {
-                headers: { 'Accept': 'application/json' }
-            });
-
-            const data = response.data;
-
-            window.showToast(data.message, 'success');
-            this.showEditForm = false;
-            window.location.reload();
-        } catch (error) {
-            console.error('Error updating user:', error);
-            window.showToast('An error occurred', 'error');
-        } finally {
-            this.updatingUser = false;
-        }
-    }
+            apiUrl: '/api/admin/users',
+            columns: [
+                { key: 'id', label: 'ID', width: 70, sortable: true },
+                { key: 'full_name', label: "{{ _('Full Name') }}", width: 200, sortable: true, filterable: true },
+                { key: 'email', label: "{{ _('Email') }}", width: 250, sortable: true, filterable: true },
+                { key: 'role', label: "{{ _('Role') }}", width: 120, sortable: true, filterable: true },
+                { key: 'is_active', label: "{{ _('Active') }}", width: 100, sortable: true },
+                { key: 'created_at', label: "{{ _('Created') }}", width: 150, sortable: true },
+                { key: 'actions', label: "{{ _('Actions') }}", width: 120, sortable: false }
+            ],
+            i18n: window.datagridI18n
         };
     }
 </script>

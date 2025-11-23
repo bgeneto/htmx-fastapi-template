@@ -30,7 +30,7 @@ from .grid_engine import GridEngine, PaginatedResponse
 from .i18n import get_locale, get_translations, set_locale
 from .i18n import gettext as _
 from .logger import get_logger
-from .models import Book, BookBase, Car, CarBase, Contact, User, UserRole
+from .models import Book, BookBase, Car, CarBase, Contact, User, UserBase, UserRole
 from .repository import (
     create_contact,
     create_user,
@@ -1736,3 +1736,115 @@ async def admin_logout():
     response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie(COOKIE_NAME)
     return response
+
+
+# ============= REST API Endpoints for Users (for Datagrid) =============
+
+
+@app.post("/api/admin/users", response_model=User)
+async def create_user_api(
+    user_data: UserBase,
+    current_user: User = Depends(require_admin),
+    session: AsyncSession = Depends(get_session),
+):
+    """Create a new user via REST API for datagrid"""
+    from app.logger import logger
+
+    logger.info(f"Creating user with data: {user_data}")
+
+    # Check for email uniqueness
+    existing = await get_user_by_email(session, user_data.email)
+    if existing:
+        raise HTTPException(status_code=400, detail=f"User with email {user_data.email} already exists")
+
+    # Create User instance from validated UserBase data
+    user = User(**user_data.model_dump())
+    # Set additional defaults not in UserBase
+    user.email_verified = False
+    user.is_verified = False
+    user.hashed_password = ""
+
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+
+@app.put("/api/admin/users/{user_id}", response_model=User)
+async def update_user_api(
+    user_id: int,
+    user_data: UserBase,
+    current_user: User = Depends(require_admin),
+    session: AsyncSession = Depends(get_session),
+):
+    """Update an existing user via REST API for datagrid"""
+    from app.logger import logger
+
+    logger.info(f"Updating user {user_id} with data: {user_data}")
+
+    # Get existing user
+    result = await session.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Prevent admin from locking themselves out
+    if user.id == current_user.id and not user_data.is_active:
+        raise HTTPException(status_code=400, detail="Cannot deactivate your own account")
+
+    # Check email uniqueness if changing email
+    if user_data.email != user.email:
+        existing = await get_user_by_email(session, user_data.email)
+        if existing and existing.id != user_id:
+            raise HTTPException(status_code=400, detail=f"User with email {user_data.email} already exists")
+
+    # Only update fields that were provided (exclude_unset=True)
+    update_data = user_data.model_dump(exclude_unset=True)
+    protected_fields = {"id", "created_at", "updated_at", "hashed_password"}
+
+    for key, value in update_data.items():
+        if key not in protected_fields and hasattr(user, key):
+            setattr(user, key, value)
+
+    # Force email_verified to match is_verified when updating
+    if "is_active" in update_data:
+        user.is_verified = user.is_active
+
+    user.updated_at = datetime.utcnow()
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+
+@app.delete("/api/admin/users/{user_id}")
+async def delete_user_api(
+    user_id: int,
+    current_user: User = Depends(require_admin),
+    session: AsyncSession = Depends(get_session),
+):
+    """Delete a user via REST API for datagrid"""
+    from app.logger import logger
+
+    logger.info(f"Deleting user {user_id}")
+
+    # Get existing user
+    result = await session.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Prevent admin from deleting themselves
+    if user.id == current_user.id:
+        raise HTTPException(status_code=400, detail="Cannot delete your own account")
+
+    # Prevent deleting other admins if you're not admin (double protection)
+    if user.role == UserRole.ADMIN and current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Insufficient privileges to delete admin users")
+
+    await session.delete(user)
+    await session.commit()
+
+    logger.info(f"Successfully deleted user {user_id}: {user.email}")
+    return {"success": True, "message": "User deleted successfully"}

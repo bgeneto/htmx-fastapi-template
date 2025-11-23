@@ -21,6 +21,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Alpine.js x-cloak directive - hide elements until Alpine initializes */
+[x-cloak] {
+  display: none !important;
+}
+
 /* Custom base styles */
 @layer base {
   :root {

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 17:08-0300\n"
+"POT-Creation-Date: 2025-11-23 17:30-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -149,9 +149,9 @@ msgid "Name"
 msgstr "Nome"
 
 #: app/main.py:567 templates/components/_contact_form.html:75
-#: templates/pages/admin/index.html:17 templates/pages/admin/users.html:78
-#: templates/pages/auth/login.html:39 templates/pages/auth/login.html:135
-#: templates/pages/auth/register.html:38
+#: templates/pages/admin/index.html:17 templates/pages/admin/users.html:36
+#: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:39
+#: templates/pages/auth/login.html:135 templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
@@ -341,14 +341,99 @@ msgstr "As senhas não coincidem"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30 templates/pages/admin/cars.html:47
-#: templates/pages/books.html:49
+#: app/strategies.py:30 templates/_base.html:89
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
 #: templates/_base.html:78
 msgid "Close"
 msgstr "Fechar"
+
+#: templates/_base.html:85
+#, python-brace-format
+msgid "Value must be greater than or equal to {0}"
+msgstr "O valor deve ser maior ou igual a {0}"
+
+#: templates/_base.html:86
+#, python-brace-format
+msgid "Value must be greater than {0}"
+msgstr "O valor deve ser maior que {0}"
+
+#: templates/_base.html:87
+#, python-brace-format
+msgid "Value must be less than or equal to {0}"
+msgstr "O valor deve ser menor ou igual a {0}"
+
+#: templates/_base.html:88
+#, python-brace-format
+msgid "Value must be less than {0}"
+msgstr "O valor deve ser menor que {0}"
+
+#: templates/_base.html:90
+msgid "Must be a valid number"
+msgstr "Deve ser um número válido"
+
+#: templates/_base.html:91
+msgid "Must be a valid integer"
+msgstr "Deve ser um número inteiro válido"
+
+#: templates/_base.html:92
+#, python-brace-format
+msgid "Must be at least {0} character(s)"
+msgstr "Deve ter pelo menos {0} caractere(s)"
+
+#: templates/_base.html:93
+#, python-brace-format
+msgid "Must be at most {0} character(s)"
+msgstr "Deve ter no máximo {0} caractere(s)"
+
+#: templates/_base.html:94
+msgid "Must be a valid text"
+msgstr "Deve ser um texto válido"
+
+#: templates/_base.html:95
+msgid "Invalid value"
+msgstr "Valor inválido"
+
+#: templates/_base.html:96
+msgid "Please fix the validation errors below."
+msgstr "Por favor, corrija os erros antes de enviar."
+
+#: templates/_base.html:97
+msgid "Record added successfully"
+msgstr "Registro adicionado com sucesso"
+
+#: templates/_base.html:98
+msgid "Record updated successfully"
+msgstr "Registro atualizado com sucesso"
+
+#: templates/_base.html:99
+msgid "Record deleted successfully"
+msgstr "Registro excluído com sucesso"
+
+#: templates/_base.html:100
+msgid "Failed to add record"
+msgstr "Falha ao adicionar o registro"
+
+#: templates/_base.html:101
+msgid "Failed to update record"
+msgstr "Falha ao atualizar o registro"
+
+#: templates/_base.html:102
+msgid "Failed to delete record"
+msgstr "Falha ao excluir o registro"
+
+#: templates/_base.html:103
+msgid "Network error - no response from server"
+msgstr "Erro de rede - sem resposta do servidor"
+
+#: templates/_base.html:104
+msgid "Unknown error occurred"
+msgstr "Um erro desconhecido ocorreu"
+
+#: templates/_base.html:105
+msgid "Validation error"
+msgstr "Erro de validação"
 
 #: templates/components/_contact_form.html:13
 msgid "Message Sent!"
@@ -465,7 +550,6 @@ msgstr "Adicionar"
 
 #: templates/components/_datagrid_grid.html:104
 #: templates/components/_datagrid_grid.html:274
-#: templates/pages/admin/users.html:189
 msgid "Edit"
 msgstr "Editar"
 
@@ -536,7 +620,6 @@ msgstr ""
 "permanentemente."
 
 #: templates/components/_datagrid_grid.html:368
-#: templates/pages/admin/users.html:117 templates/pages/admin/users.html:237
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -558,8 +641,8 @@ msgstr "Sair"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/components/_sidebar.html:68 templates/pages/admin/users.html:97
-#: templates/pages/admin/users.html:216
+#: templates/components/_sidebar.html:68
+#: templates/pages/admin/users_form.html:52
 msgid "Admin"
 msgstr "Admin"
 
@@ -658,96 +741,10 @@ msgstr "Voltar ao Início"
 msgid "Book"
 msgstr "Livro"
 
-#: templates/pages/admin/cars.html:40 templates/pages/admin/users.html:144
+#: templates/pages/admin/cars.html:40 templates/pages/admin/users.html:40
 #: templates/pages/books.html:42
 msgid "Actions"
 msgstr "Ação"
-
-#: templates/pages/admin/cars.html:43 templates/pages/books.html:45
-#, python-brace-format
-msgid "Value must be greater than or equal to {0}"
-msgstr "O valor deve ser maior ou igual a {0}"
-
-#: templates/pages/admin/cars.html:44 templates/pages/books.html:46
-#, python-brace-format
-msgid "Value must be greater than {0}"
-msgstr "O valor deve ser maior que {0}"
-
-#: templates/pages/admin/cars.html:45 templates/pages/books.html:47
-#, python-brace-format
-msgid "Value must be less than or equal to {0}"
-msgstr "O valor deve ser menor ou igual a {0}"
-
-#: templates/pages/admin/cars.html:46 templates/pages/books.html:48
-#, python-brace-format
-msgid "Value must be less than {0}"
-msgstr "O valor deve ser menor que {0}"
-
-#: templates/pages/admin/cars.html:48 templates/pages/books.html:50
-msgid "Must be a valid number"
-msgstr "Deve ser um número válido"
-
-#: templates/pages/admin/cars.html:49 templates/pages/books.html:51
-msgid "Must be a valid integer"
-msgstr "Deve ser um número inteiro válido"
-
-#: templates/pages/admin/cars.html:50 templates/pages/books.html:52
-#, python-brace-format
-msgid "Must be at least {0} character(s)"
-msgstr "Deve ter pelo menos {0} caractere(s)"
-
-#: templates/pages/admin/cars.html:51 templates/pages/books.html:53
-#, python-brace-format
-msgid "Must be at most {0} character(s)"
-msgstr "Deve ter no máximo {0} caractere(s)"
-
-#: templates/pages/admin/cars.html:52 templates/pages/books.html:54
-msgid "Must be a valid text"
-msgstr "Deve ser um texto válido"
-
-#: templates/pages/admin/cars.html:53 templates/pages/books.html:55
-msgid "Invalid value"
-msgstr "Valor inválido"
-
-#: templates/pages/admin/cars.html:54 templates/pages/books.html:56
-msgid "Please fix the validation errors below."
-msgstr "Por favor, corrija os erros antes de enviar."
-
-#: templates/pages/admin/cars.html:55 templates/pages/books.html:57
-msgid "Record added successfully"
-msgstr "Registro adicionado com sucesso"
-
-#: templates/pages/admin/cars.html:56 templates/pages/books.html:58
-msgid "Record updated successfully"
-msgstr "Registro atualizado com sucesso"
-
-#: templates/pages/admin/cars.html:57 templates/pages/books.html:59
-msgid "Record deleted successfully"
-msgstr "Registro excluído com sucesso"
-
-#: templates/pages/admin/cars.html:58 templates/pages/books.html:60
-msgid "Failed to add record"
-msgstr "Falha ao adicionar o registro"
-
-#: templates/pages/admin/cars.html:59 templates/pages/books.html:61
-msgid "Failed to update record"
-msgstr "Falha ao atualizar o registro"
-
-#: templates/pages/admin/cars.html:60 templates/pages/books.html:62
-msgid "Failed to delete record"
-msgstr "Falha ao excluir o registro"
-
-#: templates/pages/admin/cars.html:61 templates/pages/books.html:63
-msgid "Network error - no response from server"
-msgstr "Erro de rede - sem resposta do servidor"
-
-#: templates/pages/admin/cars.html:62 templates/pages/books.html:64
-msgid "Unknown error occurred"
-msgstr "Um erro desconhecido ocorreu"
-
-#: templates/pages/admin/cars.html:63 templates/pages/books.html:65
-msgid "Validation error"
-msgstr "Erro de validação"
 
 #: templates/pages/contacts.html:3 templates/pages/contacts.html:8
 msgid "Contacts Directory"
@@ -789,8 +786,8 @@ msgstr "Informações Pessoais"
 msgid "Security"
 msgstr "Segurança"
 
-#: templates/pages/admin/users.html:85 templates/pages/auth/register.html:65
-#: templates/pages/profile.html:100
+#: templates/pages/admin/users.html:35 templates/pages/admin/users_form.html:25
+#: templates/pages/auth/register.html:65 templates/pages/profile.html:100
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -846,11 +843,11 @@ msgstr "Membro Desde"
 msgid "Account Status"
 msgstr "Status da Conta"
 
-#: templates/pages/admin/users.html:170 templates/pages/profile.html:382
+#: templates/pages/admin/users.html:38 templates/pages/profile.html:382
 msgid "Active"
 msgstr "Ativo"
 
-#: templates/pages/admin/users.html:170 templates/pages/profile.html:384
+#: templates/pages/profile.html:384
 msgid "Inactive"
 msgstr "Inativo"
 
@@ -906,7 +903,7 @@ msgstr "Um erro ocorreu"
 msgid "Browse and manage vehicle inventory"
 msgstr "Navegue e gerencie todos os envios de contato"
 
-#: templates/pages/admin/cars.html:16
+#: templates/pages/admin/cars.html:16 templates/pages/admin/users.html:16
 msgid "Back to Admin"
 msgstr "Voltar ao Início"
 
@@ -942,7 +939,7 @@ msgstr "ex: XLE"
 msgid "Admin - Contacts"
 msgstr "Admin - Contatos"
 
-#: templates/pages/admin/index.html:19 templates/pages/admin/users.html:141
+#: templates/pages/admin/index.html:19 templates/pages/admin/users.html:39
 msgid "Created"
 msgstr "Criado"
 
@@ -973,98 +970,52 @@ msgstr "Senha"
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
-#: templates/pages/admin/users.html:3 templates/pages/admin/users.html:12
+#: templates/pages/admin/users.html:3 templates/pages/admin/users.html:9
 msgid "User Management"
 msgstr ""
 
-#: templates/pages/admin/users.html:13
+#: templates/pages/admin/users.html:10
 msgid "Manage user accounts and permissions"
 msgstr ""
 
-#: templates/pages/admin/users.html:22
-#, fuzzy
-msgid "Back to Contacts"
-msgstr "Voltar ao Início"
-
-#: templates/pages/admin/users.html:42
-#, fuzzy
-msgid "user(s) pending approval"
-msgstr "O usuário não está aguardando aprovação"
-
-#: templates/pages/admin/users.html:45
-msgid "Review and approve new registrations below."
-msgstr ""
-
-#: templates/pages/admin/users.html:59 templates/pages/admin/users.html:72
-msgid "Create New User"
-msgstr ""
-
-#: templates/pages/admin/users.html:92 templates/pages/admin/users.html:135
-#: templates/pages/admin/users.html:211
-#, fuzzy
-msgid "Role"
-msgstr "Perfil"
-
-#: templates/pages/admin/users.html:95 templates/pages/admin/users.html:132
-#: templates/pages/admin/users.html:214
+#: templates/pages/admin/users.html:23 templates/pages/admin/users_form.html:50
 #, fuzzy
 msgid "User"
 msgstr "Usuários"
 
-#: templates/pages/admin/users.html:96 templates/pages/admin/users.html:215
+#: templates/pages/admin/users.html:37 templates/pages/admin/users_form.html:44
+#, fuzzy
+msgid "Role"
+msgstr "Perfil"
+
+#: templates/pages/admin/users_form.html:14
+#, fuzzy
+msgid "user@example.com"
+msgstr "voce@exemplo.com"
+
+#: templates/pages/admin/users_form.html:31
+#, fuzzy
+msgid "Your Name"
+msgstr "Nome Completo"
+
+#: templates/pages/admin/users_form.html:51
 msgid "Moderator"
 msgstr ""
 
-#: templates/pages/admin/users.html:103
-msgid "Password (optional)"
-msgstr ""
-
-#: templates/pages/admin/users.html:105
-msgid "Leave empty for magic link only"
-msgstr ""
-
-#: templates/pages/admin/users.html:113
+#: templates/pages/admin/users_form.html:53
 #, fuzzy
-msgid "Creating..."
-msgstr "Alterando..."
+msgid "Pending"
+msgstr " Enviando..."
 
-#: templates/pages/admin/users.html:113
-#, fuzzy
-msgid "Create User"
-msgstr "Criado"
-
-#: templates/pages/admin/users.html:138
+#: templates/pages/admin/users_form.html:65
 #, fuzzy
 msgid "Status"
 msgstr "Entre em contato"
 
-#: templates/pages/admin/users.html:181
-msgid "Approve"
-msgstr ""
-
-#: templates/pages/admin/users.html:206
-#, fuzzy
-msgid "Edit User"
-msgstr "Editar"
-
-#: templates/pages/admin/users.html:225
+#: templates/pages/admin/users_form.html:72
 #, fuzzy
 msgid "Active Account"
 msgstr "Criar Conta"
-
-#: templates/pages/admin/users.html:233
-#, fuzzy
-msgid "Updating..."
-msgstr "Salvando..."
-
-#: templates/pages/admin/users.html:233
-#, fuzzy
-msgid "Update User"
-msgstr "Atualização falhou"
-
-#: templates/pages/admin/users.html:276
-msgid "Approve this user ? "
-msgstr ""
 
 #: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
 msgid "Log In"
@@ -1516,4 +1467,46 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
 #~ msgid "Guest"
 #~ msgstr "Convidado"
+
+#~ msgid "Back to Contacts"
+#~ msgstr "Voltar ao Início"
+
+#~ msgid "user(s) pending approval"
+#~ msgstr "O usuário não está aguardando aprovação"
+
+#~ msgid "Review and approve new registrations below."
+#~ msgstr ""
+
+#~ msgid "Create New User"
+#~ msgstr ""
+
+#~ msgid "Password (optional)"
+#~ msgstr ""
+
+#~ msgid "Leave empty for magic link only"
+#~ msgstr ""
+
+#~ msgid "Creating..."
+#~ msgstr "Alterando..."
+
+#~ msgid "Create User"
+#~ msgstr "Criado"
+
+#~ msgid "Approve"
+#~ msgstr ""
+
+#~ msgid "Edit User"
+#~ msgstr "Editar"
+
+#~ msgid "Updating..."
+#~ msgstr "Salvando..."
+
+#~ msgid "Update User"
+#~ msgstr "Atualização falhou"
+
+#~ msgid "Approve this user ? "
+#~ msgstr ""
+
+#~ msgid "John Doe"
+#~ msgstr ""
 

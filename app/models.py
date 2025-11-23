@@ -2,8 +2,9 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from pydantic import EmailStr
 from sqlalchemy.types import Text
+from sqlmodel import Field, SQLModel
 
 
 class UserRole(str, Enum):
@@ -118,3 +119,12 @@ class Book(BookBase, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class UserBase(SQLModel):
+    """Base User model class is required for proper validation (table=False, validates like Pydantic)"""
+
+    email: EmailStr = Field(description="Email address")
+    full_name: str = Field(max_length=200, min_length=2)
+    role: UserRole = Field(default=UserRole.USER)
+    is_active: bool = Field(default=True)
