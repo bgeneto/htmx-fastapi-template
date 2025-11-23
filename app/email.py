@@ -3,6 +3,7 @@
 import resend
 
 from .config import settings
+from .i18n import gettext as _
 from .logger import get_logger
 
 logger = get_logger(__name__)
@@ -296,41 +297,62 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     """
     logger.info(f"=== send_otp_code() CALLED === email={email}, full_name={full_name}, otp_code={otp_code[:2]}****")
 
-    subject = "Your verification code"
-    preheader_text = f"Enter this 6-digit code to log in to {settings.app_name}"
+    subject = _("Your verification code")
+    preheader_text = _(f"Enter this 6-digit code to log in to {settings.app_name}")
 
     content_body = f"""
         <tr>
-            <td style="padding: 40px 30px; text-align: center; background-color: #ffffff;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #1f2937;">Verification Required</h2>
-                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #374151;">
-                    Hi {full_name},<br><br>
-                    To complete your login to {settings.app_name}, please enter this verification code:
+            <td style="padding: 40px 30px; background-color: #ffffff;">
+                <!-- Greeting -->
+                <h2 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 600; color: #1f2937; text-align: center;">{_("Verification Required")}</h2>
+                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #6b7280; text-align: center;">
+                    {_("Hi")} {full_name},
+                </p>
+
+                <!-- Instructions -->
+                <p style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #374151; text-align: center;">
+                    {_(f"To complete your login to {settings.app_name}, please enter this verification code:")}
                 </p>
 
                 <!-- OTP Code Display -->
-                <table border="0" cellspacing="8" cellpadding="0" style="margin: 25px auto; background: #f9fafb; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
-                    <tr>
-                        <td style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #1f2937; font-family: 'Courier New', monospace; text-align: center;">
+                <div style="margin: 0 auto 35px; text-align: center;">
+                    <div style="display: inline-block; background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%); border: 2px solid #dbeafe; border-radius: 16px; padding: 30px 40px;">
+                        <div style="font-size: 48px; font-weight: 700; letter-spacing: 12px; color: #1e40af; font-family: 'Courier New', monospace; tracking: 0.15em;">
                             {otp_code}
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
 
-                <p style="margin: 25px 0 0 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
-                    <strong>Important:</strong>
-                </p>
-                <ul style="margin: 10px 0 25px 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #6b7280;">
-                    <li>This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes</li>
-                    <li>Never share this code with anyone</li>
-                    <li>Enter the code exactly as shown</li>
-                </ul>
+                <!-- Important Info Section -->
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">
+                        ⚠️ {_("Important:")}
+                    </p>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
+                                • {_(f"This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes")}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
+                                • {_("Never share this code with anyone")}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
+                                • {_("Enter the code exactly as shown")}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-                <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #9ca3af;">
-                    <strong>Security notice:</strong> If you didn't request this verification code,
-                    you can safely ignore this email. Someone might have entered your email address by mistake.
-                </p>
+                <!-- Security Notice -->
+                <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 20px 0 0 0;">
+                    <p style="margin: 0; font-size: 13px; color: #166534; line-height: 1.5;">
+                        <strong>✓ {_("Security tip:")}</strong> {_("If you didn't request this verification code, you can safely ignore this email. Your account remains secure.")}
+                    </p>
+                </div>
             </td>
         </tr>
     """
@@ -339,9 +361,14 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
         preheader_text, subject, content_body, sender_footer=True
     )
 
+    verification_text = _("your verification code is:")
+    expiry_text = _(f"This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes")
+    share_warning = _("Never share this code.")
+    code_label = _("Verification code:")
+
     plain_text = _create_plain_text_version(
-        f"{subject} - Hi {full_name}, your verification code is: {otp_code}. This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes. Never share this code.",
-        f"Verification code: {otp_code}",
+        f"{subject} - {_('Hi')} {full_name}, {verification_text}: {otp_code}. {expiry_text}. {share_warning}",
+        f"{code_label}: {otp_code}",
     )
 
     # Create escape URL for List-Unsubscribe header
@@ -393,38 +420,37 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
     Returns:
         True if email sent successfully, False otherwise
     """
-    subject = "Your account has been approved"
-    preheader_text = f"Welcome to {settings.app_name} - your account is now approved!"
+    subject = _("Your account has been approved")
+    preheader_text = _(f"Welcome to {settings.app_name} - your account is now approved!")
 
     content_body = f"""
         <tr>
             <td style="padding: 40px 30px; background-color: #ecfdf5;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #065f46;">Account Approved! 🎉</h2>
+                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #065f46;">{_("Account Approved! 🎉")}</h2>
                 <p style="margin: 0 0 25px 0; font-size: 16px; line-height: 1.6; color: #374151;">
-                    Congratulations {full_name}!<br><br>
-                    Your account has been approved and you can now log in to {settings.app_name}.
+                    {_("Congratulations")} {full_name}!<br><br>
+                    {_(f"Your account has been approved and you can now log in to {settings.app_name}.")}
                 </p>
 
                 <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
                     <tr>
                         <td style="border-radius: 6px; background-color: #10b981;" bgcolor="#10b981">
                             <a href="{login_url}" style="padding: 14px 28px; border: 1px solid #10b981; border-radius: 6px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none;" class="mobile-font-size">
-                                Get Started Now
+                                {_("Get Started Now")}
                             </a>
                         </td>
                     </tr>
                 </table>
 
                 <p style="margin: 25px 0 15px 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
-                    You can now access all features by entering your email address at:<br>
+                    {_("You can now access all features by entering your email address at:")}<br>
                     <a href="{login_url}" style="color: #10b981; word-break: break-all;">{login_url}</a>
                 </p>
 
                 <hr style="border: none; border-top: 1px solid #d1fae5; margin: 30px 0;">
                 <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
-                    <strong>What happens next?</strong><br>
-                    You can now request magic links for passwordless login, upload files, and access your account securely.
-                    We use passwordless authentication for your security - no passwords needed!
+                    <strong>{_("What happens next?")}</strong><br>
+                    {_("You can now request magic links for passwordless login, upload files, and access your account securely. We use passwordless authentication for your security - no passwords needed!")}
                 </p>
             </td>
         </tr>
@@ -434,9 +460,14 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
         preheader_text, subject, content_body, sender_footer=True
     )
 
+    great_news = _("Great news")
+    approved_msg = _(f"Your account has been approved and you can now login to {settings.app_name}")
+    get_started = _("Get started")
+    login_label = _("Login to your account")
+
     plain_text = _create_plain_text_version(
-        f"Great news {full_name}! Your account has been approved and you can now login to {settings.app_name}. Get started: {login_url}",
-        f"Login to your account: {login_url}",
+        f"{great_news} {full_name}! {approved_msg}. {get_started}: {login_url}",
+        f"{login_label}: {login_url}",
     )
 
     # Create escape URL for List-Unsubscribe header (though unlikely to be used for approval emails)
