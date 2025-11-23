@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     BOOTSTRAP_ADMIN_EMAIL: str = Field(...)
     BOOTSTRAP_ADMIN_PASSWORD: SecretStr = Field(...)
 
+    # Login method configuration
+    LOGIN_METHOD: str = "otp"  # Options: magic, otp, classic
+    OTP_EXPIRY_MINUTES: int = 5
+
     # Email settings (Resend)
     EMAIL_API_KEY: SecretStr = Field(...)
     EMAIL_FROM_ADDRESS: str = Field(...)
@@ -56,6 +60,8 @@ settings = Settings(
     BOOTSTRAP_ADMIN_PASSWORD=SecretStr(
         os.getenv("BOOTSTRAP_ADMIN_PASSWORD", "")  # Must be set in env
     ),
+    LOGIN_METHOD=os.getenv("LOGIN_METHOD", "otp"),
+    OTP_EXPIRY_MINUTES=int(os.getenv("OTP_EXPIRY_MINUTES", "5")),
     EMAIL_API_KEY=SecretStr(os.getenv("EMAIL_API_KEY", "")),
     EMAIL_FROM_ADDRESS=os.getenv("EMAIL_FROM_ADDRESS", "noreply@example.com"),
     APP_BASE_URL=os.getenv("APP_BASE_URL", "http://localhost:8000"),

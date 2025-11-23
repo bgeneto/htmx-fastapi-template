@@ -26,6 +26,20 @@ class SuccessResponse:
         return JSONResponse(content={"success": True, "message": self.message})
 
 
+class OTPVerificationResponse:
+    """Response for OTP verification indicating redirect to verification page"""
+    def __init__(self, email: str):
+        self.email = email
+
+    def to_response(self) -> JSONResponse:
+        return JSONResponse(content={
+            "success": True,
+            "redirect": "verify_otp",
+            "email": self.email,
+            "message": _("OTP sent successfully")
+        })
+
+
 class MagicLinkHandler:
     """Handles magic link login process."""
 
@@ -51,7 +65,7 @@ class MagicLinkHandler:
             # Generate magic link token
             raw_token = await create_login_token(request.session, user)
             magic_link = f"{settings.APP_BASE_URL}/auth/verify/{raw_token}"
-            
+
             if request.next_url:
                 from urllib.parse import quote
                 magic_link += f"?next={quote(request.next_url)}"
@@ -64,6 +78,47 @@ class MagicLinkHandler:
 
         # Always show check email page
         return None  # Signal to redirect to check email page
+
+
+class OTPHandler:
+    """Handles OTP login process."""
+
+    async def authenticate(
+        self, request: AuthenticationRequest
+    ) -> Optional[AuthenticationResponse]:
+        from .email import send_otp_code
+        from .repository import get_user_by_email
+
+        # Get user
+        user = await get_user_by_email(request.session, request.email)
+
+        # Always return success to prevent email enumeration
+        if user and user.is_active:
+            # Check if user is pending
+            if user.role == UserRole.PENDING:
+                return SuccessResponse(_("Your account is pending admin approval."))
+
+            # Generate and send OTP code
+            try:
+                from .repository import create_otp_code
+                otp_code = await create_otp_code(request.session, request.email)
+
+                # Send OTP email
+                await send_otp_code(request.email, user.full_name, otp_code)
+
+                # Return response indicating OTP verification page
+                return OTPVerificationResponse(request.email)
+
+            except Exception:
+                # Log error but still show generic success to prevent enumeration
+                pass
+        else:
+            # Log warning for non-existent/inactive user (for monitoring)
+            pass
+
+        # Always return success to prevent email enumeration
+        # Even if OTP generation failed, we show the same response
+        return OTPVerificationResponse(request.email)
 
 
 class AuthenticationStrategy(Protocol):
@@ -84,5 +139,18 @@ class MagicLinkStrategy:
         return await self.handler.authenticate(request)
 
 
-# Default strategy instance
-default_auth_strategy = MagicLinkStrategy(MagicLinkHandler())
+class OTPStrategy:
+    """Strategy for OTP authentication."""
+
+    def __init__(self, handler: OTPHandler):
+        self.handler = handler
+
+    async def handle_login(
+        self, request: AuthenticationRequest
+    ) -> Optional[AuthenticationResponse]:
+        return await self.handler.authenticate(request)
+
+
+# Default strategy instances
+magic_link_strategy = MagicLinkStrategy(MagicLinkHandler())
+otp_strategy = OTPStrategy(OTPHandler())

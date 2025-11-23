@@ -10,7 +10,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from .config import settings
 from .db import AsyncSessionLocal
 from .logger import get_logger
-from .models import Car, Contact, LoginToken, User, UserRole
+from .models import Car, Contact, LoginToken, OTPCode, User, UserRole
 from .schemas import AdminCreateUser, ContactCreate, UserRegister, UserUpdate
 
 logger = get_logger("repo")
@@ -391,3 +391,99 @@ async def seed_books(session: AsyncSession, count: int = 100):
     session.add_all(books)
     await session.commit()
     logger.info(f"Seeded {count} books")
+
+
+# ============= OTP CRUD =============
+
+
+async def create_otp_code(session: AsyncSession, email: str) -> str:
+    """Generate and store a 6-digit OTP code for the given email"""
+    import random
+    import string
+
+    # Generate 6-digit numeric code
+    otp_code = ''.join(random.choices(string.digits, k=6))
+
+    # Delete any existing unused OTP codes for this email
+    await session.exec(
+        select(OTPCode).where(OTPCode.email == email.lower(), OTPCode.used_at.is_(None))
+    )
+    for old_otp in await session.exec(
+        select(OTPCode).where(OTPCode.email == email.lower(), OTPCode.used_at.is_(None))
+    ):
+        session.delete(old_otp)
+
+    # Create new OTP code
+    expires_at = datetime.utcnow() + timedelta(minutes=settings.OTP_EXPIRY_MINUTES)
+    otp = OTPCode(
+        email=email.lower(),
+        code=otp_code,
+        expires_at=expires_at,
+    )
+    session.add(otp)
+    await session.commit()
+    await session.refresh(otp)
+
+    logger.info(f"Created OTP code for email: {email}")
+    return otp_code
+
+
+async def verify_otp_code(session: AsyncSession, email: str, provided_code: str) -> bool:
+    """Verify the OTP code for the given email"""
+    # Get valid OTP code for this email
+    result = await session.exec(
+        select(OTPCode).where(
+            OTPCode.email == email.lower(),
+            OTPCode.used_at.is_(None),
+            OTPCode.expires_at > datetime.utcnow()
+        )
+    )
+    otp = result.one_or_none()
+
+    if not otp:
+        return False
+
+    # Increment attempts
+    otp.attempts += 1
+
+    # Check if code matches
+    if otp.code == provided_code:
+        # Mark as used
+        otp.used_at = datetime.utcnow()
+        await session.commit()
+        logger.info(f"OTP verified successfully for email: {email}")
+        return True
+    else:
+        await session.commit()
+        logger.warning(f"Invalid OTP provided for email: {email}")
+        return False
+
+
+async def is_otp_pending(session: AsyncSession, email: str) -> bool:
+    """Check if there's a pending OTP for the given email"""
+    result = await session.exec(
+        select(OTPCode).where(
+            OTPCode.email == email.lower(),
+            OTPCode.used_at.is_(None),
+            OTPCode.expires_at > datetime.utcnow()
+        )
+    )
+    return result.one_or_none() is not None
+
+
+async def get_otp_ttl(session: AsyncSession, email: str) -> int:
+    """Get time-to-live for OTP in seconds"""
+    result = await session.exec(
+        select(OTPCode).where(
+            OTPCode.email == email.lower(),
+            OTPCode.used_at.is_(None),
+            OTPCode.expires_at > datetime.utcnow()
+        )
+    )
+    otp = result.one_or_none()
+
+    if not otp:
+        return 0
+
+    ttl = (otp.expires_at - datetime.utcnow()).total_seconds()
+    return max(0, int(ttl))

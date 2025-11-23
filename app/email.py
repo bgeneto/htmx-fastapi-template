@@ -275,6 +275,95 @@ async def send_registration_notification(
         return False
 
 
+async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
+    """
+    Send OTP code for login verification
+
+    Args:
+        email: Recipient email address
+        full_name: Recipient's full name
+        otp_code: 6-digit OTP code
+
+    Returns:
+        True if email sent successfully, False otherwise
+    """
+    subject = "Your verification code"
+    preheader_text = f"Enter this 6-digit code to log in to {settings.app_name}"
+
+    content_body = f"""
+        <tr>
+            <td style="padding: 40px 30px; text-align: center; background-color: #ffffff;">
+                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #1f2937;">Verification Required</h2>
+                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #374151;">
+                    Hi {full_name},<br><br>
+                    To complete your login to {settings.app_name}, please enter this verification code:
+                </p>
+
+                <!-- OTP Code Display -->
+                <table border="0" cellspacing="8" cellpadding="0" style="margin: 25px auto; background: #f9fafb; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
+                    <tr>
+                        <td style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #1f2937; font-family: 'Courier New', monospace; text-align: center;">
+                            {otp_code}
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="margin: 25px 0 0 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                    <strong>Important:</strong>
+                </p>
+                <ul style="margin: 10px 0 25px 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                    <li>This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes</li>
+                    <li>Never share this code with anyone</li>
+                    <li>Enter the code exactly as shown</li>
+                </ul>
+
+                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+                <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #9ca3af;">
+                    <strong>Security notice:</strong> If you didn't request this verification code,
+                    you can safely ignore this email. Someone might have entered your email address by mistake.
+                </p>
+            </td>
+        </tr>
+    """
+
+    html_content = _create_safe_html_template(
+        preheader_text, subject, content_body, sender_footer=True
+    )
+
+    plain_text = _create_plain_text_version(
+        f"{subject} - Hi {full_name}, your verification code is: {otp_code}. This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes. Never share this code.",
+        f"Verification code: {otp_code}",
+    )
+
+    # Create escape URL for List-Unsubscribe header
+    from urllib.parse import quote
+
+    unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
+
+    try:
+        api_response = resend.Emails.send(
+            {
+                "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
+                "to": [email],
+                "subject": subject,
+                "html": html_content,
+                "text": plain_text,
+                "headers": {
+                    "List-Unsubscribe": f"<{unsubscribe_url}>",
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    "X-Auto-Response-Suppress": "AutoReply, DR, NDR, RN, NRN",
+                    "X-Transaction-Type": "transactional",
+                    "X-Email-Type": "authentication",
+                },
+            }
+        )
+        logger.info(f"OTP email sent to {email}: {api_response}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send OTP email to {email}: {e}")
+        return False
+
+
 async def send_account_approved(email: str, full_name: str, login_url: str) -> bool:
     """
     Notify user that their account has been approved by admin

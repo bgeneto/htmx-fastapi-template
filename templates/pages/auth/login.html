@@ -6,7 +6,13 @@
 <div class="max-w-md mx-auto p-6">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Welcome Back') }}</h1>
+        {% if login_method == 'otp' %}
+        <p class="text-gray-600 dark:text-gray-400">{{ _('Enter your email to receive a verification code') }}</p>
+        {% elif login_method == 'magic' %}
         <p class="text-gray-600 dark:text-gray-400">{{ _('Enter your email to receive a magic link') }}</p>
+        {% elif login_method == 'classic' %}
+        <p class="text-gray-600 dark:text-gray-400">{{ _('Enter your email and password to log in') }}</p>
+        {% endif %}
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
@@ -25,7 +31,81 @@
 
         <div x-data="loginForm()">
             <form @submit.prevent="submitForm" novalidate class="space-y-6">
-                <!-- Email field -->
+                {% if login_method == 'classic' %}
+                <!-- Classic login with password -->
+                <div class="space-y-4">
+                    <!-- Email field -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                            {{ _('Email') }}
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input id="email" type="email" x-model="form.email" @blur="validate('email')"
+                                @input="validate('email')" required autocomplete="email" autofocus
+                                placeholder="{{ _('you@example.com') }}"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                        </div>
+                        <div x-show="errors.email" x-transition
+                            class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span x-text="errors.email"></span>
+                        </div>
+                    </div>
+
+                    <!-- Password field -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                            {{ _('Password') }}
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input id="password" type="password" x-model="form.password" @blur="validate('password')"
+                                @input="validate('password')" required autocomplete="current-password"
+                                placeholder="{{ _('••••••••') }}"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                        </div>
+                        <div x-show="errors.password" x-transition
+                            class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span x-text="errors.password"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info message for classic login -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                    <div class="flex">
+                        <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            {{ _("Enter your email and password to access your account.") }}
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Email field for magic link and OTP -->
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
                         {{ _('Email') }}
@@ -53,7 +133,7 @@
                     </div>
                 </div>
 
-                <!-- Info message -->
+                <!-- Info message for magic link and OTP -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                     <div class="flex">
                         <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" fill="none"
@@ -62,10 +142,15 @@
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <p class="text-sm text-blue-700 dark:text-blue-300">
+                            {% if login_method == 'otp' %}
+                            {{ _("We'll send you a 6-digit verification code to your email. Enter the code on the next page to complete your login.") }}
+                            {% else %}
                             {{ _("We'll send you a secure login link to your email. No password needed!") }}
+                            {% endif %}
                         </p>
                     </div>
                 </div>
+                {% endif %}
 
                 <!-- Action buttons -->
                 <div class="space-y-3">
@@ -79,7 +164,14 @@
                                 d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        <span x-text="loading ? '{{ _(" Sending...") }}' : '{{ _("Continue with e-mail") }}'"></span>
+                        <span x-text="loading ? '{{ _(" Sending...") }}' :
+                        {% if login_method == 'classic' %}
+                        '{{ _("Log In") }}'
+                        {% elif login_method == 'otp' %}
+                        '{{ _("Send Verification Code") }}'
+                        {% else %}
+                        '{{ _("Continue with e-mail") }}'
+                        {% endif %}"></span>
                         </button>
 
                         <div class=" text-center">
@@ -97,17 +189,22 @@
 <script>
     function loginForm() {
         return {
+            loginMethod: "{{ login_method }}",
             form: {
-                email: ''
+                email: '',
+                password: ''
             },
             errors: {
-                email: ''
+                email: '',
+                password: ''
             },
             loading: false,
 
             i18n: {
                 emailRequired: "{{ _('Email is required') }}",
                 emailInvalid: "{{ _('Please enter a valid email address') }}",
+                passwordRequired: "{{ _('Password is required') }}",
+                passwordMinLength: "{{ _('Password must be at least 8 characters') }}",
                 fixErrors: "{{ _('Please fix the errors before submitting.') }}"
             },
 
@@ -123,11 +220,23 @@
                     } else {
                         this.errors.email = '';
                     }
+                } else if (field === 'password' && this.loginMethod === 'classic') {
+                    if (!value) {
+                        this.errors.password = this.i18n.passwordRequired;
+                    } else if (value.length < 8) {
+                        this.errors.password = this.i18n.passwordMinLength;
+                    } else {
+                        this.errors.password = '';
+                    }
                 }
             },
 
             validateAll() {
                 this.validate('email');
+                if (this.loginMethod === 'classic') {
+                    this.validate('password');
+                    return !this.errors.email && !this.errors.password;
+                }
                 return !this.errors.email;
             },
 
@@ -143,6 +252,11 @@
                     const formData = new FormData();
                     formData.append('email', this.form.email);
 
+                    // Add password for classic login
+                    if (this.loginMethod === 'classic') {
+                        formData.append('password', this.form.password);
+                    }
+
                     // Add next parameter if present in URL
                     const urlParams = new URLSearchParams(window.location.search);
                     const nextParam = urlParams.get('next');
@@ -154,13 +268,22 @@
                         headers: { 'Accept': 'text/html' }
                     });
 
-                    // Server redirects to check_email page on success
-                    // Note: Axios follows redirects automatically
-                    if (response.status === 200 && response.request.responseURL) {
+                    // Handle different response types
+                    const data = response.data;
+
+                    if (data.redirect) {
+                        // Handle OTP redirect
+                        if (data.redirect === 'verify_otp') {
+                            // Redirect to OTP verification page with email
+                            window.location.href = `/auth/verify-otp?email=${encodeURIComponent(data.email)}`;
+                        } else {
+                            window.location.href = data.redirect;
+                        }
+                    } else if (response.status === 200 && response.request.responseURL) {
+                        // Server redirects to check_email page on success
                         window.location.href = response.request.responseURL;
                     } else {
                         // For JSON responses
-                        const data = response.data;
                         if (data.message) {
                             window.showToast(data.message, 'info');
                         }

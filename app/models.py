@@ -62,6 +62,20 @@ class LoginToken(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class OTPCode(SQLModel, table=True):
+    """OTP verification codes for login"""
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(index=True, max_length=320)
+    code: str = Field(max_length=6)  # 6-digit code
+
+    expires_at: datetime = Field(index=True)
+    used_at: Optional[datetime] = Field(default=None)
+    attempts: int = Field(default=0)  # Track failed attempts
+
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
 class Contact(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(index=True, max_length=200)

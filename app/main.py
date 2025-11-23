@@ -672,9 +672,13 @@ async def register(
 
 @app.get("/auth/login", response_class=HTMLResponse)
 async def login_form(request: Request):
-    """Display magic link login form"""
+    """Display login form based on configured login method"""
     return templates.TemplateResponse(
-        "pages/auth/login.html", {"request": request, "error": None}
+        "pages/auth/login.html", {
+            "request": request,
+            "error": None,
+            "login_method": settings.LOGIN_METHOD,
+        }
     )
 
 
@@ -682,17 +686,19 @@ async def login_form(request: Request):
 async def login(
     request: Request,
     email: str = Form(...),
+    password: Optional[str] = Form(None),
     next: Optional[str] = None,
     session: AsyncSession = Depends(get_session),
 ):
-    """Request magic link for passwordless login"""
+    """Handle login based on configured login method"""
     from .response_helpers import FormResponseHelper
-
-    form_data = {"email": email}
 
     # Validate email format
     try:
-        LoginRequest.model_validate(form_data)
+        if settings.LOGIN_METHOD == 'classic':
+            LoginRequest.model_validate({"email": email, "password": password})
+        else:
+            LoginRequest.model_validate({"email": email})
     except ValidationError as e:
         return FormResponseHelper.form_error(
             message=_("Login failed"),
@@ -701,20 +707,193 @@ async def login(
 
     from .auth_strategies import (
         AuthenticationRequest,
-        default_auth_strategy,
+        magic_link_strategy,
+        otp_strategy,
     )
+
+    # Select strategy based on configuration
+    if settings.LOGIN_METHOD == 'otp':
+        strategy = otp_strategy
+    elif settings.LOGIN_METHOD == 'magic':
+        strategy = magic_link_strategy
+    elif settings.LOGIN_METHOD == 'classic':
+        # Use fastapi-users for classic login
+        return await classic_login(request, email, password, next, session)
+    else:
+        # Default to magic link for backward compatibility
+        strategy = magic_link_strategy
 
     # Use authentication strategy
     auth_request = AuthenticationRequest(email, session, next)
-    response = await default_auth_strategy.handle_login(auth_request)
+    response = await strategy.handle_login(auth_request)
 
     if response:
         return response.to_response()
 
-    # Redirect to check email page
+    # Redirect to check email page (for magic link)
     return templates.TemplateResponse(
-        "pages/auth/check_email.html", {"request": request, "email": email}
+        "pages/auth/check_email.html", {
+            "request": request,
+            "email": email,
+            "login_method": settings.LOGIN_METHOD,
+        }
     )
+
+
+@app.get("/auth/verify-otp", response_class=HTMLResponse)
+async def verify_otp_form(request: Request, email: str):
+    """Display OTP verification form"""
+    return templates.TemplateResponse(
+        "pages/auth/verify_otp.html", {
+            "request": request,
+            "email": email,
+            "error": None,
+        }
+    )
+
+
+@app.post("/auth/verify-otp")
+async def verify_otp(
+    request: Request,
+    email: str = Form(...),
+    otp_code: str = Form(...),
+    session: AsyncSession = Depends(get_session),
+):
+    """Verify OTP code and login user"""
+    from .repository import verify_otp_code, get_user_by_email
+
+    # Verify OTP code
+    is_valid = await verify_otp_code(session, email, otp_code)
+
+    if not is_valid:
+        return templates.TemplateResponse(
+            "pages/auth/verify_otp.html",
+            {
+                "request": request,
+                "email": email,
+                "error": _("Invalid or expired verification code. Please try again."),
+            },
+        )
+
+    # Get user and create session
+    user = await get_user_by_email(session, email)
+    if not user or not user.is_active:
+        return templates.TemplateResponse(
+            "pages/auth/verify_otp.html",
+            {
+                "request": request,
+                "email": email,
+                "error": _("User not found or inactive. Please contact support."),
+            },
+        )
+
+    # Generate JWT token using fastapi-users strategy
+    from .users import get_jwt_strategy
+
+    strategy = get_jwt_strategy()
+    token = await strategy.write_token(user)
+
+    # Redirect based on role
+    redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
+
+    response = RedirectResponse(url=redirect_url, status_code=303)
+
+    # Set session cookie
+    response.set_cookie(
+        key="session",
+        value=token,
+        max_age=settings.SESSION_EXPIRY_DAYS * 24 * 60 * 60,
+        secure=False,  # Set to True in production with HTTPS
+        httponly=True,
+        samesite="lax",
+    )
+
+    return response
+
+
+@app.post("/auth/resend-otp")
+async def resend_otp(
+    request: Request,
+    email: str = Form(...),
+    session: AsyncSession = Depends(get_session),
+):
+    """Resend OTP code"""
+    from .auth_strategies import AuthenticationRequest, OTPHandler
+    from .repository import get_user_by_email
+
+    # Get user
+    user = await get_user_by_email(session, email)
+    if not user or not user.is_active:
+        # Don't reveal if user exists or not
+        return JSONResponse(
+            content={"success": True, "message": _("OTP sent successfully")},
+            status_code=200,
+        )
+
+    # Send OTP
+    otp_handler = OTPHandler()
+    auth_request = AuthenticationRequest(email, session)
+    await otp_handler.authenticate(auth_request)
+
+    return JSONResponse(
+        content={"success": True, "message": _("OTP sent successfully")},
+        status_code=200,
+    )
+
+
+async def classic_login(
+    request: Request,
+    email: str,
+    password: str,
+    next_url: Optional[str],
+    session: AsyncSession,
+):
+    """Classic username/password login using fastapi-users"""
+    try:
+        # Use fastapi-users login
+        from fastapi_users.router.common import ErrorCode
+
+        # Create login form data
+        from fastapi_users.router import ErrorCode, LoginResponse
+
+        # Use fastapi-users authentication backend
+        user = await auth_backend.login(email, password)
+
+        if not user:
+            return FormResponseHelper.form_error(
+                message=_("Invalid email or password"),
+            )
+
+        # Get JWT strategy
+        from .users import get_jwt_strategy
+        strategy = get_jwt_strategy()
+
+        # Generate token
+        token = await strategy.write_token(user)
+
+        # Set redirect URL
+        redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
+        if next_url:
+            from .url_validator import validate_admin_redirect
+            redirect_url = validate_admin_redirect(next_url, redirect_url)
+
+        response = RedirectResponse(url=redirect_url, status_code=303)
+        response.set_cookie(
+            key="session",
+            value=token,
+            max_age=settings.SESSION_EXPIRY_DAYS * 24 * 60 * 60,
+            secure=False,
+            httponly=True,
+            samesite="lax",
+        )
+
+        return response
+
+    except Exception as e:
+        logger.error(f"Classic login error: {e}")
+        return FormResponseHelper.form_error(
+            message=_("Login failed. Please check your credentials and try again."),
+        )
 
 
 @app.get("/auth/verify/{token}")
