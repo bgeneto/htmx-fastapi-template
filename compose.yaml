@@ -32,7 +32,7 @@ services:
       - default
       - proxy
     depends_on:
-      - redis
+      - redis-fastapi
 
   redis-fastapi:
     image: redis:7-alpine
