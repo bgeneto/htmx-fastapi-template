@@ -90,7 +90,7 @@ class OTPHandler:
         self, request: AuthenticationRequest
     ) -> Optional[AuthenticationResponse]:
         from .email import send_otp_code
-        from .repository import create_user, get_user_by_email
+        from .repository import get_user_by_email
 
         # Get user
         user = await get_user_by_email(request.session, request.email)
@@ -100,7 +100,7 @@ class OTPHandler:
         if not user:
             try:
                 from .config import settings
-                from .schemas import UserCreate
+                from .models import User
 
                 # Extract name from email (everything before @)
                 email_username = request.email.split('@')[0]
@@ -117,14 +117,17 @@ class OTPHandler:
                     is_active = True
                     logger.info(f"OTPHandler: Auto-creating active USER for {request.email} (instant access)")
 
-                user_data = UserCreate(
+                # Create user directly without password (passwordless OTP login)
+                user = User(
                     email=request.email,
                     full_name=auto_name,
                     is_active=is_active,
-                    role=user_role
+                    role=user_role,
+                    hashed_password=""  # No password for OTP users
                 )
 
-                user = await create_user(request.session, user_data)
+                # Add to session and commit
+                request.session.add(user)
                 await request.session.commit()
                 logger.info(f"OTPHandler: Successfully created user for {request.email} with role={user_role}")
 

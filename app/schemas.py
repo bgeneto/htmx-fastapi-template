@@ -73,6 +73,22 @@ class UserUpdate(schemas.BaseUserUpdate):
     role: Optional[UserRole] = None
 
 
+class UserCreateOTP(BaseModel):
+    """Schema for creating users via passwordless OTP login"""
+
+    email: EmailStr = Field(..., description="Email address")
+    full_name: str = Field(..., description="Full name", min_length=2, max_length=200)
+    is_active: bool = True
+    role: UserRole = UserRole.USER
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        if not v or len(v.strip()) < 2:
+            raise ValueError(_("Name must be at least 2 characters"))
+        return v.strip()
+
+
 # ============= Legacy Authentication Schemas (kept for compatibility) =============
 
 
