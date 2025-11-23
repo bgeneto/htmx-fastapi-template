@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 16:19-0300\n"
+"POT-Creation-Date: 2025-11-23 16:25-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,7 +37,7 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
-#: app/auth_strategies.py:66 app/auth_strategies.py:102
+#: app/auth_strategies.py:66 app/auth_strategies.py:103
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 

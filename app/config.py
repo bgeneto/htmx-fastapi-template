@@ -30,6 +30,11 @@ class Settings(BaseSettings):
     LOGIN_METHOD: str = "otp"  # Options: magic, otp, classic
     OTP_EXPIRY_MINUTES: int = 5
 
+    # Require admin approval for new user registrations (OTP auto-registration)
+    # If True: new users are created as PENDING and must wait for admin approval
+    # If False: new users are created as active USER role (instant access)
+    REQUIRE_ADMIN_APPROVAL: bool = True
+
     # Email settings (Resend)
     EMAIL_API_KEY: SecretStr = Field(...)
     EMAIL_FROM_ADDRESS: str = Field(...)
@@ -62,6 +67,7 @@ settings = Settings(
     ),
     LOGIN_METHOD=os.getenv("LOGIN_METHOD", "otp"),
     OTP_EXPIRY_MINUTES=int(os.getenv("OTP_EXPIRY_MINUTES", "5")),
+    REQUIRE_ADMIN_APPROVAL=os.getenv("REQUIRE_ADMIN_APPROVAL", "true").lower() == "true",
     EMAIL_API_KEY=SecretStr(os.getenv("EMAIL_API_KEY", "")),
     EMAIL_FROM_ADDRESS=os.getenv("EMAIL_FROM_ADDRESS", "noreply@example.com"),
     APP_BASE_URL=os.getenv("APP_BASE_URL", "http://localhost:8000"),

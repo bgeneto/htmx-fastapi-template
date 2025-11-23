@@ -801,6 +801,18 @@ async def verify_otp(
             },
         )
 
+    # Check if user is pending approval
+    if user.role == UserRole.PENDING:
+        return templates.TemplateResponse(
+            "pages/auth/verify_otp.html",
+            {
+                "request": request,
+                "email": email,
+                "error": _("Your account is pending admin approval. You will be notified once approved."),
+                "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
+            },
+        )
+
     # Generate JWT token using fastapi-users strategy
     from .users import get_jwt_strategy
 

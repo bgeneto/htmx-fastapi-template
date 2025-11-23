@@ -84,53 +84,91 @@ class MagicLinkHandler:
 
 
 class OTPHandler:
-    """Handles OTP login process."""
+    """Handles OTP login process with auto-registration."""
 
     async def authenticate(
         self, request: AuthenticationRequest
     ) -> Optional[AuthenticationResponse]:
         from .email import send_otp_code
-        from .repository import get_user_by_email
+        from .repository import create_user, get_user_by_email
 
         # Get user
         user = await get_user_by_email(request.session, request.email)
+        logger.info(f"OTPHandler: User lookup for {request.email}: user={'found' if user else 'NOT FOUND'}, is_active={user.is_active if user else 'N/A'}")
 
-        # Always return success to prevent email enumeration
-        if user and user.is_active:
-            # Check if user is pending
-            if user.role == UserRole.PENDING:
-                return SuccessResponse(_("Your account is pending admin approval."))
-
-            # Generate and send OTP code
+        # Auto-create user if not found
+        if not user:
             try:
-                from .repository import create_otp_code
-                logger.info(f"Creating OTP code for email: {request.email}")
-                otp_code = await create_otp_code(request.session, request.email)
-                logger.info(f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}")
+                from .config import settings
+                from .schemas import UserCreate
 
-                # Send OTP email
-                logger.info(f"Attempting to send OTP email to {request.email}")
-                email_sent = await send_otp_code(request.email, user.full_name, otp_code)
-                logger.info(f"OTP email sending result for {request.email}: {email_sent}")
+                # Extract name from email (everything before @)
+                email_username = request.email.split('@')[0]
+                # Capitalize and replace dots/underscores with spaces
+                auto_name = email_username.replace('.', ' ').replace('_', ' ').title()
 
-                if not email_sent:
-                    logger.error(f"OTP email failed to send to {request.email} - email_sent returned False")
+                # Determine user role and status based on settings
+                if settings.REQUIRE_ADMIN_APPROVAL:
+                    user_role = UserRole.PENDING
+                    is_active = True  # Active but with PENDING role (needs approval)
+                    logger.info(f"OTPHandler: Auto-creating PENDING user for {request.email} (requires admin approval)")
+                else:
+                    user_role = UserRole.USER
+                    is_active = True
+                    logger.info(f"OTPHandler: Auto-creating active USER for {request.email} (instant access)")
 
-                # Return response indicating OTP verification page
-                return OTPVerificationResponse(request.email)
+                user_data = UserCreate(
+                    email=request.email,
+                    full_name=auto_name,
+                    is_active=is_active,
+                    role=user_role
+                )
+
+                user = await create_user(request.session, user_data)
+                await request.session.commit()
+                logger.info(f"OTPHandler: Successfully created user for {request.email} with role={user_role}")
 
             except Exception as e:
-                # Log error but still show generic success to prevent enumeration
-                logger.error(f"Error in OTP generation/sending for {request.email}: {e}")
+                logger.error(f"OTPHandler: Failed to auto-create user for {request.email}: {e}")
                 logger.exception("Full traceback:")
-                pass
-        else:
-            # Log warning for non-existent/inactive user (for monitoring)
-            pass
+                # Still return success to prevent enumeration
+                return OTPVerificationResponse(request.email)
 
-        # Always return success to prevent email enumeration
-        # Even if OTP generation failed, we show the same response
-        return OTPVerificationResponse(request.email)
+        # Check if user is active
+        if not user.is_active:
+            logger.warning(f"OTPHandler: User INACTIVE for email {request.email} - skipping OTP send")
+            # Still return success to prevent enumeration
+            return OTPVerificationResponse(request.email)
+
+        # Check if user is pending approval - do NOT send OTP
+        if user.role == UserRole.PENDING:
+            logger.info(f"OTPHandler: User PENDING for {request.email} - returning approval message")
+            return SuccessResponse(_("Your account is pending admin approval. You will be notified once approved."))
+
+        # Generate and send OTP code
+        try:
+            from .repository import create_otp_code
+            logger.info(f"Creating OTP code for email: {request.email}")
+            otp_code = await create_otp_code(request.session, request.email)
+            logger.info(f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}")
+
+            # Send OTP email
+            logger.info(f"Attempting to send OTP email to {request.email}")
+            email_sent = await send_otp_code(request.email, user.full_name, otp_code)
+            logger.info(f"OTP email sending result for {request.email}: {email_sent}")
+
+            if not email_sent:
+                logger.error(f"OTP email failed to send to {request.email} - email_sent returned False")
+
+            # Return response indicating OTP verification page
+            return OTPVerificationResponse(request.email)
+
+        except Exception as e:
+            # Log error but still show generic success to prevent enumeration
+            logger.error(f"Error in OTP generation/sending for {request.email}: {e}")
+            logger.exception("Full traceback:")
+            # Still return success to prevent enumeration
+            return OTPVerificationResponse(request.email)
 
 
 class AuthenticationStrategy(Protocol):
