@@ -168,6 +168,17 @@ app = FastAPI(
     json_encoders={datetime: lambda v: v.isoformat()},
 )
 
+# Middleware for host header logging (diagnostic)
+class HostHeaderLoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        host_header = request.headers.get("host", "NOT_SET")
+        forwarded_host = request.headers.get("x-forwarded-host", "NOT_SET")
+        logger.debug("Incoming request Host header: '{}' | X-Forwarded-Host: '{}' | URL: {} {}", host_header, forwarded_host, request.method, request.url.path)
+        return await call_next(request)
+
+
+app.add_middleware(HostHeaderLoggingMiddleware)
+
 # Security Middleware Configuration
 # TrustedHostMiddleware - validates Host header to prevent host header injection attacks
 allowed_hosts = get_allowed_hosts()
