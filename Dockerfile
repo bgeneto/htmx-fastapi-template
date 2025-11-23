@@ -41,13 +41,8 @@ RUN npm run build:css && \
     npm prune --production && \
     pybabel compile -d translations
 
-# Health check using FastAPI's built-in /docs endpoint
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8000/docs || exit 1
-
 ENV PYTHONUNBUFFERED=1
 
 # Run migrations, fix database permissions, and start the application
 CMD alembic upgrade head && \
     uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers
-

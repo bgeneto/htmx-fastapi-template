@@ -191,6 +191,7 @@ app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
     docs_url=None,
+    redoc_url=None,
     lifespan=lifespan,
     json_encoders={datetime: lambda v: v.isoformat()},
     dependencies=[Depends(inject_user_to_request_state)],
