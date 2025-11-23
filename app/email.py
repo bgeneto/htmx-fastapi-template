@@ -259,7 +259,9 @@ async def send_registration_notification(
     )
 
     try:
-        logger.info(f"Attempting to send registration notification to {admin_email} via Resend")
+        logger.info(
+            f"Attempting to send registration notification to {admin_email} via Resend"
+        )
         api_response = resend.Emails.send(
             {
                 "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
@@ -274,7 +276,9 @@ async def send_registration_notification(
                 },
             }
         )
-        logger.info(f"Registration notification sent successfully to {admin_email}: {api_response}")
+        logger.info(
+            f"Registration notification sent successfully to {admin_email}: {api_response}"
+        )
         return True
     except Exception as e:
         logger.error(f"Failed to send registration notification to {admin_email}: {e}")
@@ -295,10 +299,14 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     Returns:
         True if email sent successfully, False otherwise
     """
-    logger.info(f"=== send_otp_code() CALLED === email={email}, full_name={full_name}, otp_code={otp_code[:2]}****")
+    logger.info(
+        f"=== send_otp_code() CALLED === email={email}, full_name={full_name}, otp_code={otp_code[:2]}****"
+    )
 
     subject = _("Your verification code")
-    preheader_text = _(f"Enter this 6-digit code to log in to {settings.app_name}")
+    preheader_text = _("Enter this 6-digit code to log in to {app_name}").format(
+        app_name=settings.app_name
+    )
 
     content_body = f"""
         <tr>
@@ -311,7 +319,7 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
 
                 <!-- Instructions -->
                 <p style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #374151; text-align: center;">
-                    {_(f"To complete your login to {settings.app_name}, please enter this verification code:")}
+                    {_("To complete your login to {app_name}, please enter this verification code:").format(app_name=settings.app_name)}
                 </p>
 
                 <!-- OTP Code Display -->
@@ -326,12 +334,12 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
                 <!-- Important Info Section -->
                 <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 25px 0;">
                     <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">
-                        ⚠️ {_("Important:")}
+                        ⚠️ {_("Important")}:
                     </p>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
-                                • {_(f"This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes")}
+                                • {_("This code will expire in {minutes} minutes").format(minutes=settings.OTP_EXPIRY_MINUTES)}
                             </td>
                         </tr>
                         <tr>
@@ -362,7 +370,9 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     )
 
     verification_text = _("your verification code is:")
-    expiry_text = _(f"This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes")
+    expiry_text = _("This code will expire in {minutes} minutes").format(
+        minutes=settings.OTP_EXPIRY_MINUTES
+    )
     share_warning = _("Never share this code.")
     code_label = _("Verification code:")
 
@@ -421,7 +431,9 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
         True if email sent successfully, False otherwise
     """
     subject = _("Your account has been approved")
-    preheader_text = _(f"Welcome to {settings.app_name} - your account is now approved!")
+    preheader_text = _("Welcome to {app_name} - your account is now approved!").format(
+        app_name=settings.app_name
+    )
 
     content_body = f"""
         <tr>
@@ -429,7 +441,7 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
                 <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #065f46;">{_("Account Approved! 🎉")}</h2>
                 <p style="margin: 0 0 25px 0; font-size: 16px; line-height: 1.6; color: #374151;">
                     {_("Congratulations")} {full_name}!<br><br>
-                    {_(f"Your account has been approved and you can now log in to {settings.app_name}.")}
+                    {_("Your account has been approved and you can now log in to {app_name}.").format(app_name=settings.app_name)}
                 </p>
 
                 <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
@@ -461,7 +473,9 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
     )
 
     great_news = _("Great news")
-    approved_msg = _(f"Your account has been approved and you can now login to {settings.app_name}")
+    approved_msg = _(
+        "Your account has been approved and you can now login to {app_name}"
+    ).format(app_name=settings.app_name)
     get_started = _("Get started")
     login_label = _("Login to your account")
 
@@ -493,7 +507,9 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
                 },
             }
         )
-        logger.info(f"Account approved email sent successfully to {email}: {api_response}")
+        logger.info(
+            f"Account approved email sent successfully to {email}: {api_response}"
+        )
         return True
     except Exception as e:
         logger.error(f"Failed to send account approved email to {email}: {e}")
