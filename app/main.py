@@ -1,4 +1,3 @@
-import os
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -256,6 +255,32 @@ app.include_router(
     tags=["auth"],
 )
 
+# Include OTP authentication router
+from .otp_config import otp_router
+
+app.include_router(
+    otp_router,
+    prefix="/auth/otp",
+    tags=["auth"],
+)
+
+# Add OTP verification route to handle redirect from login
+@app.get("/auth/otp/verify", response_class=HTMLResponse)
+async def otp_verify_form(request: Request):
+    """Display OTP verification form"""
+    # Get email from query parameters
+    email = request.query_params.get("email", "")
+    next_url = request.query_params.get("next", "")
+
+    return templates.TemplateResponse(
+        "pages/auth/verify_otp.html",
+        {
+            "request": request,
+            "email": email,
+            "next": next_url
+        }
+    )
+
 templates = Jinja2Templates(directory="templates")
 
 # Configure Jinja2 with i18n extension
@@ -270,7 +295,14 @@ templates.env.install_gettext_callables(  # type: ignore[attr-defined]
 # Global template context for all templates
 def get_template_context():
     """Get global context for all templates."""
-    return {"enable_i18n": settings.ENABLE_I18N}
+    return {
+        "enable_i18n": settings.ENABLE_I18N,
+        "settings": {
+            "LOGIN_METHOD": settings.LOGIN_METHOD,
+            "OTP_EXPIRY_MINUTES": settings.OTP_EXPIRY_MINUTES,
+            "MAGIC_LINK_EXPIRY_MINUTES": settings.MAGIC_LINK_EXPIRY_MINUTES,
+        }
+    }
 
 
 # Add global context function to templates
@@ -703,6 +735,7 @@ async def login(
         AuthenticationRequest,
         default_auth_strategy,
     )
+    from .config import settings
 
     # Use authentication strategy
     auth_request = AuthenticationRequest(email, session, next)
@@ -711,10 +744,19 @@ async def login(
     if response:
         return response.to_response()
 
-    # Redirect to check email page
-    return templates.TemplateResponse(
-        "pages/auth/check_email.html", {"request": request, "email": email}
-    )
+    # Redirect to appropriate page based on login method
+    if settings.LOGIN_METHOD.lower() == "otp":
+        # For OTP, redirect to OTP verification page
+        from urllib.parse import quote
+        otp_verify_url = f"/auth/otp/verify?email={quote(email)}"
+        if next:
+            otp_verify_url += f"&next={quote(next)}"
+        return RedirectResponse(url=otp_verify_url, status_code=302)
+    else:
+        # For magic link, redirect to check email page
+        return templates.TemplateResponse(
+            "pages/auth/check_email.html", {"request": request, "email": email}
+        )
 
 
 @app.get("/auth/verify/{token}")

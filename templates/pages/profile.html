@@ -204,7 +204,7 @@
                                                 <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                                 </path>
                                             </svg>
-                                            <span x-text="profileLoading ? '{{ _("Saving...") }}' : '{{ _("Save Changes") }}'"></span>
+                                            <span x-text="profileLoading ? '{{ _("Saving...") }}' : '{{ _("Save") }}'"></span>
                                         </button>
                                     </form>
                                 </div>
@@ -525,9 +525,9 @@
             try {
                 const formData = new FormData();
                 formData.append('profile_picture', file);
-                
+
                 const response = await axios.post('/api/profile/update', formData, {
-                    headers: { 
+                    headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data'
                     }

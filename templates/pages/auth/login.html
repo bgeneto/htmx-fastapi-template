@@ -6,7 +6,10 @@
 <div class="max-w-md mx-auto p-6">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Welcome Back') }}</h1>
-        <p class="text-gray-600 dark:text-gray-400">{{ _('Enter your email to receive a magic link') }}</p>
+        <p class="text-gray-600 dark:text-gray-400" x-data="{ loginMethod: '{{ settings.LOGIN_METHOD.lower() }}' }">
+            <span x-show="loginMethod === 'otp'">{{ _('Enter your email to receive a verification code') }}</span>
+            <span x-show="loginMethod !== 'otp'">{{ _('Enter your email to receive a magic link') }}</span>
+        </p>
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
@@ -23,7 +26,7 @@
         </div>
         {% endif %}
 
-        <div x-data="loginForm()">
+        <div x-data="loginForm()" x-init="loginMethod = '{{ settings.LOGIN_METHOD.lower() }}'">
             <form @submit.prevent="submitForm" novalidate class="space-y-6">
                 <!-- Email field -->
                 <div>
@@ -61,9 +64,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <p class="text-sm text-blue-700 dark:text-blue-300">
-                            {{ _("We'll send you a secure login link to your email. No password needed!") }}
-                        </p>
+                        <div class="text-sm text-blue-700 dark:text-blue-300">
+                            <p x-show="loginMethod === 'otp'">
+                                {{ _("We'll send a 6-digit verification code to your email.") }}
+                            </p>
+                            <p x-show="loginMethod !== 'otp'">
+                                {{ _("We'll send you a secure login link to your email.") }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -79,7 +87,7 @@
                                 d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        <span x-text="loading ? '{{ _(" Sending...") }}' : '{{ _("Continue with e-mail") }}'"></span>
+                        <span x-text="loading ? '{{ _(" Sending...") }}' : (loginMethod === 'otp' ? '{{ _("Send Verification Code") }}' : '{{ _("Continue with e-mail") }}')"></span>
                         </button>
 
                         <div class=" text-center">
@@ -97,6 +105,7 @@
 <script>
     function loginForm() {
         return {
+            loginMethod: '',
             form: {
                 email: ''
             },

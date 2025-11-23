@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     # Authentication settings
     SESSION_EXPIRY_DAYS: int = 30
     MAGIC_LINK_EXPIRY_MINUTES: int = 15
+    LOGIN_METHOD: str = Field(default="otp", description="Authentication method: 'magic' or 'otp'")
+    OTP_EXPIRY_MINUTES: int = 5
+
+    # Redis settings for OTP storage
+    REDIS_URL: str = "redis://localhost:6379"
 
     # Bootstrap admin (password-based, only admin can use password login)
     BOOTSTRAP_ADMIN_EMAIL: str = Field(...)

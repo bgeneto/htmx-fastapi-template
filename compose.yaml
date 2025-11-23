@@ -30,6 +30,22 @@ services:
         max-file: "3"
     networks:
       - proxy
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: fastapi-starter-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - proxy
+
+volumes:
+  redis_data:
+    driver: local
 
 networks:
   proxy:

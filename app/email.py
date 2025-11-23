@@ -360,3 +360,79 @@ async def send_account_approved(email: str, full_name: str, login_url: str) -> b
     except Exception as e:
         logger.error(f"Failed to send account approved email to {email}: {e}")
         return False
+
+
+async def send_otp_email(email: str, full_name: str, otp_code: str) -> bool:
+    """
+    Send OTP email for authentication
+
+    Args:
+        email: Recipient email address
+        full_name: Recipient's full name
+        otp_code: 6-digit OTP code
+
+    Returns:
+        True if email sent successfully, False otherwise
+    """
+    subject = "Your verification code"
+    preheader_text = f"Your {settings.app_name} verification code: {otp_code}"
+
+    content_body = f"""
+        <tr>
+            <td style="padding: 40px 30px; text-align: center; background-color: #ffffff;">
+                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #2563eb;">Verify Your Email</h2>
+                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #333;">
+                    Hi {full_name},<br><br>
+                    Here's your verification code to log in to {settings.app_name}. This code will expire in {settings.OTP_EXPIRY_MINUTES} minutes.
+                </p>
+
+                <div style="margin: 40px auto; padding: 20px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;">
+                    <p style="margin: 0 0 10px 0; font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Your Code</p>
+                    <div style="font-size: 32px; font-weight: bold; color: #1e293b; letter-spacing: 8px; font-family: 'Courier New', monospace;">{otp_code}</div>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid #eeeeee; margin: 40px 0;">
+                <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #666;">
+                    <strong>Security note:</strong> If you didn't request this verification code, you can safely ignore this email.<br>
+                    Codes expire quickly for your security.
+                </p>
+            </td>
+        </tr>
+    """
+
+    html_content = _create_safe_html_template(
+        preheader_text, subject, content_body, sender_footer=True
+    )
+
+    plain_text = _create_plain_text_version(
+        f"{subject} - Hi {full_name}, your verification code is: {otp_code} (expires in {settings.OTP_EXPIRY_MINUTES} minutes)",
+        f"Verification code: {otp_code}",
+    )
+
+    # Create escape URL for List-Unsubscribe header
+    from urllib.parse import quote
+
+    unsubscribe_url = f"{settings.APP_BASE_URL}/unsubscribe?email={quote(email)}"
+
+    try:
+        api_response = resend.Emails.send(
+            {
+                "from": f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM_ADDRESS}>",
+                "to": [email],
+                "subject": subject,
+                "html": html_content,
+                "text": plain_text,
+                "headers": {
+                    "List-Unsubscribe": f"<{unsubscribe_url}>",
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    "X-Auto-Response-Suppress": "AutoReply, DR, NDR, RN, NRN",
+                    "X-Transaction-Type": "transactional",
+                    "X-Email-Type": "authentication",
+                },
+            }
+        )
+        logger.info(f"OTP email sent to {email}: {api_response}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send OTP email to {email}: {e}")
+        return False
