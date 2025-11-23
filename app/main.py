@@ -58,6 +58,7 @@ from .schemas import (
 from .users import (
     auth_backend,
     current_active_user,
+    current_user_optional,
     fastapi_users,
     password_helper,
     require_admin,
@@ -172,11 +173,19 @@ class DateTimeJSONEncoder(JSONEncoder):
         return super().default(obj)
 
 
+# Global dependency to inject user into request state
+async def inject_user_to_request_state(
+    request: Request, user: Optional[User] = Depends(current_user_optional)
+):
+    request.state.user = user
+
+
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
     lifespan=lifespan,
     json_encoders={datetime: lambda v: v.isoformat()},
+    dependencies=[Depends(inject_user_to_request_state)],
 )
 
 
@@ -206,6 +215,8 @@ class HostHeaderLoggingMiddleware(BaseHTTPMiddleware):
 #    allowed_hosts=allowed_hosts,
 # )
 
+
+# Add middleware
 # CORSMiddleware - controls which origins can make cross-origin requests
 app.add_middleware(
     CORSMiddleware,
@@ -432,11 +443,16 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request, session: AsyncSession = Depends(get_session)):
+async def index(
+    request: Request,
+    user: Optional[User] = Depends(current_user_optional),
+    session: AsyncSession = Depends(get_session),
+):
     response = templates.TemplateResponse(
         "pages/index.html",
         {
             "request": request,
+            "user": user,
         },
     )
     # Cache headers for improved performance
@@ -505,19 +521,9 @@ async def contact(
 @app.get("/contacts", response_class=HTMLResponse)
 async def contacts_page(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    user: Optional[User] = Depends(current_user_optional),
 ):
     """Display contacts directory page with data grid"""
-    # Try to get current user if authenticated (optional)
-    user = None
-    try:
-        from .users import current_active_user
-
-        user = await current_active_user(request, session)
-    except Exception:
-        # User not authenticated - continue without user
-        pass
-
     return templates.TemplateResponse(
         "pages/contacts.html",
         {
@@ -1081,7 +1087,7 @@ async def admin_cars(
         "pages/admin/cars.html",
         {
             "request": request,
-            "current_user": current_user,
+            "user": current_user,
         },
     )
 
@@ -1198,19 +1204,9 @@ async def delete_car(
 @app.get("/books", response_class=HTMLResponse)
 async def books_page(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    user: Optional[User] = Depends(current_user_optional),
 ):
     """Display books page with universal data grid"""
-    # Try to get current user if authenticated (optional)
-    user = None
-    try:
-        from .users import current_active_user
-
-        user = await current_active_user(request, session)
-    except Exception:
-        # User not authenticated or error getting user - continue without user
-        pass
-
     return templates.TemplateResponse(
         "pages/books.html",
         {
@@ -1362,7 +1358,7 @@ async def admin_users_list(
     users = await list_users(session, limit=200)
     return templates.TemplateResponse(
         "pages/admin/users.html",
-        {"request": request, "users": users, "current_user": current_user},
+        {"request": request, "users": users, "user": current_user},
     )
 
 

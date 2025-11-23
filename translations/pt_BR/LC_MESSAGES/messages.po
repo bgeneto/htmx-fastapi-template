@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 11:51-0300\n"
+"POT-Creation-Date: 2025-11-23 12:54-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,152 +37,152 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:528 app/main.py:1224 templates/pages/admin/index.html:15
+#: app/main.py:534 app/main.py:1220 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:531 templates/components/_contact_form.html:36
+#: app/main.py:537 templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:538 templates/components/_contact_form.html:75
+#: app/main.py:544 templates/components/_contact_form.html:75
 #: templates/pages/admin/index.html:17 templates/pages/auth/login.html:31
 #: templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:545 templates/components/_contact_form.html:113
+#: app/main.py:551 templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:551
+#: app/main.py:557
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:556
+#: app/main.py:562
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:631
+#: app/main.py:637
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:639
+#: app/main.py:645
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:659 templates/pages/auth/register.html:151
+#: app/main.py:665 templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:692
+#: app/main.py:698
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:728
+#: app/main.py:734
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:824 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
+#: app/main.py:830 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
 #: app/schemas.py:118 app/schemas.py:153 app/strategies.py:15
 #: templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149 templates/pages/profile.html:437
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/main.py:832
+#: app/main.py:838
 msgid "Invalid email address"
 msgstr "E-mail inválido"
 
-#: app/main.py:838
+#: app/main.py:844
 msgid "Email already in use by another account"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:848
+#: app/main.py:854
 msgid "Phone number too long (max 20 characters)"
 msgstr "O número de telefone deve ter pelo menos 2 caracteres"
 
-#: app/main.py:858 templates/pages/profile.html:503
+#: app/main.py:864 templates/pages/profile.html:503
 msgid "Invalid file type. Please upload PNG, JPG, or WebP image."
 msgstr "Tipo de arquivo inválido. Por favor, envie uma imagem PNG, JPG ou WebP."
 
-#: app/main.py:865 templates/pages/profile.html:509
+#: app/main.py:871 templates/pages/profile.html:509
 msgid "File too large. Maximum size is 5MB."
 msgstr "Arquivo muito grande. Tamanho máximo de 5MB."
 
-#: app/main.py:898 templates/pages/profile.html:575
+#: app/main.py:904 templates/pages/profile.html:575
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: app/main.py:928 app/main.py:944 templates/pages/profile.html:631
+#: app/main.py:934 app/main.py:950 templates/pages/profile.html:631
 msgid "Password change failed"
 msgstr "Falha na alteração de senha"
 
-#: app/main.py:935
+#: app/main.py:941
 msgid "No password set for this account. Use magic link login."
 msgstr "Senha não definida para esta conta. Use login por link mágico."
 
-#: app/main.py:945
+#: app/main.py:951
 msgid "Current password is incorrect"
 msgstr "Senha atual incorreta"
 
-#: app/main.py:955 templates/pages/profile.html:619
+#: app/main.py:961 templates/pages/profile.html:619
 msgid "Password changed successfully"
 msgstr "Senha alterada com sucesso"
 
-#: app/main.py:1039 templates/pages/admin/login.html:40
+#: app/main.py:1045 templates/pages/admin/login.html:40
 #: templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1227 templates/pages/books.html:37
+#: app/main.py:1223 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1234 templates/pages/books.html:38
+#: app/main.py:1230 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1241
+#: app/main.py:1237
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/main.py:1248 templates/pages/admin/cars.html:38
+#: app/main.py:1244 templates/pages/admin/cars.html:38
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1254 templates/pages/admin/cars.html:39
+#: app/main.py:1250 templates/pages/admin/cars.html:39
 #: templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
 
-#: app/main.py:1258 templates/pages/books.html:40
+#: app/main.py:1254 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1261 templates/pages/books.html:41
+#: app/main.py:1257 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1388
+#: app/main.py:1384
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1427
+#: app/main.py:1423
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1463
+#: app/main.py:1459
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -459,27 +459,23 @@ msgstr "Livros"
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
-#: templates/components/_top_navbar.html:63
-msgid "User"
-msgstr "Usuário"
-
-#: templates/components/_top_navbar.html:65
+#: templates/components/_top_navbar.html:64
 msgid "Guest"
 msgstr "Convidado"
 
-#: templates/components/_top_navbar.html:103 templates/pages/profile.html:2
+#: templates/components/_top_navbar.html:100 templates/pages/profile.html:2
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:118
+#: templates/components/_top_navbar.html:115
 msgid "Settings"
 msgstr "Configurações"
 
-#: templates/components/_top_navbar.html:130
+#: templates/components/_top_navbar.html:127
 msgid "Payments"
 msgstr "Pagamentos"
 
-#: templates/components/_top_navbar.html:147
+#: templates/components/_top_navbar.html:144
 msgid "Sign out"
 msgstr "Sair"
 
@@ -1140,4 +1136,7 @@ msgstr "Já tem uma conta? Entrar"
 
 #~ msgid "Toggle Theme"
 #~ msgstr "Mudar Tema"
+
+#~ msgid "User"
+#~ msgstr "Usuário"
 

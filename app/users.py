@@ -4,6 +4,7 @@ FastAPI Users configuration and setup
 This module configures fastapi-users for authentication and user management.
 Integrates with the existing User model and provides authentication backends.
 """
+
 from typing import Optional
 
 from fastapi import Depends, HTTPException, Request
@@ -55,7 +56,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         from .logger import get_logger
 
         logger = get_logger("users")
-        logger.info(f"Verification requested for user {user.id}. Verification token: {token}")
+        logger.info(
+            f"Verification requested for user {user.id}. Verification token: {token}"
+        )
 
 
 async def get_user_db(session: AsyncSession = Depends(get_session)):
@@ -101,6 +104,7 @@ fastapi_users = FastAPIUsers[User, int](
 
 # Current user dependencies
 current_active_user = fastapi_users.current_user(active=True)
+current_user_optional = fastapi_users.current_user(active=True, optional=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
 
 

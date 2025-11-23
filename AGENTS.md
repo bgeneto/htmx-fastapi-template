@@ -105,6 +105,18 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
   - Benefit: CC -4 in admin_login, extensible to other roles.
 - Used in `app/main.py` top5 complex funcs post-audit.
 
+### 7. Global User Context (Single Source of Truth)
+- **Problem**: Inconsistent user data availability across templates (some routes passed `user`, others `current_user`, or nothing).
+- **Solution**: Global dependency `inject_user_to_request_state` in `app/main.py`.
+- **Mechanism**:
+  - Runs for **every** request via `FastAPI(dependencies=[Depends(inject_user_to_request_state)])`.
+  - Uses `fastapi-users`'s `current_user_optional` to get the authenticated user (or None).
+  - Injects user into `request.state.user`.
+- **Usage in Templates**:
+  - **Preferred**: Use `request.state.user` (always available).
+  - **Fallback**: Templates like `_top_navbar.html` check `user` (explicitly passed) OR `request.state.user`.
+- **Benefit**: "Single Source of Truth" for user data without repeating code in every route handler.
+
 ### 4. Tailwind CSS Build Process
 - **Version**: Tailwind CSS v4 via `@tailwindcss/postcss` plugin
 - **Source**: `static/css/input.css` (uses `@import "tailwindcss"` instead of `@tailwind` directives)
