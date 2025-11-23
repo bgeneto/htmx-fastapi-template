@@ -32,7 +32,6 @@ from .models import Book, BookBase, Car, CarBase, Contact, User, UserRole
 from .repository import (
     create_contact,
     create_user,
-    get_recent_contacts,
     get_session,
     get_user_by_email,
     get_valid_token,
@@ -428,31 +427,14 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request, session: AsyncSession = Depends(get_session)):
-    recent_contacts = await get_recent_contacts(session, limit=4)
     response = templates.TemplateResponse(
         "pages/index.html",
         {
             "request": request,
-            "recent_contacts": recent_contacts,
         },
     )
     # Cache headers for improved performance
     response.headers["Cache-Control"] = "private, max-age=0, must-revalidate"
-    return response
-
-
-@app.get("/recent-contacts", response_class=HTMLResponse)
-async def get_recent_contacts_partial(
-    request: Request, session: AsyncSession = Depends(get_session)
-):
-    """Return just the recent contacts partial for dynamic updates"""
-    recent_contacts = await get_recent_contacts(session, limit=4)
-    response = templates.TemplateResponse(
-        "components/_recent_contacts.html",
-        {"request": request, "recent_contacts": recent_contacts},
-    )
-    # Short cache since this data changes frequently
-    response.headers["Cache-Control"] = "private, max-age=10"
     return response
 
 

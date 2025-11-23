@@ -132,8 +132,7 @@ templates/                   # Jinja2 templates (organized by feature)
   ├── components/           # Reusable template components
   │   ├── _theme_toggle.html
   │   ├── _language_selector.html
-  │   ├── _form_alpine.html (forms with Alpine.js validation)
-  │   └── _recent_contacts.html
+  │   └── _contact_form.html (forms with Alpine.js validation)
   └── pages/                # Full-page templates
       ├── index.html
       ├── auth/             # Authentication pages

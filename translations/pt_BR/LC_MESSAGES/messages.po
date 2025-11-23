@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 01:01-0300\n"
+"POT-Creation-Date: 2025-11-23 10:08-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,96 +37,96 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:526 app/main.py:1035 templates/pages/admin/index.html:15
+#: app/main.py:508 app/main.py:1017 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:529 templates/components/_form_alpine.html:28
+#: app/main.py:511 templates/components/_contact_form.html:28
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:536 templates/components/_form_alpine.html:53
+#: app/main.py:518 templates/components/_contact_form.html:53
 #: templates/pages/admin/index.html:17 templates/pages/auth/login.html:31
-#: templates/pages/auth/register.html:45
+#: templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:543 templates/components/_form_alpine.html:79
+#: app/main.py:525 templates/components/_contact_form.html:79
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:549
+#: app/main.py:531
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:554
+#: app/main.py:536
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:629
+#: app/main.py:611
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:637
+#: app/main.py:619
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:657 templates/pages/auth/register.html:162
+#: app/main.py:639 templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:690
+#: app/main.py:672
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:726
+#: app/main.py:708
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:865 templates/pages/admin/login.html:39
-#: templates/pages/admin/login.html:175
+#: app/main.py:847 templates/pages/admin/login.html:40
+#: templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1038 templates/pages/books.html:37
+#: app/main.py:1020 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1045 templates/pages/books.html:38
+#: app/main.py:1027 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1052 templates/pages/admin/cars.html:38
+#: app/main.py:1034 templates/pages/admin/cars.html:38
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1057 templates/pages/books.html:40
+#: app/main.py:1039 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1060 templates/pages/books.html:41
+#: app/main.py:1042 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1187
+#: app/main.py:1169
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1226
+#: app/main.py:1208
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1262
+#: app/main.py:1244
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -147,18 +147,18 @@ msgid "Internal server error"
 msgstr "Erro interno do servidor"
 
 #: app/schemas.py:22 app/schemas.py:63 app/schemas.py:86 app/schemas.py:115
-#: app/strategies.py:15 templates/components/_form_alpine.html:148
-#: templates/pages/auth/register.html:160
+#: app/strategies.py:15 templates/components/_contact_form.html:148
+#: templates/pages/auth/register.html:149
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
 #: app/schemas.py:29 app/strategies.py:20
-#: templates/components/_form_alpine.html:152
+#: templates/components/_contact_form.html:152
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
-#: app/strategies.py:25 templates/components/_form_alpine.html:150
-#: templates/pages/auth/login.html:110 templates/pages/auth/register.html:158
+#: app/strategies.py:25 templates/components/_contact_form.html:150
+#: templates/pages/auth/login.html:110 templates/pages/auth/register.html:147
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
@@ -166,6 +166,53 @@ msgstr "Por favor, insira um endereço de e-mail válido"
 #: templates/pages/books.html:49
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
+
+#: templates/components/_contact_form.html:11
+msgid "Message Sent!"
+msgstr "Mensagem Enviada!"
+
+#: templates/components/_contact_form.html:20
+msgid "Send Another Message"
+msgstr "Enviar Outra Mensagem"
+
+#: templates/components/_contact_form.html:114
+msgid "Sending..."
+msgstr "Enviando..."
+
+#: templates/components/_contact_form.html:114
+msgid "Send Message"
+msgstr "Enviar Mensagem"
+
+#: templates/components/_contact_form.html:123
+msgid "Reset"
+msgstr "Limpar"
+
+#: templates/components/_contact_form.html:147
+#: templates/pages/auth/register.html:148
+msgid "Name is required"
+msgstr "O nome é obrigatório"
+
+#: templates/components/_contact_form.html:149
+#: templates/pages/auth/login.html:109 templates/pages/auth/register.html:146
+msgid "Email is required"
+msgstr "O e-mail é obrigatório"
+
+#: templates/components/_contact_form.html:151
+msgid "Message is required"
+msgstr "A mensagem é obrigatória"
+
+#: templates/components/_contact_form.html:153
+#: templates/pages/auth/login.html:111 templates/pages/auth/register.html:150
+msgid "Please fix the errors before submitting."
+msgstr "Por favor, corrija os erros antes de enviar."
+
+#: templates/components/_contact_form.html:154
+msgid "Thanks"
+msgstr "Obrigado"
+
+#: templates/components/_contact_form.html:154
+msgid "your message has been received!"
+msgstr "sua mensagem foi recebida!"
 
 #: templates/components/_datagrid.html:25
 #: templates/components/_datagrid_grid.html:7
@@ -309,69 +356,14 @@ msgstr "Cancelar"
 msgid "Save Changes"
 msgstr "Salvar Alterações"
 
-#: templates/components/_form_alpine.html:11
-msgid "Message Sent!"
-msgstr "Mensagem Enviada!"
-
-#: templates/components/_form_alpine.html:20
-msgid "Send Another Message"
-msgstr "Enviar Outra Mensagem"
-
-#: templates/components/_form_alpine.html:114
-msgid "Sending..."
-msgstr "Enviando..."
-
-#: templates/components/_form_alpine.html:114
-msgid "Send Message"
-msgstr "Enviar Mensagem"
-
-#: templates/components/_form_alpine.html:123
-msgid "Reset"
-msgstr "Limpar"
-
-#: templates/components/_form_alpine.html:147
-#: templates/pages/auth/register.html:159
-msgid "Name is required"
-msgstr "O nome é obrigatório"
-
-#: templates/components/_form_alpine.html:149
-#: templates/pages/auth/login.html:109 templates/pages/auth/register.html:157
-msgid "Email is required"
-msgstr "O e-mail é obrigatório"
-
-#: templates/components/_form_alpine.html:151
-msgid "Message is required"
-msgstr "A mensagem é obrigatória"
-
-#: templates/components/_form_alpine.html:153
-#: templates/pages/auth/login.html:111 templates/pages/auth/register.html:161
-msgid "Please fix the errors before submitting."
-msgstr "Por favor, corrija os erros antes de enviar."
-
-#: templates/components/_form_alpine.html:154
-msgid "Thanks"
-msgstr "Obrigado"
-
-#: templates/components/_form_alpine.html:154
-msgid "your message has been received!"
-msgstr "sua mensagem foi recebida!"
-
 #: templates/components/_language_selector.html:81
-#: templates/components/_top_navbar.html:177
+#: templates/components/_top_navbar.html:181
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
 #: templates/components/_logout_button.html:3
 msgid "Logout"
 msgstr "Sair"
-
-#: templates/components/_recent_contacts.html:2
-msgid "Recent contacts"
-msgstr "Contatos recentes"
-
-#: templates/components/_recent_contacts.html:22
-msgid "No contacts yet. Be the first to submit!"
-msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
 #: templates/components/_sidebar.html:54
 #: templates/components/_top_navbar.html:19
@@ -403,75 +395,71 @@ msgstr ""
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_top_navbar.html:36
+#: templates/components/_sidebar.html:121
+msgid "Drag to resize sidebar"
+msgstr "Arraste para redimensionar"
+
+#: templates/components/_top_navbar.html:42
 msgid "User"
 msgstr ""
 
-#: templates/components/_top_navbar.html:38
-#, fuzzy
+#: templates/components/_top_navbar.html:44
 msgid "Guest"
-msgstr "Limpar"
+msgstr "Convidado"
 
-#: templates/components/_top_navbar.html:65
-#, fuzzy
+#: templates/components/_top_navbar.html:71
 msgid "Profile"
-msgstr "Preço"
+msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:80
+#: templates/components/_top_navbar.html:86
 msgid "Settings"
 msgstr ""
 
-#: templates/components/_top_navbar.html:91
-#, fuzzy
+#: templates/components/_top_navbar.html:97
 msgid "Payments"
-msgstr "Páginas"
+msgstr "Pagamentos"
 
-#: templates/components/_top_navbar.html:114
+#: templates/components/_top_navbar.html:118
 msgid "Toggle Theme"
-msgstr ""
+msgstr "Mudar Tema"
 
-#: templates/components/_top_navbar.html:130
+#: templates/components/_top_navbar.html:134
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
-#: templates/components/_top_navbar.html:219
+#: templates/components/_top_navbar.html:223
 msgid "Sign out"
 msgstr ""
 
 #: templates/errors/404.html:3 templates/errors/404.html:25
-#, fuzzy
 msgid "Page Not Found"
-msgstr "Recurso não encontrado"
+msgstr "Página não encontrada"
 
 #: templates/errors/404.html:28
 msgid "Sorry, the page you are looking for does not exist or has been moved."
 msgstr ""
 
 #: templates/errors/404.html:40 templates/errors/5xx.html:40
-#, fuzzy
 msgid "Go Home"
 msgstr "Voltar ao Início"
 
 #: templates/errors/404.html:48 templates/errors/5xx.html:48
-#, fuzzy
 msgid "Go Back"
-msgstr "Bem-vindo de Volta"
+msgstr "Voltar"
 
 #: templates/errors/404.html:54
 msgid "Here are some helpful links instead:"
-msgstr ""
+msgstr "Aqui estão alguns links úteis:"
 
 #: templates/errors/404.html:58
-#, fuzzy
 msgid "Login"
 msgstr "Entrar"
 
 #: templates/errors/5xx.html:3 templates/errors/5xx.html:25
 msgid "Unexpected Error"
-msgstr ""
+msgstr "Erro Inesperado"
 
 #: templates/errors/5xx.html:28
-#, fuzzy
 msgid ""
 "An unexpected error occurred while processing your request. Please try "
 "again later."
@@ -479,7 +467,7 @@ msgstr "Ocorreu um erro. Por favor, tente novamente."
 
 #: templates/errors/5xx.html:54
 msgid "Error Code"
-msgstr ""
+msgstr "Código de Erro"
 
 #: templates/pages/books.html:3 templates/pages/books.html:9
 msgid "Books Library"
@@ -489,7 +477,7 @@ msgstr "Biblioteca de Livros"
 msgid "Universal Grid Engine Demo"
 msgstr "Demonstração do Motor de Grade Universal"
 
-#: templates/pages/auth/register.html:36 templates/pages/books.html:16
+#: templates/pages/auth/register.html:29 templates/pages/books.html:16
 msgid "Back to Home"
 msgstr "Voltar ao Início"
 
@@ -595,11 +583,11 @@ msgstr "Diretório de Contatos"
 msgid "Browse and manage all contact submissions"
 msgstr "Navegue e gerencie todos os envios de contato"
 
-#: templates/pages/index.html:11
+#: templates/pages/index.html:10
 msgid "Modern Full-Stack Starter"
-msgstr ""
+msgstr "Full-Stack Starter Moderno"
 
-#: templates/pages/index.html:24
+#: templates/pages/index.html:20
 msgid "Contact us"
 msgstr "Entre em contato"
 
@@ -655,29 +643,29 @@ msgstr "Criado"
 msgid "Action"
 msgstr "Ação"
 
-#: templates/pages/admin/login.html:25
+#: templates/pages/admin/login.html:24
 msgid "Admin Access"
 msgstr "Acesso Admin"
 
-#: templates/pages/admin/login.html:26
+#: templates/pages/admin/login.html:25
 msgid "Please enter your credentials"
 msgstr "Informe suas credenciais"
 
-#: templates/pages/admin/login.html:40
+#: templates/pages/admin/login.html:42
 msgid ""
 "Please check your email and password and try\n"
-"            again."
+"                            again."
 msgstr "Por favor, verifique seu e-mail e senha e tente novamente."
 
-#: templates/pages/admin/login.html:81
+#: templates/pages/admin/login.html:95
 msgid "Password"
 msgstr "Senha"
 
-#: templates/pages/admin/login.html:177
+#: templates/pages/admin/login.html:208
 msgid "Invalid email or password"
 msgstr "E-mail ou senha inválidos"
 
-#: templates/pages/admin/login.html:184
+#: templates/pages/admin/login.html:215
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
@@ -715,40 +703,40 @@ msgstr "Continuar com e-mail"
 msgid "Don't have an account? Register"
 msgstr "Não tem uma conta? Cadastre-se"
 
-#: templates/pages/auth/register.html:3 templates/pages/auth/register.html:125
+#: templates/pages/auth/register.html:3 templates/pages/auth/register.html:115
 msgid "Register"
 msgstr "Cadastrar"
 
-#: templates/pages/auth/register.html:15
+#: templates/pages/auth/register.html:8
 msgid "Create Account"
 msgstr "Criar Conta"
 
-#: templates/pages/auth/register.html:16
+#: templates/pages/auth/register.html:9
 msgid "Register for an account"
 msgstr "Cadastre-se para uma conta"
 
-#: templates/pages/auth/register.html:31
+#: templates/pages/auth/register.html:24
 msgid "Registration Successful!"
 msgstr "Cadastro Realizado com Sucesso!"
 
-#: templates/pages/auth/register.html:73
+#: templates/pages/auth/register.html:65
 msgid "Full Name"
 msgstr "Nome Completo"
 
-#: templates/pages/auth/register.html:107
+#: templates/pages/auth/register.html:97
 msgid ""
 "Your account will be pending admin approval. You will receive an email "
 "once\n"
-"                                approved."
+"                            approved."
 msgstr ""
 "Sua conta ficará pendente de aprovação do administrador. Você receberá um"
 " e-mail assim que for aprovada."
 
-#: templates/pages/auth/register.html:125
+#: templates/pages/auth/register.html:115
 msgid " Registering..."
 msgstr " Cadastrando..."
 
-#: templates/pages/auth/register.html:131
+#: templates/pages/auth/register.html:121
 msgid "Already have an account? Log in"
 msgstr "Já tem uma conta? Entrar"
 
@@ -962,5 +950,11 @@ msgstr "Já tem uma conta? Entrar"
 #~ msgstr "Item"
 
 #~ msgid "Language"
-#~ msgstr ""
+#~ msgstr "Idioma"
+
+#~ msgid "Recent contacts"
+#~ msgstr "Contatos recentes"
+
+#~ msgid "No contacts yet. Be the first to submit!"
+#~ msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 

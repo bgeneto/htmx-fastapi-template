@@ -29,20 +29,22 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 def hash_password(password: str) -> str:
     """
     Hash password using fastapi-users' PasswordHelper (pwdlib with Argon2/Bcrypt).
-    
+
     This replaces the old passlib-based sha256_crypt hashing.
     """
     from .users import password_helper
+
     return password_helper.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify password against hash using fastapi-users' PasswordHelper.
-    
+
     Supports both new pwdlib hashes and legacy passlib hashes for backward compatibility.
     """
     from .users import password_helper
+
     # password_helper.verify returns tuple (verified, updated_hash)
     verified, _ = password_helper.verify_and_update(plain_password, hashed_password)
     return verified
@@ -124,7 +126,7 @@ async def update_user(session: AsyncSession, user: User, payload: UserUpdate) ->
     if payload.role is not None:
         user.role = payload.role
         # Sync is_superuser with ADMIN role
-        user.is_superuser = (payload.role == UserRole.ADMIN)
+        user.is_superuser = payload.role == UserRole.ADMIN
     if payload.is_active is not None:
         user.is_active = payload.is_active
 
@@ -144,7 +146,7 @@ async def approve_user(
     user.is_verified = True
     user.email_verified = True
     # Sync is_superuser with ADMIN role
-    user.is_superuser = (role == UserRole.ADMIN)
+    user.is_superuser = role == UserRole.ADMIN
     user.updated_at = datetime.utcnow()
 
     await session.commit()
@@ -258,11 +260,6 @@ async def list_contacts(session: AsyncSession, limit: int = 100):
         select(Contact).order_by(desc(Contact.id)).limit(limit)  # type: ignore[arg-type]
     )
     return result.all()
-
-
-async def get_recent_contacts(session: AsyncSession, limit: int = 4):
-    """Get the most recent contacts ordered by creation date"""
-    return await list_contacts(session, limit=limit)
 
 
 # ============= Car CRUD =============

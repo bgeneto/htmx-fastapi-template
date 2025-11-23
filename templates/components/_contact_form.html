@@ -232,9 +232,6 @@
                     if (window.showToast) {
                         window.showToast(this.successMessage, 'success');
                     }
-
-                    // Refresh recent contacts
-                    this.refreshRecentContacts();
                 } catch (error) {
                     console.error('Form submission error:', error);
                     if (error.response && error.response.data) {
@@ -264,21 +261,6 @@
             resetToForm() {
                 this.resetForm();
             },
-
-            async refreshRecentContacts() {
-                try {
-                    const response = await axios.get('/recent-contacts', {
-                        headers: { 'Accept': 'text/html' }
-                    });
-                    const html = response.data;
-                    const recentContactsArea = document.getElementById('recent-contacts-area');
-                    if (recentContactsArea) {
-                        recentContactsArea.outerHTML = html;
-                    }
-                } catch (error) {
-                    console.error('Failed to refresh recent contacts:', error);
-                }
-            }
         };
     }
 </script>

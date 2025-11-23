@@ -11,7 +11,7 @@
 
     <div class="flex flex-col h-full px-4 py-4 overflow-y-auto my-2">
         <!-- Logo and Collapse Button -->
-        <div class="flex items-center justify-between pl-2.5 mb-6">
+        <div class="flex items-center pl-2.5 mb-6" :class="collapsed ? 'justify-center' : 'justify-between'">
             <a href="/" class="flex items-center" x-show="!collapsed">
                 <span
                     class="self-center text-xl font-semibold whitespace-nowrap text-onSurfaceStrong dark:text-onSurfaceDarkStrong">
@@ -22,10 +22,10 @@
             <!-- Collapse/Expand Button - ALWAYS VISIBLE -->
             <button type="button" @click="toggleCollapse()" :aria-expanded="!collapsed"
                 :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-                class="hidden md:flex p-1.5 rounded-md bg-surface hover:bg-primary/10 dark:bg-surfaceDark dark:hover:bg-primaryDark/10 focus:outline-none transition-all"
-                :class="collapsed ? 'mx-auto' : 'ml-3'" :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+                class="hidden md:flex p-1.5 rounded-md bg-surface hover:bg-primary/10 dark:bg-surfaceDark dark:hover:bg-primaryDark/10 focus:outline-none transition-all -mr-2.5"
+                :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
                 <!-- Expand icon when collapsed - double chevron right -->
-                <svg x-show="collapsed" class="w-5 h-5 text-primary dark:text-primaryDark" fill="none"
+                <svg x-show="collapsed" class="w-5 h-5 text-onSurface dark:text-onSurfaceDark" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-cloak>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                         d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
@@ -118,7 +118,7 @@
 
     <!-- Resize handle (hidden on mobile) - visible indicator -->
     <div x-show="!collapsed" class="hidden md:flex absolute right-0 top-0 h-full items-center group"
-        @pointerdown.prevent="startDrag($event)" title="Drag to resize sidebar">
+        @pointerdown.prevent="startDrag($event)" title="{{ _('Drag to resize sidebar') }}">
         <!-- Visual resize indicator -->
         <div role="slider" aria-label="Resize sidebar - drag or use arrow keys" tabindex="0"
             class="resize-handle relative flex items-center justify-center bg-transparent hover:bg-primary/10 dark:hover:bg-primaryDark/10 transition-colors"
