@@ -27,18 +27,20 @@
                 {% include "components/_theme_toggle.html" %}
                 <!-- Language Selector -->
                 {% include "components/_language_selector.html" %}
-                <!-- Profile Menu -->
-                <div x-data="{ userDropdownIsOpen: false }"
-                     class="relative"
-                     x-on:keydown.esc.window="userDropdownIsOpen = false">
-                    <button type="button"
-                            class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
-                            x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''"
-                            aria-haspopup="true"
-                            x-on:click="userDropdownIsOpen = !userDropdownIsOpen"
-                            x-bind:aria-expanded="userDropdownIsOpen">
-                        {% set user = user or (request.state.user if request.state.user is defined else None) %}
-                        {% if user %}
+
+                {% set user = user or (request.state.user if request.state.user is defined else None) %}
+
+                {% if user %}
+                    <!-- Profile Menu (for logged-in users) -->
+                    <div x-data="{ userDropdownIsOpen: false }"
+                         class="relative"
+                         x-on:keydown.esc.window="userDropdownIsOpen = false">
+                        <button type="button"
+                                class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                x-bind:class="userDropdownIsOpen ? 'bg-gray-100 dark:bg-gray-700' : ''"
+                                aria-haspopup="true"
+                                x-on:click="userDropdownIsOpen = !userDropdownIsOpen"
+                                x-bind:aria-expanded="userDropdownIsOpen">
                             {% if user.profile_picture %}
                                 <img src="{{ user.profile_picture }}"
                                      class="w-8 h-8 rounded-full object-cover"
@@ -50,85 +52,70 @@
                                      alt="{{ user.full_name }}"
                                      aria-hidden="true" />
                             {% endif %}
-                        {% else %}
-                            <img src="https://ui-avatars.com/api/?name=Guest&background=6366f1&color=fff&size=32"
-                                 class="w-8 h-8 rounded-full"
-                                 alt="Guest"
-                                 aria-hidden="true" />
-                        {% endif %}
-                        <div class="hidden sm:block text-left">
-                            <span class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {% if user %}
+                            <div class="hidden sm:block text-left">
+                                <span class="block text-sm font-medium text-gray-900 dark:text-gray-100">
                                     {{ user.full_name }}
-                                {% else %}
-                                    {{ _("Guest") }}
-                                {% endif %}
-                            </span>
-                            <span class="block text-xs text-gray-600 dark:text-gray-400"
-                                  aria-hidden="true">
-                                {% if user %}
+                                </span>
+                                <span class="block text-xs text-gray-600 dark:text-gray-400"
+                                      aria-hidden="true">
                                     {{ user.email }}
-                                {% else %}
-                                    @guest
-                                {% endif %}
-                            </span>
-                            <span class="sr-only">profile settings</span>
-                        </div>
-                    </button>
-                    <!-- menu -->
-                    <div x-cloak
-                         x-show="userDropdownIsOpen"
-                         class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
-                         role="menu"
-                         x-on:click.outside="userDropdownIsOpen = false"
-                         x-on:keydown.down.prevent="$focus.wrap().next()"
-                         x-on:keydown.up.prevent="$focus.wrap().previous()"
-                         x-transition=""
-                         x-trap="userDropdownIsOpen">
-                        <!-- Profile Section -->
-                        <div class="py-1">
-                            <a href="/profile"
-                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                               role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 20 20"
-                                     fill="currentColor"
-                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                     aria-hidden="true">
-                                    <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
-                                </svg>
-                                <span>{{ _("Profile") }}</span>
-                            </a>
-                        </div>
-                        <!-- Settings & Payments Section -->
-                        <div class="py-1 border-t border-gray-200 dark:border-gray-700">
-                            <a href="#"
-                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                               role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 20 20"
-                                     fill="currentColor"
-                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                     aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
-                                </svg>
-                                <span>{{ _("Settings") }}</span>
-                            </a>
-                            <a href="#"
-                               class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                               role="menuitem">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 20 20"
-                                     fill="currentColor"
-                                     class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                     aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd" />
-                                </svg>
-                                <span>{{ _("Payments") }}</span>
-                            </a>
-                        </div>
-                        <!-- Sign Out Section -->
-                        {% if request.cookies.get("session") %}
+                                </span>
+                                <span class="sr-only">profile settings</span>
+                            </div>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div x-cloak
+                             x-show="userDropdownIsOpen"
+                             class="absolute right-0 z-50 w-56 mt-2 origin-top-right bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 border border-gray-200 dark:border-gray-700"
+                             role="menu"
+                             x-on:click.outside="userDropdownIsOpen = false"
+                             x-on:keydown.down.prevent="$focus.wrap().next()"
+                             x-on:keydown.up.prevent="$focus.wrap().previous()"
+                             x-transition=""
+                             x-trap="userDropdownIsOpen">
+                            <!-- Profile Section -->
+                            <div class="py-1">
+                                <a href="/profile"
+                                   class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                   role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         aria-hidden="true">
+                                        <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                                    </svg>
+                                    <span>{{ _("Profile") }}</span>
+                                </a>
+                            </div>
+                            <!-- Settings & Payments Section -->
+                            <div class="py-1 border-t border-gray-200 dark:border-gray-700">
+                                <a href="#"
+                                   class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                   role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ _("Settings") }}</span>
+                                </a>
+                                <a href="#"
+                                   class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                   role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor"
+                                         class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                         aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ _("Payments") }}</span>
+                                </a>
+                            </div>
+                            <!-- Sign Out Section -->
                             <div class="py-1 border-t border-gray-200 dark:border-gray-700">
                                 <a href="/auth/logout"
                                    class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -144,9 +131,15 @@
                                     <span>{{ _("Sign out") }}</span>
                                 </a>
                             </div>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <!-- Login Button (for guests) -->
+                    <a href="/auth/login"
+                       class="px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white">
+                        {{ _("Login") }}
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

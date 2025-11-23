@@ -190,6 +190,7 @@ async def inject_user_to_request_state(
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
+    docs_url=None,
     lifespan=lifespan,
     json_encoders={datetime: lambda v: v.isoformat()},
     dependencies=[Depends(inject_user_to_request_state)],
@@ -447,6 +448,20 @@ async def general_exception_handler(request: Request, exc: Exception):
     return templates.TemplateResponse(
         "errors/500.html", {"request": request}, status_code=500
     )
+
+
+@app.get("/health")
+async def healthcheck(session: AsyncSession = Depends(get_session)):
+    """Health check endpoint that tests database connectivity"""
+    try:
+        # Test database connection with a simple query
+        await session.execute(select(1))
+        return {"status": "healthy"}
+    except Exception as exc:
+        logger.error(f"Health check failed: {exc}")
+        raise HTTPException(
+            status_code=503, detail="Database connection failed"
+        )
 
 
 @app.get("/", response_class=HTMLResponse)
