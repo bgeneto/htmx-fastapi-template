@@ -14,7 +14,6 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.middleware.gzip import GZipMiddleware
 
 # Keep legacy auth for magic links
 from .auth import (
@@ -214,7 +213,7 @@ app.add_middleware(
 # NOTE: GZipMiddleware is explicitly disabled because we're using a reverse proxy
 # (like Nginx or Caddy) that handles compression more efficiently.
 # If you're not using a reverse proxy, you can uncomment the line below:
-app.add_middleware(GZipMiddleware, minimum_size=1000)
+# app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Include fastapi-users routers for auth
 # NOTE: We keep our custom magic link authentication alongside fastapi-users
@@ -370,12 +369,17 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
             "errors/500.html", {"request": request}, status_code=500
         )
 
-    # For other errors, return JSON for API or raise for HTML
+    # For other unknown errors
     if is_api_request:
+        # API requests get JSON response
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
     else:
-        # Let FastAPI handle other status codes
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+        # HTML requests get a friendly error page with translation support
+        return templates.TemplateResponse(
+            "errors/5xx.html",
+            {"request": request, "error_code": exc.status_code},
+            status_code=exc.status_code,
+        )
 
 
 # Handle 404 errors for non-existent routes

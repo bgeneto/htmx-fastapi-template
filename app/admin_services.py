@@ -10,10 +10,9 @@ from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-
-from .strategies import create_admin_login_verifier
 from .models import User
 from .repository import get_user_by_email
+from .strategies import create_admin_login_verifier
 from .url_validator import validate_admin_redirect
 
 
@@ -92,11 +91,11 @@ class AdminLoginService:
             User object if found
 
         Raises:
-            HTTPException: If user not found
+            InvalidCredentialsError: If user not found
         """
         user = await get_user_by_email(self.session, email)
         if not user:
-            raise HTTPException(status_code=400, detail="Invalid credentials")
+            raise InvalidCredentialsError()
         return user
 
     def _validate_credentials(self, user: User, password: str) -> None:
