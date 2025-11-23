@@ -19,7 +19,6 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 # Keep legacy auth for magic links
 from .auth import (
     COOKIE_NAME,
-    create_session_cookie,
 )
 from .config import settings
 from .db import init_db
@@ -108,10 +107,12 @@ def get_cors_origins() -> list[str]:
 
     # Allow localhost for development
     if not settings.APP_BASE_URL.startswith("http://localhost"):
-        origins.extend([
-            "http://localhost:8000",
-            "http://127.0.0.1:8000",
-        ])
+        origins.extend(
+            [
+                "http://localhost:8000",
+                "http://127.0.0.1:8000",
+            ]
+        )
 
     return origins
 
@@ -277,16 +278,28 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
             )
 
         # For HTML requests, redirect to appropriate login page
-        from urllib.parse import quote
+        # For HTML requests, redirect to appropriate login page
+        response_url = (
+            "/admin/login" if request.url.path.startswith("/admin") else "/auth/login"
+        )
+        response = RedirectResponse(url=response_url, status_code=302)
 
-        next_url = quote(str(request.url), safe="")
+        # Set next URL in cookie for post-login redirect
+        # We use a separate cookie to avoid URL parameter pollution and open redirect issues
+        # Store only relative path + query to pass strict URL validation
+        next_path = request.url.path
+        if request.url.query:
+            next_path += f"?{request.url.query}"
 
-        if request.url.path.startswith("/admin"):
-            return RedirectResponse(
-                url=f"/admin/login?next={next_url}", status_code=302
-            )
-        else:
-            return RedirectResponse(url=f"/auth/login?next={next_url}", status_code=302)
+        response.set_cookie(
+            "next_url",
+            next_path,
+            httponly=True,
+            samesite="lax",
+            secure=not settings.debug,
+            max_age=300,  # 5 minutes expiry
+        )
+        return response
 
     elif exc.status_code == 403:
         # Forbidden - show nice error page for HTML requests
@@ -332,14 +345,9 @@ async def not_found_handler(request: Request, exc):
     """Handle 404 errors with custom template for HTML requests."""
     # Check if it's an API request
     if request.url.path.startswith("/api/"):
-        return JSONResponse(
-            status_code=404,
-            content={"detail": "Not found"}
-        )
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
     return templates.TemplateResponse(
-        "errors/404.html",
-        {"request": request},
-        status_code=404
+        "errors/404.html", {"request": request}, status_code=404
     )
 
 
@@ -352,13 +360,10 @@ async def internal_error_handler(request: Request, exc):
     # Check if it's an API request
     if request.url.path.startswith("/api/"):
         return JSONResponse(
-            status_code=500,
-            content={"detail": "Internal server error"}
+            status_code=500, content={"detail": "Internal server error"}
         )
     return templates.TemplateResponse(
-        "errors/500.html",
-        {"request": request},
-        status_code=500
+        "errors/500.html", {"request": request}, status_code=500
     )
 
 
@@ -371,13 +376,10 @@ async def general_exception_handler(request: Request, exc: Exception):
     # Check if it's an API request
     if request.url.path.startswith("/api/"):
         return JSONResponse(
-            status_code=500,
-            content={"detail": "Internal server error"}
+            status_code=500, content={"detail": "Internal server error"}
         )
     return templates.TemplateResponse(
-        "errors/500.html",
-        {"request": request},
-        status_code=500
+        "errors/500.html", {"request": request}, status_code=500
     )
 
 
@@ -692,31 +694,37 @@ async def verify_magic_link(
         user.email_verified = True
         await session.commit()
 
-    # Create session cookie
-    assert user.id is not None  # User should exist from get_valid_token
-    cookie = create_session_cookie(user.id, user.email, user.role)
+    # Generate JWT token using fastapi-users strategy
+    from .users import get_jwt_strategy
+
+    strategy = get_jwt_strategy()
+    token = await strategy.write_token(user)
 
     # Redirect based on role or next URL
     redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
 
-    # Check for next URL
-    next_url = request.query_params.get("next")
+    # Check for next URL in cookie or query param
+    next_url = request.cookies.get("next_url") or request.query_params.get("next")
+
     if next_url:
         from .url_validator import validate_admin_redirect
 
         # Validate redirect URL to prevent open redirects
-        # We use validate_admin_redirect but it works for general URLs too if we want strict checking
-        # Or we can implement a more general validator
         redirect_url = validate_admin_redirect(next_url, redirect_url)
 
     response = RedirectResponse(url=redirect_url, status_code=303)
+
+    # Set session cookie (JWT)
     response.set_cookie(
         COOKIE_NAME,
-        cookie,
+        token,
         httponly=True,
         samesite="lax",
-        secure=not settings.debug,  # Use secure cookies in production
+        secure=not settings.debug,
     )
+
+    # Clear next_url cookie
+    response.delete_cookie("next_url")
 
     logger.info(f"User logged in via magic link: {user.email}")
     return response
@@ -782,8 +790,11 @@ async def admin_login(
     login_service = AdminLoginService(session)
 
     try:
+        # Check for next URL in cookie if not provided in params
+        actual_next = next or request.cookies.get("next_url")
+
         # Authenticate user using service with guard clauses
-        result = await login_service.authenticate(email, password, next)
+        result = await login_service.authenticate(email, password, actual_next)
 
         # Return success response - JavaScript will handle redirect
         response = JSONResponse(
@@ -798,6 +809,9 @@ async def admin_login(
             samesite="lax",
             secure=not settings.debug,
         )
+
+        # Clear next_url cookie if it exists
+        response.delete_cookie("next_url")
 
         logger.info(f"Bootstrap admin logged in: {result.user.email}")
         return response

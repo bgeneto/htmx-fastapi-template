@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .auth import create_session_cookie
+
 from .strategies import create_admin_login_verifier
 from .models import User
 from .repository import get_user_by_email
@@ -68,13 +68,16 @@ class AdminLoginService:
         # Guard clause: Determine redirect URL
         redirect_url = self._determine_redirect_url(next_url)
 
-        # Create session cookie
-        session_cookie = create_session_cookie(user.id, user.email, user.role)
+        # Generate JWT token using fastapi-users strategy
+        from .users import get_jwt_strategy
+
+        strategy = get_jwt_strategy()
+        token = await strategy.write_token(user)
 
         return LoginResult(
             success=True,
             redirect_url=redirect_url,
-            session_cookie=session_cookie,
+            session_cookie=token,
             user=user,
         )
 

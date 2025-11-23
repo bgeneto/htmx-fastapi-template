@@ -91,7 +91,7 @@ npm install && npm run build:css
 python -m app.create_db
 
 # 5. Run app
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --proxy-headers
 ```
 
 ### Adding New Features with i18n
