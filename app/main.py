@@ -14,6 +14,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 
 # Keep legacy auth for magic links
 from .auth import (
@@ -213,7 +214,7 @@ app.add_middleware(
 # NOTE: GZipMiddleware is explicitly disabled because we're using a reverse proxy
 # (like Nginx or Caddy) that handles compression more efficiently.
 # If you're not using a reverse proxy, you can uncomment the line below:
-# app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Include fastapi-users routers for auth
 # NOTE: We keep our custom magic link authentication alongside fastapi-users
