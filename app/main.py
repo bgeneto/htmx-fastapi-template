@@ -736,6 +736,8 @@ async def login(
             "request": request,
             "email": email,
             "login_method": settings.LOGIN_METHOD,
+            "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
+            "magic_link_expiry_minutes": settings.MAGIC_LINK_EXPIRY_MINUTES,
         }
     )
 
@@ -748,6 +750,7 @@ async def verify_otp_form(request: Request, email: str):
             "request": request,
             "email": email,
             "error": None,
+            "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
         }
     )
 
@@ -772,6 +775,7 @@ async def verify_otp(
                 "request": request,
                 "email": email,
                 "error": _("Invalid or expired verification code. Please try again."),
+                "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
             },
         )
 
@@ -784,6 +788,7 @@ async def verify_otp(
                 "request": request,
                 "email": email,
                 "error": _("User not found or inactive. Please contact support."),
+                "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
             },
         )
 
