@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 10:36-0300\n"
+"POT-Creation-Date: 2025-11-23 10:52-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -41,18 +41,18 @@ msgstr "Sua conta está aguardando aprovação do administrador."
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:511 templates/components/_contact_form.html:28
+#: app/main.py:511 templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:518 templates/components/_contact_form.html:53
+#: app/main.py:518 templates/components/_contact_form.html:75
 #: templates/pages/admin/index.html:17 templates/pages/auth/login.html:31
 #: templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:525 templates/components/_contact_form.html:79
+#: app/main.py:525 templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
@@ -147,17 +147,17 @@ msgid "Internal server error"
 msgstr "Erro interno do servidor"
 
 #: app/schemas.py:22 app/schemas.py:63 app/schemas.py:86 app/schemas.py:115
-#: app/strategies.py:15 templates/components/_contact_form.html:148
+#: app/strategies.py:15 templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
 #: app/schemas.py:29 app/strategies.py:20
-#: templates/components/_contact_form.html:152
+#: templates/components/_contact_form.html:202
 msgid "Message must be at least 5 characters"
 msgstr "A mensagem deve ter pelo menos 5 caracteres"
 
-#: app/strategies.py:25 templates/components/_contact_form.html:150
+#: app/strategies.py:25 templates/components/_contact_form.html:200
 #: templates/pages/auth/login.html:110 templates/pages/auth/register.html:147
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
@@ -167,54 +167,54 @@ msgstr "Por favor, insira um endereço de e-mail válido"
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
-#: templates/_base.html:87
+#: templates/_base.html:78
 msgid "Close"
 msgstr ""
 
-#: templates/components/_contact_form.html:11
+#: templates/components/_contact_form.html:13
 msgid "Message Sent!"
 msgstr "Mensagem Enviada!"
 
-#: templates/components/_contact_form.html:20
+#: templates/components/_contact_form.html:24
 msgid "Send Another Message"
 msgstr "Enviar Outra Mensagem"
 
-#: templates/components/_contact_form.html:114
+#: templates/components/_contact_form.html:162
 msgid "Sending..."
 msgstr "Enviando..."
 
-#: templates/components/_contact_form.html:114
+#: templates/components/_contact_form.html:162
 msgid "Send Message"
 msgstr "Enviar Mensagem"
 
-#: templates/components/_contact_form.html:123
+#: templates/components/_contact_form.html:174
 msgid "Reset"
 msgstr "Limpar"
 
-#: templates/components/_contact_form.html:147
+#: templates/components/_contact_form.html:197
 #: templates/pages/auth/register.html:148
 msgid "Name is required"
 msgstr "O nome é obrigatório"
 
-#: templates/components/_contact_form.html:149
+#: templates/components/_contact_form.html:199
 #: templates/pages/auth/login.html:109 templates/pages/auth/register.html:146
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
 
-#: templates/components/_contact_form.html:151
+#: templates/components/_contact_form.html:201
 msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
-#: templates/components/_contact_form.html:153
+#: templates/components/_contact_form.html:203
 #: templates/pages/auth/login.html:111 templates/pages/auth/register.html:150
 msgid "Please fix the errors before submitting."
 msgstr "Por favor, corrija os erros antes de enviar."
 
-#: templates/components/_contact_form.html:154
+#: templates/components/_contact_form.html:204
 msgid "Thanks"
 msgstr "Obrigado"
 
-#: templates/components/_contact_form.html:154
+#: templates/components/_contact_form.html:204
 msgid "your message has been received!"
 msgstr "sua mensagem foi recebida!"
 
@@ -361,7 +361,6 @@ msgid "Save Changes"
 msgstr "Salvar Alterações"
 
 #: templates/components/_language_selector.html:81
-#: templates/components/_top_navbar.html:180
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
@@ -369,45 +368,45 @@ msgstr "Alterando idioma..."
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/components/_sidebar.html:54
+#: templates/components/_sidebar.html:62
 #: templates/components/_top_navbar.html:19
 msgid "Dashboard"
 msgstr ""
 
-#: templates/components/_sidebar.html:62
+#: templates/components/_sidebar.html:68
 msgid "Admin"
 msgstr ""
 
-#: templates/components/_sidebar.html:74 templates/errors/404.html:56
+#: templates/components/_sidebar.html:82 templates/errors/404.html:53
 msgid "Contacts"
 msgstr "Contatos"
 
-#: templates/components/_sidebar.html:84 templates/pages/admin/cars.html:3
+#: templates/components/_sidebar.html:95 templates/pages/admin/cars.html:3
 #: templates/pages/admin/cars.html:9
 msgid "Cars Inventory"
 msgstr "Diretório de Contatos"
 
-#: templates/components/_sidebar.html:94
+#: templates/components/_sidebar.html:108
 msgid "Users"
 msgstr ""
 
-#: templates/components/_sidebar.html:102
+#: templates/components/_sidebar.html:114
 msgid "Demo"
 msgstr ""
 
-#: templates/components/_sidebar.html:114 templates/errors/404.html:57
+#: templates/components/_sidebar.html:128 templates/errors/404.html:55
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_sidebar.html:121
+#: templates/components/_sidebar.html:136
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
-#: templates/components/_top_navbar.html:42
+#: templates/components/_top_navbar.html:39
 msgid "User"
 msgstr ""
 
-#: templates/components/_top_navbar.html:44
+#: templates/components/_top_navbar.html:41
 msgid "Guest"
 msgstr "Convidado"
 
@@ -415,61 +414,53 @@ msgstr "Convidado"
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/components/_top_navbar.html:86
+#: templates/components/_top_navbar.html:85
 msgid "Settings"
 msgstr ""
 
-#: templates/components/_top_navbar.html:97
+#: templates/components/_top_navbar.html:96
 msgid "Payments"
 msgstr "Pagamentos"
 
-#: templates/components/_top_navbar.html:118
-msgid "Toggle Theme"
-msgstr "Mudar Tema"
-
-#: templates/components/_top_navbar.html:134
-msgid "Language"
-msgstr "Idioma"
-
-#: templates/components/_top_navbar.html:221
+#: templates/components/_top_navbar.html:115
 msgid "Sign out"
 msgstr ""
 
-#: templates/errors/404.html:3 templates/errors/404.html:25
+#: templates/errors/404.html:2 templates/errors/404.html:20
 msgid "Page Not Found"
 msgstr "Página não encontrada"
 
-#: templates/errors/404.html:28
+#: templates/errors/404.html:22
 msgid "Sorry, the page you are looking for does not exist or has been moved."
 msgstr ""
 
-#: templates/errors/404.html:40 templates/errors/5xx.html:40
+#: templates/errors/404.html:35 templates/errors/5xx.html:37
 msgid "Go Home"
 msgstr "Voltar ao Início"
 
-#: templates/errors/404.html:48 templates/errors/5xx.html:48
+#: templates/errors/404.html:45 templates/errors/5xx.html:47
 msgid "Go Back"
 msgstr "Voltar"
 
-#: templates/errors/404.html:54
+#: templates/errors/404.html:50
 msgid "Here are some helpful links instead:"
 msgstr "Aqui estão alguns links úteis:"
 
-#: templates/errors/404.html:58
+#: templates/errors/404.html:57
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/errors/5xx.html:3 templates/errors/5xx.html:25
+#: templates/errors/5xx.html:2 templates/errors/5xx.html:22
 msgid "Unexpected Error"
 msgstr "Erro Inesperado"
 
-#: templates/errors/5xx.html:28
+#: templates/errors/5xx.html:24
 msgid ""
 "An unexpected error occurred while processing your request. Please try "
 "again later."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
-#: templates/errors/5xx.html:54
+#: templates/errors/5xx.html:52
 msgid "Error Code"
 msgstr "Código de Erro"
 
@@ -961,4 +952,7 @@ msgstr "Já tem uma conta? Entrar"
 
 #~ msgid "No contacts yet. Be the first to submit!"
 #~ msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
+
+#~ msgid "Toggle Theme"
+#~ msgstr "Mudar Tema"
 
