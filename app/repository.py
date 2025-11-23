@@ -209,18 +209,19 @@ async def get_valid_token(
     """
     token_hash = _hash_token(raw_token)
 
-    # Find unexpired, unused token
+    # Find unexpired token with usage_count < 2 (allow up to 2 uses)
     result = await session.exec(
         select(LoginToken)
         .where(LoginToken.token_hash == token_hash)
         .where(LoginToken.used_at.is_(None))  # type: ignore[union-attr]
+        .where(LoginToken.usage_count < 2)
         .where(LoginToken.expires_at > datetime.utcnow())
     )
 
     login_token = result.one_or_none()
 
     if not login_token:
-        logger.warning("Invalid or expired token attempted")
+        logger.warning("Invalid, expired, or fully used token attempted")
         return None
 
     # Get associated user
@@ -236,10 +237,17 @@ async def get_valid_token(
 
 
 async def mark_token_used(session: AsyncSession, login_token: LoginToken) -> None:
-    """Mark a login token as used"""
-    login_token.used_at = datetime.utcnow()
+    """Increment token usage count and mark as used after 2 uses"""
+    login_token.usage_count += 1
+
+    # Mark as used only after 2 uses (maximum allowed)
+    if login_token.usage_count >= 2:
+        login_token.used_at = datetime.utcnow()
+        logger.info(f"Token {login_token.id} fully used after {login_token.usage_count} uses and marked as expired")
+    else:
+        logger.info(f"Token {login_token.id} used {login_token.usage_count} time(s)")
+
     await session.commit()
-    logger.info(f"Marked token {login_token.id} as used")
 
 
 # ============= Contact CRUD (existing) =============
@@ -455,8 +463,13 @@ async def verify_otp_code(session: AsyncSession, email: str, provided_code: str)
         logger.info(f"OTP verified successfully for email: {email}")
         return True
     else:
+        # Mark as used after 3 failed attempts for security
+        if otp.attempts >= 3:
+            otp.used_at = datetime.utcnow()
+            logger.warning(f"OTP invalidated due to too many failed attempts for email: {email}")
+
         await session.commit()
-        logger.warning(f"Invalid OTP provided for email: {email}")
+        logger.warning(f"Invalid OTP provided for email: {email} (attempt {otp.attempts})")
         return False
 
 
@@ -488,3 +501,25 @@ async def get_otp_ttl(session: AsyncSession, email: str) -> int:
 
     ttl = (otp.expires_at - datetime.utcnow()).total_seconds()
     return max(0, int(ttl))
+
+
+async def cleanup_expired_otps(session: AsyncSession) -> int:
+    """Delete expired OTP codes and return count of deleted records"""
+    # Delete codes that are expired or already used
+    result = await session.exec(
+        select(OTPCode).where(
+            sa.or_(
+                OTPCode.expires_at < datetime.utcnow(),
+                OTPCode.used_at.is_not(None)
+            )
+        )
+    )
+    expired_otps = result.all()
+
+    for otp in expired_otps:
+        session.delete(otp)
+
+    await session.commit()
+
+    logger.info(f"Cleaned up {len(expired_otps)} expired OTP codes")
+    return len(expired_otps)

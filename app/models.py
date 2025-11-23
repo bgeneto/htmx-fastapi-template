@@ -58,6 +58,7 @@ class LoginToken(SQLModel, table=True):
 
     expires_at: datetime = Field(index=True)
     used_at: Optional[datetime] = Field(default=None)
+    usage_count: int = Field(default=0)  # Track how many times the link has been used
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
 

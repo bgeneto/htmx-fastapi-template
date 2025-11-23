@@ -4,7 +4,10 @@ from fastapi.responses import JSONResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .i18n import gettext as _
+from .logger import get_logger
 from .models import UserRole
+
+logger = get_logger(__name__)
 
 
 class AuthenticationRequest:
@@ -101,16 +104,21 @@ class OTPHandler:
             # Generate and send OTP code
             try:
                 from .repository import create_otp_code
+                logger.info(f"Creating OTP code for email: {request.email}")
                 otp_code = await create_otp_code(request.session, request.email)
+                logger.info(f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}")
 
                 # Send OTP email
-                await send_otp_code(request.email, user.full_name, otp_code)
+                logger.info(f"Attempting to send OTP email to {request.email}")
+                email_sent = await send_otp_code(request.email, user.full_name, otp_code)
+                logger.info(f"OTP email sending result for {request.email}: {email_sent}")
 
                 # Return response indicating OTP verification page
                 return OTPVerificationResponse(request.email)
 
-            except Exception:
+            except Exception as e:
                 # Log error but still show generic success to prevent enumeration
+                logger.error(f"Error in OTP generation/sending for {request.email}: {e}")
                 pass
         else:
             # Log warning for non-existent/inactive user (for monitoring)

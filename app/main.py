@@ -724,10 +724,12 @@ async def login(
         strategy = magic_link_strategy
 
     # Use authentication strategy
+    logger.info(f"Attempting login with method: {settings.LOGIN_METHOD} for email: {email}")
     auth_request = AuthenticationRequest(email, session, next)
     response = await strategy.handle_login(auth_request)
 
     if response:
+        logger.info(f"Authentication strategy returned response for {email}")
         return response.to_response()
 
     # Redirect to check email page (for magic link)
