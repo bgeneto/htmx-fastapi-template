@@ -39,7 +39,6 @@
                                            @input="handleInput(index, $event)"
                                            @keydown="handleKeydown(index, $event)"
                                            @paste="handlePaste($event)"
-                                           x-focus="index === 0"
                                            class="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                            autocomplete="one-time-code">
                                 </template>
@@ -139,7 +138,13 @@
             },
 
             init() {
-                // Alpine focus plugin handles auto-focus via x-focus directive
+                // Focus the first OTP input field immediately so user can paste
+                setTimeout(() => {
+                    const firstInput = document.querySelector('input[pattern="[0-9]"]');
+                    if (firstInput) {
+                        firstInput.focus();
+                    }
+                }, 0);
                 // Start countdown on page load (user just got sent an OTP)
                 this.startCountdown();
             },
@@ -296,8 +301,13 @@
                     // Start countdown timer (prevents rapid resend attempts)
                     this.startCountdown();
 
-                    // Alpine focus plugin will handle focus via x-focus directive
-                    // No need for manual focus handling
+                    // Focus first input with simple JavaScript
+                    setTimeout(() => {
+                        const firstInput = document.querySelector('input[pattern="[0-9]"]');
+                        if (firstInput) {
+                            firstInput.focus();
+                        }
+                    }, 0);
                 } catch (error) {
                     console.error('Resend OTP error:', error);
                     window.showToast('{{ _("Failed to send verification code. Please try again.") }}', 'error');

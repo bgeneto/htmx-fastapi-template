@@ -1,4 +1,3 @@
-import os
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -146,6 +145,14 @@ def get_cors_origins() -> list[str]:
 async def lifespan(app: FastAPI):
     # Startup
     try:
+        # Initialize Resend API for email sending
+        import resend
+        if settings.EMAIL_API_KEY:
+            resend.api_key = settings.EMAIL_API_KEY.get_secret_value()
+            logger.info("Resend API initialized with key: {}...", resend.api_key[:10])
+        else:
+            logger.warning("EMAIL_API_KEY not configured - email sending will fail")
+
         await init_db()
         logger.info("DB initialized on startup")
 
@@ -765,7 +772,7 @@ async def verify_otp(
     session: AsyncSession = Depends(get_session),
 ):
     """Verify OTP code and login user"""
-    from .repository import verify_otp_code, get_user_by_email
+    from .repository import get_user_by_email, verify_otp_code
 
     # Verify OTP code
     is_valid = await verify_otp_code(session, email, otp_code)
@@ -858,10 +865,8 @@ async def classic_login(
     """Classic username/password login using fastapi-users"""
     try:
         # Use fastapi-users login
-        from fastapi_users.router.common import ErrorCode
 
         # Create login form data
-        from fastapi_users.router import ErrorCode, LoginResponse
 
         # Use fastapi-users authentication backend
         user = await auth_backend.login(email, password)

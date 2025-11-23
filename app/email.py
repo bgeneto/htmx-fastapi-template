@@ -7,13 +7,6 @@ from .logger import get_logger
 
 logger = get_logger(__name__)
 
-# Initialize Resend API key
-if settings.EMAIL_API_KEY:
-    resend.api_key = settings.EMAIL_API_KEY.get_secret_value()
-    logger.debug("Resend API key initialized")
-else:
-    logger.warning("Resend API key not configured - email sending will fail")
-
 
 def _create_safe_html_template(
     preheader_text: str, subject: str, content_body: str, sender_footer: bool = False
@@ -301,6 +294,8 @@ async def send_otp_code(email: str, full_name: str, otp_code: str) -> bool:
     Returns:
         True if email sent successfully, False otherwise
     """
+    logger.info(f"=== send_otp_code() CALLED === email={email}, full_name={full_name}, otp_code={otp_code[:2]}****")
+
     subject = "Your verification code"
     preheader_text = f"Enter this 6-digit code to log in to {settings.app_name}"
 

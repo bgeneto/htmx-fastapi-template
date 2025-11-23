@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 15:57-0300\n"
+"POT-Creation-Date: 2025-11-23 16:19-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -33,7 +33,7 @@ msgstr "Já existe um usuário com este e-mail"
 msgid "You cannot deactivate your own account"
 msgstr "Você não pode desativar sua própria conta"
 
-#: app/auth_strategies.py:42 app/main.py:836 app/main.py:846
+#: app/auth_strategies.py:42 app/main.py:843 app/main.py:853
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
@@ -41,168 +41,168 @@ msgstr "Código OTP enviado com sucesso"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:534 app/main.py:1406 templates/pages/admin/index.html:15
+#: app/main.py:541 app/main.py:1411 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:537 templates/components/_contact_form.html:36
+#: app/main.py:544 templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:544 templates/components/_contact_form.html:75
-#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:40
-#: templates/pages/auth/login.html:111 templates/pages/auth/register.html:38
+#: app/main.py:551 templates/components/_contact_form.html:75
+#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:39
+#: templates/pages/auth/login.html:135 templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:551 templates/components/_contact_form.html:113
+#: app/main.py:558 templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:557
+#: app/main.py:564
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:562
+#: app/main.py:569
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:637
+#: app/main.py:644
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:645
+#: app/main.py:652
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:665 templates/pages/auth/register.html:151
+#: app/main.py:672 templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:704
+#: app/main.py:711
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:779
+#: app/main.py:786
 msgid "Invalid or expired verification code. Please try again."
 msgstr "Código de verificação inválido ou expirado. Por favor, tente novamente. "
 
-#: app/main.py:792
+#: app/main.py:799
 msgid "User not found or inactive. Please contact support."
 msgstr "Usuário não encontrado ou inativo. Por favor, contate o suporte."
 
-#: app/main.py:871 templates/pages/admin/login.html:208
+#: app/main.py:876 templates/pages/admin/login.html:208
 msgid "Invalid email or password"
 msgstr "E-mail ou senha inválidos"
 
-#: app/main.py:902
+#: app/main.py:907
 msgid "Login failed. Please check your credentials and try again."
 msgstr "Login falhou. Por favor, verifique suas credenciais e tente novamente."
 
-#: app/main.py:920
+#: app/main.py:925
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:1016 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
+#: app/main.py:1021 app/schemas.py:22 app/schemas.py:65 app/schemas.py:89
 #: app/schemas.py:118 app/schemas.py:153 app/strategies.py:15
 #: templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149 templates/pages/profile.html:437
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1024
+#: app/main.py:1029
 msgid "Invalid email address"
 msgstr "E-mail inválido"
 
-#: app/main.py:1030
+#: app/main.py:1035
 msgid "Email already in use by another account"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:1040
+#: app/main.py:1045
 msgid "Phone number too long (max 20 characters)"
 msgstr "O número de telefone deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1050 templates/pages/profile.html:503
+#: app/main.py:1055 templates/pages/profile.html:503
 msgid "Invalid file type. Please upload PNG, JPG, or WebP image."
 msgstr "Tipo de arquivo inválido. Por favor, envie uma imagem PNG, JPG ou WebP."
 
-#: app/main.py:1057 templates/pages/profile.html:509
+#: app/main.py:1062 templates/pages/profile.html:509
 msgid "File too large. Maximum size is 5MB."
 msgstr "Arquivo muito grande. Tamanho máximo de 5MB."
 
-#: app/main.py:1090 templates/pages/profile.html:575
+#: app/main.py:1095 templates/pages/profile.html:575
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: app/main.py:1120 app/main.py:1136 templates/pages/profile.html:631
+#: app/main.py:1125 app/main.py:1141 templates/pages/profile.html:631
 msgid "Password change failed"
 msgstr "Falha na alteração de senha"
 
-#: app/main.py:1127
+#: app/main.py:1132
 msgid "No password set for this account. Use magic link login."
 msgstr "Senha não definida para esta conta. Use login por link mágico."
 
-#: app/main.py:1137
+#: app/main.py:1142
 msgid "Current password is incorrect"
 msgstr "Senha atual incorreta"
 
-#: app/main.py:1147 templates/pages/profile.html:619
+#: app/main.py:1152 templates/pages/profile.html:619
 msgid "Password changed successfully"
 msgstr "Senha alterada com sucesso"
 
-#: app/main.py:1231 templates/pages/admin/login.html:40
+#: app/main.py:1236 templates/pages/admin/login.html:40
 #: templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1409 templates/pages/books.html:37
+#: app/main.py:1414 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1416 templates/pages/books.html:38
+#: app/main.py:1421 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1423
+#: app/main.py:1428
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/main.py:1430 templates/pages/admin/cars.html:38
+#: app/main.py:1435 templates/pages/admin/cars.html:38
 #: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1436 templates/pages/admin/cars.html:39
+#: app/main.py:1441 templates/pages/admin/cars.html:39
 #: templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
 
-#: app/main.py:1440 templates/pages/books.html:40
+#: app/main.py:1445 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1443 templates/pages/books.html:41
+#: app/main.py:1448 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1570
+#: app/main.py:1575
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1609
+#: app/main.py:1614
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1645
+#: app/main.py:1650
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -232,7 +232,7 @@ msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
 #: app/strategies.py:25 templates/components/_contact_form.html:200
-#: templates/pages/auth/login.html:205 templates/pages/auth/register.html:147
+#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
 #: templates/pages/profile.html:439
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
@@ -255,7 +255,7 @@ msgid "Send Another Message"
 msgstr "Enviar Outra Mensagem"
 
 #: templates/components/_contact_form.html:162
-#: templates/pages/auth/verify_otp.html:112
+#: templates/pages/auth/verify_otp.html:106
 msgid "Sending..."
 msgstr "Enviando..."
 
@@ -273,7 +273,7 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_contact_form.html:199
-#: templates/pages/auth/login.html:204 templates/pages/auth/register.html:146
+#: templates/pages/auth/login.html:234 templates/pages/auth/register.html:146
 #: templates/pages/profile.html:438
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
@@ -283,8 +283,8 @@ msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
 #: templates/components/_contact_form.html:203
-#: templates/pages/auth/login.html:208 templates/pages/auth/register.html:150
-#: templates/pages/auth/verify_otp.html:144
+#: templates/pages/auth/login.html:238 templates/pages/auth/register.html:150
+#: templates/pages/auth/verify_otp.html:137
 msgid "Please fix the errors before submitting."
 msgstr "Por favor, corrija os erros antes de enviar."
 
@@ -765,7 +765,7 @@ msgstr "Não"
 msgid "Last Updated"
 msgstr "Última Atualização"
 
-#: templates/pages/auth/login.html:207 templates/pages/profile.html:440
+#: templates/pages/auth/login.html:237 templates/pages/profile.html:440
 msgid "Password must be at least 8 characters"
 msgstr "A senha deve ter pelo menos 8 caracteres"
 
@@ -859,48 +859,48 @@ msgid ""
 "                            again."
 msgstr "Por favor, verifique seu e-mail e senha e tente novamente."
 
-#: templates/pages/admin/login.html:95 templates/pages/auth/login.html:68
+#: templates/pages/admin/login.html:95 templates/pages/auth/login.html:79
 msgid "Password"
 msgstr "Senha"
 
 #: templates/pages/admin/login.html:215
-#: templates/pages/auth/verify_otp.html:268
+#: templates/pages/auth/verify_otp.html:265
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
-#: templates/pages/auth/login.html:3 templates/pages/auth/login.html:169
+#: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
 msgid "Log In"
 msgstr "Entrar"
 
-#: templates/pages/auth/login.html:8
+#: templates/pages/auth/login.html:6
 msgid "Welcome Back"
 msgstr "Bem-vindo de Volta"
 
-#: templates/pages/auth/login.html:10
+#: templates/pages/auth/login.html:8
 msgid "Enter your email to receive a verification code"
 msgstr "Digite seu e-mail para receber um código de verificação"
 
-#: templates/pages/auth/login.html:12
+#: templates/pages/auth/login.html:10
 msgid "Enter your email to receive a magic link"
 msgstr "Digite seu e-mail para receber um link mágico"
 
-#: templates/pages/auth/login.html:14
+#: templates/pages/auth/login.html:12
 msgid "Enter your email and password to log in"
 msgstr "Insira seu e-mail e senha para entrar"
 
-#: templates/pages/auth/login.html:52 templates/pages/auth/login.html:123
+#: templates/pages/auth/login.html:59 templates/pages/auth/login.html:155
 msgid "you@example.com"
 msgstr "voce@exemplo.com"
 
-#: templates/pages/auth/login.html:80
+#: templates/pages/auth/login.html:98
 msgid "••••••••"
 msgstr "••••••••"
 
-#: templates/pages/auth/login.html:103
+#: templates/pages/auth/login.html:126
 msgid "Enter your email and password to access your account."
 msgstr "Digite seu e-mail e senha para acessar sua conta."
 
-#: templates/pages/auth/login.html:146
+#: templates/pages/auth/login.html:183
 msgid ""
 "We'll send you a 6-digit verification code to your email. Enter the code "
 "on the next page to complete your login."
@@ -908,29 +908,29 @@ msgstr ""
 "Enviaremos um código de verificação de 6 dígitos para seu e-mail. Digite "
 "o código na próxima página para completar seu login."
 
-#: templates/pages/auth/login.html:148
+#: templates/pages/auth/login.html:185
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
 "Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
 "senha!"
 
-#: templates/pages/auth/login.html:167
+#: templates/pages/auth/login.html:206
 msgid " Sending..."
 msgstr " Enviando..."
 
-#: templates/pages/auth/login.html:171
+#: templates/pages/auth/login.html:206
 msgid "Send Verification Code"
 msgstr "Enviar Código de Verificação"
 
-#: templates/pages/auth/login.html:173
+#: templates/pages/auth/login.html:206
 msgid "Continue with e-mail"
 msgstr "Continuar com e-mail"
 
-#: templates/pages/auth/login.html:180
+#: templates/pages/auth/login.html:211
 msgid "Don't have an account? Register"
 msgstr "Não tem uma conta? Cadastre-se"
 
-#: templates/pages/auth/login.html:206
+#: templates/pages/auth/login.html:236
 msgid "Password is required"
 msgstr "A Senha é obrigatória"
 
@@ -971,75 +971,76 @@ msgstr "Já tem uma conta? Entrar"
 msgid "Verify Code"
 msgstr "Verificar Código"
 
-#: templates/pages/auth/verify_otp.html:12
-msgid "Enter Verification Code"
-msgstr "Digite o Código de Verificação"
+#: templates/pages/auth/verify_otp.html:6
+#, fuzzy
+msgid "Verify Your Code"
+msgstr "Verificar Código"
 
-#: templates/pages/auth/verify_otp.html:14
+#: templates/pages/auth/verify_otp.html:7
 msgid "We sent a 6-digit code to"
 msgstr "Enviamos um código de 6 dígitos para"
 
-#: templates/pages/auth/verify_otp.html:36
+#: templates/pages/auth/verify_otp.html:30
 msgid "Verification Code"
 msgstr "Código de Verificação"
 
-#: templates/pages/auth/verify_otp.html:80
+#: templates/pages/auth/verify_otp.html:74
 msgid "Important:"
 msgstr "Importante:"
 
-#: templates/pages/auth/verify_otp.html:82
+#: templates/pages/auth/verify_otp.html:76
 msgid "Enter the 6-digit code exactly as shown"
 msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
 
-#: templates/pages/auth/verify_otp.html:83
+#: templates/pages/auth/verify_otp.html:77
 msgid "The code will expire in"
 msgstr "O código expirará em"
 
-#: templates/pages/auth/verify_otp.html:83
+#: templates/pages/auth/verify_otp.html:77
 msgid "minutes"
 msgstr "minutos"
 
-#: templates/pages/auth/verify_otp.html:84
+#: templates/pages/auth/verify_otp.html:78
 msgid "Never share this code with anyone"
 msgstr "Nunca compartilhe este código com ninguém"
 
-#: templates/pages/auth/verify_otp.html:103
+#: templates/pages/auth/verify_otp.html:97
 msgid "Verifying..."
 msgstr "Verificando..."
 
-#: templates/pages/auth/verify_otp.html:103
+#: templates/pages/auth/verify_otp.html:97
 msgid "Verify & Log In"
 msgstr "Verificar e Entrar"
 
-#: templates/pages/auth/verify_otp.html:107
+#: templates/pages/auth/verify_otp.html:101
 msgid "Didn't receive the code?"
 msgstr "Não recebeu o código?"
 
-#: templates/pages/auth/verify_otp.html:112
+#: templates/pages/auth/verify_otp.html:106
 msgid "Resend Code"
 msgstr "Reenviar Código"
 
-#: templates/pages/auth/verify_otp.html:117
+#: templates/pages/auth/verify_otp.html:111
 msgid "Back to Login"
 msgstr "Voltar ao Início"
 
-#: templates/pages/auth/verify_otp.html:142
+#: templates/pages/auth/verify_otp.html:135
 msgid "Verification code is required"
 msgstr "Código de verificação necessário"
 
-#: templates/pages/auth/verify_otp.html:143
+#: templates/pages/auth/verify_otp.html:136
 msgid "Please enter a valid 6-digit code"
 msgstr "Por favor, insira um código válido de 6 dígitos"
 
-#: templates/pages/auth/verify_otp.html:257
+#: templates/pages/auth/verify_otp.html:254
 msgid "Login successful!"
 msgstr "Login bem-sucedido!"
 
-#: templates/pages/auth/verify_otp.html:297
+#: templates/pages/auth/verify_otp.html:294
 msgid "Verification code sent successfully!"
 msgstr "Código de verificação enviado com sucesso!"
 
-#: templates/pages/auth/verify_otp.html:314
+#: templates/pages/auth/verify_otp.html:313
 msgid "Failed to send verification code. Please try again."
 msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
@@ -1266,4 +1267,7 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
 #~ msgid "User"
 #~ msgstr "Usuário"
+
+#~ msgid "Enter Verification Code"
+#~ msgstr "Digite o Código de Verificação"
 

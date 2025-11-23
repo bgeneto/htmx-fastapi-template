@@ -113,12 +113,16 @@ class OTPHandler:
                 email_sent = await send_otp_code(request.email, user.full_name, otp_code)
                 logger.info(f"OTP email sending result for {request.email}: {email_sent}")
 
+                if not email_sent:
+                    logger.error(f"OTP email failed to send to {request.email} - email_sent returned False")
+
                 # Return response indicating OTP verification page
                 return OTPVerificationResponse(request.email)
 
             except Exception as e:
                 # Log error but still show generic success to prevent enumeration
                 logger.error(f"Error in OTP generation/sending for {request.email}: {e}")
+                logger.exception("Full traceback:")
                 pass
         else:
             # Log warning for non-existent/inactive user (for monitoring)
