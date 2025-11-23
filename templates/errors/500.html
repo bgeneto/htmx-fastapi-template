@@ -8,63 +8,57 @@
     <!-- Theme toggle in top right corner -->
     <div class="fixed top-4 right-4 flex items-center gap-3">
       {% if enable_i18n %}
-      {% include "components/_language_selector.html" %}
-      {% endif %}
-      {% include "components/_theme_toggle.html" %}
-      {% include "components/_logout_button.html" %}
-    </div>
+      <!-- 500 Icon -->
+      <div class="mb-8">
+        <div
+          class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900">
+          <svg class="w-16 h-16 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-1.964-1.333-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z">
+            </path>
+          </svg>
+        </div>
+      </div>
 
-    <!-- 500 Icon -->
-    <div class="mb-8">
-      <div
-        class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900">
-        <svg class="w-16 h-16 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-1.964-1.333-2.732 0L3.732 16c-.77 1.333.192 3 1.732 3z">
-          </path>
-        </svg>
+      <!-- Error Message -->
+      <h1 class="text-6xl font-bold mb-4 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+        500
+      </h1>
+      <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        {{ _('Internal Server Error') }}
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+        {{ _('Oops! Something went wrong on our end. We\'re working to fix it.') }}
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/"
+          class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+            </path>
+          </svg>
+          {{ _('Go Home') }}
+        </a>
+        <button onclick="location.reload()"
+          class="inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow hover:shadow-lg">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+            </path>
+          </svg>
+          {{ _('Try Again') }}
+        </button>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ _('If this problem persists, please contact support.') }}
+        </p>
       </div>
     </div>
-
-    <!-- Error Message -->
-    <h1 class="text-6xl font-bold mb-4 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-      500
-    </h1>
-    <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-      {{ _('Internal Server Error') }}
-    </h2>
-    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
-      {{ _('Oops! Something went wrong on our end. We\'re working to fix it.') }}
-    </p>
-
-    <!-- Action Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="/"
-        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-          </path>
-        </svg>
-        {{ _('Go Home') }}
-      </a>
-      <button onclick="location.reload()"
-        class="inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow hover:shadow-lg">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-          </path>
-        </svg>
-        {{ _('Try Again') }}
-      </button>
-    </div>
-
-    <!-- Additional Info -->
-    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        {{ _('If this problem persists, please contact support.') }}
-      </p>
-    </div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}

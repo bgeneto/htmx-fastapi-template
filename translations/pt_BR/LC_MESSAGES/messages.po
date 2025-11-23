@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-22 22:54-0300\n"
+"POT-Creation-Date: 2025-11-22 23:29-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,96 +37,96 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/main.py:521 app/main.py:1030 templates/pages/admin/index.html:21
+#: app/main.py:526 app/main.py:1035 templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:524 templates/components/_form_alpine.html:28
-#: templates/pages/admin/index.html:22
+#: app/main.py:529 templates/components/_form_alpine.html:28
+#: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:531 templates/components/_form_alpine.html:53
-#: templates/pages/admin/index.html:23 templates/pages/auth/login.html:38
+#: app/main.py:536 templates/components/_form_alpine.html:53
+#: templates/pages/admin/index.html:17 templates/pages/auth/login.html:38
 #: templates/pages/auth/register.html:45
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:538 templates/components/_form_alpine.html:79
-#: templates/pages/admin/index.html:24
+#: app/main.py:543 templates/components/_form_alpine.html:79
+#: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:544
+#: app/main.py:549
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:549
+#: app/main.py:554
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:624
+#: app/main.py:629
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:632
+#: app/main.py:637
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:652 templates/pages/auth/register.html:162
+#: app/main.py:657 templates/pages/auth/register.html:162
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:685
+#: app/main.py:690
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:721
+#: app/main.py:726
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:860 templates/pages/admin/login.html:43
+#: app/main.py:865 templates/pages/admin/login.html:43
 #: templates/pages/admin/login.html:179
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1033 templates/pages/books.html:42
+#: app/main.py:1038 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1040 templates/pages/books.html:43
+#: app/main.py:1045 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1047 templates/pages/admin/cars.html:43
-#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:44
+#: app/main.py:1052 templates/pages/admin/cars.html:38
+#: templates/pages/admin/cars_form.html:69 templates/pages/books.html:39
 #: templates/pages/books_form.html:20
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1052 templates/pages/books.html:45
+#: app/main.py:1057 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1055 templates/pages/books.html:46
+#: app/main.py:1060 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1182
+#: app/main.py:1187
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1221
+#: app/main.py:1226
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1257
+#: app/main.py:1262
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
@@ -162,8 +162,8 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30 templates/pages/admin/cars.html:52
-#: templates/pages/books.html:54
+#: app/strategies.py:30 templates/pages/admin/cars.html:47
+#: templates/pages/books.html:49
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
@@ -238,7 +238,7 @@ msgstr "Editar"
 #: templates/components/_datagrid_grid.html:113
 #: templates/components/_datagrid_grid.html:276
 #: templates/components/_datagrid_grid.html:379
-#: templates/pages/admin/index.html:40
+#: templates/pages/admin/index.html:34
 msgid "Delete"
 msgstr "Excluir"
 
@@ -360,6 +360,10 @@ msgstr "sua mensagem foi recebida!"
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
+#: templates/components/_logout_button.html:3
+msgid "Logout"
+msgstr "Sair"
+
 #: templates/components/_recent_contacts.html:2
 msgid "Recent contacts"
 msgstr "Contatos recentes"
@@ -368,172 +372,162 @@ msgstr "Contatos recentes"
 msgid "No contacts yet. Be the first to submit!"
 msgstr "Nenhum contato ainda. Seja o primeiro a enviar!"
 
-#: templates/errors/403.html:3 templates/errors/403.html:32
-msgid "Access Denied"
-msgstr "Acesso Negado"
-
-#: templates/errors/403.html:35
-msgid "You don't have permission to access this resource."
-msgstr "Você não tem permissão para acessar este recurso."
-
-#: templates/errors/403.html:45 templates/errors/404.html:45
-#: templates/errors/500.html:45
-msgid "Go Home"
-msgstr "Voltar ao Início"
-
-#: templates/errors/403.html:52 templates/errors/404.html:62
-msgid "Login"
-msgstr "Entrar"
-
-#: templates/errors/403.html:59
-msgid "If you believe you should have access, please contact an administrator."
+#: templates/components/_sidebar.html:27
+#: templates/components/_top_navbar.html:17
+msgid "Dashboard"
 msgstr ""
-"Se você acredita que deveria ter acesso, por favor contate um "
-"administrador."
 
-#: templates/errors/404.html:3 templates/errors/404.html:32
-msgid "Page Not Found"
-msgstr "Página Não Encontrada"
+#: templates/components/_sidebar.html:35
+msgid "Admin"
+msgstr ""
 
-#: templates/errors/404.html:35
-msgid "Sorry, the page you are looking for does not exist or has been moved."
-msgstr "Desculpe, a página que você está procurando não existe ou foi movida."
-
-#: templates/errors/404.html:52
-msgid "Go Back"
-msgstr "Voltar"
-
-#: templates/errors/404.html:58
-msgid "Here are some helpful links instead:"
-msgstr "Aqui estão alguns links úteis:"
-
-#: templates/errors/404.html:60
+#: templates/components/_sidebar.html:48
 msgid "Contacts"
 msgstr "Contatos"
 
-#: templates/errors/404.html:61
+#: templates/components/_sidebar.html:60 templates/pages/admin/cars.html:3
+#: templates/pages/admin/cars.html:9
+msgid "Cars Inventory"
+msgstr "Diretório de Contatos"
+
+#: templates/components/_sidebar.html:72
+msgid "Users"
+msgstr ""
+
+#: templates/components/_sidebar.html:80
+msgid "Demo"
+msgstr ""
+
+#: templates/components/_sidebar.html:93
 msgid "Books"
 msgstr "Livros"
 
-#: templates/errors/500.html:3 templates/errors/500.html:32
-msgid "Internal Server Error"
-msgstr "Erro Interno do Servidor"
+#: templates/components/_top_navbar.html:55
+#, fuzzy
+msgid "Logged In User"
+msgstr "Entrar"
 
-#: templates/errors/500.html:35
-msgid "Oops! Something went wrong on our end. We're working to fix it."
-msgstr "Ops! Algo deu errado do nosso lado. Estamos trabalhando para corrigir."
+#: templates/components/_top_navbar.html:57
+#, fuzzy
+msgid "Guest"
+msgstr "Limpar"
 
-#: templates/errors/500.html:52
-msgid "Try Again"
-msgstr "Tentar Novamente"
+#: templates/components/_top_navbar.html:66
+#, fuzzy
+msgid "Theme"
+msgstr "Item"
 
-#: templates/errors/500.html:59
-msgid "If this problem persists, please contact support."
-msgstr "Se este problema persistir, por favor contate o suporte."
+#: templates/components/_top_navbar.html:74
+msgid "Language"
+msgstr ""
 
-#: templates/pages/books.html:3 templates/pages/books.html:14
+#: templates/components/_top_navbar.html:86
+msgid "Sign out"
+msgstr ""
+
+#: templates/pages/books.html:3 templates/pages/books.html:9
 msgid "Books Library"
 msgstr "Biblioteca de Livros"
 
-#: templates/pages/books.html:15
+#: templates/pages/books.html:10
 msgid "Universal Grid Engine Demo"
 msgstr "Demonstração do Motor de Grade Universal"
 
-#: templates/pages/auth/register.html:36 templates/pages/books.html:21
+#: templates/pages/auth/register.html:36 templates/pages/books.html:16
 msgid "Back to Home"
 msgstr "Voltar ao Início"
 
-#: templates/pages/books.html:29
+#: templates/pages/books.html:24
 msgid "Book"
 msgstr "Livro"
 
-#: templates/pages/admin/cars.html:45 templates/pages/books.html:47
+#: templates/pages/admin/cars.html:40 templates/pages/books.html:42
 msgid "Actions"
 msgstr "Ação"
 
-#: templates/pages/admin/cars.html:48 templates/pages/books.html:50
+#: templates/pages/admin/cars.html:43 templates/pages/books.html:45
 #, python-brace-format
 msgid "Value must be greater than or equal to {0}"
 msgstr "O valor deve ser maior ou igual a {0}"
 
-#: templates/pages/admin/cars.html:49 templates/pages/books.html:51
+#: templates/pages/admin/cars.html:44 templates/pages/books.html:46
 #, python-brace-format
 msgid "Value must be greater than {0}"
 msgstr "O valor deve ser maior que {0}"
 
-#: templates/pages/admin/cars.html:50 templates/pages/books.html:52
+#: templates/pages/admin/cars.html:45 templates/pages/books.html:47
 #, python-brace-format
 msgid "Value must be less than or equal to {0}"
 msgstr "O valor deve ser menor ou igual a {0}"
 
-#: templates/pages/admin/cars.html:51 templates/pages/books.html:53
+#: templates/pages/admin/cars.html:46 templates/pages/books.html:48
 #, python-brace-format
 msgid "Value must be less than {0}"
 msgstr "O valor deve ser menor que {0}"
 
-#: templates/pages/admin/cars.html:53 templates/pages/books.html:55
+#: templates/pages/admin/cars.html:48 templates/pages/books.html:50
 msgid "Must be a valid number"
 msgstr "Deve ser um número válido"
 
-#: templates/pages/admin/cars.html:54 templates/pages/books.html:56
+#: templates/pages/admin/cars.html:49 templates/pages/books.html:51
 msgid "Must be a valid integer"
 msgstr "Deve ser um número inteiro válido"
 
-#: templates/pages/admin/cars.html:55 templates/pages/books.html:57
+#: templates/pages/admin/cars.html:50 templates/pages/books.html:52
 #, python-brace-format
 msgid "Must be at least {0} character(s)"
 msgstr "Deve ter pelo menos {0} caractere(s)"
 
-#: templates/pages/admin/cars.html:56 templates/pages/books.html:58
+#: templates/pages/admin/cars.html:51 templates/pages/books.html:53
 #, python-brace-format
 msgid "Must be at most {0} character(s)"
 msgstr "Deve ter no máximo {0} caractere(s)"
 
-#: templates/pages/admin/cars.html:57 templates/pages/books.html:59
+#: templates/pages/admin/cars.html:52 templates/pages/books.html:54
 msgid "Must be a valid text"
 msgstr "Deve ser um texto válido"
 
-#: templates/pages/admin/cars.html:58 templates/pages/books.html:60
+#: templates/pages/admin/cars.html:53 templates/pages/books.html:55
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: templates/pages/admin/cars.html:59 templates/pages/books.html:61
+#: templates/pages/admin/cars.html:54 templates/pages/books.html:56
 msgid "Please fix the validation errors below."
 msgstr "Por favor, corrija os erros antes de enviar."
 
-#: templates/pages/admin/cars.html:60 templates/pages/books.html:62
+#: templates/pages/admin/cars.html:55 templates/pages/books.html:57
 msgid "Record added successfully"
 msgstr "Registro adicionado com sucesso"
 
-#: templates/pages/admin/cars.html:61 templates/pages/books.html:63
+#: templates/pages/admin/cars.html:56 templates/pages/books.html:58
 msgid "Record updated successfully"
 msgstr "Registro atualizado com sucesso"
 
-#: templates/pages/admin/cars.html:62 templates/pages/books.html:64
+#: templates/pages/admin/cars.html:57 templates/pages/books.html:59
 msgid "Record deleted successfully"
 msgstr "Registro excluído com sucesso"
 
-#: templates/pages/admin/cars.html:63 templates/pages/books.html:65
+#: templates/pages/admin/cars.html:58 templates/pages/books.html:60
 msgid "Failed to add record"
 msgstr "Falha ao adicionar o registro"
 
-#: templates/pages/admin/cars.html:64 templates/pages/books.html:66
+#: templates/pages/admin/cars.html:59 templates/pages/books.html:61
 msgid "Failed to update record"
 msgstr "Falha ao atualizar o registro"
 
-#: templates/pages/admin/cars.html:65 templates/pages/books.html:67
+#: templates/pages/admin/cars.html:60 templates/pages/books.html:62
 msgid "Failed to delete record"
 msgstr "Falha ao excluir o registro"
 
-#: templates/pages/admin/cars.html:66 templates/pages/books.html:68
+#: templates/pages/admin/cars.html:61 templates/pages/books.html:63
 msgid "Network error - no response from server"
 msgstr "Erro de rede - sem resposta do servidor"
 
-#: templates/pages/admin/cars.html:67 templates/pages/books.html:69
+#: templates/pages/admin/cars.html:62 templates/pages/books.html:64
 msgid "Unknown error occurred"
 msgstr "Um erro desconhecido ocorreu"
 
-#: templates/pages/admin/cars.html:68 templates/pages/books.html:70
+#: templates/pages/admin/cars.html:63 templates/pages/books.html:65
 msgid "Validation error"
 msgstr "Erro de validação"
 
@@ -545,49 +539,39 @@ msgstr "Diretório de Contatos"
 msgid "Browse and manage all contact submissions"
 msgstr "Navegue e gerencie todos os envios de contato"
 
-#: templates/pages/index.html:9
-msgid "ContactFlow"
-msgstr "ContactFlow"
-
-#: templates/pages/index.html:10
-msgid ""
-"FastAPI + Alpine.js starter — now with Tailwind UI\n"
-"        v4"
+#: templates/pages/index.html:11
+msgid "Modern Full-Stack Starter"
 msgstr ""
 
-#: templates/pages/index.html:24
+#: templates/pages/index.html:26
 msgid "Contact us"
 msgstr "Entre em contato"
 
-#: templates/pages/admin/cars.html:3 templates/pages/admin/cars.html:14
-msgid "Cars Inventory"
-msgstr "Diretório de Contatos"
-
-#: templates/pages/admin/cars.html:15
+#: templates/pages/admin/cars.html:10
 msgid "Browse and manage vehicle inventory"
 msgstr "Navegue e gerencie todos os envios de contato"
 
-#: templates/pages/admin/cars.html:21
+#: templates/pages/admin/cars.html:16
 msgid "Back to Admin"
 msgstr "Voltar ao Início"
 
-#: templates/pages/admin/cars.html:28
+#: templates/pages/admin/cars.html:23
 msgid "Car"
 msgstr "Carro"
 
-#: templates/pages/admin/cars.html:40 templates/pages/admin/cars_form.html:10
+#: templates/pages/admin/cars.html:35 templates/pages/admin/cars_form.html:10
 msgid "Make"
 msgstr "Marca"
 
-#: templates/pages/admin/cars.html:41 templates/pages/admin/cars_form.html:29
+#: templates/pages/admin/cars.html:36 templates/pages/admin/cars_form.html:29
 msgid "Model"
 msgstr "Modelo"
 
-#: templates/pages/admin/cars.html:42 templates/pages/admin/cars_form.html:48
+#: templates/pages/admin/cars.html:37 templates/pages/admin/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
 
-#: templates/pages/admin/cars.html:44 templates/pages/admin/cars_form.html:87
+#: templates/pages/admin/cars.html:39 templates/pages/admin/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
 
@@ -603,19 +587,15 @@ msgstr "ex: Camry"
 msgid "e.g., XLE"
 msgstr "ex: XLE"
 
-#: templates/pages/admin/index.html:3 templates/pages/admin/index.html:14
+#: templates/pages/admin/index.html:3 templates/pages/admin/index.html:9
 msgid "Admin - Contacts"
 msgstr "Admin - Contatos"
 
-#: templates/pages/admin/index.html:15
-msgid "Logout"
-msgstr "Sair"
-
-#: templates/pages/admin/index.html:25
+#: templates/pages/admin/index.html:19
 msgid "Created"
 msgstr "Criado"
 
-#: templates/pages/admin/index.html:26
+#: templates/pages/admin/index.html:20
 msgid "Action"
 msgstr "Ação"
 
@@ -868,4 +848,54 @@ msgstr "Já tem uma conta? Entrar"
 
 #~ msgid "Send Magic Link"
 #~ msgstr "Enviar Link Mágico"
+
+#~ msgid "Access Denied"
+#~ msgstr "Acesso Negado"
+
+#~ msgid "You don't have permission to access this resource."
+#~ msgstr "Você não tem permissão para acessar este recurso."
+
+#~ msgid "Go Home"
+#~ msgstr "Voltar ao Início"
+
+#~ msgid "Login"
+#~ msgstr "Entrar"
+
+#~ msgid "If you believe you should have access, please contact an administrator."
+#~ msgstr ""
+#~ "Se você acredita que deveria ter "
+#~ "acesso, por favor contate um "
+#~ "administrador."
+
+#~ msgid "Page Not Found"
+#~ msgstr "Página Não Encontrada"
+
+#~ msgid "Sorry, the page you are looking for does not exist or has been moved."
+#~ msgstr "Desculpe, a página que você está procurando não existe ou foi movida."
+
+#~ msgid "Go Back"
+#~ msgstr "Voltar"
+
+#~ msgid "Here are some helpful links instead:"
+#~ msgstr "Aqui estão alguns links úteis:"
+
+#~ msgid "Internal Server Error"
+#~ msgstr "Erro Interno do Servidor"
+
+#~ msgid "Oops! Something went wrong on our end. We're working to fix it."
+#~ msgstr "Ops! Algo deu errado do nosso lado. Estamos trabalhando para corrigir."
+
+#~ msgid "Try Again"
+#~ msgstr "Tentar Novamente"
+
+#~ msgid "If this problem persists, please contact support."
+#~ msgstr "Se este problema persistir, por favor contate o suporte."
+
+#~ msgid "ContactFlow"
+#~ msgstr "ContactFlow"
+
+#~ msgid ""
+#~ "FastAPI + Alpine.js starter — now with Tailwind UI\n"
+#~ "        v4"
+#~ msgstr ""
 

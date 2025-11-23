@@ -3,13 +3,6 @@
 {% block title %}{{ _('User Management') }} - Admin - {{ super() }}{% endblock %}
 
 {% block content %}
-<!-- Header with theme and language toggles -->
-<div class="fixed top-4 right-4 z-50 flex items-center gap-3">
-    {% include "components/_language_selector.html" %}
-    {% include "components/_theme_toggle.html" %}
-    {% include "components/_logout_button.html" %}
-</div>
-
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
