@@ -754,7 +754,19 @@ async def login(
         logger.info(f"Authentication strategy returned response for {email}")
         return response.to_response()
 
-    # Redirect to check email page (for magic link)
+    # Redirect to check email page (for magic link when no response returned)
+    # Check if request wants JSON (from JavaScript) or HTML
+    accept_header = request.headers.get("accept", "")
+    if "application/json" in accept_header:
+        # Return JSON for AJAX requests
+        return JSONResponse(content={
+            "success": True,
+            "redirect": "check_email",
+            "email": email,
+            "message": _("Check your email for the login link")
+        })
+
+    # Return HTML template for direct form submissions
     return templates.TemplateResponse(
         "pages/auth/check_email.html", {
             "request": request,
@@ -818,6 +830,11 @@ async def verify_otp(
 
     # Check if user is pending approval
     if user.role == UserRole.PENDING:
+        # Mark email as verified even for pending users (they verified OTP)
+        if not user.email_verified:
+            user.email_verified = True
+            await session.commit()
+
         return templates.TemplateResponse(
             "pages/auth/verify_otp.html",
             {
@@ -827,6 +844,11 @@ async def verify_otp(
                 "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
             },
         )
+
+    # Mark email as verified for active users
+    if not user.email_verified:
+        user.email_verified = True
+        await session.commit()
 
     # Generate JWT token using fastapi-users strategy
     from .users import get_jwt_strategy

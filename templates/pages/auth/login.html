@@ -295,7 +295,9 @@
                     }
 
                     const response = await axios.post('/auth/login', formData, {
-                        headers: { 'Accept': 'text/html' }
+                        headers: {
+                            'Accept': 'application/json'  // Request JSON for programmatic handling
+                        }
                     });
 
                     // Handle different response types
@@ -306,21 +308,33 @@
                         if (data.redirect === 'verify_otp') {
                             // Redirect to OTP verification page with email
                             window.location.href = `/auth/verify-otp?email=${encodeURIComponent(data.email)}`;
+                        } else if (data.redirect === 'check_email') {
+                            // Redirect to check email page (for magic link)
+                            window.location.href = `/auth/login?email=${encodeURIComponent(data.email)}`;
+                            // Show success message
+                            if (data.message) {
+                                window.showToast(data.message, 'success');
+                            }
                         } else {
                             window.location.href = data.redirect;
                         }
+                    } else if (data.success && data.message) {
+                        // Show message to user (e.g., "pending approval")
+                        window.showToast(data.message, 'info');
+                        // Clear form to prevent re-submission
+                        this.form.email = '';
+                        this.form.password = '';
                     } else if (response.status === 200 && response.request.responseURL) {
                         // Server redirects to check_email page on success
                         window.location.href = response.request.responseURL;
-                    } else {
-                        // For JSON responses
-                        if (data.message) {
-                            window.showToast(data.message, 'info');
-                        }
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    window.showToast('An error occurred. Please try again.', 'error');
+                    if (error.response && error.response.data && error.response.data.detail) {
+                        window.showToast(error.response.data.detail, 'error');
+                    } else {
+                        window.showToast('An error occurred. Please try again.', 'error');
+                    }
                 } finally {
                     this.loading = false;
                 }

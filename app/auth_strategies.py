@@ -143,15 +143,11 @@ class OTPHandler:
             # Still return success to prevent enumeration
             return OTPVerificationResponse(request.email)
 
-        # Check if user is pending approval - do NOT send OTP
-        if user.role == UserRole.PENDING:
-            logger.info(f"OTPHandler: User PENDING for {request.email} - returning approval message")
-            return SuccessResponse(_("Your account is pending admin approval. You will be notified once approved."))
-
-        # Generate and send OTP code
+        # Generate and send OTP code (even for PENDING users - they verify email first)
+        # The verification page will show the approval message after OTP is validated
         try:
             from .repository import create_otp_code
-            logger.info(f"Creating OTP code for email: {request.email}")
+            logger.info(f"Creating OTP code for email: {request.email} (role={user.role})")
             otp_code = await create_otp_code(request.session, request.email)
             logger.info(f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}")
 
@@ -164,6 +160,7 @@ class OTPHandler:
                 logger.error(f"OTP email failed to send to {request.email} - email_sent returned False")
 
             # Return response indicating OTP verification page
+            # PENDING users will see approval message on verification page
             return OTPVerificationResponse(request.email)
 
         except Exception as e:
