@@ -27,6 +27,25 @@ This is a **FastAPI + Alpine.js + Tailwind CSS** starter template with full i18n
 - **After adding new strings**: Run `./translate.sh refresh` → edit `.po` files → `./translate.sh compile`
 - Translation files live in `translations/{locale}/LC_MESSAGES/messages.po`
 
+### 2.5 Model-Schema Separation (Development Contract)
+- **MANDATORY**: Maintain strict separation between database models (`app/models/`) and API schemas (`app/schemas.py`)
+- **Database Models** (`app/models/`): SQLModel classes inheriting from `SQLModel, table=True`
+  - Handle data persistence, database constraints, foreign keys, indexes
+  - Contain fields not exposed in APIs (e.g., internal timestamps, audit fields)
+  - Example: `User(SQLModel, table=True)` with hashed_password, is_superuser fields
+- **API Schemas** (`app/schemas.py`): Pure Pydantic classes inheriting from `BaseModel`
+  - Define API request/response contracts and validation logic
+  - Control data shapes for create vs read operations (e.g., exclude sensitive fields)
+  - Contain API-specific validation with i18n-friendly error messages
+  - Example: `UserRead(BaseModel)` with selected fields and `model_config = {"from_attributes": True}`
+- **Why separated**:
+  - Single Responsibility: Models handle persistence, schemas handle API contracts
+  - Flexibility: Different validation rules for database vs API (stricter API validation)
+  - Security: Exclude sensitive database fields from API responses
+  - Evolution: Change API contracts without touching database schema (and vice versa)
+- **Critical principle**: Always use schemas in FastAPI endpoints, never raw database models or `dict`
+- **Base pattern**: Models use `{ModelName}Base(SQLModel)` classes for shared validation logic between models and schemas
+
 ### 3. Validation Strategy (Dual Client + Server)
 - **Server-side**: Pydantic schemas in `app/schemas.py` with custom validators
 - **Client-side**: Alpine.js `validate()` functions mirror server rules (see `_form_alpine.html`)

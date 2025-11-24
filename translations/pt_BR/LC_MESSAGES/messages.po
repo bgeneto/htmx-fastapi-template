@@ -1257,7 +1257,7 @@ msgstr "Verificar Código"
 
 #: templates/pages/auth/verify_otp.html:6
 msgid "Verify Your Code"
-msgstr "Verificar seu Código"
+msgstr "Verificar Código"
 
 #: templates/pages/auth/verify_otp.html:7
 msgid "We sent a 6-digit code to"

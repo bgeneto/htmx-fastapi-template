@@ -3,6 +3,7 @@ import secrets
 from datetime import datetime, timedelta
 from typing import AsyncGenerator, Optional
 
+import sqlalchemy as sa
 from sqlalchemy import desc  # type: ignore[import]
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -409,18 +410,13 @@ async def create_otp_code(session: AsyncSession, email: str) -> str:
     import random
     import string
 
+    # Always delete ALL existing OTP codes for this email to prevent duplicates
+    await session.exec(
+        sa.delete(OTPCode).where(OTPCode.email == email.lower())
+    )
+
     # Generate 6-digit numeric code
     otp_code = ''.join(random.choices(string.digits, k=6))
-
-    # Delete any existing unused OTP codes for this email
-    old_otps_result = await session.exec(
-        select(OTPCode).where(
-            OTPCode.email == email.lower(),
-            OTPCode.used_at.is_(None)
-        )
-    )
-    for old_otp in old_otps_result:
-        session.delete(old_otp)
 
     # Create new OTP code
     expires_at = datetime.utcnow() + timedelta(minutes=settings.OTP_EXPIRY_MINUTES)
@@ -439,18 +435,23 @@ async def create_otp_code(session: AsyncSession, email: str) -> str:
 
 async def verify_otp_code(session: AsyncSession, email: str, provided_code: str) -> bool:
     """Verify the OTP code for the given email"""
-    # Get valid OTP code for this email
+    # Get valid OTP codes for this email, ordered by creation date (latest first)
     result = await session.exec(
         select(OTPCode).where(
             OTPCode.email == email.lower(),
             OTPCode.used_at.is_(None),
             OTPCode.expires_at > datetime.utcnow()
-        )
+        ).order_by(desc(OTPCode.created_at))
     )
-    otp = result.one_or_none()
+    otp = result.first()
 
     if not otp:
         return False
+
+    # Log warning if multiple OTPs found (should not happen but helps debug)
+    all_otps = result.all()
+    if len(all_otps) > 1:
+        logger.warning(f"Found {len(all_otps)} valid OTP codes for email: {email}. Using most recent.")
 
     # Increment attempts
     otp.attempts += 1
