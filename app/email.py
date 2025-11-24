@@ -107,35 +107,71 @@ async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
     Returns:
         True if email sent successfully, False otherwise
     """
-    subject = "Your login link"
-    preheader_text = f"Click your login link from {settings.app_name} - expires in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes"
+    logger.info(
+        f"=== send_magic_link() CALLED === email={email}, full_name={full_name}"
+    )
+
+    subject = _("Your login link")
+    preheader_text = _("Click to log in to {app_name} - expires in {minutes} minutes").format(
+        app_name=settings.app_name, minutes=settings.MAGIC_LINK_EXPIRY_MINUTES
+    )
 
     content_body = f"""
         <tr>
-            <td style="padding: 40px 30px; text-align: center; background-color: #ffffff;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: normal; color: #2563eb;">Login to {settings.app_name}</h2>
-                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #333;">
-                    Hi {full_name},<br><br>
-                    Click the button below to log in to your account. This link will expire in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes.
+            <td style="padding: 40px 30px; background-color: #ffffff;">
+                <!-- Greeting -->
+                <h2 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 600; color: #1f2937; text-align: center;">{_("Welcome Back")}</h2>
+                <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #6b7280; text-align: center;">
+                    {_("Hi")} {full_name},
                 </p>
+
+                <!-- Instructions -->
+                <p style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #374151; text-align: center;">
+                    {_("Click the button below to log in to your {app_name} account:").format(app_name=settings.app_name)}
+                </p>
+
+                <!-- CTA Button -->
                 <table border="0" cellspacing="0" cellpadding="0" style="margin: 30px auto;">
                     <tr>
-                        <td style="border-radius: 5px; background-color: #2563eb;" bgcolor="#2563eb">
-                            <a href="{magic_link}" style="padding: 12px 30px; border: 1px solid #2563eb; border-radius: 5px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; text-transform: capitalize;" class="mobile-font-size">
-                                Log In
+                        <td style="border-radius: 6px; background-color: #2563eb;" bgcolor="#2563eb">
+                            <a href="{magic_link}" style="padding: 14px 32px; border: 1px solid #2563eb; border-radius: 6px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; text-decoration: none;" class="mobile-font-size">
+                                {_("Log In Now")}
                             </a>
                         </td>
                     </tr>
                 </table>
-                <p style="margin: 30px 0 0 0; font-size: 14px; line-height: 1.6; color: #666;">
-                    Or copy and paste this link into your browser:<br>
-                    <a href="{magic_link}" style="color: #2563eb; word-break: break-all;">{magic_link}</a>
+
+                <!-- Expiry Notice -->
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #92400e;">
+                        ⏱️ {_("Important")}:
+                    </p>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
+                                • {_("This link will expire in {minutes} minutes").format(minutes=settings.MAGIC_LINK_EXPIRY_MINUTES)}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 14px; color: #b45309; line-height: 1.5;">
+                                • {_("Keep this link secure")}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Fallback Link -->
+                <p style="margin: 20px 0 0 0; font-size: 14px; line-height: 1.6; color: #6b7280; text-align: center;">
+                    {_("Or copy and paste this link in your browser:")}<br>
+                    <a href="{magic_link}" style="color: #2563eb; word-break: break-all; font-size: 13px;">{magic_link}</a>
                 </p>
-                <hr style="border: none; border-top: 1px solid #eeeeee; margin: 40px 0;">
-                <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #666;">
-                    <strong>Security note:</strong> If you didn't request this login link, you can safely ignore this email.<br>
-                    Links expire quickly for your security.
-                </p>
+
+                <!-- Security Notice -->
+                <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 20px 0 0 0;">
+                    <p style="margin: 0; font-size: 13px; color: #166534; line-height: 1.5;">
+                        <strong>✓ {_("Security tip:")}</strong> {_("If you didn't request this login link, you can safely ignore this email. Your account remains secure.")}
+                    </p>
+                </div>
             </td>
         </tr>
     """
@@ -144,9 +180,16 @@ async def send_magic_link(email: str, full_name: str, magic_link: str) -> bool:
         preheader_text, subject, content_body, sender_footer=True
     )
 
+    login_text = _("Click here to log in:")
+    expiry_text = _("This link will expire in {minutes} minutes").format(
+        minutes=settings.MAGIC_LINK_EXPIRY_MINUTES
+    )
+    security_text = _("If you didn't request this link, you can ignore this email.")
+    link_label = _("Login link:")
+
     plain_text = _create_plain_text_version(
-        f"{subject} - Hi {full_name}, click this link to log in: {magic_link} (expires in {settings.MAGIC_LINK_EXPIRY_MINUTES} minutes)",
-        f"Login link: {magic_link}",
+        f"{subject} - {_('Hi')} {full_name}, {login_text}: {magic_link}. {expiry_text}. {security_text}",
+        f"{link_label}: {magic_link}",
     )
 
     # Create escape URL for List-Unsubscribe header

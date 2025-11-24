@@ -306,15 +306,23 @@
                     if (data.redirect) {
                         // Handle OTP redirect
                         if (data.redirect === 'verify_otp') {
-                            // Redirect to OTP verification page with email
-                            window.location.href = `/auth/verify-otp?email=${encodeURIComponent(data.email)}`;
-                        } else if (data.redirect === 'check_email') {
-                            // Redirect to check email page (for magic link)
-                            window.location.href = `/auth/login?email=${encodeURIComponent(data.email)}`;
-                            // Show success message
+                            // Show success message before redirecting
                             if (data.message) {
                                 window.showToast(data.message, 'success');
                             }
+                            // Small delay to allow toast to display before redirect
+                            setTimeout(() => {
+                                window.location.href = `/auth/verify-otp?email=${encodeURIComponent(data.email)}`;
+                            }, 800);
+                        } else if (data.redirect === 'check_email') {
+                            // Show success message for magic link
+                            if (data.message) {
+                                window.showToast(data.message, 'success');
+                            }
+                            // Small delay to allow toast to display before redirect
+                            setTimeout(() => {
+                                window.location.href = `/auth/login?email=${encodeURIComponent(data.email)}`;
+                            }, 800);
                         } else {
                             window.location.href = data.redirect;
                         }
@@ -330,10 +338,26 @@
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    if (error.response && error.response.data && error.response.data.detail) {
-                        window.showToast(error.response.data.detail, 'error');
+                    if (error.response && error.response.data) {
+                        // Check for field errors first
+                        if (error.response.data.field_errors) {
+                            const fieldErrors = error.response.data.field_errors;
+                            if (fieldErrors.email) {
+                                this.errors.email = fieldErrors.email;
+                            }
+                            if (fieldErrors.password) {
+                                this.errors.password = fieldErrors.password;
+                            }
+                            window.showToast(error.response.data.message || this.i18n.fixErrors, 'error');
+                        } else if (error.response.data.detail) {
+                            window.showToast(error.response.data.detail, 'error');
+                        } else if (error.response.data.message) {
+                            window.showToast(error.response.data.message, 'error');
+                        } else {
+                            window.showToast('{{ _("An error occurred. Please try again.") }}', 'error');
+                        }
                     } else {
-                        window.showToast('An error occurred. Please try again.', 'error');
+                        window.showToast('{{ _("An error occurred. Please try again.") }}', 'error');
                     }
                 } finally {
                     this.loading = false;

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 22:48-0300\n"
+"POT-Creation-Date: 2025-11-23 23:03-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -41,50 +41,113 @@ msgstr "Código OTP enviado com sucesso"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/email.py:306
+#: app/email.py:114
+#, fuzzy
+msgid "Your login link"
+msgstr "Verifique seu e-mail para o link de login"
+
+#: app/email.py:115
+#, fuzzy, python-brace-format
+msgid "Click to log in to {app_name} - expires in {minutes} minutes"
+msgstr "O código expirará em {minutes} minutos"
+
+#: app/email.py:123 templates/pages/auth/login.html:6
+msgid "Welcome Back"
+msgstr "Bem-vindo de Volta"
+
+#: app/email.py:125 app/email.py:191 app/email.py:360 app/email.py:423
+msgid "Hi"
+msgstr "Olá"
+
+#: app/email.py:130
+#, python-brace-format
+msgid "Click the button below to log in to your {app_name} account:"
+msgstr ""
+
+#: app/email.py:138
+#, fuzzy
+msgid "Log In Now"
+msgstr "Entrar"
+
+#: app/email.py:147 app/email.py:380
+msgid "Important"
+msgstr "Importante"
+
+#: app/email.py:152 app/email.py:184
+#, fuzzy, python-brace-format
+msgid "This link will expire in {minutes} minutes"
+msgstr "O código expirará em {minutes} minutos"
+
+#: app/email.py:157
+msgid "Keep this link secure"
+msgstr ""
+
+#: app/email.py:165
+msgid "Or copy and paste this link in your browser:"
+msgstr ""
+
+#: app/email.py:172 app/email.py:404
+msgid "Security tip:"
+msgstr "Dica de Segurança"
+
+#: app/email.py:172
+#, fuzzy
+msgid ""
+"If you didn't request this login link, you can safely ignore this email. "
+"Your account remains secure."
+msgstr ""
+"Se você não solicitou este código de verificação, você pode ignorar "
+"seguramente este e-mail. Sua conta permanece segura."
+
+#: app/email.py:183
+#, fuzzy
+msgid "Click here to log in:"
+msgstr "Voltar ao Início"
+
+#: app/email.py:187
+#, fuzzy
+msgid "If you didn't request this link, you can ignore this email."
+msgstr ""
+"Se você não solicitou este código de verificação, você pode ignorar "
+"seguramente este e-mail. Sua conta permanece segura."
+
+#: app/email.py:188
+#, fuzzy
+msgid "Login link:"
+msgstr "Entrar"
+
+#: app/email.py:349
 msgid "Your verification code"
 msgstr "Seu código de verificação"
 
-#: app/email.py:307
+#: app/email.py:350
 #, python-brace-format
 msgid "Enter this 6-digit code to log in to {app_name}"
 msgstr ""
 
-#: app/email.py:315
+#: app/email.py:358
 msgid "Verification Required"
 msgstr "Verificação Necessária"
 
-#: app/email.py:317 app/email.py:380
-msgid "Hi"
-msgstr "Olá"
-
-#: app/email.py:322
+#: app/email.py:365
 #, python-brace-format
 msgid "To complete your login to {app_name}, please enter this verification code:"
 msgstr ""
 
-#: app/email.py:337
-msgid "Important"
-msgstr "Importante"
-
-#: app/email.py:342 app/email.py:373
+#: app/email.py:385 app/email.py:416
 #, python-brace-format
 msgid "This code will expire in {minutes} minutes"
 msgstr "O código expirará em {minutes} minutos"
 
-#: app/email.py:347 templates/pages/auth/verify_otp.html:78
+#: app/email.py:390 templates/pages/auth/verify_otp.html:78
 msgid "Never share this code with anyone"
 msgstr "Nunca compartilhe este código com ninguém"
 
-#: app/email.py:352
+#: app/email.py:395
 msgid "Enter the code exactly as shown"
 msgstr "Entrar o código exatamente como mostrado"
 
-#: app/email.py:361
-msgid "Security tip:"
-msgstr "Dica de Segurança"
-
-#: app/email.py:361
+#: app/email.py:404
 msgid ""
 "If you didn't request this verification code, you can safely ignore this "
 "email. Your account remains secure."
@@ -92,55 +155,55 @@ msgstr ""
 "Se você não solicitou este código de verificação, você pode ignorar "
 "seguramente este e-mail. Sua conta permanece segura."
 
-#: app/email.py:372
+#: app/email.py:415
 msgid "your verification code is:"
 msgstr "Seu código de verificação é:"
 
-#: app/email.py:376
+#: app/email.py:419
 msgid "Never share this code."
 msgstr "Nunca compartilhe este código com ninguém"
 
-#: app/email.py:377
+#: app/email.py:420
 msgid "Verification code:"
 msgstr "Código de Verificação"
 
-#: app/email.py:433
+#: app/email.py:476
 msgid "Your account has been approved"
 msgstr "Sua conta foi aprovada"
 
-#: app/email.py:434
+#: app/email.py:477
 #, python-brace-format
 msgid "Welcome to {app_name} - your account is now approved!"
 msgstr "Bem-vindo(a) ao {app_name} - sua conta foi aprovada!"
 
-#: app/email.py:441
+#: app/email.py:484
 msgid "Account Approved! 🎉"
 msgstr "Conta Aprovada! 🎉"
 
-#: app/email.py:443
+#: app/email.py:486
 msgid "Congratulations"
 msgstr "Parabéns"
 
-#: app/email.py:444
+#: app/email.py:487
 #, python-brace-format
 msgid "Your account has been approved and you can now log in to {app_name}."
 msgstr "Sua conta foi aprovada e você pode agora fazer login no {app_name}."
 
-#: app/email.py:451
+#: app/email.py:494
 msgid "Get Started Now"
 msgstr "Comece Agora"
 
-#: app/email.py:458
+#: app/email.py:501
 msgid "You can now access all features by entering your email address at:"
 msgstr ""
 "Agora você pode acessar todas as funcionalidades entrando no seu endereço"
 " de e-mail em:"
 
-#: app/email.py:464 templates/pages/auth/pending_approval.html:61
+#: app/email.py:507 templates/pages/auth/pending_approval.html:61
 msgid "What happens next?"
 msgstr "O que acontece agora?"
 
-#: app/email.py:465
+#: app/email.py:508
 msgid ""
 "You can now request magic links for passwordless login, upload files, and"
 " access your account securely. We use passwordless authentication for "
@@ -150,20 +213,20 @@ msgstr ""
 "arquivos e acessar sua conta com segurança. Usamos autenticação sem senha"
 " para sua segurança - sem senhas necessárias!"
 
-#: app/email.py:475
+#: app/email.py:518
 msgid "Great news"
 msgstr "Boa notícia"
 
-#: app/email.py:477
+#: app/email.py:520
 #, python-brace-format
 msgid "Your account has been approved and you can now login to {app_name}"
 msgstr "Sua conta foi aprovada e você pode agora fazer login no {app_name}"
 
-#: app/email.py:479
+#: app/email.py:522
 msgid "Get started"
 msgstr "Comece agora"
 
-#: app/email.py:480
+#: app/email.py:523
 msgid "Login to your account"
 msgstr "Faça login na sua conta"
 
@@ -1127,10 +1190,6 @@ msgstr "Conta Ativa"
 #: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
 msgid "Log In"
 msgstr "Entrar"
-
-#: templates/pages/auth/login.html:6
-msgid "Welcome Back"
-msgstr "Bem-vindo de Volta"
 
 #: templates/pages/auth/login.html:8
 msgid "Enter your email to receive a verification code"
