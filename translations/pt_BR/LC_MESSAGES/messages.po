@@ -330,7 +330,7 @@ msgstr "Usuário atualizado com sucesso"
 
 #: app/models.py:103
 msgid "Year must be after 1886"
-msgstr ""
+msgstr "O ano deve ser maior que 1886"
 
 #: app/models.py:111
 msgid "Price must be greater than 0"

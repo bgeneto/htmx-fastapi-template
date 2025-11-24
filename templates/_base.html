@@ -162,16 +162,29 @@
                 collapsed: false,
                 dragging: false,
                 storageKey: key,
+                collapsedKey: key + '_isCollapsed',
 
                 init() {
+                    // Restore collapsed state
+                    const isCollapsed = localStorage.getItem(this.collapsedKey) === 'true';
+                    this.collapsed = isCollapsed;
+
+                    // Restore width
                     const saved = localStorage.getItem(this.storageKey);
+                    let px = defaultWidth;
+                    
                     if (saved) {
-                        const px = this.clamp(parseInt(saved, 10));
-                        this.sidebarWidth = px;
-                        document.documentElement.style.setProperty('--sidebar-width', px + 'px');
-                    } else {
-                        document.documentElement.style.setProperty('--sidebar-width', defaultWidth + 'px');
+                        px = this.clamp(parseInt(saved, 10));
                     }
+
+                    if (this.collapsed) {
+                        this._saved = px; // Remember the expanded width
+                        this.sidebarWidth = 56;
+                    } else {
+                        this.sidebarWidth = px;
+                    }
+                    
+                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
                 },
 
                 clamp(w) {
@@ -217,15 +230,29 @@
 
                 toggleCollapse() {
                     this.collapsed = !this.collapsed;
+                    localStorage.setItem(this.collapsedKey, this.collapsed);
+
                     if (this.collapsed) {
                         this._saved = this.sidebarWidth;
                         this.sidebarWidth = 56;
+                        // Do NOT save the collapsed width (56) to the main storageKey
+                        // so we preserve the user's preferred expanded width
                     } else {
-                        this.sidebarWidth = this.clamp(this._saved ?? this.sidebarWidth);
+                        // Restore width
+                        let targetWidth = this._saved;
+                        
+                        // Fallback to storage if _saved is missing (shouldn't happen often if init works, but good for safety)
+                        if (!targetWidth) {
+                             const saved = localStorage.getItem(this.storageKey);
+                             if (saved) targetWidth = parseInt(saved, 10);
+                        }
+                        
+                        this.sidebarWidth = this.clamp(targetWidth ?? defaultWidth);
+                        // Save the restored width to be sure
+                        localStorage.setItem(this.storageKey, this.sidebarWidth);
                     }
 
                     document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
-                    localStorage.setItem(this.storageKey, this.sidebarWidth);
                 },
 
                 handleKeydown(e) {
