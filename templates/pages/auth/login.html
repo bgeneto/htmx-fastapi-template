@@ -28,6 +28,49 @@
                 </div>
             {% endif %}
             <div x-data="loginForm()">
+                <!-- Success Alert -->
+                <div x-show="successMessage"
+                     x-transition
+                     class="mb-6 p-4 rounded-lg border-l-4 border-green-600 bg-green-50 dark:bg-green-900/20 flex items-start gap-3">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="font-semibold text-green-800 dark:text-green-200" x-text="successMessage"></p>
+                    </div>
+                    <button @click="successMessage = ''"
+                            class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Error Alert -->
+                <div x-show="errorMessage"
+                     x-transition
+                     class="mb-6 p-4 rounded-lg border-l-4 border-red-600 bg-red-50 dark:bg-red-900/20 flex items-start gap-3">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="font-semibold text-red-800 dark:text-red-200" x-text="errorMessage"></p>
+                    </div>
+                    <button @click="errorMessage = ''"
+                            class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
                 <form @submit.prevent="submitForm" novalidate class="space-y-6">
                     {% if login_method == 'classic' %}
                         <!-- Classic login with password -->
@@ -229,6 +272,8 @@
                 password: ''
             },
             loading: false,
+            successMessage: '',
+            errorMessage: '',
 
             i18n: {
                 emailRequired: "{{ _('Email is required') }}",
@@ -272,11 +317,13 @@
 
             async submitForm() {
                 if (!this.validateAll()) {
-                    window.showToast(this.i18n.fixErrors, 'error');
+                    this.errorMessage = this.i18n.fixErrors;
                     return;
                 }
 
                 this.loading = true;
+                this.successMessage = '';
+                this.errorMessage = '';
 
                 try {
                     const formData = new FormData();
@@ -308,6 +355,7 @@
                         if (data.redirect === 'verify_otp') {
                             // Show success message before redirecting
                             if (data.message) {
+                                this.successMessage = data.message;
                                 window.showToast(data.message, 'success');
                             }
                             // Small delay to allow toast to display before redirect
@@ -317,6 +365,7 @@
                         } else if (data.redirect === 'check_email') {
                             // Show success message for magic link
                             if (data.message) {
+                                this.successMessage = data.message;
                                 window.showToast(data.message, 'success');
                             }
                             // Small delay to allow toast to display before redirect
@@ -328,6 +377,7 @@
                         }
                     } else if (data.success && data.message) {
                         // Show message to user (e.g., "pending approval")
+                        this.successMessage = data.message;
                         window.showToast(data.message, 'info');
                         // Clear form to prevent re-submission
                         this.form.email = '';
@@ -348,16 +398,21 @@
                             if (fieldErrors.password) {
                                 this.errors.password = fieldErrors.password;
                             }
-                            window.showToast(error.response.data.message || this.i18n.fixErrors, 'error');
+                            this.errorMessage = error.response.data.message || this.i18n.fixErrors;
+                            window.showToast(this.errorMessage, 'error');
                         } else if (error.response.data.detail) {
-                            window.showToast(error.response.data.detail, 'error');
+                            this.errorMessage = error.response.data.detail;
+                            window.showToast(this.errorMessage, 'error');
                         } else if (error.response.data.message) {
-                            window.showToast(error.response.data.message, 'error');
+                            this.errorMessage = error.response.data.message;
+                            window.showToast(this.errorMessage, 'error');
                         } else {
-                            window.showToast('{{ _("An error occurred. Please try again.") }}', 'error');
+                            this.errorMessage = '{{ _("An error occurred. Please try again.") }}';
+                            window.showToast(this.errorMessage, 'error');
                         }
                     } else {
-                        window.showToast('{{ _("An error occurred. Please try again.") }}', 'error');
+                        this.errorMessage = '{{ _("An error occurred. Please try again.") }}';
+                        window.showToast(this.errorMessage, 'error');
                     }
                 } finally {
                     this.loading = false;
