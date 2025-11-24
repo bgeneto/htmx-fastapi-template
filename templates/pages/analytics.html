@@ -1,0 +1,190 @@
+{% extends "_base.html" %}
+{% block title %}{{ _("Analytics Dashboard") }}{% endblock %}
+{% block content %}
+    <div class="max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _("Analytics Dashboard") }}</h1>
+                <p class="text-gray-600 dark:text-gray-400">{{ _("Overview of your application data and statistics") }}</p>
+            </div>
+            <div x-data="analyticsDashboard()" x-init="init()" class="space-y-6">
+                <!-- Stats Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Users Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ _("Users") }}</p>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white"
+                                   x-text="stats.totalUsers || '...'"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                    <span class="text-green-600 dark:text-green-400"
+                                          x-text="'+' + (stats.activeUsers || 0) + ' {{ _("active this week") }}'"></span>
+                                </p>
+                            </div>
+                            <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-300"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cars Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ _("Cars") }}</p>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white"
+                                   x-text="stats.totalCars || '...'"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                    <span x-text="(stats.carsThisMonth || 0) + ' {{ _("added this month") }}'"></span>
+                                </p>
+                            </div>
+                            <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+                                <svg class="w-6 h-6 text-green-600 dark:text-green-300"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Books Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ _("Books") }}</p>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white"
+                                   x-text="stats.totalBooks || '...'"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                    <span x-text="(stats.booksThisMonth || 0) + ' {{ _("added this month") }}'"></span>
+                                </p>
+                            </div>
+                            <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-300"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Loading State -->
+                <div x-show="loading" class="flex justify-center items-center py-12">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400"></div>
+                    <span class="ml-2 text-gray-600 dark:text-gray-400">{{ _("Loading analytics...") }}</span>
+                </div>
+                <!-- Error State -->
+                <div x-show="error"
+                     x-cloak
+                     class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        <span class="text-red-700 dark:text-red-300" x-text="error"></span>
+                    </div>
+                </div>
+                <!-- Quick Actions -->
+                <div x-show="!loading && !error"
+                     x-cloak
+                     class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{{ _("Quick Actions") }}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <a href="/admin/users"
+                           class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                </path>
+                            </svg>
+                            {{ _("Manage Users") }}
+                        </a>
+                        <a href="/cars"
+                           class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                            {{ _("View Cars") }}
+                        </a>
+                        <a href="/books"
+                           class="inline-flex items-center justify-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                </path>
+                            </svg>
+                            {{ _("View Books") }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function analyticsDashboard() {
+        return {
+            loading: true,
+            error: null,
+            stats: {
+                totalUsers: 0,
+                activeUsers: 0,
+                totalCars: 0,
+                carsThisMonth: 0,
+                totalBooks: 0,
+                booksThisMonth: 0
+            },
+
+            async init() {
+                await this.loadStats();
+            },
+
+            async loadStats() {
+                this.loading = true;
+                this.error = null;
+
+                try {
+                    const response = await axios.get('/api/analytics/stats');
+
+                    if (response.data) {
+                        this.stats = {
+                            totalUsers: response.data.users?.total || 0,
+                            activeUsers: response.data.users?.activeThisWeek || 0,
+                            totalCars: response.data.cars?.total || 0,
+                            carsThisMonth: response.data.cars?.thisMonth || 0,
+                            totalBooks: response.data.books?.total || 0,
+                            booksThisMonth: response.data.books?.thisMonth || 0
+                        };
+                    }
+                } catch (error) {
+                    console.error('Failed to load analytics:', error);
+                    this.error = "{{ _('Failed to load analytics data') }}";
+                } finally {
+                    this.loading = false;
+                }
+            }
+        };
+    }
+    </script>
+{% endblock %}

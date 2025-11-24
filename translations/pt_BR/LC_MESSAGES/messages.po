@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 18:27-0300\n"
+"POT-Creation-Date: 2025-11-23 21:47-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -41,35 +41,51 @@ msgstr "Código OTP enviado com sucesso"
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
-#: app/email.py:300
+#: app/email.py:306
 msgid "Your verification code"
 msgstr "Seu código de verificação"
 
 #: app/email.py:307
+#, python-brace-format
+msgid "Enter this 6-digit code to log in to {app_name}"
+msgstr ""
+
+#: app/email.py:315
 msgid "Verification Required"
 msgstr "Verificação Necessária"
 
-#: app/email.py:309 app/email.py:370
+#: app/email.py:317 app/email.py:380
 msgid "Hi"
 msgstr "Olá"
 
-#: app/email.py:329 templates/pages/auth/verify_otp.html:74
-msgid "Important:"
+#: app/email.py:322
+#, python-brace-format
+msgid "To complete your login to {app_name}, please enter this verification code:"
+msgstr ""
+
+#: app/email.py:337
+#, fuzzy
+msgid "Important"
 msgstr "Importante:"
 
-#: app/email.py:339 templates/pages/auth/verify_otp.html:78
+#: app/email.py:342 app/email.py:373
+#, fuzzy, python-brace-format
+msgid "This code will expire in {minutes} minutes"
+msgstr "O código expirará em"
+
+#: app/email.py:347 templates/pages/auth/verify_otp.html:78
 msgid "Never share this code with anyone"
 msgstr "Nunca compartilhe este código com ninguém"
 
-#: app/email.py:344
+#: app/email.py:352
 msgid "Enter the code exactly as shown"
 msgstr "Entrar o código exatamente como mostrado"
 
-#: app/email.py:353
+#: app/email.py:361
 msgid "Security tip:"
 msgstr "Dica de Segurança"
 
-#: app/email.py:353
+#: app/email.py:361
 msgid ""
 "If you didn't request this verification code, you can safely ignore this "
 "email. Your account remains secure."
@@ -77,45 +93,55 @@ msgstr ""
 "Se você não solicitou este código de verificação, você pode ignorar "
 "seguramente este e-mail. Sua conta permanece segura."
 
-#: app/email.py:364
+#: app/email.py:372
 msgid "your verification code is:"
 msgstr "Seu código de verificação é:"
 
-#: app/email.py:366
+#: app/email.py:376
 msgid "Never share this code."
 msgstr "Nunca compartilhe este código com ninguém"
 
-#: app/email.py:367
+#: app/email.py:377
 msgid "Verification code:"
 msgstr "Código de Verificação"
 
-#: app/email.py:423
+#: app/email.py:433
 msgid "Your account has been approved"
 msgstr "Sua conta foi aprovada"
 
-#: app/email.py:429
+#: app/email.py:434
+#, fuzzy, python-brace-format
+msgid "Welcome to {app_name} - your account is now approved!"
+msgstr "Sua conta foi aprovada"
+
+#: app/email.py:441
 msgid "Account Approved! 🎉"
 msgstr "Conta Aprovada! 🎉"
 
-#: app/email.py:431
+#: app/email.py:443
 msgid "Congratulations"
 msgstr "Parabéns"
 
-#: app/email.py:439
+#: app/email.py:444
+#, fuzzy, python-brace-format
+msgid "Your account has been approved and you can now log in to {app_name}."
+msgstr "Sua conta foi aprovada"
+
+#: app/email.py:451
 msgid "Get Started Now"
 msgstr "Comece Agora"
 
-#: app/email.py:446
+#: app/email.py:458
 msgid "You can now access all features by entering your email address at:"
 msgstr ""
 "Agora você pode acessar todas as funcionalidades entrando no seu endereço"
 " de e-mail em: "
 
-#: app/email.py:452 templates/pages/auth/pending_approval.html:61
+#: app/email.py:464 templates/pages/auth/pending_approval.html:61
 msgid "What happens next?"
 msgstr "O que acontece agora?"
 
-#: app/email.py:453
+#: app/email.py:465
 msgid ""
 "You can now request magic links for passwordless login, upload files, and"
 " access your account securely. We use passwordless authentication for "
@@ -125,15 +151,20 @@ msgstr ""
 "arquivos e acessar sua conta com segurança. Usamos autenticação sem senha"
 " para sua segurança - sem senhas necessárias!"
 
-#: app/email.py:463
+#: app/email.py:475
 msgid "Great news"
 msgstr "Boa notícia"
 
-#: app/email.py:465
+#: app/email.py:477
+#, fuzzy, python-brace-format
+msgid "Your account has been approved and you can now login to {app_name}"
+msgstr "Sua conta foi aprovada"
+
+#: app/email.py:479
 msgid "Get started"
 msgstr "Comece agora"
 
-#: app/email.py:466
+#: app/email.py:480
 msgid "Login to your account"
 msgstr "Faça login na sua conta"
 
@@ -681,7 +712,7 @@ msgstr "Dashboard"
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/components/_sidebar.html:82
+#: templates/components/_sidebar.html:82 templates/pages/analytics.html:17
 msgid "Users"
 msgstr "Usuários"
 
@@ -690,10 +721,11 @@ msgid "Demo"
 msgstr "Demo"
 
 #: templates/components/_sidebar.html:102 templates/errors/404.html:55
+#: templates/pages/analytics.html:62
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_sidebar.html:115
+#: templates/components/_sidebar.html:115 templates/pages/analytics.html:40
 msgid "Cars"
 msgstr "Carros"
 
@@ -759,6 +791,51 @@ msgstr "Ocorreu um erro. Por favor, tente novamente."
 msgid "Error Code"
 msgstr "Código de Erro"
 
+#: templates/pages/analytics.html:2 templates/pages/analytics.html:7
+#, fuzzy
+msgid "Analytics Dashboard"
+msgstr "Dashboard"
+
+#: templates/pages/analytics.html:8
+msgid "Overview of your application data and statistics"
+msgstr ""
+
+#: templates/pages/analytics.html:22
+msgid "active this week"
+msgstr ""
+
+#: templates/pages/analytics.html:44 templates/pages/analytics.html:66
+msgid "added this month"
+msgstr ""
+
+#: templates/pages/analytics.html:84
+msgid "Loading analytics..."
+msgstr ""
+
+#: templates/pages/analytics.html:105
+#, fuzzy
+msgid "Quick Actions"
+msgstr "Ação"
+
+#: templates/pages/analytics.html:116
+msgid "Manage Users"
+msgstr ""
+
+#: templates/pages/analytics.html:127
+#, fuzzy
+msgid "View Cars"
+msgstr "Carros"
+
+#: templates/pages/analytics.html:138
+#, fuzzy
+msgid "View Books"
+msgstr "Livros"
+
+#: templates/pages/analytics.html:182
+#, fuzzy
+msgid "Failed to load analytics data"
+msgstr "Falha ao atualizar o perfil"
+
 #: templates/pages/books.html:3 templates/pages/books.html:9
 msgid "Books Management"
 msgstr "Gerenciamento de Livros"
@@ -808,11 +885,7 @@ msgstr "ex: Camry"
 msgid "e.g., XLE"
 msgstr "ex: XLE"
 
-#: templates/pages/contact.html:10
-msgid "Modern Full-Stack Starter"
-msgstr "Full-Stack Starter Moderno"
-
-#: templates/pages/contact.html:18
+#: templates/pages/contact.html:7
 msgid "Contact us"
 msgstr "Entre em contato"
 
@@ -1194,6 +1267,10 @@ msgstr "Enviamos um código de 6 dígitos para"
 msgid "Verification Code"
 msgstr "Código de Verificação"
 
+#: templates/pages/auth/verify_otp.html:74
+msgid "Important:"
+msgstr "Importante:"
+
 #: templates/pages/auth/verify_otp.html:76
 msgid "Enter the 6-digit code exactly as shown"
 msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
@@ -1522,4 +1599,44 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
 #~ msgid "Browse and manage all contact submissions"
 #~ msgstr "Navegue e gerencie todos os envios de contato"
+
+#~ msgid "Modern Full-Stack Starter"
+#~ msgstr "Full-Stack Starter Moderno"
+
+# Analytics Dashboard
+#~ msgid "Analytics Dashboard"
+#~ msgstr "Painel de Análise"
+
+#~ msgid "Overview of your application data and statistics"
+#~ msgstr "Visão geral dos dados e estatísticas da sua aplicação"
+
+#~ msgid "Loading analytics..."
+#~ msgstr "Carregando análises..."
+
+#~ msgid "Failed to load analytics data"
+#~ msgstr "Falha ao carregar dados de análise"
+
+#~ msgid "Quick Actions"
+#~ msgstr "Ações Rápidas"
+
+#~ msgid "Manage Users"
+#~ msgstr "Gerenciar Usuários"
+
+#~ msgid "View Cars"
+#~ msgstr "Ver Carros"
+
+#~ msgid "View Books"
+#~ msgstr "Ver Livros"
+
+#~ msgid "View Contacts"
+#~ msgstr "Ver Contatos"
+
+#~ msgid "added this month"
+#~ msgstr "adicionados este mês"
+
+#~ msgid "active this week"
+#~ msgstr "ativos esta semana"
+
+#~ msgid "this week"
+#~ msgstr "esta semana"
 
