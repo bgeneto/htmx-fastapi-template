@@ -9,7 +9,6 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates  # type: ignore[import]
-
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
@@ -17,25 +16,13 @@ from starlette.middleware.cors import CORSMiddleware
 from .config import settings
 from .db import init_db
 from .i18n import get_locale, get_translations, set_locale
-
 from .logger import get_logger
 from .models import (
     User,
-    UserCreate,
-    UserRead,
-    UserUpdate,
 )
 from .repository import (
     seed_cars,
 )
-
-# Import fastapi-users components
-from .users import (
-    auth_backend,
-    current_user_optional,
-    fastapi_users,
-)
-
 from .routers import (
     admin,
     analytics,
@@ -45,6 +32,18 @@ from .routers import (
     contacts,
     pages,
     users,
+)
+from .schemas import (
+    UserCreate,
+    UserRead,
+    UserUpdate,
+)
+
+# Import fastapi-users components
+from .users import (
+    auth_backend,
+    current_user_optional,
+    fastapi_users,
 )
 
 logger = get_logger("main")
