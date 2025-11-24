@@ -1285,9 +1285,8 @@ msgstr ""
 #: templates/pages/auth/login.html:228
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
-"Nós iremos enviar um link de login seguro para seu e-mail. Sem "
-"necessidade de senha!Enviaremos um link de login seguro para seu e-mail. "
-"Sem necessidade de senha!"
+"Enviaremos um link de login seguro para seu e-mail. Sem "
+"necessidade de senha!"
 
 #: templates/pages/auth/login.html:249
 msgid " Sending..."
