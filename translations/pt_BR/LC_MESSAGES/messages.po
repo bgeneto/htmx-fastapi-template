@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 23:24-0300\n"
+"POT-Creation-Date: 2025-11-24 11:17-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -37,7 +37,7 @@ msgstr "Você não pode desativar sua própria conta"
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
-#: app/auth_strategies.py:66
+#: app/auth_strategies.py:109
 msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
@@ -933,7 +933,7 @@ msgstr "Gerenciamento de Livros"
 msgid "Browse and manage books inventory "
 msgstr "Navegue e gerencie todos os livros"
 
-#: templates/pages/auth/check_email.html:89
+#: templates/pages/auth/check_email.html:62
 #: templates/pages/auth/register.html:29 templates/pages/books.html:16
 msgid "Back to Home"
 msgstr "Voltar ao Início"
@@ -1187,64 +1187,56 @@ msgstr "Status"
 msgid "Active Account"
 msgstr "Conta Ativa"
 
-#: templates/pages/auth/check_email.html:3
-#: templates/pages/auth/check_email.html:28
+#: templates/pages/auth/check_email.html:2
+#: templates/pages/auth/check_email.html:17
 msgid "Check Your Email"
 msgstr "Verifique Seu Email"
 
-#: templates/pages/auth/check_email.html:33
+#: templates/pages/auth/check_email.html:19
 msgid "We've sent a verification code to"
 msgstr "Enviamos um código de verificação para"
 
-#: templates/pages/auth/check_email.html:37
+#: templates/pages/auth/check_email.html:21
 msgid "We've sent a magic link to"
 msgstr "Enviamos um link de login para"
 
-#: templates/pages/auth/check_email.html:52
+#: templates/pages/auth/check_email.html:34
 msgid "What to do next:"
 msgstr "O que fazer a seguir:"
 
-#: templates/pages/auth/check_email.html:55
+#: templates/pages/auth/check_email.html:37
 msgid "Check your email for the 6-digit verification code"
 msgstr "Verifique seu e-mail para o código de verificação de 6 dígitos"
 
-#: templates/pages/auth/check_email.html:57
+#: templates/pages/auth/check_email.html:39
 msgid "Check your email inbox"
 msgstr "Verifique seu e-mail"
 
-#: templates/pages/auth/check_email.html:60
+#: templates/pages/auth/check_email.html:42
 msgid "Enter the code on the verification page"
 msgstr "Digite o código na página de verificação"
 
-#: templates/pages/auth/check_email.html:62
+#: templates/pages/auth/check_email.html:44
 msgid "Click the login link in the email"
 msgstr "Clique no link de login no e-mail"
 
-#: templates/pages/auth/check_email.html:64
+#: templates/pages/auth/check_email.html:46
 msgid "You'll be automatically logged in"
 msgstr "Você será logado automaticamente"
 
-#: templates/pages/auth/check_email.html:68
+#: templates/pages/auth/check_email.html:50
 #: templates/pages/auth/verify_otp.html:77
 msgid "The code will expire in"
 msgstr "O código expirará em"
 
-#: templates/pages/auth/check_email.html:68
-#: templates/pages/auth/check_email.html:70
+#: templates/pages/auth/check_email.html:50
+#: templates/pages/auth/check_email.html:52
 msgid "minutes for security."
 msgstr "minutos por segurança."
 
-#: templates/pages/auth/check_email.html:70
+#: templates/pages/auth/check_email.html:52
 msgid "The link will expire in"
 msgstr "O link expirará em"
-
-#: templates/pages/auth/check_email.html:79
-msgid "Didn't receive the email?"
-msgstr "Não recebeu o email?"
-
-#: templates/pages/auth/check_email.html:83
-msgid "Request Another Link"
-msgstr "Requisitar Outro Link"
 
 #: templates/pages/auth/login.html:2 templates/pages/auth/login.html:249
 msgid "Log In"
@@ -1285,8 +1277,8 @@ msgstr ""
 #: templates/pages/auth/login.html:228
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
-"Enviaremos um link de login seguro para seu e-mail. Sem "
-"necessidade de senha!"
+"Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
+"senha!"
 
 #: templates/pages/auth/login.html:249
 msgid " Sending..."
@@ -1780,4 +1772,10 @@ msgstr "Falha ao enviar o código de verificação. Por favor, tente novamente."
 
 #~ msgid "this week"
 #~ msgstr "esta semana"
+
+#~ msgid "Didn't receive the email?"
+#~ msgstr "Não recebeu o email?"
+
+#~ msgid "Request Another Link"
+#~ msgstr "Requisitar Outro Link"
 

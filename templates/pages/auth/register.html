@@ -10,7 +10,19 @@
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-        <div x-data="registerForm()" x-init="init()">
+        {% if login_method != 'classic' %}
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <svg class="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                        {{ _('User registration is not available. Please log in using the magic link or OTP method.') }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        <div x-data="registerForm()" x-init="init()" :style="{ pointerEvents: isRegistrationDisabled ? 'none' : 'auto', opacity: isRegistrationDisabled ? '0.5' : '1' }">
             <!-- Success message -->
             <div x-show="success" x-transition class="text-center py-8">
                 <div
@@ -102,7 +114,7 @@
 
                 <!-- Action buttons -->
                 <div class="space-y-3">
-                    <button type="submit" :disabled="loading"
+                    <button type="submit" :disabled="loading || isRegistrationDisabled"
                         class="w-full inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg x-show="loading" class="h-5 w-5 mr-2 animate-spin text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -130,6 +142,8 @@
 <script>
     function registerForm() {
         return {
+            loginMethod: "{{ login_method }}",
+            isRegistrationDisabled: "{{ login_method }}" !== 'classic',
             form: {
                 email: '',
                 full_name: ''

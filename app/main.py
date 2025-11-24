@@ -226,18 +226,21 @@ app.add_middleware(
 
 # Include fastapi-users routers for auth
 # NOTE: We keep our custom magic link authentication alongside fastapi-users
-# fastapi-users provides: /auth/login (JWT), /auth/logout, /auth/register
+# fastapi-users provides: /auth/login (JWT), /auth/logout, /auth/register (if classic login)
 # We also keep our custom routes for magic link and admin login
+# The register router is only included if LOGIN_METHOD is set to 'classic'
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
     prefix="/api/auth",
     tags=["auth"],
 )
-app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/api/auth",
-    tags=["auth"],
-)
+# Only include register router if using classic login method
+if settings.LOGIN_METHOD == "classic":
+    app.include_router(
+        fastapi_users.get_register_router(UserRead, UserCreate),
+        prefix="/api/auth",
+        tags=["auth"],
+    )
 app.include_router(
     fastapi_users.get_verify_router(UserRead),
     prefix="/api/auth",

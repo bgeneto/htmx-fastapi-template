@@ -38,9 +38,14 @@ logger = get_logger("auth")
 
 @router.get("/auth/register", response_class=HTMLResponse)
 async def register_form(request: Request):
-    """Display user registration form"""
+    """Display user registration form (only available in classic login mode)"""
     return templates.TemplateResponse(
-        "pages/auth/register.html", {"request": request, "error": None}
+        "pages/auth/register.html",
+        {
+            "request": request,
+            "error": None,
+            "login_method": settings.LOGIN_METHOD,
+        },
     )
 
 
@@ -51,7 +56,14 @@ async def register(
     full_name: str = Form(...),
     session: AsyncSession = Depends(get_session),
 ):
-    """Handle user self-registration (creates pending user)"""
+    """Handle user self-registration (only available in classic login mode)"""
+    # Only allow registration in classic login mode
+    if settings.LOGIN_METHOD != "classic":
+        return FormResponseHelper.form_error(
+            message=_(
+                "User registration is not available. Please log in using the magic link or OTP method."
+            )
+        )
     form_data = {"email": email, "full_name": full_name}
 
     # Check if user already exists
