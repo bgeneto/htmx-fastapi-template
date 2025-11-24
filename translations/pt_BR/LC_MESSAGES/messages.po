@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 23:03-0300\n"
+"POT-Creation-Date: 2025-11-23 23:24-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -33,7 +33,7 @@ msgstr "Já existe um usuário com este e-mail"
 msgid "You cannot deactivate your own account"
 msgstr "Você não pode desativar sua própria conta"
 
-#: app/auth_strategies.py:42 app/routers/auth.py:360 app/routers/auth.py:370
+#: app/auth_strategies.py:42 app/routers/auth.py:375 app/routers/auth.py:385
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
@@ -42,14 +42,13 @@ msgid "Your account is pending admin approval."
 msgstr "Sua conta está aguardando aprovação do administrador."
 
 #: app/email.py:114
-#, fuzzy
 msgid "Your login link"
-msgstr "Verifique seu e-mail para o link de login"
+msgstr "Seu link de login"
 
 #: app/email.py:115
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Click to log in to {app_name} - expires in {minutes} minutes"
-msgstr "O código expirará em {minutes} minutos"
+msgstr "Clique para fazer login no {app_name} - expira em {minutes} minutos"
 
 #: app/email.py:123 templates/pages/auth/login.html:6
 msgid "Welcome Back"
@@ -62,10 +61,9 @@ msgstr "Olá"
 #: app/email.py:130
 #, python-brace-format
 msgid "Click the button below to log in to your {app_name} account:"
-msgstr ""
+msgstr "Clique no botão abaixo para fazer login na sua conta {app_name}:"
 
 #: app/email.py:138
-#, fuzzy
 msgid "Log In Now"
 msgstr "Entrar"
 
@@ -74,24 +72,23 @@ msgid "Important"
 msgstr "Importante"
 
 #: app/email.py:152 app/email.py:184
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This link will expire in {minutes} minutes"
 msgstr "O código expirará em {minutes} minutos"
 
 #: app/email.py:157
 msgid "Keep this link secure"
-msgstr ""
+msgstr "Mantenha este link seguro"
 
 #: app/email.py:165
 msgid "Or copy and paste this link in your browser:"
-msgstr ""
+msgstr "Ou copie e cole este link no seu navegador:"
 
 #: app/email.py:172 app/email.py:404
 msgid "Security tip:"
 msgstr "Dica de Segurança"
 
 #: app/email.py:172
-#, fuzzy
 msgid ""
 "If you didn't request this login link, you can safely ignore this email. "
 "Your account remains secure."
@@ -100,21 +97,18 @@ msgstr ""
 "seguramente este e-mail. Sua conta permanece segura."
 
 #: app/email.py:183
-#, fuzzy
 msgid "Click here to log in:"
-msgstr "Voltar ao Início"
+msgstr "Clique aqui para entrar:"
 
 #: app/email.py:187
-#, fuzzy
 msgid "If you didn't request this link, you can ignore this email."
 msgstr ""
-"Se você não solicitou este código de verificação, você pode ignorar "
-"seguramente este e-mail. Sua conta permanece segura."
+"Se você não solicitou este código de verificação, você pode ignorar este "
+"e-mail."
 
 #: app/email.py:188
-#, fuzzy
 msgid "Login link:"
-msgstr "Entrar"
+msgstr "Link de Login:"
 
 #: app/email.py:349
 msgid "Your verification code"
@@ -123,7 +117,7 @@ msgstr "Seu código de verificação"
 #: app/email.py:350
 #, python-brace-format
 msgid "Enter this 6-digit code to log in to {app_name}"
-msgstr ""
+msgstr "Insira este código de 6 dígitos para fazer login no {app_name}"
 
 #: app/email.py:358
 msgid "Verification Required"
@@ -133,6 +127,8 @@ msgstr "Verificação Necessária"
 #, python-brace-format
 msgid "To complete your login to {app_name}, please enter this verification code:"
 msgstr ""
+"Para completar seu login no {app_name}, por favor, insira este código de "
+"verificação:"
 
 #: app/email.py:385 app/email.py:416
 #, python-brace-format
@@ -265,7 +261,7 @@ msgstr "As senhas não coincidem"
 
 #: app/models/user.py:76 app/strategies.py:25
 #: templates/components/_contact_form.html:200
-#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
+#: templates/pages/auth/login.html:280 templates/pages/auth/register.html:147
 #: templates/pages/profile.html:439
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
@@ -337,15 +333,15 @@ msgstr "Falha no login"
 msgid "Check your email for the login link"
 msgstr "Verifique seu e-mail para o link de login"
 
-#: app/routers/auth.py:264
+#: app/routers/auth.py:279
 msgid "Invalid or expired verification code. Please try again."
 msgstr "Código de verificação inválido ou expirado. Por favor, tente novamente. "
 
-#: app/routers/auth.py:277
+#: app/routers/auth.py:292
 msgid "User not found or inactive. Please contact support."
 msgstr "Usuário não encontrado ou inativo. Por favor, contate o suporte."
 
-#: app/routers/auth.py:389
+#: app/routers/auth.py:404
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
@@ -416,8 +412,8 @@ msgstr "Nome"
 
 #: app/routers/contacts.py:118 templates/components/_contact_form.html:75
 #: templates/pages/admin/index.html:17 templates/pages/admin/users.html:36
-#: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:39
-#: templates/pages/auth/login.html:135 templates/pages/auth/register.html:38
+#: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:82
+#: templates/pages/auth/login.html:178 templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
@@ -592,7 +588,7 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_contact_form.html:199
-#: templates/pages/auth/login.html:234 templates/pages/auth/register.html:146
+#: templates/pages/auth/login.html:279 templates/pages/auth/register.html:146
 #: templates/pages/profile.html:438
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
@@ -602,7 +598,7 @@ msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
 #: templates/components/_contact_form.html:203
-#: templates/pages/auth/login.html:238 templates/pages/auth/register.html:150
+#: templates/pages/auth/login.html:283 templates/pages/auth/register.html:150
 #: templates/pages/auth/verify_otp.html:137
 msgid "Please fix the errors before submitting."
 msgstr "Por favor, corrija os erros antes de enviar."
@@ -820,11 +816,11 @@ msgstr "Entrar"
 
 #: templates/errors/403.html:2 templates/errors/403.html:22
 msgid "Access Denied"
-msgstr ""
+msgstr "Acesso Negado"
 
 #: templates/errors/403.html:24
 msgid "You don't have permission to access this resource."
-msgstr ""
+msgstr "Você não tem permissão para acessar este recurso."
 
 #: templates/errors/403.html:37 templates/errors/404.html:35
 #: templates/errors/500.html:35 templates/errors/5xx.html:37
@@ -834,6 +830,8 @@ msgstr "Voltar ao Início"
 #: templates/errors/403.html:54
 msgid "If you believe you should have access, please contact an administrator."
 msgstr ""
+"Se você acredita que deveria ter acesso, por favor, contate um "
+"administrador."
 
 #: templates/errors/404.html:2 templates/errors/404.html:20
 msgid "Page Not Found"
@@ -856,21 +854,22 @@ msgid "Contacts"
 msgstr "Contatos"
 
 #: templates/errors/500.html:2 templates/errors/500.html:20
-#, fuzzy
 msgid "Internal Server Error"
-msgstr "Erro interno do servidor"
+msgstr "Erro Interno do Servidor"
 
 #: templates/errors/500.html:22
 msgid "Oops! Something went wrong on our end. We're working to fix it."
 msgstr ""
+"Opa! Algo deu errado do nosso lado. Estamos trabalhando para corrigir "
+"isso."
 
 #: templates/errors/500.html:46
 msgid "Try Again"
-msgstr ""
+msgstr "Tente Novamente"
 
 #: templates/errors/500.html:51
 msgid "If this problem persists, please contact support."
-msgstr ""
+msgstr "Se o problema persistir, por favor, contate o suporte."
 
 #: templates/errors/5xx.html:2 templates/errors/5xx.html:22
 msgid "Unexpected Error"
@@ -934,6 +933,7 @@ msgstr "Gerenciamento de Livros"
 msgid "Browse and manage books inventory "
 msgstr "Navegue e gerencie todos os livros"
 
+#: templates/pages/auth/check_email.html:89
 #: templates/pages/auth/register.html:29 templates/pages/books.html:16
 msgid "Back to Home"
 msgstr "Voltar ao Início"
@@ -1084,7 +1084,7 @@ msgstr "Não"
 msgid "Last Updated"
 msgstr "Última Atualização"
 
-#: templates/pages/auth/login.html:237 templates/pages/profile.html:440
+#: templates/pages/auth/login.html:282 templates/pages/profile.html:440
 msgid "Password must be at least 8 characters"
 msgstr "A senha deve ter pelo menos 8 caracteres"
 
@@ -1138,12 +1138,12 @@ msgid ""
 "                            again."
 msgstr "Por favor, verifique seu e-mail e senha e tente novamente."
 
-#: templates/pages/admin/login.html:95 templates/pages/auth/login.html:79
+#: templates/pages/admin/login.html:95 templates/pages/auth/login.html:122
 msgid "Password"
 msgstr "Senha"
 
-#: templates/pages/admin/login.html:215
-#: templates/pages/auth/verify_otp.html:265
+#: templates/pages/admin/login.html:215 templates/pages/auth/login.html:410
+#: templates/pages/auth/login.html:414 templates/pages/auth/verify_otp.html:265
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
@@ -1187,7 +1187,66 @@ msgstr "Status"
 msgid "Active Account"
 msgstr "Conta Ativa"
 
-#: templates/pages/auth/login.html:2 templates/pages/auth/login.html:206
+#: templates/pages/auth/check_email.html:3
+#: templates/pages/auth/check_email.html:28
+msgid "Check Your Email"
+msgstr "Verifique Seu Email"
+
+#: templates/pages/auth/check_email.html:33
+msgid "We've sent a verification code to"
+msgstr "Enviamos um código de verificação para"
+
+#: templates/pages/auth/check_email.html:37
+msgid "We've sent a magic link to"
+msgstr "Enviamos um link de login para"
+
+#: templates/pages/auth/check_email.html:52
+msgid "What to do next:"
+msgstr "O que fazer a seguir:"
+
+#: templates/pages/auth/check_email.html:55
+msgid "Check your email for the 6-digit verification code"
+msgstr "Verifique seu e-mail para o código de verificação de 6 dígitos"
+
+#: templates/pages/auth/check_email.html:57
+msgid "Check your email inbox"
+msgstr "Verifique seu e-mail"
+
+#: templates/pages/auth/check_email.html:60
+msgid "Enter the code on the verification page"
+msgstr "Digite o código na página de verificação"
+
+#: templates/pages/auth/check_email.html:62
+msgid "Click the login link in the email"
+msgstr "Clique no link de login no e-mail"
+
+#: templates/pages/auth/check_email.html:64
+msgid "You'll be automatically logged in"
+msgstr "Você será logado automaticamente"
+
+#: templates/pages/auth/check_email.html:68
+#: templates/pages/auth/verify_otp.html:77
+msgid "The code will expire in"
+msgstr "O código expirará em"
+
+#: templates/pages/auth/check_email.html:68
+#: templates/pages/auth/check_email.html:70
+msgid "minutes for security."
+msgstr "minutos por segurança."
+
+#: templates/pages/auth/check_email.html:70
+msgid "The link will expire in"
+msgstr "O link expirará em"
+
+#: templates/pages/auth/check_email.html:79
+msgid "Didn't receive the email?"
+msgstr "Não recebeu o email?"
+
+#: templates/pages/auth/check_email.html:83
+msgid "Request Another Link"
+msgstr "Requisitar Outro Link"
+
+#: templates/pages/auth/login.html:2 templates/pages/auth/login.html:249
 msgid "Log In"
 msgstr "Entrar"
 
@@ -1203,19 +1262,19 @@ msgstr "Digite seu e-mail para receber um link mágico"
 msgid "Enter your email and password to log in"
 msgstr "Insira seu e-mail e senha para entrar"
 
-#: templates/pages/auth/login.html:59 templates/pages/auth/login.html:155
+#: templates/pages/auth/login.html:102 templates/pages/auth/login.html:198
 msgid "you@example.com"
 msgstr "voce@exemplo.com"
 
-#: templates/pages/auth/login.html:98
+#: templates/pages/auth/login.html:141
 msgid "••••••••"
 msgstr "••••••••"
 
-#: templates/pages/auth/login.html:126
+#: templates/pages/auth/login.html:169
 msgid "Enter your email and password to access your account."
 msgstr "Digite seu e-mail e senha para acessar sua conta."
 
-#: templates/pages/auth/login.html:183
+#: templates/pages/auth/login.html:226
 msgid ""
 "We'll send you a 6-digit verification code to your email. Enter the code "
 "on the next page to complete your login."
@@ -1223,29 +1282,30 @@ msgstr ""
 "Enviaremos um código de verificação de 6 dígitos para seu e-mail. Digite "
 "o código na próxima página para completar seu login."
 
-#: templates/pages/auth/login.html:185
+#: templates/pages/auth/login.html:228
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
-"Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
-"senha!"
+"Nós iremos enviar um link de login seguro para seu e-mail. Sem "
+"necessidade de senha!Enviaremos um link de login seguro para seu e-mail. "
+"Sem necessidade de senha!"
 
-#: templates/pages/auth/login.html:206
+#: templates/pages/auth/login.html:249
 msgid " Sending..."
 msgstr " Enviando..."
 
-#: templates/pages/auth/login.html:206
+#: templates/pages/auth/login.html:249
 msgid "Send Verification Code"
 msgstr "Enviar Código de Verificação"
 
-#: templates/pages/auth/login.html:206
+#: templates/pages/auth/login.html:249
 msgid "Continue with e-mail"
 msgstr "Continuar com e-mail"
 
-#: templates/pages/auth/login.html:211
+#: templates/pages/auth/login.html:254
 msgid "Don't have an account? Register"
 msgstr "Não tem uma conta? Cadastre-se"
 
-#: templates/pages/auth/login.html:236
+#: templates/pages/auth/login.html:281
 msgid "Password is required"
 msgstr "A Senha é obrigatória"
 
@@ -1360,10 +1420,6 @@ msgstr "Importante:"
 #: templates/pages/auth/verify_otp.html:76
 msgid "Enter the 6-digit code exactly as shown"
 msgstr "Entrar o código de 6 dígitos exatamente como mostrado"
-
-#: templates/pages/auth/verify_otp.html:77
-msgid "The code will expire in"
-msgstr "O código expirará em"
 
 #: templates/pages/auth/verify_otp.html:77
 msgid "minutes"
