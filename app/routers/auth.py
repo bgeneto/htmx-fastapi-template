@@ -8,9 +8,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from ..auth import COOKIE_NAME
 from ..auth_strategies import (
     AuthenticationRequest,
+    OTPHandler,
     magic_link_strategy,
     otp_strategy,
-    OTPHandler,
 )
 from ..config import settings
 from ..email import send_registration_notification
@@ -29,8 +29,8 @@ from ..repository import (
 from ..response_helpers import FormResponseHelper
 from ..schemas import LoginRequest, UserRegister
 from ..templates import templates
-from ..users import auth_backend, current_user_optional, get_jwt_strategy
 from ..url_validator import validate_admin_redirect
+from ..users import auth_backend, current_user_optional, get_jwt_strategy
 
 router = APIRouter()
 logger = get_logger("auth")
@@ -240,6 +240,21 @@ async def verify_otp_form(request: Request, email: str):
             "email": email,
             "error": None,
             "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
+        },
+    )
+
+
+@router.get("/auth/check-email", response_class=HTMLResponse)
+async def check_email_form(request: Request, email: str = ""):
+    """Display check email page for magic link/OTP confirmation"""
+    return templates.TemplateResponse(
+        "pages/auth/check_email.html",
+        {
+            "request": request,
+            "email": email,
+            "login_method": settings.LOGIN_METHOD,
+            "otp_expiry_minutes": settings.OTP_EXPIRY_MINUTES,
+            "magic_link_expiry_minutes": settings.MAGIC_LINK_EXPIRY_MINUTES,
         },
     )
 
