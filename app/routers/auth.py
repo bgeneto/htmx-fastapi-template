@@ -16,7 +16,7 @@ from ..config import settings
 from ..email import send_registration_notification
 from ..i18n import gettext as _
 from ..logger import get_logger
-from ..models import UserRole
+from ..models import User, UserRole
 from ..repository import (
     create_user,
     get_session,
@@ -29,7 +29,7 @@ from ..repository import (
 from ..response_helpers import FormResponseHelper
 from ..schemas import LoginRequest, UserRegister
 from ..templates import templates
-from ..users import auth_backend, get_jwt_strategy
+from ..users import auth_backend, current_user_optional, get_jwt_strategy
 from ..url_validator import validate_admin_redirect
 
 router = APIRouter()
@@ -95,8 +95,15 @@ async def register(
 
 
 @router.get("/auth/login", response_class=HTMLResponse)
-async def login_form(request: Request):
+async def login_form(
+    request: Request,
+    user: Optional[User] = Depends(current_user_optional),
+):
     """Display login form based on configured login method"""
+    if user:
+        redirect_url = "/admin" if user.role == UserRole.ADMIN else "/"
+        return RedirectResponse(url=redirect_url, status_code=303)
+
     return templates.TemplateResponse(
         "pages/auth/login.html",
         {

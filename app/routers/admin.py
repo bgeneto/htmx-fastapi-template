@@ -20,7 +20,7 @@ from ..models import Book, Car, Contact, User, UserBase, UserRole
 from ..repository import get_session, get_user_by_email, list_contacts, list_users
 from ..response_helpers import FormResponseHelper, ResponseHelper
 from ..templates import templates
-from ..users import require_admin
+from ..users import current_user_optional, require_admin
 
 router = APIRouter()
 logger = get_logger("admin")
@@ -30,8 +30,14 @@ logger = get_logger("admin")
 
 
 @router.get("/admin/login", response_class=HTMLResponse)
-async def admin_login_form(request: Request):
+async def admin_login_form(
+    request: Request,
+    user: Optional[User] = Depends(current_user_optional),
+):
     """Display admin login form with optional 'next' parameter for post-login redirect"""
+    if user and user.role == UserRole.ADMIN:
+        return RedirectResponse(url="/admin", status_code=303)
+
     return templates.TemplateResponse(
         "pages/admin/login.html", {"request": request, "error": None}
     )
