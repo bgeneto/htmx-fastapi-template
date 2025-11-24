@@ -51,6 +51,7 @@ class MagicLinkHandler:
     ) -> Optional[AuthenticationResponse]:
         from .config import settings
         from .email import send_magic_link
+        from .models import User
         from .repository import (
             create_login_token,
             get_user_by_email,
@@ -59,27 +60,71 @@ class MagicLinkHandler:
         # Get user
         user = await get_user_by_email(request.session, request.email)
 
-        # Always return success to prevent email enumeration
-        if user and user.is_active:
-            # Check if user is pending
-            if user.role == UserRole.PENDING:
-                return SuccessResponse(_("Your account is pending admin approval."))
+        # Auto-create user if not found (same as OTP handler)
+        if not user:
+            try:
+                # Extract name from email (everything before @)
+                email_username = request.email.split('@')[0]
+                # Capitalize and replace dots/underscores with spaces
+                auto_name = email_username.replace('.', ' ').replace('_', ' ').title()
 
-            # Generate magic link token
-            raw_token = await create_login_token(request.session, user)
-            magic_link = f"{settings.APP_BASE_URL}/auth/verify/{raw_token}"
+                # Determine user role and status based on settings
+                if settings.REQUIRE_ADMIN_APPROVAL:
+                    user_role = UserRole.PENDING
+                    is_active = True  # Active but with PENDING role (needs approval)
+                    logger.info(f"MagicLinkHandler: Auto-creating PENDING user for {request.email} (requires admin approval)")
+                else:
+                    user_role = UserRole.USER
+                    is_active = True
+                    logger.info(f"MagicLinkHandler: Auto-creating active USER for {request.email} (instant access)")
 
-            if request.next_url:
-                from urllib.parse import quote
-                magic_link += f"?next={quote(request.next_url)}"
+                # Create user directly without password (passwordless magic link login)
+                user = User(
+                    email=request.email,
+                    full_name=auto_name,
+                    is_active=is_active,
+                    role=user_role,
+                    hashed_password=""  # No password for magic link users
+                )
 
-            # Send magic link email
+                # Add to session and commit
+                request.session.add(user)
+                await request.session.commit()
+                logger.info(f"MagicLinkHandler: Successfully created user for {request.email} with role={user_role}")
+
+            except Exception as e:
+                logger.error(f"MagicLinkHandler: Failed to auto-create user for {request.email}: {e}")
+                logger.exception("Full traceback:")
+                # Still return success to prevent enumeration
+                return None  # Signal to redirect to check email page
+
+        # Check if user is active
+        if not user.is_active:
+            logger.warning(f"MagicLinkHandler: User INACTIVE for email {request.email} - skipping magic link send")
+            # Still return success to prevent enumeration
+            return None  # Signal to redirect to check email page
+
+        # Check if user is pending
+        if user.role == UserRole.PENDING:
+            return SuccessResponse(_("Your account is pending admin approval."))
+
+        # Generate magic link token
+        raw_token = await create_login_token(request.session, user)
+        magic_link = f"{settings.APP_BASE_URL}/auth/verify/{raw_token}"
+
+        if request.next_url:
+            from urllib.parse import quote
+            magic_link += f"?next={quote(request.next_url)}"
+
+        # Send magic link email
+        try:
             await send_magic_link(user.email, user.full_name, magic_link)
-        else:
-            # Log warning for non-existent/inactive user (for monitoring)
-            pass
+            logger.info(f"MagicLinkHandler: Magic link sent successfully to {user.email}")
+        except Exception as e:
+            logger.error(f"MagicLinkHandler: Failed to send magic link to {user.email}: {e}")
+            logger.exception("Full traceback:")
 
-        # Always show check email page
+        # Always show check email page (success to prevent enumeration)
         return None  # Signal to redirect to check email page
 
 
