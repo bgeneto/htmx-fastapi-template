@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-23 21:47-0300\n"
+"POT-Creation-Date: 2025-11-23 22:06-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -34,6 +34,7 @@ msgid "You cannot deactivate your own account"
 msgstr "Você não pode desativar sua própria conta"
 
 #: app/auth_strategies.py:42 app/main.py:913 app/main.py:923
+#: app/routers/auth.py:353 app/routers/auth.py:363
 msgid "OTP sent successfully"
 msgstr "Código OTP enviado com sucesso"
 
@@ -64,14 +65,13 @@ msgid "To complete your login to {app_name}, please enter this verification code
 msgstr ""
 
 #: app/email.py:337
-#, fuzzy
 msgid "Important"
-msgstr "Importante:"
+msgstr "Importante"
 
 #: app/email.py:342 app/email.py:373
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This code will expire in {minutes} minutes"
-msgstr "O código expirará em"
+msgstr "O código expirará em {minutes} minutos"
 
 #: app/email.py:347 templates/pages/auth/verify_otp.html:78
 msgid "Never share this code with anyone"
@@ -110,9 +110,9 @@ msgid "Your account has been approved"
 msgstr "Sua conta foi aprovada"
 
 #: app/email.py:434
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Welcome to {app_name} - your account is now approved!"
-msgstr "Sua conta foi aprovada"
+msgstr "Bem-vindo(a) ao {app_name} - sua conta foi aprovada!"
 
 #: app/email.py:441
 msgid "Account Approved! 🎉"
@@ -123,9 +123,9 @@ msgid "Congratulations"
 msgstr "Parabéns"
 
 #: app/email.py:444
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your account has been approved and you can now log in to {app_name}."
-msgstr "Sua conta foi aprovada"
+msgstr "Sua conta foi aprovada e você pode agora fazer login no {app_name}."
 
 #: app/email.py:451
 msgid "Get Started Now"
@@ -133,9 +133,7 @@ msgstr "Comece Agora"
 
 #: app/email.py:458
 msgid "You can now access all features by entering your email address at:"
-msgstr ""
-"Agora você pode acessar todas as funcionalidades entrando no seu endereço"
-" de e-mail em: "
+msgstr "Agora você pode acessar todas as funcionalidades entrando no seu endereço de e-mail em:"
 
 #: app/email.py:464 templates/pages/auth/pending_approval.html:61
 msgid "What happens next?"
@@ -156,9 +154,9 @@ msgid "Great news"
 msgstr "Boa notícia"
 
 #: app/email.py:477
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your account has been approved and you can now login to {app_name}"
-msgstr "Sua conta foi aprovada"
+msgstr "Sua conta foi aprovada e você pode agora fazer login no {app_name}"
 
 #: app/email.py:479
 msgid "Get started"
@@ -168,219 +166,205 @@ msgstr "Comece agora"
 msgid "Login to your account"
 msgstr "Faça login na sua conta"
 
-#: app/main.py:557 app/main.py:1354 app/main.py:1517
+#: app/main.py:557 app/main.py:1354 app/main.py:1517 app/routers/books.py:36
+#: app/routers/cars.py:34 app/routers/contacts.py:108
 #: templates/pages/admin/index.html:15
 msgid "ID"
 msgstr "ID"
 
-#: app/main.py:560 templates/components/_contact_form.html:36
+#: app/main.py:560 app/routers/contacts.py:111
+#: templates/components/_contact_form.html:36
 #: templates/pages/admin/index.html:16
 msgid "Name"
 msgstr "Nome"
 
-#: app/main.py:567 templates/components/_contact_form.html:75
+#: app/main.py:567 app/routers/contacts.py:118
+#: templates/components/_contact_form.html:75
 #: templates/pages/admin/index.html:17 templates/pages/admin/users.html:36
 #: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:39
 #: templates/pages/auth/login.html:135 templates/pages/auth/register.html:38
 msgid "Email"
 msgstr "E-mail"
 
-#: app/main.py:574 templates/components/_contact_form.html:113
+#: app/main.py:574 app/routers/contacts.py:125
+#: templates/components/_contact_form.html:113
 #: templates/pages/admin/index.html:18
 msgid "Message"
 msgstr "Mensagem"
 
-#: app/main.py:580
+#: app/main.py:580 app/routers/contacts.py:131
 msgid "Submitted"
 msgstr "Enviado"
 
-#: app/main.py:585
+#: app/main.py:585 app/routers/contacts.py:136
 msgid "Search by name or email..."
 msgstr "Pesquisar por nome ou e-mail..."
 
-#: app/main.py:660
+#: app/main.py:660 app/routers/auth.py:61
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:668
+#: app/main.py:668 app/routers/auth.py:69
 msgid "Registration failed"
 msgstr "Falha no cadastro"
 
-#: app/main.py:688 templates/pages/auth/register.html:151
+#: app/main.py:688 app/routers/auth.py:89
+#: templates/pages/auth/register.html:151
 msgid "Registration successful! Your account is pending admin approval."
 msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/main.py:727
+#: app/main.py:727 app/routers/auth.py:172
 msgid "Login failed"
 msgstr "Falha no login"
 
-#: app/main.py:767
+#: app/main.py:767 app/routers/auth.py:209
 msgid "Check your email for the login link"
 msgstr "Verifique seu e-mail para o link de login"
 
-#: app/main.py:814
+#: app/main.py:814 app/routers/auth.py:257
 msgid "Invalid or expired verification code. Please try again."
 msgstr "Código de verificação inválido ou expirado. Por favor, tente novamente. "
 
-#: app/main.py:827
+#: app/main.py:827 app/routers/auth.py:270
 msgid "User not found or inactive. Please contact support."
 msgstr "Usuário não encontrado ou inativo. Por favor, contate o suporte."
 
-#: app/main.py:946 templates/pages/admin/login.html:208
+#: app/main.py:946 app/routers/auth.py:124 templates/pages/admin/login.html:208
 msgid "Invalid email or password"
 msgstr "E-mail ou senha inválidos"
 
-#: app/main.py:977
+#: app/main.py:977 app/routers/auth.py:151
 msgid "Login failed. Please check your credentials and try again."
 msgstr "Login falhou. Por favor, verifique suas credenciais e tente novamente."
 
-#: app/main.py:995
+#: app/main.py:995 app/routers/auth.py:382
 msgid "Invalid or expired login link. Please request a new one."
 msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 
-#: app/main.py:1091 app/models.py:170 app/schemas.py:22 app/schemas.py:65
-#: app/schemas.py:88 app/schemas.py:105 app/schemas.py:134 app/schemas.py:169
-#: app/strategies.py:15 templates/components/_contact_form.html:198
+#: app/main.py:1091 app/models/user.py:66 app/routers/users.py:57
+#: app/schemas.py:22 app/schemas.py:65 app/schemas.py:88 app/schemas.py:105
+#: app/schemas.py:134 app/schemas.py:169 app/strategies.py:15
+#: templates/components/_contact_form.html:198
 #: templates/pages/auth/register.html:149 templates/pages/profile.html:437
 msgid "Name must be at least 2 characters"
 msgstr "O nome deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1099
+#: app/main.py:1099 app/routers/users.py:65
 msgid "Invalid email address"
 msgstr "E-mail inválido"
 
-#: app/main.py:1105
+#: app/main.py:1105 app/routers/users.py:71
 msgid "Email already in use by another account"
 msgstr "Já existe uma conta com este e-mail"
 
-#: app/main.py:1115
+#: app/main.py:1115 app/routers/users.py:81
 msgid "Phone number too long (max 20 characters)"
 msgstr "O número de telefone deve ter pelo menos 2 caracteres"
 
-#: app/main.py:1125 templates/pages/profile.html:503
+#: app/main.py:1125 app/routers/users.py:91 templates/pages/profile.html:503
 msgid "Invalid file type. Please upload PNG, JPG, or WebP image."
 msgstr "Tipo de arquivo inválido. Por favor, envie uma imagem PNG, JPG ou WebP."
 
-#: app/main.py:1132 templates/pages/profile.html:509
+#: app/main.py:1132 app/routers/users.py:98 templates/pages/profile.html:509
 msgid "File too large. Maximum size is 5MB."
 msgstr "Arquivo muito grande. Tamanho máximo de 5MB."
 
-#: app/main.py:1165 templates/pages/profile.html:575
+#: app/main.py:1165 app/routers/users.py:131 templates/pages/profile.html:575
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: app/main.py:1195 app/main.py:1211 templates/pages/profile.html:631
+#: app/main.py:1195 app/main.py:1211 app/routers/users.py:159
+#: app/routers/users.py:175 templates/pages/profile.html:631
 msgid "Password change failed"
 msgstr "Falha na alteração de senha"
 
-#: app/main.py:1202
+#: app/main.py:1202 app/routers/users.py:166
 msgid "No password set for this account. Use magic link login."
 msgstr "Senha não definida para esta conta. Use login por link mágico."
 
-#: app/main.py:1212
+#: app/main.py:1212 app/routers/users.py:176
 msgid "Current password is incorrect"
 msgstr "Senha atual incorreta"
 
-#: app/main.py:1222 templates/pages/profile.html:619
+#: app/main.py:1222 app/routers/users.py:186 templates/pages/profile.html:619
 msgid "Password changed successfully"
 msgstr "Senha alterada com sucesso"
 
-#: app/main.py:1306 templates/pages/admin/login.html:40
-#: templates/pages/admin/login.html:206
+#: app/main.py:1306 app/routers/admin.py:106
+#: templates/pages/admin/login.html:40 templates/pages/admin/login.html:206
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
-#: app/main.py:1357 templates/pages/cars.html:35
+#: app/main.py:1357 app/routers/cars.py:37 templates/pages/cars.html:35
 #: templates/pages/cars_form.html:10
 msgid "Make"
 msgstr "Marca"
 
-#: app/main.py:1364 templates/pages/cars.html:36
+#: app/main.py:1364 app/routers/cars.py:44 templates/pages/cars.html:36
 #: templates/pages/cars_form.html:29
 msgid "Model"
 msgstr "Modelo"
 
-#: app/main.py:1371 templates/pages/cars.html:37
+#: app/main.py:1371 app/routers/cars.py:51 templates/pages/cars.html:37
 #: templates/pages/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
 
-#: app/main.py:1376 app/main.py:1541 templates/pages/books.html:39
+#: app/main.py:1376 app/main.py:1541 app/routers/books.py:60
+#: app/routers/cars.py:56 templates/pages/books.html:39
 #: templates/pages/books_form.html:20 templates/pages/cars.html:38
 #: templates/pages/cars_form.html:69
 msgid "Year"
 msgstr "Ano"
 
-#: app/main.py:1379 app/main.py:1547 templates/pages/cars.html:39
+#: app/main.py:1379 app/main.py:1547 app/routers/books.py:66
+#: app/routers/cars.py:59 templates/pages/cars.html:39
 #: templates/pages/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
 
-#: app/main.py:1385 templates/pages/admin/index.html:19
+#: app/main.py:1385 app/routers/cars.py:65 templates/pages/admin/index.html:19
 #: templates/pages/admin/users.html:39
 msgid "Created"
 msgstr "Criado"
 
-#: app/main.py:1520 templates/pages/books.html:37
+#: app/main.py:1520 app/routers/books.py:39 templates/pages/books.html:37
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/main.py:1527 templates/pages/books.html:38
+#: app/main.py:1527 app/routers/books.py:46 templates/pages/books.html:38
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
 
-#: app/main.py:1534
+#: app/main.py:1534 app/routers/books.py:53
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/main.py:1551 templates/pages/books.html:40
+#: app/main.py:1551 app/routers/books.py:70 templates/pages/books.html:40
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/main.py:1554 templates/pages/books.html:41
+#: app/main.py:1554 app/routers/books.py:73 templates/pages/books.html:41
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/main.py:1681
+#: app/main.py:1681 app/routers/admin.py:368
 msgid "User approved successfully"
 msgstr "Usuário aprovado com sucesso"
 
-#: app/main.py:1720
+#: app/main.py:1720 app/routers/admin.py:404
 msgid "User created successfully"
 msgstr "Usuário criado com sucesso"
 
-#: app/main.py:1756
+#: app/main.py:1756 app/routers/admin.py:437
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
-
-#: app/models.py:103
-msgid "Year must be after 1886"
-msgstr "O ano deve ser maior que 1886"
-
-#: app/models.py:111
-msgid "Price must be greater than 0"
-msgstr "O preço deve ser maior que 0"
-
-#: app/models.py:137
-msgid "Year must be after 1450"
-msgstr "O ano deve ser maior que 1450"
-
-#: app/models.py:145
-msgid "Pages must be at least 1"
-msgstr "As páginas devem ser pelo menos 1"
-
-#: app/models.py:179 app/strategies.py:25
-#: templates/components/_contact_form.html:200
-#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
-#: templates/pages/profile.html:439
-msgid "Please enter a valid email address"
-msgstr "Por favor, insira um endereço de e-mail válido"
 
 #: app/response_helpers.py:117
 msgid "Authentication required"
@@ -407,9 +391,32 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
+#: app/models/user.py:76 app/strategies.py:25
+#: templates/components/_contact_form.html:200
+#: templates/pages/auth/login.html:235 templates/pages/auth/register.html:147
+#: templates/pages/profile.html:439
+msgid "Please enter a valid email address"
+msgstr "Por favor, insira um endereço de e-mail válido"
+
 #: app/strategies.py:30 templates/_base.html:80
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
+
+#: app/models/book.py:24
+msgid "Year must be after 1450"
+msgstr "O ano deve ser maior que 1450"
+
+#: app/models/book.py:33
+msgid "Pages must be at least 1"
+msgstr "As páginas devem ser pelo menos 1"
+
+#: app/models/car.py:23
+msgid "Year must be after 1886"
+msgstr "O ano deve ser maior que 1886"
+
+#: app/models/car.py:32
+msgid "Price must be greater than 0"
+msgstr "O preço deve ser maior que 0"
 
 #: templates/_base.html:76
 #, python-brace-format
@@ -792,47 +799,42 @@ msgid "Error Code"
 msgstr "Código de Erro"
 
 #: templates/pages/analytics.html:2 templates/pages/analytics.html:7
-#, fuzzy
 msgid "Analytics Dashboard"
-msgstr "Dashboard"
+msgstr "Dashboard Analítico"
 
 #: templates/pages/analytics.html:8
 msgid "Overview of your application data and statistics"
-msgstr ""
+msgstr "Visão Geral de seus dados e estatísticas"
 
 #: templates/pages/analytics.html:22
 msgid "active this week"
-msgstr ""
+msgstr "ativos esta semana"
 
 #: templates/pages/analytics.html:44 templates/pages/analytics.html:66
 msgid "added this month"
-msgstr ""
+msgstr "adicionados este mês"
 
 #: templates/pages/analytics.html:84
 msgid "Loading analytics..."
-msgstr ""
+msgstr "Carregando dados..."
 
 #: templates/pages/analytics.html:105
-#, fuzzy
 msgid "Quick Actions"
-msgstr "Ação"
+msgstr "Ações rápidas"
 
 #: templates/pages/analytics.html:116
 msgid "Manage Users"
-msgstr ""
+msgstr "Gerenciar usuários"
 
 #: templates/pages/analytics.html:127
-#, fuzzy
 msgid "View Cars"
-msgstr "Carros"
+msgstr "Ver carros"
 
 #: templates/pages/analytics.html:138
-#, fuzzy
 msgid "View Books"
-msgstr "Livros"
+msgstr "Ver livros"
 
 #: templates/pages/analytics.html:182
-#, fuzzy
 msgid "Failed to load analytics data"
 msgstr "Falha ao atualizar o perfil"
 
@@ -855,7 +857,7 @@ msgstr "Livro"
 #: templates/pages/admin/users.html:40 templates/pages/books.html:42
 #: templates/pages/cars.html:40
 msgid "Actions"
-msgstr "Ação"
+msgstr "Ações"
 
 #: templates/pages/cars.html:3 templates/pages/cars.html:9
 msgid "Cars Management"
