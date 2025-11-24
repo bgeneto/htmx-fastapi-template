@@ -370,7 +370,7 @@
                             }
                             // Small delay to allow toast to display before redirect
                             setTimeout(() => {
-                                window.location.href = `/auth/login?email=${encodeURIComponent(data.email)}`;
+                                window.location.href = `/auth/check-email?email=${encodeURIComponent(data.email)}`;
                             }, 800);
                         } else {
                             window.location.href = data.redirect;
