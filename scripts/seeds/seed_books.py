@@ -29,7 +29,7 @@ async def seed_books(count: int = 100):
             book = Book(
                 title=fake.catch_phrase(),
                 author=fake.name(),
-                year=fake.year(),
+                year=int(fake.year()),
                 pages=fake.random_int(min=100, max=1000),
                 summary=fake.text(max_nb_chars=500)
             )

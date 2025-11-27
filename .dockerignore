@@ -70,7 +70,6 @@ compose.yaml
 .dockerignore
 
 # Development tools
-scripts/
 setup-tailwind.sh
 translate.sh
 pre-commit.sh
