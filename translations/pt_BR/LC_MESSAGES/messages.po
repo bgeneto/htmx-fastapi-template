@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-27 07:49-0300\n"
+"POT-Creation-Date: 2025-11-27 09:34-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -356,12 +356,12 @@ msgstr "Link de login inválido ou expirado. Por favor, solicite um novo."
 msgid "ID"
 msgstr "ID"
 
-#: app/routers/books.py:39 templates/pages/books.html:37
+#: app/routers/books.py:39 templates/pages/books.html:31
 #: templates/pages/books_form.html:3
 msgid "Title"
 msgstr "Título"
 
-#: app/routers/books.py:46 templates/pages/books.html:38
+#: app/routers/books.py:46 templates/pages/books.html:32
 #: templates/pages/books_form.html:11
 msgid "Author"
 msgstr "Autor"
@@ -370,7 +370,7 @@ msgstr "Autor"
 msgid "ISBN"
 msgstr "ISBN"
 
-#: app/routers/books.py:60 app/routers/cars.py:56 templates/pages/books.html:39
+#: app/routers/books.py:60 app/routers/cars.py:56 templates/pages/books.html:33
 #: templates/pages/books_form.html:20 templates/pages/cars.html:34
 #: templates/pages/cars_form.html:69
 msgid "Year"
@@ -381,12 +381,12 @@ msgstr "Ano"
 msgid "Price"
 msgstr "Preço"
 
-#: app/routers/books.py:70 templates/pages/books.html:40
+#: app/routers/books.py:70 templates/pages/books.html:34
 #: templates/pages/books_form.html:27
 msgid "Pages"
 msgstr "Páginas"
 
-#: app/routers/books.py:73 templates/pages/books.html:41
+#: app/routers/books.py:73 templates/pages/books.html:35
 #: templates/pages/books_form.html:36
 msgid "Summary"
 msgstr "Resumo"
@@ -401,7 +401,7 @@ msgstr "Marca"
 msgid "Model"
 msgstr "Modelo"
 
-#: app/routers/cars.py:51 templates/components/_footer.html:48
+#: app/routers/cars.py:51 templates/components/_footer_extended.html:48
 #: templates/pages/cars.html:33 templates/pages/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
@@ -670,47 +670,49 @@ msgstr "Cancelar"
 msgid "Save Changes"
 msgstr "Salvar Alterações"
 
-#: templates/components/_footer.html:7
+#: templates/components/_footer.html:6
+#: templates/components/_footer_extended.html:65
+msgid "FastAPI Alpine Starter"
+msgstr ""
+
+#: templates/components/_footer.html:6
+#: templates/components/_footer_extended.html:65
+msgid "All rights reserved."
+msgstr ""
+
+#: templates/components/_footer_extended.html:7
 msgid "About"
 msgstr ""
 
-#: templates/components/_footer.html:9
+#: templates/components/_footer_extended.html:9
 msgid ""
 "FastAPI + Alpine.js starter template with full i18n support and async "
 "SQLModel persistence."
 msgstr ""
 
-#: templates/components/_footer.html:14
+#: templates/components/_footer_extended.html:14
 msgid "Resources"
 msgstr ""
 
-#: templates/components/_footer.html:21
+#: templates/components/_footer_extended.html:21
 msgid "FastAPI Documentation"
 msgstr ""
 
-#: templates/components/_footer.html:29
+#: templates/components/_footer_extended.html:29
 msgid "Alpine.js Documentation"
 msgstr ""
 
-#: templates/components/_footer.html:37
+#: templates/components/_footer_extended.html:37
 msgid "Tailwind CSS Documentation"
 msgstr ""
 
-#: templates/components/_footer.html:44
+#: templates/components/_footer_extended.html:44
 #, fuzzy
 msgid "Information"
 msgstr "Atualizar informações"
 
-#: templates/components/_footer.html:52
+#: templates/components/_footer_extended.html:52
 msgid "Environment"
-msgstr ""
-
-#: templates/components/_footer.html:65
-msgid "FastAPI Alpine Starter"
-msgstr ""
-
-#: templates/components/_footer.html:65
-msgid "All rights reserved."
 msgstr ""
 
 #: templates/components/_header.html:64
@@ -811,34 +813,34 @@ msgstr "Alterando idioma..."
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/components/_sidebar.html:72
+#: templates/components/_sidebar.html:69
 #: templates/components/_top_navbar.html:23
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/components/_sidebar.html:78
+#: templates/components/_sidebar.html:75
 #: templates/pages/admin/users_form.html:52
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/components/_sidebar.html:99 templates/pages/analytics.html:17
+#: templates/components/_sidebar.html:91 templates/pages/analytics.html:17
 msgid "Users"
 msgstr "Usuários"
 
-#: templates/components/_sidebar.html:105
+#: templates/components/_sidebar.html:97
 msgid "Demo"
 msgstr "Demo"
 
-#: templates/components/_sidebar.html:126 templates/errors/404.html:55
+#: templates/components/_sidebar.html:113 templates/errors/404.html:55
 #: templates/pages/analytics.html:62
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_sidebar.html:146 templates/pages/analytics.html:40
+#: templates/components/_sidebar.html:128 templates/pages/analytics.html:40
 msgid "Cars"
 msgstr "Carros"
 
-#: templates/components/_sidebar.html:154
+#: templates/components/_sidebar.html:136
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
@@ -974,25 +976,25 @@ msgstr "Ver livros"
 msgid "Failed to load analytics data"
 msgstr "Falha ao atualizar o perfil"
 
-#: templates/pages/books.html:3 templates/pages/books.html:9
+#: templates/pages/books.html:2 templates/pages/books.html:7
 msgid "Books Management"
 msgstr "Gerenciamento de Livros"
 
-#: templates/pages/books.html:10
+#: templates/pages/books.html:8
 msgid "Browse and manage books inventory "
 msgstr "Navegue e gerencie todos os livros"
 
 #: templates/pages/auth/check_email.html:62
-#: templates/pages/auth/register.html:41 templates/pages/books.html:16
+#: templates/pages/auth/register.html:41 templates/pages/books.html:13
 #: templates/pages/cars.html:13
 msgid "Back to Home"
 msgstr "Voltar ao Início"
 
-#: templates/pages/books.html:24
+#: templates/pages/books.html:20
 msgid "Book"
 msgstr "Livro"
 
-#: templates/pages/admin/users.html:40 templates/pages/books.html:42
+#: templates/pages/admin/users.html:40 templates/pages/books.html:36
 #: templates/pages/cars.html:36
 msgid "Actions"
 msgstr "Ações"

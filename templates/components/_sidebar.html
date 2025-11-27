@@ -2,7 +2,7 @@
 <aside x-data="resizableSidebar({ key: 'sidebarWidthCSSVar', defaultWidth: 240, minWidth: 160, maxWidth: 300 })"
        x-init="init()"
        id="sidebar"
-       class="fixed inset-y-0 left-0 z-40 transition-transform bg-surface border-r border-border-light dark:bg-surfaceDark dark:border-borderDark md:translate-x-0 w-[var(--sidebar-width)] transition-[width] duration-200 ease-in-out"
+       class="fixed inset-y-0 left-0 z-40 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 md:translate-x-0 w-[var(--sidebar-width)] transition-[width] duration-200 ease-in-out"
        :class="sidebarIsOpen ? 'translate-x-0' : '-translate-x-full'"
        @click.away="sidebarIsOpen = false"
        @keydown.escape.window="sidebarIsOpen = false"
@@ -27,7 +27,8 @@
                 <!-- Expand icon when collapsed - double chevron right -->
                 <svg x-show="collapsed"
                      class="w-5 h-5 text-onSurface dark:text-onSurfaceDark"
-                     width="20" height="20"
+                     width="20"
+                     height="20"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24"
@@ -38,7 +39,8 @@
                 <!-- Collapse icon when expanded - double chevron left -->
                 <svg x-show="!collapsed"
                      class="w-5 h-5 text-onSurface dark:text-onSurfaceDark"
-                     width="20" height="20"
+                     width="20"
+                     height="20"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24"
@@ -51,17 +53,12 @@
         <div class="flex-1 space-y-1">
             {% set current_path = request.url.path %}
             <a href="/"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
-                      {% if current_path == '/' %}
-                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
-                      {% else %}
-                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
-                      {% endif %}
-                      underline-offset-2 focus:outline-hidden focus-visible:underline"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path == '/' %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20" height="20"
+                     width="20"
+                     height="20"
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor"
@@ -79,17 +76,12 @@
                     </div>
                 </div>
                 <a href="/admin/users"
-                   class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
-                          {% if current_path.startswith('/admin/users') %}
-                              bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
-                          {% else %}
-                              text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
-                          {% endif %}
-                          underline-offset-2 focus:outline-hidden focus-visible:underline"
+                   class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/admin/users') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
                    :class="collapsed ? 'justify-center' : ''">
                     <svg class="flex-shrink-0"
                          :class="collapsed ? 'size-6' : 'size-5'"
-                         width="20" height="20"
+                         width="20"
+                         height="20"
                          aria-hidden="true"
                          xmlns="http://www.w3.org/2000/svg"
                          fill="currentColor"
@@ -106,17 +98,12 @@
                 </div>
             </div>
             <a href="/books"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
-                      {% if current_path.startswith('/books') %}
-                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
-                      {% else %}
-                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
-                      {% endif %}
-                      underline-offset-2 focus:outline-hidden focus-visible:underline"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/books') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20" height="20"
+                     width="20"
+                     height="20"
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor"
@@ -126,17 +113,12 @@
                 <span x-show="!collapsed">{{ _("Books") }}</span>
             </a>
             <a href="/cars"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
-                      {% if current_path.startswith('/cars') %}
-                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
-                      {% else %}
-                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
-                      {% endif %}
-                      underline-offset-2 focus:outline-hidden focus-visible:underline"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/cars') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20" height="20"
+                     width="20"
+                     height="20"
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor"
@@ -151,7 +133,7 @@
     <div x-show="!collapsed"
          class="hidden md:flex absolute right-0 top-0 h-full items-center group"
          @pointerdown.prevent="startDrag($event)"
-         title="{{ _("Drag to resize sidebar") }}">
+         title="{{ _('Drag to resize sidebar') }}">
         <!-- Visual resize indicator -->
         <div role="slider"
              aria-label="Resize sidebar - drag or use arrow keys"
