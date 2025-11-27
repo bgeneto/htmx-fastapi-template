@@ -1,12 +1,15 @@
-<!-- Sidebar with resizable functionality -->
-<aside x-data="resizableSidebar({ key: 'sidebarWidthCSSVar', defaultWidth: 240, minWidth: 160, maxWidth: 300 })"
+<!-- Sidebar with resizable functionality and data-driven menu -->
+{% set sidebar = request | sidebar %}
+<!-- Pass sidebar data via script tag to avoid JSON escaping issues in HTML attributes -->
+<script id="sidebar-data" type="application/json">{{ sidebar | tojson | safe }}</script>
+<aside x-data="sidebarMenu()"
        x-init="init()"
        id="sidebar"
        class="fixed inset-y-0 left-0 z-40 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 md:translate-x-0 w-[var(--sidebar-width)] transition-[width] duration-200 ease-in-out"
        :class="sidebarIsOpen ? 'translate-x-0' : '-translate-x-full'"
        @click.away="sidebarIsOpen = false"
        @keydown.escape.window="sidebarIsOpen = false"
-       aria-label="sidebar navigation"
+       aria-label="{{ _('Sidebar navigation') }}"
        role="complementary">
     <div class="flex flex-col h-full px-4 py-4 overflow-y-auto my-2">
         <!-- Logo and Collapse Button -->
@@ -21,138 +24,142 @@
             <button type="button"
                     @click="toggleCollapse()"
                     :aria-expanded="!collapsed"
-                    :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                    :aria-label="collapsed ? '{{ _('Expand sidebar') }}' : '{{ _('Collapse sidebar') }}'"
                     class="hidden md:flex p-1.5 rounded-md bg-surface hover:bg-primary/10 dark:bg-surfaceDark dark:hover:bg-primaryDark/10 focus:outline-none transition-all -mr-2.5"
-                    :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
-                <!-- Expand icon when collapsed - double chevron right -->
-                <svg x-show="collapsed"
-                     class="w-5 h-5 text-onSurface dark:text-onSurfaceDark"
-                     width="20"
-                     height="20"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                     aria-hidden="true"
-                     x-cloak>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                </svg>
-                <!-- Collapse icon when expanded - double chevron left -->
-                <svg x-show="!collapsed"
-                     class="w-5 h-5 text-onSurface dark:text-onSurfaceDark"
-                     width="20"
-                     height="20"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                     aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                </svg>
+                    :title="collapsed ? '{{ _('Expand sidebar') }}' : '{{ _('Collapse sidebar') }}'">
+                <!-- Expand icon when collapsed -->
+                <i x-show="collapsed"
+                   class="fa-solid fa-angles-right w-5 h-5 text-onSurface dark:text-onSurfaceDark flex items-center justify-center"
+                   x-cloak></i>
+                <!-- Collapse icon when expanded -->
+                <i x-show="!collapsed"
+                   class="fa-solid fa-angles-left w-5 h-5 text-onSurface dark:text-onSurfaceDark flex items-center justify-center"></i>
             </button>
         </div>
-        <!-- Navigation -->
-        <div class="flex-1 space-y-1">
-            {% set current_path = request.url.path %}
-            <a href="/"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path == '/' %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
-               :class="collapsed ? 'justify-center' : ''">
-                <svg class="flex-shrink-0"
-                     :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20"
-                     height="20"
-                     aria-hidden="true"
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="currentColor"
-                     viewBox="0 0 22 21">
-                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                </svg>
-                <span x-show="!collapsed">{{ _("Dashboard") }}</span>
-            </a>
-            <!-- Admin Section -->
-            {% if request.cookies.get("session") %}
-                <div class="pt-4 mt-4 border-t border-border-light dark:border-borderDark">
-                    <div class="flex items-center px-2 mb-2" x-show="!collapsed">
-                        <span class="text-xs font-semibold uppercase text-onSurface/60 dark:text-onSurfaceDark/60">{{ _("Admin") }}</span>
-                    </div>
+
+        <!-- Navigation - Data-driven rendering -->
+        <nav class="flex-1 space-y-1" aria-label="{{ _('Main navigation') }}">
+            <template x-for="section in sections" :key="section.key">
+                <div>
+                    <!-- Section Header with separator -->
+                    <template x-if="section.show_header">
+                        <div class="pt-4 mt-4 border-t border-border-light dark:border-borderDark">
+                            <div class="flex items-center px-2 mb-2" x-show="!collapsed">
+                                <span class="text-xs font-semibold uppercase text-onSurface/60 dark:text-onSurfaceDark/60"
+                                      x-text="section.label"></span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Menu Items -->
+                    <template x-for="item in section.items" :key="item.key">
+                        <div>
+                            <!-- Item WITHOUT children (simple link) -->
+                            <template x-if="!item.has_children">
+                                <a :href="item.route"
+                                   class="group flex items-center gap-2 py-1.5 text-sm font-medium rounded transition-all underline-offset-2 focus:outline-hidden focus-visible:underline"
+                                   :class="[
+                                       item.is_active
+                                           ? 'bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark'
+                                           : 'text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong',
+                                       collapsed ? 'justify-center px-4' : 'px-2'
+                                   ]">
+                                    <!-- Single icon: solid when active, regular otherwise (no hover effect for simplicity) -->
+                                    <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center"
+                                          :class="collapsed ? 'text-lg' : 'text-base'">
+                                        <i :class="[item.icon, item.is_active ? 'fa-solid' : 'fa-regular']"></i>
+                                    </span>
+                                    <span x-show="!collapsed" x-text="item.label" class="flex-1"></span>
+                                    <!-- Badge -->
+                                    <template x-if="item.badge && !collapsed">
+                                        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full text-white"
+                                              :class="item.badge_color"
+                                              x-text="item.badge"></span>
+                                    </template>
+                                </a>
+                            </template>
+
+                            <!-- Item WITH children (expandable parent) -->
+                            <template x-if="item.has_children">
+                                <div>
+                                    <!-- Parent button -->
+                                    <button type="button"
+                                            @click="toggleSubmenu(item.key)"
+                                            class="group w-full flex items-center gap-2 py-1.5 text-sm font-medium rounded transition-all underline-offset-2 focus:outline-hidden focus-visible:underline"
+                                            :class="[
+                                                item.is_active
+                                                    ? 'bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark'
+                                                    : 'text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong',
+                                                collapsed ? 'justify-center px-4' : 'px-2'
+                                            ]"
+                                            :aria-expanded="isExpanded(item.key)">
+                                        <!-- Single icon: solid when active/expanded, regular otherwise -->
+                                        <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center"
+                                              :class="collapsed ? 'text-lg' : 'text-base'">
+                                            <i :class="[item.icon, (item.is_active || isExpanded(item.key)) ? 'fa-solid' : 'fa-regular']"></i>
+                                        </span>
+                                        <span x-show="!collapsed" x-text="item.label" class="flex-1 text-left"></span>
+                                        <!-- Chevron indicator -->
+                                        <i x-show="!collapsed"
+                                           class="fa-solid fa-chevron-down text-xs transition-transform duration-200"
+                                           :class="isExpanded(item.key) ? 'rotate-180' : ''"></i>
+                                    </button>
+
+                                    <!-- Children submenu (collapsible) -->
+                                    <div x-show="!collapsed && isExpanded(item.key)"
+                                         x-collapse
+                                         class="mt-1 ml-4 pl-3 border-l border-border-light dark:border-borderDark space-y-1">
+                                        <template x-for="child in item.children" :key="child.key">
+                                            <a :href="child.route"
+                                               class="group flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all underline-offset-2 focus:outline-hidden focus-visible:underline"
+                                               :class="child.is_active
+                                                   ? 'bg-primary/10 text-onSurfaceStrong dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong'
+                                                   : 'text-onSurface/80 hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark/80 dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong'">
+                                                <!-- Single icon: solid when active, regular otherwise -->
+                                                <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center text-sm">
+                                                    <i :class="[child.icon, child.is_active ? 'fa-solid' : 'fa-regular']"></i>
+                                                </span>
+                                                <span x-text="child.label" class="flex-1"></span>
+                                                <!-- Child badge -->
+                                                <template x-if="child.badge">
+                                                    <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full text-white"
+                                                          :class="child.badge_color"
+                                                          x-text="child.badge"></span>
+                                                </template>
+                                            </a>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
                 </div>
-                <a href="/admin/users"
-                   class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/admin/users') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
-                   :class="collapsed ? 'justify-center' : ''">
-                    <svg class="flex-shrink-0"
-                         :class="collapsed ? 'size-6' : 'size-5'"
-                         width="20"
-                         height="20"
-                         aria-hidden="true"
-                         xmlns="http://www.w3.org/2000/svg"
-                         fill="currentColor"
-                         viewBox="0 0 20 18">
-                        <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                    </svg>
-                    <span x-show="!collapsed">{{ _("Users") }}</span>
-                </a>
-            {% endif %}
-            <!-- Demo Section -->
-            <div class="pt-4 mt-4 border-t border-border-light dark:border-borderDark">
-                <div class="flex items-center px-2 mb-2" x-show="!collapsed">
-                    <span class="text-xs font-semibold uppercase text-onSurface/60 dark:text-onSurfaceDark/60">{{ _("Demo") }}</span>
-                </div>
-            </div>
-            <a href="/books"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/books') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
-               :class="collapsed ? 'justify-center' : ''">
-                <svg class="flex-shrink-0"
-                     :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20"
-                     height="20"
-                     aria-hidden="true"
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="currentColor"
-                     viewBox="0 0 18 20">
-                    <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
-                </svg>
-                <span x-show="!collapsed">{{ _("Books") }}</span>
-            </a>
-            <a href="/cars"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all {% if current_path.startswith('/cars') %} bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark {% else %} text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong {% endif %} underline-offset-2 focus:outline-hidden focus-visible:underline"
-               :class="collapsed ? 'justify-center' : ''">
-                <svg class="flex-shrink-0"
-                     :class="collapsed ? 'size-6' : 'size-5'"
-                     width="20"
-                     height="20"
-                     aria-hidden="true"
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="currentColor"
-                     viewBox="0 0 18 20">
-                    <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.840a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
-                </svg>
-                <span x-show="!collapsed">{{ _("Cars") }}</span>
-            </a>
-        </div>
+            </template>
+        </nav>
     </div>
-    <!-- Resize handle (hidden on mobile) - visible indicator -->
+
+    <!-- Resize handle (hidden on mobile) -->
     <div x-show="!collapsed"
          class="hidden md:flex absolute right-0 top-0 h-full items-center group"
          @pointerdown.prevent="startDrag($event)"
          title="{{ _('Drag to resize sidebar') }}">
-        <!-- Visual resize indicator -->
         <div role="slider"
-             aria-label="Resize sidebar - drag or use arrow keys"
+             aria-label="{{ _('Resize sidebar - drag or use arrow keys') }}"
              tabindex="0"
              class="resize-handle relative flex items-center justify-center bg-transparent hover:bg-primary/10 dark:hover:bg-primaryDark/10 transition-colors"
              @pointerdown.prevent.stop="startDrag($event)"
              @keydown.prevent.stop="handleKeydown($event)">
-            <!-- Vertical grip lines (three dots) -->
             <div class="flex flex-col gap-1 opacity-30 group-hover:opacity-100 transition-opacity">
                 <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
                 <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
                 <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
             </div>
         </div>
-        <!-- Expanded hit area -->
         <div class="handle-hit" @pointerdown.prevent.stop="startDrag($event)"></div>
     </div>
 </aside>
-<!-- Overlay -->
+
+<!-- Mobile Overlay -->
 <div x-show="sidebarIsOpen"
      class="fixed inset-0 z-30 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 md:hidden"
      @click="sidebarIsOpen = false"
@@ -163,3 +170,76 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
      x-cloak></div>
+
+<!-- Sidebar Menu Alpine Component -->
+<script>
+function sidebarMenu() {
+    // Read sidebar data from the script tag to avoid JSON escaping issues
+    const dataElement = document.getElementById('sidebar-data');
+    const initialData = dataElement ? JSON.parse(dataElement.textContent) : { sections: [], user_role: 'guest' };
+
+    // Merge with resizable sidebar functionality
+    const resizable = resizableSidebar({ key: 'sidebarWidthCSSVar', defaultWidth: 240, minWidth: 160, maxWidth: 300 });
+
+    return {
+        // Data from server
+        sections: initialData.sections || [],
+        userRole: initialData.user_role || 'guest',
+
+        // Submenu state (accordion - only one open at a time)
+        expandedKey: null,
+
+        // Inherit resizable properties
+        ...resizable,
+
+        init() {
+            // Initialize resizable sidebar
+            resizable.init.call(this);
+
+            // Restore expanded submenu from localStorage
+            const savedKey = localStorage.getItem('sidebar_expanded');
+            if (savedKey) {
+                this.expandedKey = savedKey;
+            }
+
+            // Auto-expand parent of active child
+            this.sections.forEach(section => {
+                section.items.forEach(item => {
+                    if (item.has_children && item.children) {
+                        const hasActiveChild = item.children.some(child => child.is_active);
+                        if (hasActiveChild || item.default_expanded) {
+                            this.expandedKey = item.key;
+                        }
+                    }
+                });
+            });
+        },
+
+        isExpanded(key) {
+            return this.expandedKey === key;
+        },
+
+        toggleSubmenu(key) {
+            // Accordion behavior: close others when opening one
+            if (this.expandedKey === key) {
+                this.expandedKey = null;
+                localStorage.removeItem('sidebar_expanded');
+            } else {
+                this.expandedKey = key;
+                localStorage.setItem('sidebar_expanded', key);
+            }
+        },
+
+        // Delegate resize methods to resizable
+        toggleCollapse() {
+            resizable.toggleCollapse.call(this);
+        },
+        startDrag(event) {
+            resizable.startDrag.call(this, event);
+        },
+        handleKeydown(event) {
+            resizable.handleKeydown.call(this, event);
+        }
+    };
+}
+</script>

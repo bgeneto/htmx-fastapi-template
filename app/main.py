@@ -8,14 +8,13 @@ from urllib.parse import urlparse
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates  # type: ignore[import]
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 # Keep legacy auth for magic links
 from .config import settings
 from .db import init_db
-from .i18n import get_locale, get_translations, set_locale
+from .i18n import set_locale
 from .logger import get_logger
 from .models import (
     User,
@@ -39,6 +38,7 @@ from .schemas import (
     UserUpdate,
 )
 from .template_context import get_footer_context
+from .templates import templates
 
 # Import fastapi-users components
 from .users import (
@@ -256,26 +256,6 @@ app.include_router(
     prefix="/api/users",
     tags=["users"],
 )
-
-templates = Jinja2Templates(directory="templates")
-
-# Configure Jinja2 with i18n extension
-templates.env.add_extension("jinja2.ext.i18n")
-templates.env.install_gettext_callables(  # type: ignore[attr-defined]
-    gettext=lambda x: get_translations(get_locale()).gettext(x),
-    ngettext=lambda s, p, n: get_translations(get_locale()).ngettext(s, p, n),
-    newstyle=True,
-)
-
-
-# Global template context for all templates
-def get_template_context():
-    """Get global context for all templates."""
-    return {"enable_i18n": settings.ENABLE_I18N}
-
-
-# Add global context function to templates
-templates.env.globals.update(get_template_context())
 
 # Mount static files with caching (1 year for immutable assets)
 app.mount("/static", StaticFiles(directory="static", html=False), name="static")

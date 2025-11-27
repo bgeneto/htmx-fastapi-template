@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-27 09:34-0300\n"
+"POT-Creation-Date: 2025-11-27 10:33-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -259,6 +259,56 @@ msgstr "A mensagem deve ter pelo menos 5 caracteres"
 msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
+#: app/sidebar.py:161 templates/components/_top_navbar.html:23
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: app/sidebar.py:163 app/sidebar.py:184
+#: templates/pages/admin/users_form.html:52
+msgid "Admin"
+msgstr "Admin"
+
+#: app/sidebar.py:164 templates/pages/analytics.html:17
+msgid "Users"
+msgstr "Usuários"
+
+#: app/sidebar.py:165 templates/errors/404.html:53
+msgid "Contacts"
+msgstr "Contatos"
+
+#: app/sidebar.py:166 app/sidebar.py:186
+#: templates/components/_top_navbar.html:99
+msgid "Settings"
+msgstr "Configurações"
+
+#: app/sidebar.py:168 app/sidebar.py:185
+msgid "Demo"
+msgstr "Demo"
+
+#: app/sidebar.py:169 templates/errors/404.html:55
+#: templates/pages/analytics.html:62
+msgid "Books"
+msgstr "Livros"
+
+#: app/sidebar.py:170 templates/pages/analytics.html:40
+msgid "Cars"
+msgstr "Carros"
+
+#: app/sidebar.py:172
+#, fuzzy
+msgid "Analytics"
+msgstr "Dashboard Analítico"
+
+#: app/sidebar.py:173
+#, fuzzy
+msgid "Reports"
+msgstr "registros"
+
+#: app/sidebar.py:183
+#, fuzzy
+msgid "Main"
+msgstr "Gerenciando"
+
 #: app/models/user.py:76 app/strategies.py:25
 #: templates/components/_contact_form.html:200
 #: templates/pages/auth/login.html:282 templates/pages/auth/register.html:161
@@ -266,7 +316,7 @@ msgstr "As senhas não coincidem"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30 templates/components/_header.html:68
+#: app/strategies.py:30 templates/components/_header.html:70
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
@@ -715,93 +765,93 @@ msgstr "Atualizar informações"
 msgid "Environment"
 msgstr ""
 
-#: templates/components/_header.html:64
+#: templates/components/_header.html:66
 #, python-brace-format
 msgid "Value must be greater than or equal to {0}"
 msgstr "O valor deve ser maior ou igual a {0}"
 
-#: templates/components/_header.html:65
+#: templates/components/_header.html:67
 #, python-brace-format
 msgid "Value must be greater than {0}"
 msgstr "O valor deve ser maior que {0}"
 
-#: templates/components/_header.html:66
+#: templates/components/_header.html:68
 #, python-brace-format
 msgid "Value must be less than or equal to {0}"
 msgstr "O valor deve ser menor ou igual a {0}"
 
-#: templates/components/_header.html:67
+#: templates/components/_header.html:69
 #, python-brace-format
 msgid "Value must be less than {0}"
 msgstr "O valor deve ser menor que {0}"
 
-#: templates/components/_header.html:69
+#: templates/components/_header.html:71
 msgid "Must be a valid number"
 msgstr "Deve ser um número válido"
 
-#: templates/components/_header.html:70
+#: templates/components/_header.html:72
 msgid "Must be a valid integer"
 msgstr "Deve ser um número inteiro válido"
 
-#: templates/components/_header.html:71
+#: templates/components/_header.html:73
 #, python-brace-format
 msgid "Must be at least {0} character(s)"
 msgstr "Deve ter pelo menos {0} caractere(s)"
 
-#: templates/components/_header.html:72
+#: templates/components/_header.html:74
 #, python-brace-format
 msgid "Must be at most {0} character(s)"
 msgstr "Deve ter no máximo {0} caractere(s)"
 
-#: templates/components/_header.html:73
+#: templates/components/_header.html:75
 msgid "Must be a valid text"
 msgstr "Deve ser um texto válido"
 
-#: templates/components/_header.html:74
+#: templates/components/_header.html:76
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: templates/components/_header.html:75
+#: templates/components/_header.html:77
 msgid "Please fix the validation errors below."
 msgstr "Por favor, corrija os erros antes de enviar."
 
-#: templates/components/_header.html:76
+#: templates/components/_header.html:78
 msgid "Record added successfully"
 msgstr "Registro adicionado com sucesso"
 
-#: templates/components/_header.html:77
+#: templates/components/_header.html:79
 msgid "Record updated successfully"
 msgstr "Registro atualizado com sucesso"
 
-#: templates/components/_header.html:78
+#: templates/components/_header.html:80
 msgid "Record deleted successfully"
 msgstr "Registro excluído com sucesso"
 
-#: templates/components/_header.html:79
+#: templates/components/_header.html:81
 msgid "Failed to add record"
 msgstr "Falha ao adicionar o registro"
 
-#: templates/components/_header.html:80
+#: templates/components/_header.html:82
 msgid "Failed to update record"
 msgstr "Falha ao atualizar o registro"
 
-#: templates/components/_header.html:81
+#: templates/components/_header.html:83
 msgid "Failed to delete record"
 msgstr "Falha ao excluir o registro"
 
-#: templates/components/_header.html:82
+#: templates/components/_header.html:84
 msgid "Network error - no response from server"
 msgstr "Erro de rede - sem resposta do servidor"
 
-#: templates/components/_header.html:83
+#: templates/components/_header.html:85
 msgid "Unknown error occurred"
 msgstr "Um erro desconhecido ocorreu"
 
-#: templates/components/_header.html:84
+#: templates/components/_header.html:86
 msgid "Validation error"
 msgstr "Erro de validação"
 
-#: templates/components/_header.html:85
+#: templates/components/_header.html:87
 msgid "Close"
 msgstr "Fechar"
 
@@ -813,44 +863,34 @@ msgstr "Alterando idioma..."
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/components/_sidebar.html:69
-#: templates/components/_top_navbar.html:23
-msgid "Dashboard"
-msgstr "Dashboard"
+#: templates/components/_sidebar.html:12
+msgid "Sidebar navigation"
+msgstr ""
 
-#: templates/components/_sidebar.html:75
-#: templates/pages/admin/users_form.html:52
-msgid "Admin"
-msgstr "Admin"
+#: templates/components/_sidebar.html:27 templates/components/_sidebar.html:29
+msgid "Expand sidebar"
+msgstr ""
 
-#: templates/components/_sidebar.html:91 templates/pages/analytics.html:17
-msgid "Users"
-msgstr "Usuários"
+#: templates/components/_sidebar.html:27 templates/components/_sidebar.html:29
+msgid "Collapse sidebar"
+msgstr ""
 
-#: templates/components/_sidebar.html:97
-msgid "Demo"
-msgstr "Demo"
+#: templates/components/_sidebar.html:41
+#, fuzzy
+msgid "Main navigation"
+msgstr "Gerenciando"
 
-#: templates/components/_sidebar.html:113 templates/errors/404.html:55
-#: templates/pages/analytics.html:62
-msgid "Books"
-msgstr "Livros"
-
-#: templates/components/_sidebar.html:128 templates/pages/analytics.html:40
-msgid "Cars"
-msgstr "Carros"
-
-#: templates/components/_sidebar.html:136
+#: templates/components/_sidebar.html:145
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
+
+#: templates/components/_sidebar.html:147
+msgid "Resize sidebar - drag or use arrow keys"
+msgstr ""
 
 #: templates/components/_top_navbar.html:83 templates/pages/profile.html:2
 msgid "Profile"
 msgstr "Perfil"
-
-#: templates/components/_top_navbar.html:99
-msgid "Settings"
-msgstr "Configurações"
 
 #: templates/components/_top_navbar.html:113
 msgid "Contact"
@@ -899,10 +939,6 @@ msgstr "Voltar"
 #: templates/errors/404.html:50
 msgid "Here are some helpful links instead:"
 msgstr "Aqui estão alguns links úteis:"
-
-#: templates/errors/404.html:53
-msgid "Contacts"
-msgstr "Contatos"
 
 #: templates/errors/500.html:2 templates/errors/500.html:20
 msgid "Internal Server Error"
