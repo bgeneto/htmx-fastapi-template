@@ -6,6 +6,21 @@
         <title>
             {% block title %}{{ request.app.title }}{% endblock %}
         </title>
+        <!-- CRITICAL: Apply theme IMMEDIATELY to prevent white flash on dark mode -->
+        <!-- This must run BEFORE any stylesheets load to set the class before first paint -->
+        <script>
+            (function() {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
+        <!-- Critical inline styles to prevent background flash during theme load -->
+        <style>
+            html { background-color: #f9fafb; } /* gray-50 - light mode default */
+            html.dark { background-color: #111827; } /* gray-900 - dark mode */
+            body { background-color: inherit; margin: 0; }
+        </style>
         <!-- Preconnect to CDNs for faster resource loading -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +44,10 @@
       rel="stylesheet">-->
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
               rel="stylesheet">
-        <!-- Self-hosted Tailwind CSS (compiled) -->
+        <!-- CRITICAL: Load CSS BEFORE scripts to prevent FOUC (Flash of Unstyled Content) -->
+        <!-- This ensures styles are applied before Alpine.js initializes components -->
         <link rel="stylesheet" href="/static/css/output.css">
+        <link rel="stylesheet" href="/static/style.css" />
         <!-- Axios for AJAX calls -->
         <script defer src="/static/js/axios.min.js"></script>
         <!-- Data Grid Component (load before Alpine) -->
@@ -43,7 +60,6 @@
         <script defer src="/static/js/alpine-focus.js"></script>
         <!-- Alpine.js Core for reactive components (load last) -->
         <script defer src="/static/js/alpine-min.js"></script>
-        <link rel="stylesheet" href="/static/style.css" />
         {% block extra_head %}{% endblock %}
     </head>
     <body class="font-sans font-normal bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
@@ -62,14 +78,6 @@
              class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
         <!-- Common scripts -->
         <script>
-        // Initialize theme IMMEDIATELY before DOMContentLoaded to prevent flash
-        (function () {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-
         // Global i18n object for datagrid components (DRY pattern)
         // MUST be initialized BEFORE Alpine.js loads to be available during component initialization
         window.datagridI18n = {
@@ -172,7 +180,7 @@
                     // Restore width
                     const saved = localStorage.getItem(this.storageKey);
                     let px = defaultWidth;
-                    
+
                     if (saved) {
                         px = this.clamp(parseInt(saved, 10));
                     }
@@ -183,7 +191,7 @@
                     } else {
                         this.sidebarWidth = px;
                     }
-                    
+
                     document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
                 },
 
@@ -240,13 +248,13 @@
                     } else {
                         // Restore width
                         let targetWidth = this._saved;
-                        
+
                         // Fallback to storage if _saved is missing (shouldn't happen often if init works, but good for safety)
                         if (!targetWidth) {
                              const saved = localStorage.getItem(this.storageKey);
                              if (saved) targetWidth = parseInt(saved, 10);
                         }
-                        
+
                         this.sidebarWidth = this.clamp(targetWidth ?? defaultWidth);
                         // Save the restored width to be sure
                         localStorage.setItem(this.storageKey, this.sidebarWidth);

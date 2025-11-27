@@ -383,6 +383,94 @@ docs/                        # Project documentation
 7. **Global i18n objects**: Never initialize global objects (like `window.datagridI18n`) inside `DOMContentLoaded` - they must be available BEFORE Alpine.js loads. Alpine components with `defer` scripts may initialize before `DOMContentLoaded` fires, causing `undefined` references. Initialize globals synchronously in `<script>` tags in the `<head>`.
 8. **Pydantic validation messages**: Never use `Field(ge=1, description="...")` for custom error messages - the `description` is only for API docs. Use `@field_validator` decorators with `_("...")` for translatable validation errors. Built-in constraints (`ge`, `gt`, `le`, `lt`) return generic English messages that bypass i18n.
 
+## Frontend Performance & FOUC Prevention
+
+This project implements critical optimizations to eliminate Flash of Unstyled Content (FOUC) and layout shifts:
+
+### 1. SVG Icon Sizing (Preventing Huge Icon Flash)
+- **Problem**: SVG icons without native `width`/`height` attributes render at their intrinsic size (often huge) before CSS loads
+- **Solution**: Add explicit `width` and `height` attributes to ALL SVG elements
+- **Implementation**:
+  ```html
+  <svg class="w-5 h-5"
+       width="20" height="20"  <!-- Native HTML attributes for immediate sizing -->
+       aria-hidden="true"
+       xmlns="http://www.w3.org/2000/svg"
+       fill="currentColor"
+       viewBox="0 0 20 20">
+  ```
+- **Why**: Native HTML attributes apply synchronously as the DOM parses, before CSS loads. Tailwind classes (`w-5 h-5`) are a secondary refinement.
+- **Coverage**: Apply to all SVG icons in:
+  - `templates/components/_sidebar.html` (navigation icons)
+  - `templates/components/_top_navbar.html` (profile menu, hamburger)
+  - `templates/components/_theme_toggle.html` (theme icons)
+  - `templates/components/_language_selector.html` (language icons)
+
+### 2. CSS-First Loading (Preventing General FOUC)
+- **Problem**: Scripts load before CSS, causing components to render unstyled then restyle when CSS arrives
+- **Solution**: Load CSS before all JavaScript (especially Alpine.js)
+- **Order in `_base.html`**:
+  ```html
+  <head>
+      <!-- ... meta tags, preconnect, fonts ... -->
+      <!-- CSS BEFORE scripts -->
+      <link rel="stylesheet" href="/static/css/output.css">
+      <link rel="stylesheet" href="/static/style.css" />
+
+      <!-- Scripts AFTER CSS -->
+      <script defer src="/static/js/axios.min.js"></script>
+      <script defer src="/static/js/datagrid.js"></script>
+      <!-- Alpine.js loads last -->
+      <script defer src="/static/js/alpine-min.js"></script>
+  </head>
+  ```
+- **Why**: By the time Alpine.js initializes, external CSS is already loaded and parsed.
+
+### 3. Dark Mode White Flash Prevention (Critical Theme Script)
+- **Problem**: If dark mode was the last-used theme, a white flash appears on page load before dark styles apply
+- **Root cause**: Theme detection runs too late, after body's default light background is painted
+- **Solution**:
+  1. Move theme detection to **very top of `<head>`** - run BEFORE any stylesheets
+  2. Add **critical inline styles** that apply dark background immediately based on `.dark` class
+- **Implementation**:
+  ```html
+  <head>
+      <!-- CRITICAL: Run synchronously at very start of head -->
+      <script>
+          (function() {
+              if (localStorage.getItem('theme') === 'dark') {
+                  document.documentElement.classList.add('dark');
+              }
+          })();
+      </script>
+      <!-- Critical inline styles apply before external CSS loads -->
+      <style>
+          html { background-color: #f9fafb; } /* gray-50 - light mode default */
+          html.dark { background-color: #111827; } /* gray-900 - dark mode */
+          body { background-color: inherit; margin: 0; }
+      </style>
+
+      <!-- Preconnect, fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+
+      <!-- CSS loads after theme is set -->
+      <link rel="stylesheet" href="/static/css/output.css">
+  </head>
+  ```
+- **Why**:
+  - Inline styles apply **immediately** as HTML parses
+  - `.dark` class is already on `<html>` when background is first painted
+  - External CSS refines the styles but doesn't cause repaints
+  - Timeline: Script runs → Class added → Inline CSS applies → First paint (dark) → External CSS loads (no repaint)
+
+### Key Principle: Synchronous vs Asynchronous
+
+All FOUC prevention relies on **synchronous execution before first paint**:
+- ✅ **Synchronous** (applies before paint): Inline `<script>`, inline `<style>`, native HTML attributes
+- ❌ **Asynchronous** (applies after paint): External scripts with `defer`, external stylesheets, JavaScript DOM manipulation
+
+Always prioritize synchronous approaches for critical styling/layout attributes.
+
 ## Key Commands Reference
 
 | Task                | Command                         |
