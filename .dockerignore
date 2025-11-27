@@ -1,0 +1,109 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.coverage
+.tox/
+*.prof
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+devdata/
+db_data/
+
+# Environment
+.env
+.env.local
+.env*.local
+env.age
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# Agents
+.claude/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+compose.yaml
+.dockerignore
+
+# Development tools
+scripts/
+setup-tailwind.sh
+translate.sh
+pre-commit.sh
+alembic.ini
+babel.cfg
+
+# Testing
+tests/
+pytest.ini
+conftest.py
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+
+# Misc
+.editorconfig
+.pre-commit-config.yaml
+CHANGELOG.md
+LICENSE
+AGENTS.md
+messages.pot

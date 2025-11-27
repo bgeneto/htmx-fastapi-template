@@ -141,9 +141,6 @@ logs/
 # Node modules (if any JS used)
 node_modules/
 
-# Docker
-.dockerignore
-
 # Application specific
 # Add any project-specific files here
 
