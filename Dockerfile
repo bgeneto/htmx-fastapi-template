@@ -8,7 +8,7 @@ LABEL maintainer="FastAPI Alpine Starter" \
 # Install Node.js and curl for Tailwind CSS build and health checks
 RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y nodejs libpq-dev python3-dev gcc default-libmysqlclient-dev pkg-config && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
