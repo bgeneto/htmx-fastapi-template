@@ -49,8 +49,15 @@
         </div>
         <!-- Navigation -->
         <div class="flex-1 space-y-1">
+            {% set current_path = request.url.path %}
             <a href="/"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
+                      {% if current_path == '/' %}
+                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
+                      {% else %}
+                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
+                      {% endif %}
+                      underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"
@@ -72,7 +79,13 @@
                     </div>
                 </div>
                 <a href="/admin/users"
-                   class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+                   class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
+                          {% if current_path.startswith('/admin/users') %}
+                              bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
+                          {% else %}
+                              text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
+                          {% endif %}
+                          underline-offset-2 focus:outline-hidden focus-visible:underline"
                    :class="collapsed ? 'justify-center' : ''">
                     <svg class="flex-shrink-0"
                          :class="collapsed ? 'size-6' : 'size-5'"
@@ -93,7 +106,13 @@
                 </div>
             </div>
             <a href="/books"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
+                      {% if current_path.startswith('/books') %}
+                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
+                      {% else %}
+                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
+                      {% endif %}
+                      underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"
@@ -107,7 +126,13 @@
                 <span x-show="!collapsed">{{ _("Books") }}</span>
             </a>
             <a href="/cars"
-               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-onSurface underline-offset-2 hover:bg-primary/5 hover:text-onSurfaceStrong focus:outline-hidden focus-visible:underline dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong rounded"
+               class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded transition-all
+                      {% if current_path.startswith('/cars') %}
+                          bg-primary/10 text-onSurfaceStrong border-l-3 border-primary dark:bg-primaryDark/10 dark:text-onSurfaceDarkStrong dark:border-primaryDark
+                      {% else %}
+                          text-onSurface hover:bg-primary/5 hover:text-onSurfaceStrong dark:text-onSurfaceDark dark:hover:bg-primaryDark/5 dark:hover:text-onSurfaceDarkStrong
+                      {% endif %}
+                      underline-offset-2 focus:outline-hidden focus-visible:underline"
                :class="collapsed ? 'justify-center' : ''">
                 <svg class="flex-shrink-0"
                      :class="collapsed ? 'size-6' : 'size-5'"

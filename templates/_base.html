@@ -1,67 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            {% block title %}{{ request.app.title }}{% endblock %}
-        </title>
-        <!-- CRITICAL: Apply theme IMMEDIATELY to prevent white flash on dark mode -->
-        <!-- This must run BEFORE any stylesheets load to set the class before first paint -->
-        <script>
-            (function() {
-                if (localStorage.getItem('theme') === 'dark') {
-                    document.documentElement.classList.add('dark');
-                }
-            })();
-        </script>
-        <!-- Critical inline styles to prevent background flash during theme load -->
-        <style>
-            html { background-color: #f9fafb; } /* gray-50 - light mode default */
-            html.dark { background-color: #111827; } /* gray-900 - dark mode */
-            body { background-color: inherit; margin: 0; }
-        </style>
-        <!-- Preconnect to CDNs for faster resource loading -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <!-- Favicon and Icons -->
-        <link rel="icon" href="/static/icons/favicon.ico" sizes="any">
-        <link rel="icon"
-              href="/static/icons/favicon-16x16.png"
-              sizes="16x16"
-              type="image/png">
-        <link rel="icon"
-              href="/static/icons/favicon-32x32.png"
-              sizes="32x32"
-              type="image/png">
-        <link rel="apple-touch-icon"
-              href="/static/icons/apple-touch-icon.png"
-              sizes="180x180">
-        <link rel="manifest" href="/static/icons/site.webmanifest">
-        <meta name="theme-color" content="#ffffff">
-        <!-- Google Fonts -->
-        <!--<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet">-->
-        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-              rel="stylesheet">
-        <!-- CRITICAL: Load CSS BEFORE scripts to prevent FOUC (Flash of Unstyled Content) -->
-        <!-- This ensures styles are applied before Alpine.js initializes components -->
-        <link rel="stylesheet" href="/static/css/output.css">
-        <link rel="stylesheet" href="/static/style.css" />
-        <!-- Axios for AJAX calls -->
-        <script defer src="/static/js/axios.min.js"></script>
-        <!-- Data Grid Component (load before Alpine) -->
-        <script defer src="/static/js/datagrid.js"></script>
-        <!-- Toast Component (load before Alpine) -->
-        <script defer src="/static/js/toast.js"></script>
-        <!-- Alpine Plugins -->
-        <script defer src="/static/js/alpine-mask.js"></script>
-        <script defer src="/static/js/alpine-collapse.js"></script>
-        <script defer src="/static/js/alpine-focus.js"></script>
-        <!-- Alpine.js Core for reactive components (load last) -->
-        <script defer src="/static/js/alpine-min.js"></script>
-        {% block extra_head %}{% endblock %}
-    </head>
+<html lang="{{ request.state.locale|default("en") }}">
+    {% include "components/_header.html" %}
     <body class="font-sans font-normal bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
         <div x-data="{ sidebarIsOpen: false }"
              class="relative flex w-full min-h-screen">
@@ -71,210 +10,23 @@
                 <main class="flex-1 p-4 md:p-6 mt-16">
                     {% block content %}{% endblock %}
                 </main>
+                {% include "components/_footer.html" %}
             </div>
         </div>
         <!-- Toast container (handled by toast.js if missing, but good to have placeholder) -->
         <div id="toast-container"
              class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
-        <!-- Common scripts -->
+        <!-- Initialize Toast with translated close button -->
         <script>
-        // Global i18n object for datagrid components (DRY pattern)
-        // MUST be initialized BEFORE Alpine.js loads to be available during component initialization
-        window.datagridI18n = {
-            valueGreaterEqual: "{{ _('Value must be greater than or equal to {0}') }}",
-            valueGreater: "{{ _('Value must be greater than {0}') }}",
-            valueLessEqual: "{{ _('Value must be less than or equal to {0}') }}",
-            valueLess: "{{ _('Value must be less than {0}') }}",
-            fieldRequired: "{{ _('This field is required') }}",
-            validNumber: "{{ _('Must be a valid number') }}",
-            validInteger: "{{ _('Must be a valid integer') }}",
-            minLength: "{{ _('Must be at least {0} character(s)') }}",
-            maxLength: "{{ _('Must be at most {0} character(s)') }}",
-            validText: "{{ _('Must be a valid text') }}",
-            invalidValue: "{{ _('Invalid value') }}",
-            fixErrors: "{{ _('Please fix the validation errors below.') }}",
-            recordAddSuccess: "{{ _('Record added successfully') }}",
-            recordUpdateSuccess: "{{ _('Record updated successfully') }}",
-            recordDeleteSuccess: "{{ _('Record deleted successfully') }}",
-            recordAddFailed: "{{ _('Failed to add record') }}",
-            recordUpdateFailed: "{{ _('Failed to update record') }}",
-            recordDeleteFailed: "{{ _('Failed to delete record') }}",
-            networkError: "{{ _('Network error - no response from server') }}",
-            unknownError: "{{ _('Unknown error occurred') }}",
-            validationError: "{{ _('Validation error') }}"
-        };
-
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize Toast with server-side translations
-            if (window.Toast) {
+            if (window.Toast && typeof window.Toast.init === 'function') {
                 window.Toast.init({
                     translations: {
-                        close: "{{ _('Close') }}"
+                        close: window.datagridI18n.toastClose
                     }
                 });
             }
-
-            // Update icons to match the initial theme state
-            const isDark = document.documentElement.classList.contains('dark');
-
-            document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-                const sunIcon = btn.querySelector('[data-theme-sun]');
-                const moonIcon = btn.querySelector('[data-theme-moon]');
-                if (sunIcon && moonIcon) {
-                    if (isDark) {
-                        sunIcon.classList.remove('hidden');
-                        moonIcon.classList.add('hidden');
-                    } else {
-                        moonIcon.classList.remove('hidden');
-                        sunIcon.classList.add('hidden');
-                    }
-                }
-            });
         });
-
-        // Function to toggle theme (can be called from any component)
-        window.toggleTheme = function () {
-            const html = document.documentElement;
-            const isCurrentlyDark = html.classList.contains('dark');
-
-            // Toggle the dark class on html element
-            if (isCurrentlyDark) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-
-            // Update icons
-            document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-                const sunIcon = btn.querySelector('[data-theme-sun]');
-                const moonIcon = btn.querySelector('[data-theme-moon]');
-                if (sunIcon && moonIcon) {
-                    if (isCurrentlyDark) {
-                        moonIcon.classList.remove('hidden');
-                        sunIcon.classList.add('hidden');
-                    } else {
-                        sunIcon.classList.remove('hidden');
-                        moonIcon.classList.add('hidden');
-                    }
-                }
-            });
-        };
-
-
-        // Alpine.js resizable sidebar component
-        function resizableSidebar({ key, defaultWidth, minWidth, maxWidth }) {
-            return {
-                sidebarWidth: defaultWidth,
-                collapsed: false,
-                dragging: false,
-                storageKey: key,
-                collapsedKey: key + '_isCollapsed',
-
-                init() {
-                    // Restore collapsed state
-                    const isCollapsed = localStorage.getItem(this.collapsedKey) === 'true';
-                    this.collapsed = isCollapsed;
-
-                    // Restore width
-                    const saved = localStorage.getItem(this.storageKey);
-                    let px = defaultWidth;
-
-                    if (saved) {
-                        px = this.clamp(parseInt(saved, 10));
-                    }
-
-                    if (this.collapsed) {
-                        this._saved = px; // Remember the expanded width
-                        this.sidebarWidth = 56;
-                    } else {
-                        this.sidebarWidth = px;
-                    }
-
-                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
-                },
-
-                clamp(w) {
-                    return Math.min(maxWidth, Math.max(minWidth, Math.round(w)));
-                },
-
-                startDrag(e) {
-                    this.dragging = true;
-                    this.startX = e.clientX;
-                    this.startWidth = this.sidebarWidth;
-
-                    const moveHandler = this.onMove.bind(this);
-                    const upHandler = this.stopDrag.bind(this);
-
-                    window.addEventListener('pointermove', moveHandler);
-                    window.addEventListener('pointerup', upHandler);
-                    window.addEventListener('pointercancel', upHandler);
-
-                    this._moveHandler = moveHandler;
-                    this._upHandler = upHandler;
-                },
-
-                onMove(e) {
-                    if (!this.dragging) return;
-
-                    const dx = e.clientX - this.startX;
-                    const newWidth = this.clamp(this.startWidth + dx);
-
-                    this.sidebarWidth = newWidth;
-                    document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
-
-                    localStorage.setItem(this.storageKey, newWidth);
-                },
-
-                stopDrag() {
-                    if (!this.dragging) return;
-                    this.dragging = false;
-
-                    window.removeEventListener('pointermove', this._moveHandler);
-                    window.removeEventListener('pointerup', this._upHandler);
-                    window.removeEventListener('pointercancel', this._upHandler);
-                },
-
-                toggleCollapse() {
-                    this.collapsed = !this.collapsed;
-                    localStorage.setItem(this.collapsedKey, this.collapsed);
-
-                    if (this.collapsed) {
-                        this._saved = this.sidebarWidth;
-                        this.sidebarWidth = 56;
-                        // Do NOT save the collapsed width (56) to the main storageKey
-                        // so we preserve the user's preferred expanded width
-                    } else {
-                        // Restore width
-                        let targetWidth = this._saved;
-
-                        // Fallback to storage if _saved is missing (shouldn't happen often if init works, but good for safety)
-                        if (!targetWidth) {
-                             const saved = localStorage.getItem(this.storageKey);
-                             if (saved) targetWidth = parseInt(saved, 10);
-                        }
-
-                        this.sidebarWidth = this.clamp(targetWidth ?? defaultWidth);
-                        // Save the restored width to be sure
-                        localStorage.setItem(this.storageKey, this.sidebarWidth);
-                    }
-
-                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
-                },
-
-                handleKeydown(e) {
-                    const step = 8;
-                    if (e.key === 'ArrowLeft') this.sidebarWidth = this.clamp(this.sidebarWidth - step);
-                    if (e.key === 'ArrowRight') this.sidebarWidth = this.clamp(this.sidebarWidth + step);
-                    if (e.key === 'Home') this.sidebarWidth = minWidth;
-                    if (e.key === 'End') this.sidebarWidth = maxWidth;
-
-                    document.documentElement.style.setProperty('--sidebar-width', this.sidebarWidth + 'px');
-                    localStorage.setItem(this.storageKey, this.sidebarWidth);
-                }
-            };
-        }
         </script>
         {% block extra_scripts %}{% endblock %}
     </body>

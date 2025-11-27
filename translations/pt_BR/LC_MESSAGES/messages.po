@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-26 23:21-0300\n"
+"POT-Creation-Date: 2025-11-27 07:49-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -266,7 +266,7 @@ msgstr "As senhas não coincidem"
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
 
-#: app/strategies.py:30 templates/_base.html:88
+#: app/strategies.py:30 templates/components/_header.html:68
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
@@ -371,12 +371,12 @@ msgid "ISBN"
 msgstr "ISBN"
 
 #: app/routers/books.py:60 app/routers/cars.py:56 templates/pages/books.html:39
-#: templates/pages/books_form.html:20 templates/pages/cars.html:38
+#: templates/pages/books_form.html:20 templates/pages/cars.html:34
 #: templates/pages/cars_form.html:69
 msgid "Year"
 msgstr "Ano"
 
-#: app/routers/books.py:66 app/routers/cars.py:59 templates/pages/cars.html:39
+#: app/routers/books.py:66 app/routers/cars.py:59 templates/pages/cars.html:35
 #: templates/pages/cars_form.html:87
 msgid "Price"
 msgstr "Preço"
@@ -391,18 +391,18 @@ msgstr "Páginas"
 msgid "Summary"
 msgstr "Resumo"
 
-#: app/routers/cars.py:37 templates/pages/cars.html:35
+#: app/routers/cars.py:37 templates/pages/cars.html:31
 #: templates/pages/cars_form.html:10
 msgid "Make"
 msgstr "Marca"
 
-#: app/routers/cars.py:44 templates/pages/cars.html:36
+#: app/routers/cars.py:44 templates/pages/cars.html:32
 #: templates/pages/cars_form.html:29
 msgid "Model"
 msgstr "Modelo"
 
-#: app/routers/cars.py:51 templates/pages/cars.html:37
-#: templates/pages/cars_form.html:48
+#: app/routers/cars.py:51 templates/components/_footer.html:48
+#: templates/pages/cars.html:33 templates/pages/cars_form.html:48
 msgid "Version"
 msgstr "Versão"
 
@@ -476,96 +476,6 @@ msgstr "Senha atual incorreta"
 #: app/routers/users.py:186 templates/pages/profile.html:619
 msgid "Password changed successfully"
 msgstr "Senha alterada com sucesso"
-
-#: templates/_base.html:84
-#, python-brace-format
-msgid "Value must be greater than or equal to {0}"
-msgstr "O valor deve ser maior ou igual a {0}"
-
-#: templates/_base.html:85
-#, python-brace-format
-msgid "Value must be greater than {0}"
-msgstr "O valor deve ser maior que {0}"
-
-#: templates/_base.html:86
-#, python-brace-format
-msgid "Value must be less than or equal to {0}"
-msgstr "O valor deve ser menor ou igual a {0}"
-
-#: templates/_base.html:87
-#, python-brace-format
-msgid "Value must be less than {0}"
-msgstr "O valor deve ser menor que {0}"
-
-#: templates/_base.html:89
-msgid "Must be a valid number"
-msgstr "Deve ser um número válido"
-
-#: templates/_base.html:90
-msgid "Must be a valid integer"
-msgstr "Deve ser um número inteiro válido"
-
-#: templates/_base.html:91
-#, python-brace-format
-msgid "Must be at least {0} character(s)"
-msgstr "Deve ter pelo menos {0} caractere(s)"
-
-#: templates/_base.html:92
-#, python-brace-format
-msgid "Must be at most {0} character(s)"
-msgstr "Deve ter no máximo {0} caractere(s)"
-
-#: templates/_base.html:93
-msgid "Must be a valid text"
-msgstr "Deve ser um texto válido"
-
-#: templates/_base.html:94
-msgid "Invalid value"
-msgstr "Valor inválido"
-
-#: templates/_base.html:95
-msgid "Please fix the validation errors below."
-msgstr "Por favor, corrija os erros antes de enviar."
-
-#: templates/_base.html:96
-msgid "Record added successfully"
-msgstr "Registro adicionado com sucesso"
-
-#: templates/_base.html:97
-msgid "Record updated successfully"
-msgstr "Registro atualizado com sucesso"
-
-#: templates/_base.html:98
-msgid "Record deleted successfully"
-msgstr "Registro excluído com sucesso"
-
-#: templates/_base.html:99
-msgid "Failed to add record"
-msgstr "Falha ao adicionar o registro"
-
-#: templates/_base.html:100
-msgid "Failed to update record"
-msgstr "Falha ao atualizar o registro"
-
-#: templates/_base.html:101
-msgid "Failed to delete record"
-msgstr "Falha ao excluir o registro"
-
-#: templates/_base.html:102
-msgid "Network error - no response from server"
-msgstr "Erro de rede - sem resposta do servidor"
-
-#: templates/_base.html:103
-msgid "Unknown error occurred"
-msgstr "Um erro desconhecido ocorreu"
-
-#: templates/_base.html:104
-msgid "Validation error"
-msgstr "Erro de validação"
-
-#: templates/_base.html:112
-msgid "Close"
-msgstr "Fechar"
 
 #: templates/components/_contact_form.html:13
 msgid "Message Sent!"
@@ -760,7 +670,140 @@ msgstr "Cancelar"
 msgid "Save Changes"
 msgstr "Salvar Alterações"
 
-#: templates/components/_language_selector.html:81
+#: templates/components/_footer.html:7
+msgid "About"
+msgstr ""
+
+#: templates/components/_footer.html:9
+msgid ""
+"FastAPI + Alpine.js starter template with full i18n support and async "
+"SQLModel persistence."
+msgstr ""
+
+#: templates/components/_footer.html:14
+msgid "Resources"
+msgstr ""
+
+#: templates/components/_footer.html:21
+msgid "FastAPI Documentation"
+msgstr ""
+
+#: templates/components/_footer.html:29
+msgid "Alpine.js Documentation"
+msgstr ""
+
+#: templates/components/_footer.html:37
+msgid "Tailwind CSS Documentation"
+msgstr ""
+
+#: templates/components/_footer.html:44
+#, fuzzy
+msgid "Information"
+msgstr "Atualizar informações"
+
+#: templates/components/_footer.html:52
+msgid "Environment"
+msgstr ""
+
+#: templates/components/_footer.html:65
+msgid "FastAPI Alpine Starter"
+msgstr ""
+
+#: templates/components/_footer.html:65
+msgid "All rights reserved."
+msgstr ""
+
+#: templates/components/_header.html:64
+#, python-brace-format
+msgid "Value must be greater than or equal to {0}"
+msgstr "O valor deve ser maior ou igual a {0}"
+
+#: templates/components/_header.html:65
+#, python-brace-format
+msgid "Value must be greater than {0}"
+msgstr "O valor deve ser maior que {0}"
+
+#: templates/components/_header.html:66
+#, python-brace-format
+msgid "Value must be less than or equal to {0}"
+msgstr "O valor deve ser menor ou igual a {0}"
+
+#: templates/components/_header.html:67
+#, python-brace-format
+msgid "Value must be less than {0}"
+msgstr "O valor deve ser menor que {0}"
+
+#: templates/components/_header.html:69
+msgid "Must be a valid number"
+msgstr "Deve ser um número válido"
+
+#: templates/components/_header.html:70
+msgid "Must be a valid integer"
+msgstr "Deve ser um número inteiro válido"
+
+#: templates/components/_header.html:71
+#, python-brace-format
+msgid "Must be at least {0} character(s)"
+msgstr "Deve ter pelo menos {0} caractere(s)"
+
+#: templates/components/_header.html:72
+#, python-brace-format
+msgid "Must be at most {0} character(s)"
+msgstr "Deve ter no máximo {0} caractere(s)"
+
+#: templates/components/_header.html:73
+msgid "Must be a valid text"
+msgstr "Deve ser um texto válido"
+
+#: templates/components/_header.html:74
+msgid "Invalid value"
+msgstr "Valor inválido"
+
+#: templates/components/_header.html:75
+msgid "Please fix the validation errors below."
+msgstr "Por favor, corrija os erros antes de enviar."
+
+#: templates/components/_header.html:76
+msgid "Record added successfully"
+msgstr "Registro adicionado com sucesso"
+
+#: templates/components/_header.html:77
+msgid "Record updated successfully"
+msgstr "Registro atualizado com sucesso"
+
+#: templates/components/_header.html:78
+msgid "Record deleted successfully"
+msgstr "Registro excluído com sucesso"
+
+#: templates/components/_header.html:79
+msgid "Failed to add record"
+msgstr "Falha ao adicionar o registro"
+
+#: templates/components/_header.html:80
+msgid "Failed to update record"
+msgstr "Falha ao atualizar o registro"
+
+#: templates/components/_header.html:81
+msgid "Failed to delete record"
+msgstr "Falha ao excluir o registro"
+
+#: templates/components/_header.html:82
+msgid "Network error - no response from server"
+msgstr "Erro de rede - sem resposta do servidor"
+
+#: templates/components/_header.html:83
+msgid "Unknown error occurred"
+msgstr "Um erro desconhecido ocorreu"
+
+#: templates/components/_header.html:84
+msgid "Validation error"
+msgstr "Erro de validação"
+
+#: templates/components/_header.html:85
+msgid "Close"
+msgstr "Fechar"
+
+#: templates/components/_language_selector.html:85
 msgid "Changing language..."
 msgstr "Alterando idioma..."
 
@@ -768,34 +811,34 @@ msgstr "Alterando idioma..."
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/components/_sidebar.html:65
+#: templates/components/_sidebar.html:72
 #: templates/components/_top_navbar.html:23
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/components/_sidebar.html:71
+#: templates/components/_sidebar.html:78
 #: templates/pages/admin/users_form.html:52
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/components/_sidebar.html:86 templates/pages/analytics.html:17
+#: templates/components/_sidebar.html:99 templates/pages/analytics.html:17
 msgid "Users"
 msgstr "Usuários"
 
-#: templates/components/_sidebar.html:92
+#: templates/components/_sidebar.html:105
 msgid "Demo"
 msgstr "Demo"
 
-#: templates/components/_sidebar.html:107 templates/errors/404.html:55
+#: templates/components/_sidebar.html:126 templates/errors/404.html:55
 #: templates/pages/analytics.html:62
 msgid "Books"
 msgstr "Livros"
 
-#: templates/components/_sidebar.html:121 templates/pages/analytics.html:40
+#: templates/components/_sidebar.html:146 templates/pages/analytics.html:40
 msgid "Cars"
 msgstr "Carros"
 
-#: templates/components/_sidebar.html:129
+#: templates/components/_sidebar.html:154
 msgid "Drag to resize sidebar"
 msgstr "Arraste para redimensionar"
 
@@ -941,6 +984,7 @@ msgstr "Navegue e gerencie todos os livros"
 
 #: templates/pages/auth/check_email.html:62
 #: templates/pages/auth/register.html:41 templates/pages/books.html:16
+#: templates/pages/cars.html:13
 msgid "Back to Home"
 msgstr "Voltar ao Início"
 
@@ -949,23 +993,19 @@ msgid "Book"
 msgstr "Livro"
 
 #: templates/pages/admin/users.html:40 templates/pages/books.html:42
-#: templates/pages/cars.html:40
+#: templates/pages/cars.html:36
 msgid "Actions"
 msgstr "Ações"
 
-#: templates/pages/cars.html:3 templates/pages/cars.html:9
+#: templates/pages/cars.html:2 templates/pages/cars.html:7
 msgid "Cars Management"
 msgstr "Gerenciamento de Carros"
 
-#: templates/pages/cars.html:10
+#: templates/pages/cars.html:8
 msgid "Browse and manage cars inventory"
 msgstr "Navegue e gerencie todos os carros"
 
-#: templates/pages/admin/users.html:16 templates/pages/cars.html:16
-msgid "Back to Admin"
-msgstr "Voltar ao Início"
-
-#: templates/pages/cars.html:23
+#: templates/pages/cars.html:20
 msgid "Car"
 msgstr "Carro"
 
@@ -1160,6 +1200,10 @@ msgstr "Gerenciamento de Usuários"
 #: templates/pages/admin/users.html:10
 msgid "Manage user accounts and permissions"
 msgstr "Gerencie contas de usuários e permissões"
+
+#: templates/pages/admin/users.html:16
+msgid "Back to Admin"
+msgstr "Voltar ao Início"
 
 #: templates/pages/admin/users.html:23 templates/pages/admin/users_form.html:50
 msgid "User"

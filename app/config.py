@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     # When disabled, all UI text and validation messages will use the default language
     ENABLE_I18N: bool = True
 
+    # Application version for footer/about pages
+    APP_VERSION: str = "1.0.0"
+
     @property
     def debug(self) -> bool:
         """Alias for DEBUG to maintain compatibility."""

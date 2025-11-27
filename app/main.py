@@ -38,6 +38,7 @@ from .schemas import (
     UserRead,
     UserUpdate,
 )
+from .template_context import get_footer_context
 
 # Import fastapi-users components
 from .users import (
@@ -164,11 +165,15 @@ class DateTimeJSONEncoder(JSONEncoder):
         return super().default(obj)
 
 
-# Global dependency to inject user into request state
-async def inject_user_to_request_state(
+# Global dependency to inject user into request state and footer context
+async def inject_context_variables_to_request_state(
     request: Request, user: Optional[User] = Depends(current_user_optional)
 ):
     request.state.user = user
+    # Inject footer context variables (version, environment, current_year)
+    footer_context = get_footer_context()
+    for key, value in footer_context.items():
+        setattr(request.state, key, value)
 
 
 app = FastAPI(
@@ -178,7 +183,7 @@ app = FastAPI(
     redoc_url=None,
     lifespan=lifespan,
     json_encoders={datetime: lambda v: v.isoformat()},
-    dependencies=[Depends(inject_user_to_request_state)],
+    dependencies=[Depends(inject_context_variables_to_request_state)],
 )
 
 

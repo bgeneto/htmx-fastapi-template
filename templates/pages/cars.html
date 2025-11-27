@@ -1,33 +1,29 @@
 {% extends "_base.html" %}
-
-{% block title %}{{ _('Cars Management') }} - Admin{% endblock %}
-
+{% block title %}{{ _("Cars Management") }}{% endblock %}
 {% block content %}
-<div class="bg-gray-50 dark:bg-gray-900 py-8">
-    <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _('Cars Management') }}</h1>
-            <p class="text-gray-600 dark:text-gray-400">{{ _('Browse and manage cars inventory') }}</p>
-        </div>
-
-        <div class="mb-6">
-            <a href="/admin"
-                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors">
-                ← {{ _('Back to Admin') }}
-            </a>
-        </div>
-
-        <div x-cloak x-data="datagrid(adminCarsDatagrid())"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
-            {% set form_template = "pages/cars_form.html" %}
-            {% set resource_name = _('Car') %}
-            {% include "components/_datagrid_grid.html" %}
+    <div class="bg-gray-50 dark:bg-gray-900 py-8">
+        <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ _("Cars Management") }}</h1>
+                <p class="text-gray-600 dark:text-gray-400">{{ _("Browse and manage cars inventory") }}</p>
+            </div>
+            <div class="mb-6">
+                <a href="/"
+                   class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors">
+                    ← {{ _("Back to Home") }}
+                </a>
+            </div>
+            <div x-cloak
+                 x-data="datagrid(carsDatagrid())"
+                 class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                {% set form_template = "pages/cars_form.html" %}
+                {% set resource_name = _('Car') %}
+                {% include "components/_datagrid_grid.html" %}
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    function adminCarsDatagrid() {
+    <script>
+    function carsDatagrid() {
         return {
             apiUrl: '/api/cars',
             columns: [
@@ -42,5 +38,5 @@
             i18n: window.datagridI18n
         };
     }
-</script>
+    </script>
 {% endblock %}

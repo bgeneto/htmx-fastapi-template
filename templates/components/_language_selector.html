@@ -77,6 +77,10 @@
         // Set locale cookie
         document.cookie = `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
 
+        // Update lang attribute immediately (before reload)
+        // Convert locale format: en -> en, pt_BR -> pt-BR
+        document.documentElement.lang = locale.replace('_', '-');
+
         // Show loading indicator
         const loadingToast = window.showToast('{{ _("Changing language...") }}', 'info', 1000);
 
