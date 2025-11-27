@@ -303,15 +303,7 @@ msgstr "Usuário criado com sucesso"
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
-#: app/routers/auth.py:64 templates/pages/auth/register.html:20
-msgid ""
-"User registration is not available. Please log in using the magic link or"
-" OTP method."
-msgstr ""
-"O registro de usuário não está disponível. Por favor, faça login usando o "
-"link mágico ou o método OTP."
-
-#: app/routers/auth.py:73
+#: app/routers/auth.py:61
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
