@@ -26,10 +26,29 @@ def upgrade() -> None:
     op.add_column('user', sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.false()))
 
     # Update existing users: set is_verified based on email_verified
-    op.execute('UPDATE "user" SET is_verified = email_verified WHERE email_verified = 1')
+    # Use dialect-aware SQL for cross-database compatibility (PostgreSQL, MySQL, SQLite)
+    bind = op.get_bind()
+    if bind.engine.name == "mysql":
+        # MySQL: Use backticks for identifiers, convert integer comparison to boolean
+        op.execute('UPDATE `user` SET is_verified = (email_verified = 1) WHERE email_verified = 1')
+    elif bind.engine.name == "postgresql":
+        # PostgreSQL: Use double quotes for identifiers and explicit CAST
+        op.execute('UPDATE "user" SET is_verified = CAST(email_verified AS BOOLEAN) WHERE email_verified = true')
+    else:
+        # SQLite: Direct assignment works (SQLite treats 1 as true for boolean columns)
+        op.execute('UPDATE "user" SET is_verified = email_verified WHERE email_verified = 1')
 
     # Update existing users: set is_superuser = True for ADMIN role
-    op.execute('UPDATE "user" SET is_superuser = 1 WHERE role = \'admin\'')
+    # Use dialect-aware SQL for cross-database compatibility
+    if bind.engine.name == "mysql":
+        # MySQL: Use backticks for identifiers
+        op.execute('UPDATE `user` SET is_superuser = true WHERE role = "admin"')
+    elif bind.engine.name == "postgresql":
+        # PostgreSQL: Use double quotes for identifiers
+        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'admin\'')
+    else:
+        # SQLite: Standard SQL syntax
+        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'admin\'')
 
 
 def downgrade() -> None:

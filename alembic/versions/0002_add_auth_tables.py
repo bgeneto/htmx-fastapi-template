@@ -121,5 +121,7 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_user_email"), table_name="user")
     op.drop_table("user")
 
-    # Drop enum type (PostgreSQL)
-    op.execute("DROP TYPE IF EXISTS userrole")
+    # Drop enum type (PostgreSQL only - MySQL and SQLite don't have separate enum types)
+    bind = op.get_bind()
+    if bind.engine.name == "postgresql":
+        op.execute("DROP TYPE IF EXISTS userrole")
