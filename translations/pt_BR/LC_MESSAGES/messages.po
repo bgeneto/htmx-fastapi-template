@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-26 21:25-0300\n"
+"POT-Creation-Date: 2025-11-26 21:30-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -303,7 +303,13 @@ msgstr "Usuário criado com sucesso"
 msgid "User updated successfully"
 msgstr "Usuário atualizado com sucesso"
 
-#: app/routers/auth.py:61
+#: app/routers/auth.py:64 templates/pages/auth/register.html:20
+msgid ""
+"User registration is not available. Please log in using the magic link or"
+" OTP method."
+msgstr ""
+
+#: app/routers/auth.py:73
 msgid "An account with this email already exists"
 msgstr "Já existe uma conta com este e-mail"
 
