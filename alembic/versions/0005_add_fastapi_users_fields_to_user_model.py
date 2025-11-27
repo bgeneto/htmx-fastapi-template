@@ -42,13 +42,13 @@ def upgrade() -> None:
     # Use dialect-aware SQL for cross-database compatibility
     if bind.engine.name == "mysql":
         # MySQL: Use backticks for identifiers
-        op.execute('UPDATE `user` SET is_superuser = true WHERE role = "admin"')
+        op.execute('UPDATE `user` SET is_superuser = true WHERE role = "ADMIN"')
     elif bind.engine.name == "postgresql":
-        # PostgreSQL: Use double quotes for identifiers
-        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'admin\'')
+        # PostgreSQL: Use double quotes for identifiers and uppercase enum value
+        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'ADMIN\'')
     else:
-        # SQLite: Standard SQL syntax
-        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'admin\'')
+        # SQLite: Standard SQL syntax with uppercase enum value
+        op.execute('UPDATE "user" SET is_superuser = true WHERE role = \'ADMIN\'')
 
 
 def downgrade() -> None:
