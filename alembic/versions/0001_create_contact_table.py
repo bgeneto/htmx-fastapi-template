@@ -11,7 +11,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '0001_create_contact_table'
-down_revision = None
+down_revision = '0000_extend_alembic_version_column'
 branch_labels = None
 depends_on = None
 

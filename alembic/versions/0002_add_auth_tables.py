@@ -1,7 +1,7 @@
 """Add User and LoginToken tables with bootstrap admin
 
 Revision ID: 0002_add_auth_tables
-Revises: 0001_create_contact
+Revises: 0001_create_contact_table
 Create Date: 2025-11-19
 
 """
