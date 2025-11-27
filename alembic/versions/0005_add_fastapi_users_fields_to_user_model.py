@@ -26,13 +26,12 @@ def upgrade() -> None:
     op.add_column('user', sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.false()))
 
     # Update existing users: set is_verified based on email_verified
-    op.execute("UPDATE user SET is_verified = email_verified WHERE email_verified = 1")
+    op.execute('UPDATE "user" SET is_verified = email_verified WHERE email_verified = 1')
 
     # Update existing users: set is_superuser = True for ADMIN role
-    op.execute("UPDATE user SET is_superuser = 1 WHERE role = 'admin'")
+    op.execute('UPDATE "user" SET is_superuser = 1 WHERE role = \'admin\'')
 
 
 def downgrade() -> None:
     op.drop_column('user', 'is_verified')
     op.drop_column('user', 'is_superuser')
-

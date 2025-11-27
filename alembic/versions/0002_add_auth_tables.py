@@ -10,7 +10,6 @@ from datetime import datetime
 from typing import Sequence, Union
 
 import sqlalchemy as sa
-import sqlmodel
 
 from alembic import op
 from app.config import settings
@@ -28,14 +27,14 @@ def upgrade() -> None:
         "user",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column(
-            "email", sqlmodel.sql.sqltypes.AutoString(length=320), nullable=False
+            "email", sa.String(length=320), nullable=False
         ),
         sa.Column(
-            "full_name", sqlmodel.sql.sqltypes.AutoString(length=200), nullable=False
+            "full_name", sa.String(length=200), nullable=False
         ),
         sa.Column(
             "hashed_password",
-            sqlmodel.sql.sqltypes.AutoString(length=255),
+            sa.String(length=255),
             nullable=True,
         ),
         sa.Column(
@@ -57,7 +56,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column(
-            "token_hash", sqlmodel.sql.sqltypes.AutoString(length=64), nullable=False
+            "token_hash", sa.String(length=64), nullable=False
         ),
         sa.Column("expires_at", sa.DateTime(), nullable=False),
         sa.Column("used_at", sa.DateTime(), nullable=True),
@@ -97,7 +96,7 @@ def upgrade() -> None:
     op.execute(
         sa.text(
             """
-            INSERT INTO user (email, full_name, hashed_password, role, is_active, email_verified, created_at, updated_at)
+            INSERT INTO "user" (email, full_name, hashed_password, role, is_active, email_verified, created_at, updated_at)
             VALUES (:email, :full_name, :hashed_password, :role, :is_active, :email_verified, :created_at, :updated_at)
             """
         ).bindparams(
