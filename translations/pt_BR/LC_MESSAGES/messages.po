@@ -295,19 +295,16 @@ msgid "Cars"
 msgstr "Carros"
 
 #: app/sidebar.py:172
-#, fuzzy
 msgid "Analytics"
-msgstr "Dashboard Analítico"
+msgstr "Dados Analíticos"
 
 #: app/sidebar.py:173
-#, fuzzy
 msgid "Reports"
-msgstr "registros"
+msgstr "Relatórios"
 
 #: app/sidebar.py:183
-#, fuzzy
 msgid "Main"
-msgstr "Gerenciando"
+msgstr "Principal"
 
 #: app/models/user.py:76 app/strategies.py:25
 #: templates/components/_contact_form.html:197
@@ -358,6 +355,8 @@ msgid ""
 "User registration is not available. Please log in using the magic link or"
 " OTP method."
 msgstr ""
+"O registro de usuário não está disponível. Por favor, faça login usando o "
+"link mágico ou o método OTP."
 
 #: app/routers/auth.py:73
 msgid "An account with this email already exists"
@@ -728,11 +727,11 @@ msgstr ""
 #: templates/components/_footer.html:6
 #: templates/components/_footer_extended.html:65
 msgid "All rights reserved."
-msgstr ""
+msgstr "Todos os direitos reservados."
 
 #: templates/components/_footer_extended.html:7
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: templates/components/_footer_extended.html:9
 msgid ""
@@ -742,28 +741,27 @@ msgstr ""
 
 #: templates/components/_footer_extended.html:14
 msgid "Resources"
-msgstr ""
+msgstr "Recursos"
 
 #: templates/components/_footer_extended.html:21
 msgid "FastAPI Documentation"
-msgstr ""
+msgstr "Documentação FastAPI"
 
 #: templates/components/_footer_extended.html:29
 msgid "Alpine.js Documentation"
-msgstr ""
+msgstr "Documentação Alpine.js"
 
 #: templates/components/_footer_extended.html:37
 msgid "Tailwind CSS Documentation"
-msgstr ""
+msgstr "Documentação Tailwind CSS"
 
 #: templates/components/_footer_extended.html:44
-#, fuzzy
 msgid "Information"
-msgstr "Atualizar informações"
+msgstr "Informação"
 
 #: templates/components/_footer_extended.html:52
 msgid "Environment"
-msgstr ""
+msgstr "Ambiente"
 
 #: templates/components/_header.html:66
 #, python-brace-format
@@ -865,20 +863,19 @@ msgstr "Sair"
 
 #: templates/components/_sidebar.html:12
 msgid "Sidebar navigation"
-msgstr ""
+msgstr "Navegação da barra lateral"
 
 #: templates/components/_sidebar.html:27 templates/components/_sidebar.html:29
 msgid "Expand sidebar"
-msgstr ""
+msgstr "Expandir barra lateral"
 
 #: templates/components/_sidebar.html:27 templates/components/_sidebar.html:29
 msgid "Collapse sidebar"
-msgstr ""
+msgstr "Colapsar barra lateral"
 
 #: templates/components/_sidebar.html:41
-#, fuzzy
 msgid "Main navigation"
-msgstr "Gerenciando"
+msgstr "Navegação principal"
 
 #: templates/components/_sidebar.html:145
 msgid "Drag to resize sidebar"
@@ -886,7 +883,7 @@ msgstr "Arraste para redimensionar"
 
 #: templates/components/_sidebar.html:147
 msgid "Resize sidebar - drag or use arrow keys"
-msgstr ""
+msgstr "Redimensionar barra lateral - arraste ou use as teclas de seta"
 
 #: templates/components/_top_navbar.html:83 templates/pages/profile.html:2
 msgid "Profile"

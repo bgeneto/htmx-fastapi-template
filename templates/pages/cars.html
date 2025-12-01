@@ -13,9 +13,7 @@
                     ← {{ _("Back to Home") }}
                 </a>
             </div>
-            <div x-cloak
-                 x-data="datagrid(carsDatagrid())"
-                 class="card-datagrid">
+            <div x-cloak x-data="datagrid(carsDatagrid())" class="card-datagrid">
                 {% set form_template = "pages/cars_form.html" %}
                 {% set resource_name = _('Car') %}
                 {% include "components/_datagrid_grid.html" %}
