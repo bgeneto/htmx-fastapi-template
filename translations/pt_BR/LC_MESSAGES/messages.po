@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fastapi-alpine-starteReport-Msgid-Bugs-To: "
 "EMAIL@ADDRESS\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-01 12:07-0300\n"
+"POT-Creation-Date: 2025-12-01 12:25-0300\n"
 "PO-Revision-Date: 2025-11-18 14:52-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt_BR\n"
@@ -311,7 +311,7 @@ msgstr "Gerenciando"
 
 #: app/models/user.py:76 app/strategies.py:25
 #: templates/components/_contact_form.html:197
-#: templates/pages/auth/login.html:279 templates/pages/auth/register.html:160
+#: templates/pages/auth/login.html:269 templates/pages/auth/register.html:160
 #: templates/pages/profile.html:433
 msgid "Please enter a valid email address"
 msgstr "Por favor, insira um endereço de e-mail válido"
@@ -336,8 +336,8 @@ msgstr "O ano deve ser maior que 1886"
 msgid "Price must be greater than 0"
 msgstr "O preço deve ser maior que 0"
 
-#: app/routers/admin.py:112 templates/pages/admin/login.html:40
-#: templates/pages/admin/login.html:187
+#: app/routers/admin.py:112 templates/pages/admin/login.html:41
+#: templates/pages/admin/login.html:197
 msgid "Invalid credentials"
 msgstr "Credenciais inválidas"
 
@@ -373,7 +373,7 @@ msgstr ""
 "Cadastro realizado com sucesso! Sua conta está aguardando aprovação do "
 "administrador."
 
-#: app/routers/auth.py:143 templates/pages/admin/login.html:189
+#: app/routers/auth.py:143 templates/pages/admin/login.html:199
 msgid "Invalid email or password"
 msgstr "E-mail ou senha inválidos"
 
@@ -468,8 +468,8 @@ msgstr "Nome"
 
 #: app/routers/contacts.py:118 templates/components/_contact_form.html:73
 #: templates/pages/admin/index.html:17 templates/pages/admin/users.html:36
-#: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:81
-#: templates/pages/auth/login.html:175 templates/pages/auth/register.html:49
+#: templates/pages/admin/users_form.html:8 templates/pages/auth/login.html:83
+#: templates/pages/auth/login.html:169 templates/pages/auth/register.html:49
 msgid "Email"
 msgstr "E-mail"
 
@@ -554,7 +554,7 @@ msgid "Name is required"
 msgstr "O nome é obrigatório"
 
 #: templates/components/_contact_form.html:196
-#: templates/pages/auth/login.html:278 templates/pages/auth/register.html:159
+#: templates/pages/auth/login.html:268 templates/pages/auth/register.html:159
 #: templates/pages/profile.html:432
 msgid "Email is required"
 msgstr "O e-mail é obrigatório"
@@ -564,7 +564,7 @@ msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
 #: templates/components/_contact_form.html:200
-#: templates/pages/auth/login.html:282 templates/pages/auth/register.html:163
+#: templates/pages/auth/login.html:272 templates/pages/auth/register.html:163
 #: templates/pages/auth/verify_otp.html:136
 msgid "Please fix the errors before submitting."
 msgstr "Por favor, corrija os erros antes de enviar."
@@ -1168,7 +1168,7 @@ msgstr "Não"
 msgid "Last Updated"
 msgstr "Última Atualização"
 
-#: templates/pages/auth/login.html:281 templates/pages/profile.html:434
+#: templates/pages/auth/login.html:271 templates/pages/profile.html:434
 msgid "Password must be at least 8 characters"
 msgstr "A senha deve ter pelo menos 8 caracteres"
 
@@ -1216,18 +1216,18 @@ msgstr "Acesso Admin"
 msgid "Please enter your credentials"
 msgstr "Informe suas credenciais"
 
-#: templates/pages/admin/login.html:42
+#: templates/pages/admin/login.html:43
 msgid ""
 "Please check your email and password and try\n"
 "                            again."
 msgstr "Por favor, verifique seu e-mail e senha e tente novamente."
 
-#: templates/pages/admin/login.html:86 templates/pages/auth/login.html:120
+#: templates/pages/admin/login.html:91 templates/pages/auth/login.html:118
 msgid "Password"
 msgstr "Senha"
 
-#: templates/pages/admin/login.html:196 templates/pages/auth/login.html:409
-#: templates/pages/auth/login.html:413 templates/pages/auth/verify_otp.html:264
+#: templates/pages/admin/login.html:206 templates/pages/auth/login.html:399
+#: templates/pages/auth/login.html:403 templates/pages/auth/verify_otp.html:264
 msgid "An error occurred. Please try again."
 msgstr "Ocorreu um erro. Por favor, tente novamente."
 
@@ -1326,7 +1326,7 @@ msgstr "minutos por segurança."
 msgid "The link will expire in"
 msgstr "O link expirará em"
 
-#: templates/pages/auth/login.html:2 templates/pages/auth/login.html:246
+#: templates/pages/auth/login.html:2 templates/pages/auth/login.html:236
 msgid "Log In"
 msgstr "Entrar"
 
@@ -1342,19 +1342,19 @@ msgstr "Digite seu e-mail para receber um link mágico"
 msgid "Enter your email and password to log in"
 msgstr "Insira seu e-mail e senha para entrar"
 
-#: templates/pages/auth/login.html:101 templates/pages/auth/login.html:195
+#: templates/pages/auth/login.html:102 templates/pages/auth/login.html:188
 msgid "you@example.com"
 msgstr "voce@exemplo.com"
 
-#: templates/pages/auth/login.html:139
+#: templates/pages/auth/login.html:136
 msgid "••••••••"
 msgstr "••••••••"
 
-#: templates/pages/auth/login.html:167
+#: templates/pages/auth/login.html:162
 msgid "Enter your email and password to access your account."
 msgstr "Digite seu e-mail e senha para acessar sua conta."
 
-#: templates/pages/auth/login.html:223
+#: templates/pages/auth/login.html:214
 msgid ""
 "We'll send you a 6-digit verification code to your email. Enter the code "
 "on the next page to complete your login."
@@ -1362,29 +1362,29 @@ msgstr ""
 "Enviaremos um código de verificação de 6 dígitos para seu e-mail. Digite "
 "o código na próxima página para completar seu login."
 
-#: templates/pages/auth/login.html:225
+#: templates/pages/auth/login.html:216
 msgid "We'll send you a secure login link to your email. No password needed!"
 msgstr ""
 "Enviaremos um link de login seguro para seu e-mail. Sem necessidade de "
 "senha!"
 
-#: templates/pages/auth/login.html:246
+#: templates/pages/auth/login.html:236
 msgid " Sending..."
 msgstr " Enviando..."
 
-#: templates/pages/auth/login.html:246
+#: templates/pages/auth/login.html:236
 msgid "Send Verification Code"
 msgstr "Enviar Código de Verificação"
 
-#: templates/pages/auth/login.html:246
+#: templates/pages/auth/login.html:236
 msgid "Continue with e-mail"
 msgstr "Continuar com e-mail"
 
-#: templates/pages/auth/login.html:252
+#: templates/pages/auth/login.html:242
 msgid "Don't have an account? Register"
 msgstr "Não tem uma conta? Cadastre-se"
 
-#: templates/pages/auth/login.html:280
+#: templates/pages/auth/login.html:270
 msgid "Password is required"
 msgstr "A Senha é obrigatória"
 

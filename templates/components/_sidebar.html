@@ -140,13 +140,13 @@
 
     <!-- Resize handle (hidden on mobile) -->
     <div x-show="!collapsed"
-         class="hidden md:flex absolute right-0 top-0 h-full items-center group"
+         class="hidden md:flex absolute right-0 top-0 h-full items-center group cursor-ew-resize"
          @pointerdown.prevent="startDrag($event)"
          title="{{ _('Drag to resize sidebar') }}">
         <div role="slider"
              aria-label="{{ _('Resize sidebar - drag or use arrow keys') }}"
              tabindex="0"
-             class="resize-handle relative flex items-center justify-center bg-transparent hover:bg-primary/10 dark:hover:bg-primaryDark/10 transition-colors"
+             class="resize-handle relative flex items-center justify-center bg-transparent hover:bg-primary/10 dark:hover:bg-primaryDark/10 transition-colors cursor-ew-resize"
              @pointerdown.prevent.stop="startDrag($event)"
              @keydown.prevent.stop="handleKeydown($event)">
             <div class="flex flex-col gap-1 opacity-30 group-hover:opacity-100 transition-opacity">
@@ -155,7 +155,7 @@
                 <div class="w-1 h-1 rounded-full bg-onSurface dark:bg-onSurfaceDark"></div>
             </div>
         </div>
-        <div class="handle-hit" @pointerdown.prevent.stop="startDrag($event)"></div>
+        <div class="handle-hit cursor-ew-resize" @pointerdown.prevent.stop="startDrag($event)"></div>
     </div>
 </aside>
 
