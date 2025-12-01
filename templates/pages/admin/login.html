@@ -10,7 +10,7 @@
       </div>
     </header>
     <!-- Login form -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+    <div class="card-auth">
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-4">
           <svg class="w-8 h-8 text-blue-600 dark:text-blue-400"
@@ -26,9 +26,10 @@
       </div>
       <div x-data="adminLoginForm()">
         <!-- Credentials Error Alert -->
-        <div x-show="credentialsError"
+        <div x-cloak
+             x-show="credentialsError"
              x-transition
-             class="mb-6 p-4 rounded-lg border-l-4 border-red-600 bg-red-50 dark:bg-red-900/20 flex items-start gap-3">
+             class="alert-error flex items-start gap-3">
           <svg class="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5"
                fill="none"
                stroke="currentColor"
@@ -53,8 +54,7 @@
         <form @submit.prevent="submitForm" novalidate class="space-y-6">
           <!-- Email field -->
           <div>
-            <label for="email"
-                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">E-mail</label>
+            <label for="email" class="label-auth">E-mail</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg class="h-5 w-5 text-gray-400"
@@ -73,11 +73,9 @@
                      @input="validate('email')"
                      required
                      autocomplete="email"
-                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                     class="input-auth pl-10">
             </div>
-            <div x-show="errors.email"
-                 x-transition
-                 class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+            <div x-cloak x-show="errors.email" x-transition class="error-with-icon">
               <svg class="h-4 w-4 mr-1"
                    fill="none"
                    stroke="currentColor"
@@ -90,11 +88,7 @@
           </div>
           <!-- Password field -->
           <div>
-            <label for="password"
-                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-              {{ _("Password")
-              }}
-            </label>
+            <label for="password" class="label-auth">{{ _("Password") }}</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg class="h-5 w-5 text-gray-400"
@@ -112,11 +106,9 @@
                      @blur="validate('password')"
                      @input="validate('password')"
                      required
-                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                     class="input-auth pl-10">
             </div>
-            <div x-show="errors.password"
-                 x-transition
-                 class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+            <div x-cloak x-show="errors.password" x-transition class="error-with-icon">
               <svg class="h-4 w-4 mr-1"
                    fill="none"
                    stroke="currentColor"
@@ -128,10 +120,9 @@
             </div>
           </div>
           <!-- Submit button -->
-          <button type="submit"
-                  :disabled="loading"
-                  class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg x-show="loading"
+          <button type="submit" :disabled="loading" class="btn-primary-full">
+            <svg x-cloak
+                 x-show="loading"
                  class="h-5 w-5 mr-2 animate-spin text-white"
                  xmlns="http://www.w3.org/2000/svg"
                  fill="none"

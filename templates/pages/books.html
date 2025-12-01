@@ -15,7 +15,7 @@
             </div>
             <div x-cloak
                  x-data="datagrid(booksDatagrid())"
-                 class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                 class="card-datagrid">
                 {% set form_template = "pages/books_form.html" %}
                 {% set resource_name = _('Book') %}
                 {% include "components/_datagrid_grid.html" %}

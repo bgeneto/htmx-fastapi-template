@@ -9,9 +9,9 @@
         <p class="text-gray-600 dark:text-gray-400">{{ _('Register for an account') }}</p>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+    <div class="card-auth">
         {% if login_method != 'classic' %}
-            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
+            <div class="alert-warning mb-6">
                 <div class="flex items-start">
                     <svg class="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -25,8 +25,7 @@
         <div x-data="registerForm()" x-init="init()" :style="{ pointerEvents: isRegistrationDisabled ? 'none' : 'auto', opacity: isRegistrationDisabled ? '0.5' : '1' }">
             <!-- Success message -->
             <div x-show="success" x-transition class="text-center py-8">
-                <div
-                    class="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+                <div class="icon-circle-success mb-6">
                     <svg class="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -46,7 +45,7 @@
             <form x-show="!success" @submit.prevent="submitForm" novalidate class="space-y-6">
                 <!-- Email field -->
                 <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    <label for="email" class="label-auth">
                         {{ _('Email') }}
                     </label>
                     <div class="relative">
@@ -59,10 +58,10 @@
                         </div>
                         <input id="email" type="email" x-model="form.email" @blur="validate('email')"
                             @input="validate('email')" required autocomplete="email"
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                            class="input-auth" />
                     </div>
                     <div x-show="errors.email" x-transition
-                        class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                        class="error-with-icon">
                         <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -73,7 +72,7 @@
 
                 <!-- Full Name field -->
                 <div>
-                    <label for="full_name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    <label for="full_name" class="label-auth">
                         {{ _('Full Name') }}
                     </label>
                     <div class="relative">
@@ -85,10 +84,10 @@
                         </div>
                         <input id="full_name" type="text" x-model="form.full_name" @blur="validate('full_name')"
                             @input="validate('full_name')" required minlength="2" autocomplete="name"
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                            class="input-auth" />
                     </div>
                     <div x-show="errors.full_name" x-transition
-                        class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                        class="error-with-icon">
                         <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -98,7 +97,7 @@
                 </div>
 
                 <!-- Info message -->
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div class="alert-info">
                     <div class="flex">
                         <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +114,7 @@
                 <!-- Action buttons -->
                 <div class="space-y-3">
                     <button type="submit" :disabled="loading || isRegistrationDisabled"
-                        class="w-full inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="btn-primary-full">
                         <svg x-show="loading" class="h-5 w-5 mr-2 animate-spin text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">

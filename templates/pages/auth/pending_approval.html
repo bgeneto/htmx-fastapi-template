@@ -2,7 +2,7 @@
 {% block title %}{{ _("Account Pending Approval") }} - {{ super() }}{% endblock %}
 {% block content %}
     <div class="max-w-2xl mx-auto p-6">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12">
+        <div class="card-auth">
             <!-- Success Icon (Email Verified) -->
             <div class="flex justify-center mb-6">
                 <div class="rounded-full bg-blue-100 dark:bg-blue-900/30 p-4">
@@ -22,7 +22,7 @@
                 {{ _("Email Verified Successfully!") }}
             </h1>
             <!-- Main Message -->
-            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6 mb-6">
+            <div class="alert-warning flex items-start">
                 <div class="flex items-start">
                     <svg class="h-6 w-6 text-yellow-600 dark:text-yellow-400 mr-3 flex-shrink-0 mt-0.5"
                          fill="none"
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!-- What Happens Next -->
-            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-6">
+            <div class="alert-info">
                 <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center">
                     <svg class="h-5 w-5 mr-2"
                          fill="none"
@@ -83,8 +83,7 @@
             </div>
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="/"
-                   class="inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <a href="/" class="btn-primary">
                     <svg class="h-5 w-5 mr-2"
                          fill="none"
                          stroke="currentColor"
@@ -96,8 +95,7 @@
                     </svg>
                     {{ _("Return to Home") }}
                 </a>
-                <a href="/auth/login"
-                   class="inline-flex justify-center items-center px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-700 dark:text-gray-200 font-medium rounded-lg transition-all duration-200 shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <a href="/auth/login" class="btn-secondary">
                     {{ _("Back to Login") }}
                 </a>
             </div>

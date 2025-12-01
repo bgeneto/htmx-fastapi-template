@@ -95,8 +95,7 @@
                                     <form @submit.prevent="updateProfile" novalidate class="space-y-4">
                                         <!-- Full Name -->
                                         <div>
-                                            <label for="full_name"
-                                                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            <label for="full_name" class="label-auth">
                                                 {{ _("Full Name") }}
                                             </label>
                                             <div class="relative">
@@ -115,11 +114,11 @@
                                                        @blur="validateField('full_name')"
                                                        required
                                                        minlength="2"
-                                                       class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                                       class="input-auth">
                                             </div>
                                             <div x-show="errors.full_name"
                                                  x-transition
-                                                 class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                                 class="error-with-icon">
                                                 <svg class="h-4 w-4 mr-1"
                                                      fill="none"
                                                      stroke="currentColor"
@@ -132,8 +131,7 @@
                                         </div>
                                         <!-- Email -->
                                         <div>
-                                            <label for="email"
-                                                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            <label for="email" class="label-auth">
                                                 {{ _("Email Address") }}
                                             </label>
                                             <div class="relative">
@@ -151,11 +149,11 @@
                                                        x-model="form.email"
                                                        @blur="validateField('email')"
                                                        required
-                                                       class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                                       class="input-auth">
                                             </div>
                                             <div x-show="errors.email"
                                                  x-transition
-                                                 class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                                 class="error-with-icon">
                                                 <svg class="h-4 w-4 mr-1"
                                                      fill="none"
                                                      stroke="currentColor"
@@ -168,8 +166,7 @@
                                         </div>
                                         <!-- Phone Number -->
                                         <div>
-                                            <label for="phone"
-                                                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            <label for="phone" class="label-auth">
                                                 {{ _("Phone Number") }}
                                             </label>
                                             <div class="relative">
@@ -187,14 +184,14 @@
                                                        x-model="form.phone"
                                                        x-mask="(99) 99999-9999"
                                                        placeholder="(61) 98765-4321"
-                                                       class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                                       class="input-auth">
                                             </div>
                                             <small class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">{{ _("For WhatsApp and other messaging") }}</small>
                                         </div>
                                         <!-- Submit Button -->
                                         <button type="submit"
                                                 :disabled="profileLoading"
-                                                class="w-full inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                class="btn-primary-full">
                                             <svg x-show="profileLoading"
                                                  class="h-5 w-5 mr-2 animate-spin text-white"
                                                  xmlns="http://www.w3.org/2000/svg"
@@ -214,8 +211,7 @@
                                         <form @submit.prevent="changePassword" novalidate class="space-y-4">
                                             <!-- Current Password -->
                                             <div>
-                                                <label for="current_password"
-                                                       class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                <label for="current_password" class="label-auth">
                                                     {{ _("Current Password") }}
                                                 </label>
                                                 <div class="relative">
@@ -232,11 +228,11 @@
                                                            type="password"
                                                            x-model="passwordForm.current_password"
                                                            required
-                                                           class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm">
+                                                           class="input-auth">
                                                 </div>
                                                 <div x-show="passwordErrors.current_password"
                                                      x-transition
-                                                     class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                                     class="error-with-icon">
                                                     <svg class="h-4 w-4 mr-1"
                                                          fill="none"
                                                          stroke="currentColor"
@@ -249,8 +245,7 @@
                                             </div>
                                             <!-- New Password -->
                                             <div>
-                                                <label for="new_password"
-                                                       class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                <label for="new_password" class="label-auth">
                                                     {{ _("New Password") }}
                                                 </label>
                                                 <div class="relative">
@@ -269,11 +264,11 @@
                                                            @input="validatePasswordField('new_password')"
                                                            required
                                                            minlength="8"
-                                                           class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm">
+                                                           class="input-auth">
                                                 </div>
                                                 <div x-show="passwordErrors.new_password"
                                                      x-transition
-                                                     class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                                     class="error-with-icon">
                                                     <svg class="h-4 w-4 mr-1"
                                                          fill="none"
                                                          stroke="currentColor"
@@ -286,8 +281,7 @@
                                             </div>
                                             <!-- Confirm Password -->
                                             <div>
-                                                <label for="confirm_password"
-                                                       class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                                <label for="confirm_password" class="label-auth">
                                                     {{ _("Confirm New Password") }}
                                                 </label>
                                                 <div class="relative">
@@ -306,11 +300,11 @@
                                                            @input="validatePasswordField('confirm_password')"
                                                            required
                                                            minlength="8"
-                                                           class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm">
+                                                           class="input-auth">
                                                 </div>
                                                 <div x-show="passwordErrors.confirm_password"
                                                      x-transition
-                                                     class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                                     class="error-with-icon">
                                                     <svg class="h-4 w-4 mr-1"
                                                          fill="none"
                                                          stroke="currentColor"
@@ -338,7 +332,7 @@
                                             </button>
                                         </form>
                                     {% else %}
-                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                        <div class="alert-info">
                                             <div class="flex">
                                                 <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5"
                                                      fill="none"

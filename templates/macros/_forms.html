@@ -1,0 +1,226 @@
+{# =================================================================
+   JINJA2 FORM MACROS
+   Reusable form components for auth, contact, and datagrid forms
+   ================================================================= #}
+
+{# ---------------------------------------------------------------
+   AUTH/CONTACT FORM INPUT
+   Input with icon prefix, label, and error display
+   Usage:
+     {{ form_input('email', _('Email'), 'email', icon_email(),
+                   placeholder=_('Enter email'), model='form.email',
+                   error_var='errors.email') }}
+   --------------------------------------------------------------- #}
+{% macro form_input(name, label, type='text', icon_svg='', placeholder='', required=false, model='', error_var='', autocomplete='') %}
+<div>
+    <label for="{{ name }}" class="label-auth">{{ label }}</label>
+    <div class="relative">
+        {% if icon_svg %}
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            {{ icon_svg|safe }}
+        </div>
+        {% endif %}
+        <input id="{{ name }}"
+               name="{{ name }}"
+               type="{{ type }}"
+               {% if model %}x-model="{{ model }}"{% endif %}
+               {% if error_var %}@blur="validate('{{ name }}')" @input="validate('{{ name }}')"{% endif %}
+               {% if required %}required{% endif %}
+               {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+               placeholder="{{ placeholder }}"
+               class="{% if icon_svg %}input-auth{% else %}input-auth-no-icon{% endif %}" />
+    </div>
+    {% if error_var %}
+    <div x-show="{{ error_var }}" x-transition class="error-with-icon">
+        <svg class="h-4 w-4 mr-1" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span x-text="{{ error_var }}"></span>
+    </div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   DATAGRID MODAL FORM INPUT
+   Input for datagrid edit/create modals with icon in label
+   Usage:
+     {{ datagrid_input('title', _('Title'), icon=icon_book(),
+                       model='form.title', error_var='errors.title') }}
+   --------------------------------------------------------------- #}
+{% macro datagrid_input(name, label, type='text', icon='', placeholder='', model='', error_var='') %}
+<div>
+    <label class="label-datagrid">
+        {% if icon %}
+        <span class="flex items-center gap-2">
+            {{ icon|safe }}
+            {{ label }}
+        </span>
+        {% else %}
+        {{ label }}
+        {% endif %}
+    </label>
+    <input type="{{ type }}"
+           name="{{ name }}"
+           {% if model %}x-model="{{ model }}" @input="{{ error_var }} = ''"{% endif %}
+           class="input-datagrid"
+           {% if error_var %}:class="{'input-error': {{ error_var }}}"{% endif %}
+           placeholder="{{ placeholder }}">
+    {% if error_var %}
+    <div x-show="{{ error_var }}" x-text="{{ error_var }}" class="error-text"></div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   DATAGRID MODAL TEXTAREA
+   Textarea for datagrid edit/create modals
+   Usage:
+     {{ datagrid_textarea('description', _('Description'), rows=3,
+                          model='form.description', error_var='errors.description') }}
+   --------------------------------------------------------------- #}
+{% macro datagrid_textarea(name, label, rows=3, icon='', placeholder='', model='', error_var='') %}
+<div>
+    <label class="label-datagrid">
+        {% if icon %}
+        <span class="flex items-center gap-2">
+            {{ icon|safe }}
+            {{ label }}
+        </span>
+        {% else %}
+        {{ label }}
+        {% endif %}
+    </label>
+    <textarea name="{{ name }}"
+              rows="{{ rows }}"
+              {% if model %}x-model="{{ model }}" @input="{{ error_var }} = ''"{% endif %}
+              class="textarea-datagrid"
+              {% if error_var %}:class="{'input-error': {{ error_var }}}"{% endif %}
+              placeholder="{{ placeholder }}"></textarea>
+    {% if error_var %}
+    <div x-show="{{ error_var }}" x-text="{{ error_var }}" class="error-text"></div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   ALERT BOX (with call block for content)
+   Usage:
+     {% call alert('info', icon_info()) %}
+       <p>This is an info message.</p>
+     {% endcall %}
+   --------------------------------------------------------------- #}
+{% macro alert(type='info', icon_svg='') %}
+<div class="alert-{{ type }}">
+    <div class="flex">
+        {% if icon_svg %}
+        <div class="shrink-0">
+            {{ icon_svg|safe }}
+        </div>
+        <div class="ml-3 flex-1">
+            {{ caller() }}
+        </div>
+        {% else %}
+        <div class="flex-1">
+            {{ caller() }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   PRIMARY BUTTON WITH LOADING STATE
+   Usage:
+     {{ btn_primary(_('Submit'), loading_text=_('Submitting...'),
+                    loading_var='loading', full_width=true) }}
+   --------------------------------------------------------------- #}
+{% macro btn_primary(text, loading_text='', loading_var='loading', type='submit', full_width=false, disabled_var='') %}
+<button type="{{ type }}"
+        {% if loading_var %}:disabled="{{ loading_var }}"{% endif %}
+        {% if disabled_var %}:disabled="{{ disabled_var }}"{% endif %}
+        class="{% if full_width %}btn-primary-full{% else %}btn-primary{% endif %}">
+    {% if loading_var %}
+    <svg x-show="{{ loading_var }}" class="h-5 w-5 mr-2 animate-spin" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span x-text="{{ loading_var }} ? '{{ loading_text }}' : '{{ text }}'">{{ text }}</span>
+    {% else %}
+    {{ text }}
+    {% endif %}
+</button>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   SECONDARY BUTTON
+   Usage:
+     {{ btn_secondary(_('Cancel'), href='/') }}
+   --------------------------------------------------------------- #}
+{% macro btn_secondary(text, href='', type='button', onclick='') %}
+{% if href %}
+<a href="{{ href }}" class="btn-secondary">
+    {{ text }}
+</a>
+{% else %}
+<button type="{{ type }}" {% if onclick %}@click="{{ onclick }}"{% endif %} class="btn-secondary">
+    {{ text }}
+</button>
+{% endif %}
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   DANGER BUTTON
+   Usage:
+     {{ btn_danger(_('Delete'), onclick='deleteItem()') }}
+   --------------------------------------------------------------- #}
+{% macro btn_danger(text, type='button', onclick='', loading_var='') %}
+<button type="{{ type }}"
+        {% if onclick %}@click="{{ onclick }}"{% endif %}
+        {% if loading_var %}:disabled="{{ loading_var }}"{% endif %}
+        class="btn-danger">
+    {% if loading_var %}
+    <svg x-show="{{ loading_var }}" class="h-5 w-5 mr-2 animate-spin" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    {% endif %}
+    {{ text }}
+</button>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   CANCEL BUTTON (for modals)
+   Usage:
+     {{ btn_cancel(_('Cancel'), onclick='closeModal()') }}
+   --------------------------------------------------------------- #}
+{% macro btn_cancel(text, type='button', onclick='') %}
+<button type="{{ type }}" {% if onclick %}@click="{{ onclick }}"{% endif %} class="btn-cancel">
+    {{ text }}
+</button>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   AUTH CARD WRAPPER
+   Usage:
+     {% call card_auth() %}
+       <form>...</form>
+     {% endcall %}
+   --------------------------------------------------------------- #}
+{% macro card_auth() %}
+<div class="card-auth">
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+{# ---------------------------------------------------------------
+   SUCCESS ICON CIRCLE
+   Usage:
+     {{ icon_circle_success(icon_checkmark()) }}
+   --------------------------------------------------------------- #}
+{% macro icon_circle_success(icon_svg) %}
+<div class="icon-circle-success mb-6">
+    {{ icon_svg|safe }}
+</div>
+{% endmacro %}

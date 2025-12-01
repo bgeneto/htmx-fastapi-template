@@ -471,6 +471,34 @@ All FOUC prevention relies on **synchronous execution before first paint**:
 
 Always prioritize synchronous approaches for critical styling/layout attributes.
 
+### 4. Alpine.js x-cloak Directive (Preventing Empty Element Flash)
+- **Problem**: Elements using `x-show` are visible by default before Alpine.js initializes, causing empty alert boxes, error icons, or loading spinners to flash briefly
+- **Solution**: Add `x-cloak` directive to ALL elements that should be hidden initially
+- **How it works**:
+  - CSS rule `[x-cloak] { display: none; }` in `static/css/input.css` hides elements immediately
+  - When Alpine initializes, it removes the `x-cloak` attribute
+  - Then `x-show` takes over to control visibility
+- **Implementation**:
+  ```html
+  <!-- ✅ CORRECT: x-cloak prevents flash before Alpine loads -->
+  <div x-cloak x-show="errorMessage" class="alert-error">...</div>
+  <div x-cloak x-show="loading" class="spinner">...</div>
+  <div x-cloak x-show="errors.email" class="error-with-icon">...</div>
+
+  <!-- ❌ WRONG: Element flashes visible before Alpine hides it -->
+  <div x-show="errorMessage" class="alert-error">...</div>
+  ```
+- **When to use `x-cloak`**:
+  - Alert/notification boxes (`x-show="successMessage"`, `x-show="errorMessage"`)
+  - Form field validation errors (`x-show="errors.fieldName"`)
+  - Loading spinners (`x-show="loading"`)
+  - Dropdowns and modals (`x-show="open"`)
+  - Any element that starts hidden and appears conditionally
+- **When NOT to use `x-cloak`**:
+  - Elements that should be visible by default (`x-show="!loading"` for default button text)
+  - Static content that doesn't depend on Alpine state
+- **Reference**: See `templates/pages/auth/login.html` and `templates/pages/admin/login.html` for proper usage
+
 ## Key Commands Reference
 
 | Task                | Command                         |

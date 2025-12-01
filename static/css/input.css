@@ -116,6 +116,176 @@
   }
 }
 
+/* =================================================================
+   CSS COMPONENT LIBRARY
+   Semantic classes for reusable UI patterns using @apply
+   ================================================================= */
+
+@layer components {
+  /* ---------------------------------------------------------------
+     FORM INPUTS
+     --------------------------------------------------------------- */
+
+  /* Auth/Contact form input - gray border, icon prefix support */
+  .input-auth {
+    @apply block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500;
+  }
+
+  /* Auth input without icon (left padding adjustment) */
+  .input-auth-no-icon {
+    @apply block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500;
+  }
+
+  /* DataGrid modal form input - slate border, rounded-xl */
+  .input-datagrid {
+    @apply w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500;
+  }
+
+  /* Textarea variant for datagrid */
+  .textarea-datagrid {
+    @apply w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500 resize-none;
+  }
+
+  /* ---------------------------------------------------------------
+     FORM LABELS
+     --------------------------------------------------------------- */
+
+  /* Auth/Contact form label */
+  .label-auth {
+    @apply block text-sm font-semibold text-gray-900 dark:text-white mb-2;
+  }
+
+  /* DataGrid modal form label */
+  .label-datagrid {
+    @apply block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2;
+  }
+
+  /* ---------------------------------------------------------------
+     ERROR MESSAGES
+     --------------------------------------------------------------- */
+
+  /* Simple error text */
+  .error-text {
+    @apply mt-1 text-sm text-red-600 dark:text-red-400;
+  }
+
+  /* Error with flex icon container */
+  .error-with-icon {
+    @apply mt-2 flex items-center text-sm text-red-600 dark:text-red-400;
+  }
+
+  /* ---------------------------------------------------------------
+     BUTTONS
+     --------------------------------------------------------------- */
+
+  /* Primary gradient button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Primary button - full width variant */
+  .btn-primary-full {
+    @apply w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Secondary/Ghost button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow hover:shadow-lg;
+  }
+
+  /* Danger/Delete button */
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all font-medium shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40;
+  }
+
+  /* Cancel/Outline button for modals */
+  .btn-cancel {
+    @apply px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 rounded-xl transition-all font-medium;
+  }
+
+  /* Datagrid cancel button (with border) */
+  .btn-datagrid-cancel {
+    @apply px-5 py-2.5 border-2 border-slate-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-100 hover:bg-slate-50 dark:hover:bg-gray-600 rounded-xl transition-all font-medium flex items-center gap-2 shadow-sm hover:shadow;
+  }
+
+  /* Datagrid delete button (red gradient with rounded-xl) */
+  .btn-datagrid-delete {
+    @apply px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all font-medium flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40;
+  }
+
+  /* Success button */
+  .btn-success {
+    @apply inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl transition-all font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40;
+  }
+
+  /* Datagrid save button (blue gradient with rounded-xl) */
+  .btn-datagrid-save {
+    @apply px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all font-medium flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40;
+  }
+
+  /* ---------------------------------------------------------------
+     ALERT BOXES
+     --------------------------------------------------------------- */
+
+  .alert-info {
+    @apply bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4;
+  }
+
+  .alert-error {
+    @apply bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4;
+  }
+
+  .alert-warning {
+    @apply bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4;
+  }
+
+  .alert-success {
+    @apply bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4;
+  }
+
+  /* ---------------------------------------------------------------
+     CARDS
+     --------------------------------------------------------------- */
+
+  /* Auth page card (login, register, etc.) */
+  .card-auth {
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8;
+  }
+
+  /* Stats/Dashboard card */
+  .card-stats {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 p-6;
+  }
+
+  /* DataGrid container card */
+  .card-datagrid {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden;
+  }
+
+  /* ---------------------------------------------------------------
+     ICON CONTAINERS
+     --------------------------------------------------------------- */
+
+  /* Success icon circle (checkmark background) */
+  .icon-circle-success {
+    @apply inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full;
+  }
+
+  /* Large hero icon container for error pages */
+  .icon-hero-container {
+    @apply inline-flex items-center justify-center w-32 h-32 rounded-full;
+  }
+
+  /* ---------------------------------------------------------------
+     FORM INPUT ERROR STATE
+     --------------------------------------------------------------- */
+
+  /* Add error state to datagrid inputs */
+  .input-error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+  }
+}
+
 /* Style number input spinner arrows - must be outside @layer */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

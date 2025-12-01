@@ -1,6 +1,6 @@
 <!-- Make -->
 <div>
-    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+    <label class="label-datagrid">
         <span class="flex items-center gap-2">
             <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -11,15 +11,15 @@
         </span>
     </label>
     <input type="text" x-model="currentRow.make" @input="errors.make = ''"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
-        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.make}"
+        class="input-datagrid"
+        :class="{'input-error': errors.make}"
         placeholder="{{ _('e.g., Toyota') }}">
-    <div x-show="errors.make" x-text="errors.make" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
+    <div x-show="errors.make" x-text="errors.make" class="error-text"></div>
 </div>
 
 <!-- Model -->
 <div>
-    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+    <label class="label-datagrid">
         <span class="flex items-center gap-2">
             <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -30,15 +30,15 @@
         </span>
     </label>
     <input type="text" x-model="currentRow.model" @input="errors.model = ''"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
-        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.model}"
+        class="input-datagrid"
+        :class="{'input-error': errors.model}"
         placeholder="{{ _('e.g., Camry') }}">
-    <div x-show="errors.model" x-text="errors.model" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
+    <div x-show="errors.model" x-text="errors.model" class="error-text"></div>
 </div>
 
 <!-- Version -->
 <div>
-    <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+    <label class="label-datagrid">
         <span class="flex items-center gap-2">
             <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,17 +49,17 @@
         </span>
     </label>
     <input type="text" x-model="currentRow.version" @input="errors.version = ''"
-        class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
-        :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.version}"
+        class="input-datagrid"
+        :class="{'input-error': errors.version}"
         placeholder="{{ _('e.g., XLE') }}">
-    <div x-show="errors.version" x-text="errors.version" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
+    <div x-show="errors.version" x-text="errors.version" class="error-text"></div>
 </div>
 
 <!-- Year and Price in a grid -->
 <div class="grid grid-cols-2 gap-4">
     <!-- Year -->
     <div>
-        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+        <label class="label-datagrid">
             <span class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -70,14 +70,14 @@
             </span>
         </label>
         <input type="number" x-model.number="currentRow.year" @input="errors.year = ''"
-            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
-            :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.year}" placeholder="2024">
-        <div x-show="errors.year" x-text="errors.year" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
+            class="input-datagrid"
+            :class="{'input-error': errors.year}" placeholder="2024">
+        <div x-show="errors.year" x-text="errors.year" class="error-text"></div>
     </div>
 
     <!-- Price -->
     <div>
-        <label class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+        <label class="label-datagrid">
             <span class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -88,8 +88,8 @@
             </span>
         </label>
         <input type="number" step="0.01" x-model.number="currentRow.price" @input="errors.price = ''"
-            class="w-full px-4 py-2.5 border-2 border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-slate-400 dark:placeholder-gray-500"
-            :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': errors.price}" placeholder="0.00">
-        <div x-show="errors.price" x-text="errors.price" class="mt-1 text-sm text-red-600 dark:text-red-400"></div>
+            class="input-datagrid"
+            :class="{'input-error': errors.price}" placeholder="0.00">
+        <div x-show="errors.price" x-text="errors.price" class="error-text"></div>
     </div>
 </div>

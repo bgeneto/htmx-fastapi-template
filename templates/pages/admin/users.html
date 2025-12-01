@@ -18,7 +18,7 @@
         </div>
 
         <div x-cloak x-data="datagrid(adminUsersDatagrid())"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+            class="card-datagrid">
             {% set form_template = "pages/admin/users_form.html" %}
             {% set resource_name = _('User') %}
             {% include "components/_datagrid_grid.html" %}

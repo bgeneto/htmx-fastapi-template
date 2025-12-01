@@ -12,9 +12,9 @@
                 <p class="text-gray-600 dark:text-gray-400">{{ _("Enter your email and password to log in") }}</p>
             {% endif %}
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+        <div class="card-auth">
             {% if error %}
-                <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <div class="mb-6 alert-error">
                     <div class="flex">
                         <svg class="h-5 w-5 text-red-600 dark:text-red-400 mr-2 flex-shrink-0"
                              fill="none"
@@ -29,7 +29,8 @@
             {% endif %}
             <div x-data="loginForm()">
                 <!-- Success Alert -->
-                <div x-show="successMessage"
+                <div x-cloak
+                     x-show="successMessage"
                      x-transition
                      class="mb-6 p-4 rounded-lg border-l-4 border-green-600 bg-green-50 dark:bg-green-900/20 flex items-start gap-3">
                     <svg class="w-6 h-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
@@ -40,7 +41,8 @@
                         </path>
                     </svg>
                     <div class="flex-1">
-                        <p class="font-semibold text-green-800 dark:text-green-200" x-text="successMessage"></p>
+                        <p class="font-semibold text-green-800 dark:text-green-200"
+                           x-text="successMessage"></p>
                     </div>
                     <button @click="successMessage = ''"
                             class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 flex-shrink-0">
@@ -49,11 +51,11 @@
                         </svg>
                     </button>
                 </div>
-
                 <!-- Error Alert -->
-                <div x-show="errorMessage"
+                <div x-cloak
+                     x-show="errorMessage"
                      x-transition
-                     class="mb-6 p-4 rounded-lg border-l-4 border-red-600 bg-red-50 dark:bg-red-900/20 flex items-start gap-3">
+                     class="alert-error mb-6 border-l-4 border-red-600 flex items-start gap-3">
                     <svg class="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5"
                          fill="none"
                          stroke="currentColor"
@@ -62,7 +64,8 @@
                         </path>
                     </svg>
                     <div class="flex-1">
-                        <p class="font-semibold text-red-800 dark:text-red-200" x-text="errorMessage"></p>
+                        <p class="font-semibold text-red-800 dark:text-red-200"
+                           x-text="errorMessage"></p>
                     </div>
                     <button @click="errorMessage = ''"
                             class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 flex-shrink-0">
@@ -77,10 +80,7 @@
                         <div class="space-y-4">
                             <!-- Email field -->
                             <div>
-                                <label for="email"
-                                       class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                    {{ _("Email") }}
-                                </label>
+                                <label for="email" class="label-auth">{{ _("Email") }}</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400"
@@ -100,11 +100,9 @@
                                            autocomplete="email"
                                            autofocus
                                            placeholder="{{ _("you@example.com") }}"
-                                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                                           class="input-auth" />
                                 </div>
-                                <div x-show="errors.email"
-                                     x-transition
-                                     class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                <div x-cloak x-show="errors.email" x-transition class="error-with-icon">
                                     <svg class="h-4 w-4 mr-1"
                                          fill="none"
                                          stroke="currentColor"
@@ -117,10 +115,7 @@
                             </div>
                             <!-- Password field -->
                             <div>
-                                <label for="password"
-                                       class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                    {{ _("Password") }}
-                                </label>
+                                <label for="password" class="label-auth">{{ _("Password") }}</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-gray-400"
@@ -139,11 +134,9 @@
                                            required
                                            autocomplete="current-password"
                                            placeholder="{{ _("••••••••") }}"
-                                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                                           class="input-auth" />
                                 </div>
-                                <div x-show="errors.password"
-                                     x-transition
-                                     class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                                <div x-cloak x-show="errors.password" x-transition class="error-with-icon">
                                     <svg class="h-4 w-4 mr-1"
                                          fill="none"
                                          stroke="currentColor"
@@ -156,7 +149,7 @@
                             </div>
                         </div>
                         <!-- Info message for classic login -->
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <div class="alert-info">
                             <div class="flex">
                                 <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5"
                                      fill="none"
@@ -173,10 +166,7 @@
                     {% else %}
                         <!-- Email field for magic link and OTP -->
                         <div>
-                            <label for="email"
-                                   class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                {{ _("Email") }}
-                            </label>
+                            <label for="email" class="label-auth">{{ _("Email") }}</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400"
@@ -196,11 +186,9 @@
                                        autocomplete="email"
                                        autofocus
                                        placeholder="{{ _("you@example.com") }}"
-                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500" />
+                                       class="input-auth" />
                             </div>
-                            <div x-show="errors.email"
-                                 x-transition
-                                 class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+                            <div x-cloak x-show="errors.email" x-transition class="error-with-icon">
                                 <svg class="h-4 w-4 mr-1"
                                      fill="none"
                                      stroke="currentColor"
@@ -212,7 +200,7 @@
                             </div>
                         </div>
                         <!-- Info message for magic link and OTP -->
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <div class="alert-info">
                             <div class="flex">
                                 <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5"
                                      fill="none"
@@ -233,10 +221,9 @@
                     {% endif %}
                     <!-- Action buttons -->
                     <div class="space-y-3">
-                        <button type="submit"
-                                :disabled="loading"
-                                class="w-full inline-flex justify-center items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <svg x-show="loading"
+                        <button type="submit" :disabled="loading" class="btn-primary-full">
+                            <svg x-cloak
+                                 x-show="loading"
                                  class="h-5 w-5 mr-2 animate-spin text-white"
                                  xmlns="http://www.w3.org/2000/svg"
                                  fill="none"
@@ -249,12 +236,12 @@
                             <span x-text="loading ? '{{ _(" Sending...") }}' : {% if login_method == 'classic' %} '{{ _("Log In") }}' {% elif login_method == 'otp' %} '{{ _("Send Verification Code") }}' {% else %} '{{ _("Continue with e-mail") }}' {% endif %}"></span>
                         </button>
                         {% if login_method == 'classic' %}
-                        <div class=" text-center">
-                            <a href="/auth/register"
-                               class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                                {{ _("Don't have an account? Register") }}
-                            </a>
-                        </div>
+                            <div class=" text-center">
+                                <a href="/auth/register"
+                                   class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                    {{ _("Don't have an account? Register") }}
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </form>
