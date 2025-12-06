@@ -82,25 +82,32 @@ async def register(
             field_errors={str(error["loc"][-1]): error["msg"] for error in e.errors()},
         )
 
-    # Create pending user
+    # Create user with default role
     try:
-        user = await create_user(session, payload, role=UserRole.PENDING)
-        logger.info(f"New user registered: {user.email} (pending approval)")
-
-        # Send notification to admins
-        admin_url = f"{settings.APP_BASE_URL}/admin/users"
-        # Get first admin to notify (in production, notify all admins)
-        admin_users = await list_users(session, role_filter=UserRole.ADMIN, limit=1)
-        if admin_users:
-            await send_registration_notification(
-                admin_users[0].email, user.email, user.full_name, admin_url
-            )
-
-        return FormResponseHelper.form_success(
-            message=_(
-                "Registration successful! Your account is pending admin approval."
-            )
+        user = await create_user(
+            session, payload, role=UserRole(settings.DEFAULT_USER_ROLE)
         )
+        logger.info(f"New user registered: {user.email} (role: {user.role})")
+
+        # Send notification to admins if user is pending
+        if user.role == UserRole.PENDING:
+            admin_url = f"{settings.APP_BASE_URL}/admin/users"
+            # Get first admin to notify (in production, notify all admins)
+            admin_users = await list_users(session, role_filter=UserRole.ADMIN, limit=1)
+            if admin_users:
+                await send_registration_notification(
+                    admin_users[0].email, user.email, user.full_name, admin_url
+                )
+
+            return FormResponseHelper.form_success(
+                message=_(
+                    "Registration successful! Your account is pending admin approval."
+                )
+            )
+        else:
+            return FormResponseHelper.form_success(
+                message=_("Registration successful! You can now log in.")
+            )
     except Exception as exc:
         logger.error(f"Failed to create user: {exc}")
         raise HTTPException(status_code=500, detail="Failed to create account")
@@ -157,7 +164,7 @@ async def classic_login(
             key="session",
             value=token,
             max_age=settings.SESSION_EXPIRY_DAYS * 24 * 60 * 60,
-            secure=False,
+            secure=not settings.debug,
             httponly=True,
             samesite="lax",
         )
@@ -352,7 +359,7 @@ async def verify_otp(
         key="session",
         value=token,
         max_age=settings.SESSION_EXPIRY_DAYS * 24 * 60 * 60,
-        secure=False,  # Set to True in production with HTTPS
+        secure=not settings.debug,
         httponly=True,
         samesite="lax",
     )

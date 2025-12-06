@@ -11,7 +11,9 @@ logger = get_logger(__name__)
 
 
 class AuthenticationRequest:
-    def __init__(self, email: str, session: AsyncSession, next_url: Optional[str] = None):
+    def __init__(
+        self, email: str, session: AsyncSession, next_url: Optional[str] = None
+    ):
         self.email = email
         self.session = session
         self.next_url = next_url
@@ -29,18 +31,31 @@ class SuccessResponse:
         return JSONResponse(content={"success": True, "message": self.message})
 
 
+class WarningResponse:
+    def __init__(self, message: str):
+        self.message = message
+
+    def to_response(self) -> JSONResponse:
+        return JSONResponse(
+            content={"success": False, "type": "warning", "message": self.message}
+        )
+
+
 class OTPVerificationResponse:
     """Response for OTP verification indicating redirect to verification page"""
+
     def __init__(self, email: str):
         self.email = email
 
     def to_response(self) -> JSONResponse:
-        return JSONResponse(content={
-            "success": True,
-            "redirect": "verify_otp",
-            "email": self.email,
-            "message": _("OTP sent successfully")
-        })
+        return JSONResponse(
+            content={
+                "success": True,
+                "redirect": "verify_otp",
+                "email": self.email,
+                "message": _("OTP sent successfully"),
+            }
+        )
 
 
 class MagicLinkHandler:
@@ -62,21 +77,25 @@ class MagicLinkHandler:
 
         # Auto-create user if not found (same as OTP handler)
         if not user:
+            if not settings.AUTO_REGISTRATION:
+                logger.warning(
+                    f"MagicLinkHandler: Auto-registration disabled. Rejecting login for non-existent user {request.email}"
+                )
+                return WarningResponse(_("Account not found. Please register first."))
+
             try:
                 # Extract name from email (everything before @)
-                email_username = request.email.split('@')[0]
+                email_username = request.email.split("@")[0]
                 # Capitalize and replace dots/underscores with spaces
-                auto_name = email_username.replace('.', ' ').replace('_', ' ').title()
+                auto_name = email_username.replace(".", " ").replace("_", " ").title()
 
                 # Determine user role and status based on settings
-                if settings.REQUIRE_ADMIN_APPROVAL:
-                    user_role = UserRole.PENDING
-                    is_active = True  # Active but with PENDING role (needs approval)
-                    logger.info(f"MagicLinkHandler: Auto-creating PENDING user for {request.email} (requires admin approval)")
-                else:
-                    user_role = UserRole.USER
-                    is_active = True
-                    logger.info(f"MagicLinkHandler: Auto-creating active USER for {request.email} (instant access)")
+                # Determine user role and status based on settings
+                user_role = UserRole(settings.DEFAULT_USER_ROLE)
+                is_active = True
+                logger.info(
+                    f"MagicLinkHandler: Auto-creating user for {request.email} with role={user_role}"
+                )
 
                 # Create user directly without password (passwordless magic link login)
                 user = User(
@@ -84,29 +103,35 @@ class MagicLinkHandler:
                     full_name=auto_name,
                     is_active=is_active,
                     role=user_role,
-                    hashed_password=""  # No password for magic link users
+                    hashed_password="",  # No password for magic link users
                 )
 
                 # Add to session and commit
                 request.session.add(user)
                 await request.session.commit()
-                logger.info(f"MagicLinkHandler: Successfully created user for {request.email} with role={user_role}")
+                logger.info(
+                    f"MagicLinkHandler: Successfully created user for {request.email} with role={user_role}"
+                )
 
             except Exception as e:
-                logger.error(f"MagicLinkHandler: Failed to auto-create user for {request.email}: {e}")
+                logger.error(
+                    f"MagicLinkHandler: Failed to auto-create user for {request.email}: {e}"
+                )
                 logger.exception("Full traceback:")
                 # Still return success to prevent enumeration
                 return None  # Signal to redirect to check email page
 
         # Check if user is active
         if not user.is_active:
-            logger.warning(f"MagicLinkHandler: User INACTIVE for email {request.email} - skipping magic link send")
+            logger.warning(
+                f"MagicLinkHandler: User INACTIVE for email {request.email} - skipping magic link send"
+            )
             # Still return success to prevent enumeration
             return None  # Signal to redirect to check email page
 
         # Check if user is pending
         if user.role == UserRole.PENDING:
-            return SuccessResponse(_("Your account is pending admin approval."))
+            return WarningResponse(_("Your account is pending admin approval."))
 
         # Generate magic link token
         raw_token = await create_login_token(request.session, user)
@@ -114,14 +139,19 @@ class MagicLinkHandler:
 
         if request.next_url:
             from urllib.parse import quote
+
             magic_link += f"?next={quote(request.next_url)}"
 
         # Send magic link email
         try:
             await send_magic_link(user.email, user.full_name, magic_link)
-            logger.info(f"MagicLinkHandler: Magic link sent successfully to {user.email}")
+            logger.info(
+                f"MagicLinkHandler: Magic link sent successfully to {user.email}"
+            )
         except Exception as e:
-            logger.error(f"MagicLinkHandler: Failed to send magic link to {user.email}: {e}")
+            logger.error(
+                f"MagicLinkHandler: Failed to send magic link to {user.email}: {e}"
+            )
             logger.exception("Full traceback:")
 
         # Always show check email page (success to prevent enumeration)
@@ -139,28 +169,34 @@ class OTPHandler:
 
         # Get user
         user = await get_user_by_email(request.session, request.email)
-        logger.info(f"OTPHandler: User lookup for {request.email}: user={'found' if user else 'NOT FOUND'}, is_active={user.is_active if user else 'N/A'}")
+        logger.info(
+            f"OTPHandler: User lookup for {request.email}: user={'found' if user else 'NOT FOUND'}, is_active={user.is_active if user else 'N/A'}"
+        )
 
         # Auto-create user if not found
         if not user:
+            from .config import settings
+
+            if not settings.AUTO_REGISTRATION:
+                logger.warning(
+                    f"OTPHandler: Auto-registration disabled. Rejecting login for non-existent user {request.email}"
+                )
+                return WarningResponse(_("Account not found. Please register first."))
+
             try:
-                from .config import settings
                 from .models import User
 
                 # Extract name from email (everything before @)
-                email_username = request.email.split('@')[0]
+                email_username = request.email.split("@")[0]
                 # Capitalize and replace dots/underscores with spaces
-                auto_name = email_username.replace('.', ' ').replace('_', ' ').title()
+                auto_name = email_username.replace(".", " ").replace("_", " ").title()
 
                 # Determine user role and status based on settings
-                if settings.REQUIRE_ADMIN_APPROVAL:
-                    user_role = UserRole.PENDING
-                    is_active = True  # Active but with PENDING role (needs approval)
-                    logger.info(f"OTPHandler: Auto-creating PENDING user for {request.email} (requires admin approval)")
-                else:
-                    user_role = UserRole.USER
-                    is_active = True
-                    logger.info(f"OTPHandler: Auto-creating active USER for {request.email} (instant access)")
+                user_role = UserRole(settings.DEFAULT_USER_ROLE)
+                is_active = True  # Always active, but role might be pending
+                logger.info(
+                    f"OTPHandler: Auto-creating user for {request.email} with role={user_role}"
+                )
 
                 # Create user directly without password (passwordless OTP login)
                 user = User(
@@ -168,23 +204,29 @@ class OTPHandler:
                     full_name=auto_name,
                     is_active=is_active,
                     role=user_role,
-                    hashed_password=""  # No password for OTP users
+                    hashed_password="",  # No password for OTP users
                 )
 
                 # Add to session and commit
                 request.session.add(user)
                 await request.session.commit()
-                logger.info(f"OTPHandler: Successfully created user for {request.email} with role={user_role}")
+                logger.info(
+                    f"OTPHandler: Successfully created user for {request.email} with role={user_role}"
+                )
 
             except Exception as e:
-                logger.error(f"OTPHandler: Failed to auto-create user for {request.email}: {e}")
+                logger.error(
+                    f"OTPHandler: Failed to auto-create user for {request.email}: {e}"
+                )
                 logger.exception("Full traceback:")
                 # Still return success to prevent enumeration
                 return OTPVerificationResponse(request.email)
 
         # Check if user is active
         if not user.is_active:
-            logger.warning(f"OTPHandler: User INACTIVE for email {request.email} - skipping OTP send")
+            logger.warning(
+                f"OTPHandler: User INACTIVE for email {request.email} - skipping OTP send"
+            )
             # Still return success to prevent enumeration
             return OTPVerificationResponse(request.email)
 
@@ -192,9 +234,14 @@ class OTPHandler:
         # The verification page will show the approval message after OTP is validated
         try:
             from .repository import create_otp_code
-            logger.info(f"Creating OTP code for email: {request.email} (role={user.role})")
+
+            logger.info(
+                f"Creating OTP code for email: {request.email} (role={user.role})"
+            )
             otp_code = await create_otp_code(request.session, request.email)
-            logger.info(f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}")
+            logger.info(
+                f"OTP code generated successfully: {otp_code[:2]}**** for {request.email}"
+            )
 
             # Send OTP email
             logger.info(f"Attempting to send OTP email to {request.email}")
@@ -202,7 +249,9 @@ class OTPHandler:
             logger.info(f"OTP email sending result for {request.email}: {email_sent}")
 
             if not email_sent:
-                logger.error(f"OTP email failed to send to {request.email} - email_sent returned False")
+                logger.error(
+                    f"OTP email failed to send to {request.email} - email_sent returned False"
+                )
 
             # Return response indicating OTP verification page
             # PENDING users will see approval message on verification page

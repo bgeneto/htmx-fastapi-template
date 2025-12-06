@@ -51,6 +51,29 @@
                         </svg>
                     </button>
                 </div>
+                <!-- Warning Alert -->
+                <div x-cloak
+                     x-show="warningMessage"
+                     x-transition
+                     class="mb-6 p-4 rounded-lg border-l-4 border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 flex items-start gap-3">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="font-semibold text-yellow-800 dark:text-yellow-200"
+                           x-text="warningMessage"></p>
+                    </div>
+                    <button @click="warningMessage = ''"
+                            class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-200 flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
                 <!-- Error Alert -->
                 <div x-cloak
                      x-show="errorMessage"
@@ -263,6 +286,7 @@
             loading: false,
             successMessage: '',
             errorMessage: '',
+            warningMessage: '',
 
             i18n: {
                 emailRequired: "{{ _('Email is required') }}",
@@ -313,6 +337,7 @@
                 this.loading = true;
                 this.successMessage = '';
                 this.errorMessage = '';
+                this.warningMessage = '';
 
                 try {
                     const formData = new FormData();
@@ -364,8 +389,14 @@
                         } else {
                             window.location.href = data.redirect;
                         }
+                    } else if (data.type === 'warning' && data.message) {
+                        // Show warning message
+                        this.warningMessage = data.message;
+                        window.showToast(data.message, 'warning');
+                        // No clear form for warnings? Maybe yes if "register first"
+                        // this.form.email = '';
                     } else if (data.success && data.message) {
-                        // Show message to user (e.g., "pending approval")
+                        // Show success message
                         this.successMessage = data.message;
                         window.showToast(data.message, 'info');
                         // Clear form to prevent re-submission
